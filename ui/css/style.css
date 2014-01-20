@@ -1,0 +1,221 @@
+/*
+  ****************************************
+  GLOBAL
+  ****************************************
+ */
+html {
+	font-family: Verdana, Arial, Helvetica, sans-serif;
+	font-size: 13px;
+}
+body {
+	margin:20px auto;
+	min-width:960px;
+	max-width:90%;
+}
+.content {
+	padding:5px;
+}
+h1 {
+	margin:0
+}
+a:link, .ui-widget a:link {
+	color:#8BADCF;
+	text-decoration:none;
+}
+a:visited, .ui-widget a:visited {
+	color:#8BADCF;
+	text-decoration:none;
+}
+a:hover {
+	color: #627eb7;
+}
+dt {
+	float: left;
+	clear: left;
+	width: 140px;
+	text-align: right;
+	font-weight:bold;
+}
+dd {
+	margin: 0 0 0 150px;
+	padding: 0 0 0.5em 0;
+}
+/*
+  ***************************************
+  HEADER
+  ***************************************
+ */
+#hd .align-left {
+	text-align:left;
+}
+#hd .align-right {
+	text-align:right;
+}
+#hd .align-center {
+	text-align:center;
+}
+.banner_text {
+	padding:20px;
+	font-size:24px;
+	font-weight:bold;
+	letter-spacing:4px;
+}
+/*
+  ***************************************
+  FOOTER
+  ***************************************
+ */
+#ft {
+	padding:10px 0;
+	text-align:center;
+	background-color:#ebebeb;
+	width:100%;
+}
+#backgroundPopup {
+	display:none;
+	position:fixed;
+	_position:absolute;
+/* hack for internet explorer 6 */
+	height:100%;
+	width:100%;
+	top:0;
+	left:0;
+	z-index:2001;
+/*
+  background-color:black;
+  opacity:0.6;
+ */
+}
+/*
+  ****************************************
+  PAGINATION
+  ****************************************
+ */
+.paging_div {
+	width:100%;
+	display:table;
+	padding-top:10px;
+	padding-bottom:10px;
+}
+.pagingBtn, .pagingSep {
+	padding:2px;
+	text-decoration:none;
+}
+.pagingBtn {
+	font-weight:bold;
+}
+.pagingBtn:hover {
+	background-color:#DDDDDD;
+	text-decoration:underline;
+}
+/*
+  ***************************************
+  MAPS
+  ***************************************
+ */
+#resultMap {
+	width:600px;
+	height:400px;
+}
+#clear_all {
+	font-size:80%;
+	margin-left:25px;
+}
+.ui-tabs .ui-tabs-hide {
+	position: absolute;
+	left: -10000px;
+}
+.olLayerGooglePoweredBy {
+	display:none;
+}
+/*
+  ***************************************
+  Timemap CSS
+  ***************************************
+ */
+div#timelinecontainer {
+	width:100%;
+	height: 150px;
+}
+div#mapcontainer {
+	width:100%;
+	height: 600px;
+}
+div#display-mapcontainer {
+	width:100%;
+	height: 400px;
+}
+div.olFramedCloudPopupContent {
+	width: 300px;
+}
+div#help {
+	font-size: 12px;
+	width: 45em;
+	padding: 1em;
+}
+/*
+  div#timemap {
+  padding: 1em;
+  }
+ */
+div#timeline {
+	width: 100%;
+	height: 100%;
+	font-size: 12px;
+	background: #CCCCCC;
+}
+div#map {
+	width: 100%;
+	height: 100%;
+	background: #EEEEEE;
+}
+div.infotitle {
+	font-size: 14px;
+	font-weight: bold;
+}
+div.infodescription {
+	font-size: 14px;
+	font-style: italic;
+}
+div.custominfostyle {
+	font-family: Georgia, Garamond, serif;
+	font-size: 1.5em;
+	font-style: italic;
+	width: 20em;
+}
+/*
+  ***************************************
+  jQuery UI Menubar @VERSION
+  ***************************************
+  * Copyright 2011, AUTHORS.txt (http://jqueryui.com/about)
+  * Dual licensed under the MIT or GPL Version 2 licenses.
+  * http://jquery.org/license
+ */
+.ui-menubar {
+	list-style: none;
+	margin: 0;
+	padding-left: 0;
+	border-left:0px;
+	border-right:0px;
+}
+.ui-menubar-item {
+	float: left;
+	list-style-type:none;
+}
+.ui-menubar .ui-button {
+	float: left;
+	font-weight: normal;
+	border-top-width: 0 !important;
+	border-bottom-width: 0 !important;
+	margin: 0;
+	outline: none;
+}
+.ui-menubar .ui-menubar-link {
+	border-right: 1px dashed transparent;
+	border-left: 1px dashed transparent;
+}
+.ui-menubar .ui-menu {
+	width: 200px;
+	position: absolute;
+	z-index: 9999;
+}
