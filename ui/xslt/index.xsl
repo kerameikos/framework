@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
-
+	<xsl:include href="templates.xsl"/>
 	<xsl:variable name="display_path"/>
 
 	<xsl:template match="/">
@@ -14,14 +14,14 @@
 				<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"/>-->
 			</head>
 			<body>
-				<!--<xsl:call-template name="header"/>-->
-				<xsl:call-template name="index"/>
-				<!--<xsl:call-template name="footer"/>-->
+				<xsl:call-template name="header"/>
+				<xsl:call-template name="body"/>
+				<xsl:call-template name="footer"/>
 			</body>
 		</html>
 	</xsl:template>
 
-	<xsl:template name="index">
+	<xsl:template name="body">
 		<div class="yui3-g">
 			<div class="yui3-u-1">
 				<div class="content">

@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:crm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	exclude-result-prefixes="xsl" version="2.0">
+	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:crm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xsl" version="2.0">
+	<xsl:include href="templates.xsl"/>
 
 	<xsl:variable name="display_path">../</xsl:variable>
 
@@ -25,18 +26,27 @@
 				<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"/>-->
 			</head>
 			<body>
-				<!--<xsl:call-template name="header"/>-->
+				<xsl:call-template name="header"/>
 				<xsl:call-template name="body"/>
-				<!--<xsl:call-template name="footer"/>-->
+				<xsl:call-template name="footer"/>
 			</body>
 		</html>
 	</xsl:template>
 
 	<xsl:template name="body">
 		<div class="yui3-g">
-			<div class="yui3-u-1">
+			<div class="yui3-u-3-4">
 				<div class="content">
 					<xsl:apply-templates select="rdf:RDF/*"/>
+				</div>
+			</div>
+			<div class="yui3-u-1-4">
+				<div class="content">
+					<xsl:if test="descendant::owl:sameAs[contains(@rdf:resource, 'dbpedia.org')]">
+						<xsl:call-template name="dbpedia-abstract">
+							<xsl:with-param name="uri" select="descendant::owl:sameAs[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
+						</xsl:call-template>
+					</xsl:if>
 				</div>
 			</div>
 		</div>
@@ -44,12 +54,12 @@
 
 	<xsl:template match="rdf:RDF/*">
 		<div typeof="{name()}" about="{@rdf:about}">
-			<h1>
+			<h2>
 				<xsl:value-of select="@rdf:about"/>
 				<xsl:text> (</xsl:text>
 				<xsl:value-of select="name()"/>
 				<xsl:text>)</xsl:text>
-			</h1>
+			</h2>
 			<dl>
 				<xsl:apply-templates select="skos:prefLabel">
 					<xsl:sort select="@xml:lang"/>
@@ -64,9 +74,7 @@
 					<xsl:sort select="@rdf:resource"/>
 				</xsl:apply-templates>
 			</dl>
-
 		</div>
-
 	</xsl:template>
 
 	<xsl:template match="skos:prefLabel|skos:definition|owl:sameAs|rdf:type">
@@ -93,5 +101,18 @@
 		</dd>
 
 	</xsl:template>
+	
+	<xsl:template name="dbpedia-abstract">
+		<xsl:param name="uri"/>
+		
+		<xsl:variable name="dbpedia-rdf" as="item()*">
+			<xsl:copy-of
+				select="document(concat('http://dbpedia.org/data/', substring-after($uri, 'resource/'), '.rdf'))/*"
+			/>
+		</xsl:variable>
+		<h3>Abstract (dbpedia)</h3>
+		<xsl:value-of select="$dbpedia-rdf//dbpedia-owl:abstract[@xml:lang='en']"/>
+	</xsl:template>
+	
 
 </xsl:stylesheet>

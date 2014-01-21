@@ -5,12 +5,18 @@
  */
 html {
 	font-family: Verdana, Arial, Helvetica, sans-serif;
-	font-size: 13px;
+	font-size: 14px;
+	background-color:#ebebeb;
 }
 body {
 	margin:20px auto;
 	min-width:960px;
-	max-width:90%;
+	max-width:95%;
+}
+.yui3-g {
+	background-color:white;	
+	border-radius: 15px;
+	border:1px solid silver;
 }
 .content {
 	padding:5px;
@@ -45,20 +51,9 @@ dd {
   HEADER
   ***************************************
  */
-#hd .align-left {
-	text-align:left;
-}
-#hd .align-right {
+#hd {
+	padding:10px 0;
 	text-align:right;
-}
-#hd .align-center {
-	text-align:center;
-}
-.banner_text {
-	padding:20px;
-	font-size:24px;
-	font-weight:bold;
-	letter-spacing:4px;
 }
 /*
   ***************************************
@@ -68,23 +63,6 @@ dd {
 #ft {
 	padding:10px 0;
 	text-align:center;
-	background-color:#ebebeb;
-	width:100%;
-}
-#backgroundPopup {
-	display:none;
-	position:fixed;
-	_position:absolute;
-/* hack for internet explorer 6 */
-	height:100%;
-	width:100%;
-	top:0;
-	left:0;
-	z-index:2001;
-/*
-  background-color:black;
-  opacity:0.6;
- */
 }
 /*
   ****************************************
@@ -127,6 +105,17 @@ dd {
 }
 .olLayerGooglePoweredBy {
 	display:none;
+}
+#backgroundPopup {
+	display:none;
+	position:fixed;
+	_position:absolute;
+/* hack for internet explorer 6 */
+	height:100%;
+	width:100%;
+	top:0;
+	left:0;
+	z-index:2001;
 }
 /*
   ***************************************
