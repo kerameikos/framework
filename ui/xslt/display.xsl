@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:crm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xsl" version="2.0">
+	xmlns:crm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
+	exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="templates.xsl"/>
 
 	<xsl:variable name="display_path">../</xsl:variable>
@@ -16,6 +17,7 @@
 			rdfa: http://www.w3.org/ns/rdfa#
 			rdf:  http://www.w3.org/1999/02/22-rdf-syntax-ns#
 			skos: http://www.w3.org/2004/02/skos/core#
+			dcterms: http://purl.org/dc/terms/
 			crm: http://erlangen-crm.org/current/">
 			<head>
 				<title>Ceramic Project</title>
@@ -87,7 +89,9 @@
 					<span property="{name()}" xml:lang="{@xml:lang}">
 						<xsl:value-of select="."/>
 					</span>
-					<xsl:value-of select="concat(' (', @xml:lang, ')')"/>
+					<span class="lang">
+						<xsl:value-of select="concat(' (', @xml:lang, ')')"/>
+					</span>
 				</xsl:when>
 				<xsl:when test="string(@rdf:resource)">
 					<span>
@@ -101,18 +105,16 @@
 		</dd>
 
 	</xsl:template>
-	
+
 	<xsl:template name="dbpedia-abstract">
 		<xsl:param name="uri"/>
-		
+
 		<xsl:variable name="dbpedia-rdf" as="item()*">
-			<xsl:copy-of
-				select="document(concat('http://dbpedia.org/data/', substring-after($uri, 'resource/'), '.rdf'))/*"
-			/>
+			<xsl:copy-of select="document(concat('http://dbpedia.org/data/', substring-after($uri, 'resource/'), '.rdf'))/*"/>
 		</xsl:variable>
 		<h3>Abstract (dbpedia)</h3>
 		<xsl:value-of select="$dbpedia-rdf//dbpedia-owl:abstract[@xml:lang='en']"/>
 	</xsl:template>
-	
+
 
 </xsl:stylesheet>
