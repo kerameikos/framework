@@ -3,6 +3,6 @@
 remember to create a data folder and set tomcat write permissions -->
 <solr persistent="false">
 	<cores adminPath="/admin/cores">
-		<core name="ceramics" instanceDir="/usr/local/projects/ceramics/solr-home/4.6"/>
+		<core name="ceramics" instanceDir="4.6"/>
 	</cores>
 </solr>
