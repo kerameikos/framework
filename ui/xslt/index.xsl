@@ -11,7 +11,6 @@
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 
 				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"/>
-				<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"/>-->
 			</head>
 			<body>
 				<xsl:call-template name="header"/>
