@@ -6,6 +6,8 @@
 	<xsl:include href="templates.xsl"/>
 
 	<xsl:variable name="display_path">../</xsl:variable>
+	<xsl:variable name="id" select="substring-after(//@rdf:about, 'id/')"/>
+	<xsl:variable name="request-url" select="doc('input:request')/request/request-url"/>
 
 	<xsl:template match="/">
 		<html
@@ -36,6 +38,9 @@
 	</xsl:template>
 
 	<xsl:template name="body">
+		<div>
+			<p>Download options: <a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$request-url}&amp;format=ttl">TTL</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$request-url}&amp;format=json">JSON-LD</a></p>
+		</div>
 		<div class="yui3-g">
 			<div class="yui3-u-3-4">
 				<div class="content">
