@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/2005/Atom" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns="http://www.w3.org/2005/Atom" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	exclude-result-prefixes="xs" version="2.0">
 	<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
-	
+
 	<!-- config variable -->
 	<xsl:variable name="url" select="substring-before(doc('input:request')/request/request-url, 'feed/')"/>
-	
+
 	<!-- request params -->
-	<xsl:param name="q" select="doc('input:request')/request/parameters/parameter[name='q']/value"/>	
-	<xsl:param name="start" select="doc('input:request')/request/parameters/parameter[name='start']/value"/>	
+	<xsl:param name="q" select="doc('input:request')/request/parameters/parameter[name='q']/value"/>
+	<xsl:param name="start" select="doc('input:request')/request/parameters/parameter[name='start']/value"/>
 	<xsl:variable name="start_var" as="xs:integer">
 		<xsl:choose>
 			<xsl:when test="number($start)">
@@ -27,19 +28,18 @@
 
 
 		<feed xmlns="http://www.w3.org/2005/Atom">
-			<title>
-				<xsl:value-of select="/content/config/title"/>
-			</title>
+			<title>Ceramic Prototype</title>
+			<id>
+				<xsl:value-of select="$url"/>
+			</id>
 			<link href="{$url}"/>
 			<link href="{$url}feed/{if (string($q)) then concat('?q=', $q) else ''}" rel="self"/>
-			<id>Feed ID</id>
-
 			<xsl:if test="$next &lt; $last">
 				<link rel="next" href="{$url}feed/{if (string($q)) then concat('?q=', $q, '&amp;') else '?'}start={$next}"/>
 			</xsl:if>
 			<link rel="last" href="{$url}feed/{if (string($q)) then concat('?q=', $q, '&amp;') else '?'}start={$last}"/>
 			<author>
-				<name>Title</name>
+				<name>Ceramic Project</name>
 			</author>
 			<xsl:apply-templates select="descendant::doc"/>
 		</feed>
@@ -47,37 +47,15 @@
 	</xsl:template>
 
 	<xsl:template match="doc">
-		<!--<xsl:variable name="objectUri">
-			<xsl:choose>
-				<xsl:when test="//config/ark[@enabled='true']">
-					<xsl:choose>
-						<xsl:when test="string(str[@name='cid'])">
-							<xsl:value-of select="concat($url, 'ark:/', //config/ark/naan, '/', str[@name='recordId'], '/', str[@name='cid'])"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="concat($url, 'ark:/', //config/ark/naan, '/', str[@name='recordId'])"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:when>
-				<xsl:otherwise>
-					<xsl:choose>
-						<xsl:when test="string(str[@name='cid'])">
-							<xsl:value-of select="concat($url, 'id/', str[@name='recordId'], '/', str[@name='cid'])"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="concat($url, 'id/', str[@name='recordId'])"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</xsl:otherwise>
-			</xsl:choose>
-		</xsl:variable>-->
 		<entry>
 			<title>
-				<xsl:value-of select="str[@name='unittitle_display']"/>
+				<xsl:value-of select="str[@name='prefLabel']"/>
 			</title>
-			<link href="{str[@name='id']}"/>
-			<link rel="alternate xml" type="text/xml" href="{str[@name='id']}.xml"/>
-			<link rel="alternate rdf" type="application/rdf+xml" href="{str[@name='id']}.rdf"/>
+			<summary>
+				<xsl:value-of select="str[@name='definition']"/>
+			</summary>
+			<link href="{$url}id/{str[@name='id']}"/>
+			<link rel="alternate rdf" type="application/rdf+xml" href="{$url}id/{str[@name='id']}.rdf"/>
 			<id>
 				<xsl:value-of select="str[@name='id']"/>
 			</id>

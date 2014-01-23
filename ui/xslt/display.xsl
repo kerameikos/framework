@@ -39,16 +39,21 @@
 
 	<xsl:template name="body">
 		<div>
-			<p>Download options: <a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$request-url}&amp;format=ttl">TTL</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$request-url}&amp;format=json">JSON-LD</a></p>
+			<p>Download options: <a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$request-url}&amp;format=ttl">TTL</a> |
+					<a href="http://www.w3.org/2012/pyRdfa/extract?uri={$request-url}&amp;format=json">JSON-LD</a></p>
 		</div>
 		<div class="yui3-g">
 			<div class="yui3-u-3-4">
 				<div class="content">
 					<xsl:apply-templates select="rdf:RDF/*"/>
+					<p class="desc">Below the RDF output, there can be maps showing the geographic distribution vases of this type or created by this person, as
+						well as a simple interface to render a graph showing the distribution of particular typologies (e.g., shape types or iconographic
+						motifs), generated from SPARQL</p>
 				</div>
 			</div>
 			<div class="yui3-u-1-4">
 				<div class="content">
+					<p class="desc">The sidebar can show textual or visual information extraced from other LOD sources.</p>
 					<xsl:if test="descendant::owl:sameAs[contains(@rdf:resource, 'dbpedia.org')]">
 						<xsl:call-template name="dbpedia-abstract">
 							<xsl:with-param name="uri" select="descendant::owl:sameAs[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>

@@ -458,7 +458,7 @@
 		<field name="pleiades_uri" type="string" indexed="true" stored="true" multiValued="true"/>
 		<field name="type" type="string" indexed="true" stored="true" multiValued="true"/>
 		<field name="prefLabel" type="string" indexed="true" stored="true"/>
-		<field name="labels" type="text_general" indexed="true" stored="true" multiValued="true"/>
+		<field name="label" type="text_general" indexed="true" stored="true" multiValued="true"/>
 		<field name="broader" type="string" indexed="true" stored="true" multiValued="true"/>
 		<field name="narrower" type="string" indexed="true" stored="true" multiValued="true"/>
 		<field name="related" type="string" indexed="true" stored="true" multiValued="true"/>	

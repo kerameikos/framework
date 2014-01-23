@@ -94,7 +94,10 @@ dd {
  .lang {
  	font-style:italic;	
  }
- 
+ .desc {
+ 	font-style:italic;
+ 	color:gray;
+ }
 /*
   ***************************************
   MAPS

@@ -17,6 +17,27 @@
 			<field name="id">
 				<xsl:value-of select="$id"/>
 			</field>
+			<field name="prefLabel">
+				<xsl:value-of select="skos:prefLabel[@xml:lang='en']"/>
+			</field>
+			<field name="definition">
+				<xsl:value-of select="skos:definition[@xml:lang='en']"/>
+			</field>
+			<xsl:for-each select="skos:prefLabel|skos:altLabel">
+				<field name="label">
+					<xsl:value-of select="."/>
+				</field>
+			</xsl:for-each>
+			<xsl:for-each select="owl:sameAs|skos:related">
+				<field name="{local-name()}">
+					<xsl:value-of select="@rdf:resource"/>
+				</field>
+				<xsl:if test="contains(@rdf:resource, 'pleiades.stoa.org')">
+					<field name="pleiades_uri">
+						<xsl:value-of select="@rdf:resource"/>
+					</field>
+				</xsl:if>
+			</xsl:for-each>
 			<field name="timestamp">
 				<xsl:variable name="timestamp" select="datetime:dateTime()"/>
 				<xsl:choose>
