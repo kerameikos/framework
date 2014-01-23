@@ -22,9 +22,15 @@
 
 	<xsl:template name="body">
 		<div class="yui3-g">
-			<div class="yui3-u-1">
+			<div class="yui3-u-2-3">
 				<div class="content">
 					<xsl:copy-of select="//index/*"/>
+				</div>
+			</div>
+			<div class="yui3-u-1-3">
+				<div class="content">
+					<h2>Sidebar</h2>
+					<a href="feed/"><img src="{$display_path}ui/images/atom-large.png"/></a>
 				</div>
 			</div>
 		</div>

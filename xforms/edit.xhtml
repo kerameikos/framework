@@ -375,23 +375,21 @@
 							<xforms:label><img src="/ceramics/xforms/images/save.gif" alt="Save"/>Save</xforms:label>
 							<xforms:action ev:event="DOMActivate">
 								<!-- set id -->
-								<xforms:setvalue ref="instance('doc')/@rdf:about" value="concat('http://ceramics.org/id/', instance('control-instance')/id)"/>
-								<!-- save file back to disk -->
+								<!--<xforms:setvalue ref="instance('doc')/@rdf:about" value="concat('http://ceramics.org/id/', instance('control-instance')/id)"/>
+								<!-\- save file back to disk -\->
 								<xforms:setvalue ref="instance('save-config')/url"
 									value="concat('file://', instance('control-instance')/id_path, instance('control-instance')/id, '.xml')"/>
 								<xforms:insert nodeset="instance('dump')"
 									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/save-id.xpl', ('doc', 'configuration'), (instance('doc'), instance('save-config')), 'data')"/>
-								<!-- first RDF to triplestore -->
+								<!-\- first RDF to triplestore -\->
 								<xforms:setvalue ref="instance('sparqlUpdate')"
 									value="replace(instance('sparqlUpdate-template'), 'URI', concat('http://ceramics.org/id/', instance('doc')/*/@rdf:about))"/>
 								<xforms:send submission="delete-graph"/>
-								<xforms:send submission="post-new"/>
+								<xforms:send submission="post-new"/>-->
 								<!-- post to Solr -->
 								<xforms:insert nodeset="instance('addIndex')"
 									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/id-to-solr.xpl', 'data', instance('doc'), 'data')"/>
 								<xforms:send submission="post-solr-doc"/>
-								<!-- set value of id in control-instance to prevent re-naming -->
-								<xforms:setvalue ref="instance('control-instance')/id" value="instance('doc')/@rdf:about"/>
 							</xforms:action>
 						</xforms:trigger>
 						<xforms:trigger bind="delete-trigger">
