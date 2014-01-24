@@ -31,8 +31,7 @@
 	<page path="/ceramics/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/display.xpl"/>
 
 	<!-- Atom feed -->
-	<!--<page path="/ceramics/feed/" model="xpl/solr-feed.xpl" view="xpl/feed.xpl"/>-->
-	<page path="/ceramics/feed/" view="xpl/solr-feed.xpl" />
+	<page path="/ceramics/feed/" model="xpl/solr-feed.xpl" view="xpl/feed.xpl"/>
 	
 	<!-- **** PAGES **** -->
 	<page path="/ceramics/sparql" view="xpl/sparql.xpl"/>

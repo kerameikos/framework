@@ -46,20 +46,20 @@
 						<xsl:when test="string($q)">
 							<xsl:choose>
 								<xsl:when test="string($sort)">
-									<xsl:value-of select="concat($solr-url, '?q=', encode-for-uri($q), '&amp;sort=', encode-for-uri($sort), '&amp;start=',$start, '&amp;rows=100')"/>
+									<xsl:value-of select="concat($solr-url, '?q=', encode-for-uri($q), '&amp;sort=', encode-for-uri($sort), '&amp;start=',$start_var, '&amp;rows=100')"/>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of select="concat($solr-url, '?q=', encode-for-uri($q), '&amp;sort=timestamp%20desc&amp;start=',$start, '&amp;rows=100')"/>
+									<xsl:value-of select="concat($solr-url, '?q=', encode-for-uri($q), '&amp;sort=timestamp%20desc&amp;start=',$start_var, '&amp;rows=100')"/>
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:choose>
 								<xsl:when test="string($sort)">
-									<xsl:value-of select="concat($solr-url, '?q=*:*&amp;sort=', encode-for-uri($sort), '&amp;start=',$start, '&amp;rows=100')"/>
+									<xsl:value-of select="concat($solr-url, '?q=*:*&amp;sort=', encode-for-uri($sort), '&amp;start=',$start_var, '&amp;rows=100')"/>
 								</xsl:when>
 								<xsl:otherwise>
-									<xsl:value-of select="concat($solr-url, '?q=*:*&amp;sort=timestamp%20desc&amp;start=',$start, '&amp;rows=100')"/>
+									<xsl:value-of select="concat($solr-url, '?q=*:*&amp;sort=timestamp%20desc&amp;start=',$start_var, '&amp;rows=100')"/>
 								</xsl:otherwise>
 							</xsl:choose>
 						</xsl:otherwise>
