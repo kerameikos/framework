@@ -4,7 +4,7 @@
 	<xsl:output method="xml" encoding="UTF-8" indent="yes"/>
 
 	<!-- config variable -->
-	<xsl:variable name="url" select="substring-before(doc('input:request')/request/request-url, 'feed/')"/>
+	<xsl:variable name="url" select="/content/config/url"/>
 
 	<!-- request params -->
 	<xsl:param name="q" select="doc('input:request')/request/parameters/parameter[name='q']/value"/>

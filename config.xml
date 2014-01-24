@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
+	<url>http://localhost:8080/orbeon/ceramics/</url>
 	<solr_published>http://localhost:8080/solr/ceramics/</solr_published>
 	<content>
 		<index>
