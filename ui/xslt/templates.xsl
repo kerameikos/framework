@@ -9,11 +9,11 @@
 			<xsl:text> | </xsl:text>
 			<a href="{$display_path}">Home</a>
 			<!--<xsl:text> | </xsl:text>
-			<a href="{$display_path}search" >Search</a>-->
+			<a href="{$display_path}search/" >Search</a>-->
 			<xsl:text> | </xsl:text>
-			<a href="{$display_path}sparql">SPARQL</a>
+			<a href="{$display_path}sparql/">SPARQL</a>
 			<!--<xsl:text> | </xsl:text>
-			<a href="{$display_path}apis">APIs</a>-->
+			<a href="{$display_path}apis/">APIs</a>-->
 		</div>
 	</xsl:template>
 
