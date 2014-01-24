@@ -34,7 +34,7 @@
 	<page path="/ceramics/feed/" model="xpl/solr-feed.xpl" view="xpl/feed.xpl"/>
 	
 	<!-- **** PAGES **** -->
-	<page path="/ceramics/sparql" view="xpl/sparql.xpl"/>
+	<page path="/ceramics/sparql/" view="xpl/sparql.xpl"/>
 	<!-- index -->
 	<page path="/ceramics/" view="xpl/index.xpl"/>
 
