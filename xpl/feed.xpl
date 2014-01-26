@@ -31,7 +31,7 @@
 		<p:input name="data" href="#model"/>
 		<p:input name="config">
 			<config>
-				<content-type>application/xml</content-type>
+				<content-type>application/atom+xml</content-type>
 				<indent>true</indent>
 			</config>
 		</p:input>
