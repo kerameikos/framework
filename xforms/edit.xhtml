@@ -5,7 +5,7 @@
 	xmlns:crm="http://erlangen-crm.org/current/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 	<head>
-		<title>ceramics.org</title>
+		<title>Kylix: LOD Editor</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css"/>
 		<link rel="stylesheet" href="/fr/style/form-runner-bootstrap-override.css" type="text/css"/>
 		<link rel="stylesheet" href="/config/theme/examples.css" type="text/css" media="all"/>
@@ -15,7 +15,7 @@
 		<link rel="stylesheet" href="/apps/ceramics/xforms/css/style.css"/>
 
 		<xforms:model>
-			<xforms:instance id="doc"  xxforms:exclude-result-prefixes="#all">
+			<xforms:instance id="doc" xxforms:exclude-result-prefixes="#all">
 				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:crm="http://erlangen-crm.org/current/"
 					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
@@ -55,7 +55,6 @@
 				<config xmlns="">
 					<url/>
 					<content-type>application/xml</content-type>
-					<mode>xml</mode>
 					<make-directories>false</make-directories>
 					<append>false</append>
 				</config>
@@ -77,7 +76,7 @@
 			<xforms:instance id="languages">
 				<xi:include href="instances/languages.xml"/>
 			</xforms:instance>
-			
+
 			<xforms:instance id="classes">
 				<classes xmlns="">
 					<class>foaf:Person</class>
@@ -129,10 +128,9 @@
 				<query><![CDATA[
 					PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 					PREFIX dcterms:  <http://purl.org/dc/terms/>
-					PREFIX nm:       <http://ceramics.org/id/>
 					PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 					SELECT ?uri ?label WHERE {
-					?uri  rdf:type <http://ceramics.org/id/TERM>.
+					?uri  rdf:type <http://example.org/id/TERM>.
 					?uri skos:prefLabel ?label .
 					FILTER (lang(?label) = "en")}
 					ORDER BY ASC(?label)
@@ -264,9 +262,9 @@
 				replace="instance" method="get">
 				<xforms:message ev:event="xforms-submit-error" level="modal">Failed to get Dbpedia RDF.</xforms:message>
 				<xforms:action ev:event="xforms-submit-done" xxforms:iterate="instance('dbpedia')//rdfs:label">
-					<xxforms:variable name="lang" select="@xml:lang"/>
+					<xforms:var name="lang" select="@xml:lang"/>
 					<xforms:action if="not(instance('doc')/*/skos:prefLabel[@xml:lang=$lang])">
-						<xforms:insert context="instance('doc')" nodeset="./skos:prefLabel[last()]" origin="instance('prefLabel-template')"/>
+						<xforms:insert context="instance('doc')/*" nodeset="./skos:prefLabel[last()]" origin="instance('prefLabel-template')"/>
 						<xforms:setvalue ref="instance('doc')/*/skos:prefLabel[last()]" value="context()"/>
 						<xforms:setvalue ref="instance('doc')/*/skos:prefLabel[last()]/@xml:lang" value="$lang"/>
 					</xforms:action>
@@ -375,17 +373,17 @@
 							<xforms:label><img src="/ceramics/xforms/images/save.gif" alt="Save"/>Save</xforms:label>
 							<xforms:action ev:event="DOMActivate">
 								<!-- set id -->
-								<!--<xforms:setvalue ref="instance('doc')/@rdf:about" value="concat('http://ceramics.org/id/', instance('control-instance')/id)"/>
-								<!-\- save file back to disk -\->
+								<xforms:setvalue ref="instance('doc')/*/@rdf:about" value="concat('http://example.org/id/', instance('control-instance')/id)"/>
+								<!-- save file back to disk -->
 								<xforms:setvalue ref="instance('save-config')/url"
 									value="concat('file://', instance('control-instance')/id_path, instance('control-instance')/id, '.xml')"/>
 								<xforms:insert nodeset="instance('dump')"
 									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/save-id.xpl', ('doc', 'configuration'), (instance('doc'), instance('save-config')), 'data')"/>
-								<!-\- first RDF to triplestore -\->
+								<!-- first RDF to triplestore -->
 								<xforms:setvalue ref="instance('sparqlUpdate')"
-									value="replace(instance('sparqlUpdate-template'), 'URI', concat('http://ceramics.org/id/', instance('doc')/*/@rdf:about))"/>
+									value="replace(instance('sparqlUpdate-template'), 'URI', instance('doc')/*/@rdf:about)"/>
 								<xforms:send submission="delete-graph"/>
-								<xforms:send submission="post-new"/>-->
+								<xforms:send submission="post-new"/>
 								<!-- post to Solr -->
 								<xforms:insert nodeset="instance('addIndex')"
 									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/id-to-solr.xpl', 'data', instance('doc'), 'data')"/>
@@ -396,26 +394,26 @@
 							<xforms:label class="file_control"><img src="/ceramics/xforms/images/remove.gif" alt="Delete"/>Delete</xforms:label>
 							<xforms:dispatch ev:event="DOMActivate" target="delete-dialog" name="fr-show"/>
 						</xforms:trigger>
-						<xforms:group ref="instance('doc')/*//owl:sameAs[contains(@rdf:resource, 'wikipedia')]">
+						<xforms:group ref="instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]">
 							<xforms:trigger>
 								<xforms:label>Import Dbpedia Labels</xforms:label>
 								<xforms:action ev:event="DOMActivate">
 									<xforms:setvalue ref="instance('control-instance')/dbpedia"
-										value="substring-after(instance('doc')/*/*[@property='skos:related'][contains(@rdf:resource, 'wikipedia')]/@rdf:resource, 'wiki/')"/>
+										value="substring-after(instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]/@rdf:resource, 'resource/')"/>
 									<xforms:send submission="get-dbpedia-rdf"/>
 								</xforms:action>
 							</xforms:trigger>
 						</xforms:group>
 					</div>
-					<h1>Edit ceramics id</h1>
+					<h1>Edit ID</h1>
 					<div>
 						<xforms:input ref="instance('control-instance')/id">
 							<xforms:label>id</xforms:label>
 							<xforms:alert>Required</xforms:alert>
 						</xforms:input>
 						<xforms:group ref=".[string-length(instance('control-instance')/id) &gt; 0]">
-							<a href="http://ceramics.org/id/{instance('control-instance')/id}"> (<xforms:output
-									ref="concat('http://ceramics.org/id/', instance('control-instance')/id)"/>)</a>
+							<a href="http://example.org/id/{instance('control-instance')/id}"> (<xforms:output
+									ref="concat('http://example.org/id/', instance('control-instance')/id)"/>)</a>
 						</xforms:group>
 					</div>
 					<xforms:group ref=".[not(instance('doc')/child::node())]">
@@ -438,7 +436,8 @@
 									<xforms:insert context="instance('doc')" origin="xforms:element($type, xforms:attribute('rdf:about', ''))"/>
 									<!-- insert skos:prefLabel and skos:definition with @xml:lang='en'-->
 									<xforms:insert context="instance('doc')/*" origin="xforms:element('skos:prefLabel', xforms:attribute('xml:lang', 'en'))"/>
-									<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]" origin="xforms:element('skos:definition', xforms:attribute('xml:lang', 'en'))"/>
+									<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
+										origin="xforms:element('skos:definition', xforms:attribute('xml:lang', 'en'))"/>
 								</xforms:action>
 							</xforms:select1>
 						</div>
@@ -463,8 +462,7 @@
 									</xforms:itemset>-\->
 								</xforms:select1>
 							</div>-->
-							
-							<xforms:group ref="*">
+								<xforms:group ref="*">
 								<div class="trigger_container">
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
@@ -693,7 +691,7 @@
 								<xforms:send submission="delete-id-from-solr"/>
 								<!-- delete from SPARQL -->
 								<xforms:setvalue ref="instance('sparqlUpdate')"
-									value="replace(instance('sparqlUpdate-template'), 'URI', concat('http://ceramics.org/id/', instance('doc')/*/@rdf:about))"/>
+									value="replace(instance('sparqlUpdate-template'), 'URI', instance('doc')/*/@rdf:about)"/>
 								<xforms:send submission="delete-graph"/>
 								<!-- delete id from disk -->
 								<xforms:setvalue ref="instance('delete-config')/delete/url"
@@ -708,7 +706,7 @@
 							<fr:label>No</fr:label>
 						</fr:negative-choice>
 					</fr:alert-dialog>
-					<fr:xforms-inspector/>
+<!--					<fr:xforms-inspector/>-->
 				</div>
 			</div>
 		</div>

@@ -9,10 +9,10 @@
 	<p:processor name="oxf:xml-converter">
 		<p:input name="config">
 			<config>
+				<method>xml</method>
 				<content-type>application/xml</content-type>
 				<indent-amount>4</indent-amount>
 				<encoding>utf-8</encoding>
-				<omit-xml-declaration>true</omit-xml-declaration>
 				<indent>true</indent>
 			</config>
 		</p:input>
