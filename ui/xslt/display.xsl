@@ -7,9 +7,9 @@
 
 	<xsl:variable name="display_path">../</xsl:variable>
 	<xsl:variable name="id" select="substring-after(//@rdf:about, 'id/')"/>
-	<xsl:variable name="request-url" select="doc('input:request')/request/request-url"/>
+	<xsl:variable name="uri" select="concat(/content/config/url, $id, '.html')"/>
 
-	<xsl:template match="/">
+	<xsl:template match="/content/rdf:RDF">
 		<html
 			prefix="dcterms: http://purl.org/dc/terms/
 			foaf: http://xmlns.com/foaf/0.1/
@@ -39,13 +39,13 @@
 
 	<xsl:template name="body">
 		<div>
-			<p>Download options: <a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$request-url}&amp;format=ttl">TTL</a> |
-					<a href="http://www.w3.org/2012/pyRdfa/extract?uri={$request-url}&amp;format=json">JSON-LD</a></p>
+			<p>Download options: <a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$uri}&amp;format=ttl">TTL</a> |
+					<a href="http://www.w3.org/2012/pyRdfa/extract?uri={$uri}&amp;format=json">JSON-LD</a></p>
 		</div>
 		<div class="yui3-g">
 			<div class="yui3-u-3-4">
 				<div class="content">
-					<xsl:apply-templates select="rdf:RDF/*"/>
+					<xsl:apply-templates select="*" mode="type"/>
 					<p class="desc">Below the RDF output, there can be maps showing the geographic distribution vases of this type or created by this person, as
 						well as a simple interface to render a graph showing the distribution of particular typologies (e.g., shape types or iconographic
 						motifs), generated from SPARQL</p>
@@ -64,7 +64,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="rdf:RDF/*">
+	<xsl:template match="*" mode="type">
 		<div typeof="{name()}" about="{@rdf:about}">
 			<h2>
 				<xsl:value-of select="@rdf:about"/>
