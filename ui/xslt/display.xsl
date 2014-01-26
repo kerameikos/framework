@@ -7,7 +7,7 @@
 
 	<xsl:variable name="display_path">../</xsl:variable>
 	<xsl:variable name="id" select="substring-after(//@rdf:about, 'id/')"/>
-	<xsl:variable name="uri" select="concat(/content/config/url, $id, '.html')"/>
+	<xsl:variable name="uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 
 	<xsl:template match="/content/rdf:RDF">
 		<html
