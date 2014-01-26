@@ -53,7 +53,7 @@
 			</div>
 			<div class="yui3-u-1-4">
 				<div class="content">
-					<p class="desc">The sidebar can show textual or visual information extraced from other LOD sources.</p>
+					<p class="desc">The sidebar can show textual or visual information extracted from other LOD sources.</p>
 					<xsl:if test="descendant::owl:sameAs[contains(@rdf:resource, 'dbpedia.org')]">
 						<xsl:call-template name="dbpedia-abstract">
 							<xsl:with-param name="uri" select="descendant::owl:sameAs[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
