@@ -25,15 +25,15 @@ h1 {
 	margin:0
 }
 a:link, .ui-widget a:link {
-	color:#8BADCF;
+	color: #627eb7;
 	text-decoration:none;
 }
 a:visited, .ui-widget a:visited {
-	color:#8BADCF;
+	color: #627eb7;
 	text-decoration:none;
 }
 a:hover {
-	color: #627eb7;
+	color:#8BADCF;
 }
 dt {
 	float: left;
