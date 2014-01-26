@@ -49,19 +49,19 @@ SELECT * WHERE {
 				<div class="content">
 					<h1>SPARQL Query</h1>
 					<p class="desc">The SPARQL endpoint is not yet active.</p>
-					<form action="query" method="GET" accept-charset="UTF-8">
+					<form action="{$display_path}query" method="GET" accept-charset="UTF-8">
 						<textarea name="query" rows="20" style="width:95%;margins:20px auto">
 							<xsl:value-of select="$default-query"/>
 						</textarea>
 						<br/> Output: <select name="output">
-							<option value="json">JSON</option>
 							<option value="xml">XML</option>
-							<option value="text">Text</option>
+							<option value="json">JSON</option>
+							<!--<option value="text">Text</option>
 							<option value="csv">CSV</option>
-							<option value="tsv">TSV</option>
+							<option value="tsv">TSV</option>-->
 						</select>
 						<!--<br/> XSLT style sheet (blank for none): <input name="stylesheet" size="20" value="/xml-to-html.xsl"/>-->
-						<input type="submit" value="Get Results" disabled="disabled"/>
+						<input type="submit" value="Get Results"/>
 					</form>
 				</div>
 			</div>

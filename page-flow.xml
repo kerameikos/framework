@@ -37,6 +37,7 @@
 	
 	<!-- **** PAGES **** -->
 	<page path="/ceramics/sparql/" view="xpl/sparql.xpl"/>
+	<page path="/ceramics/query" view="xpl/query.xpl"/>
 	<!-- index -->
 	<page path="/ceramics/" view="xpl/index.xpl"/>
 
