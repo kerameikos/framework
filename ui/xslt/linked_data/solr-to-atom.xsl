@@ -55,7 +55,8 @@
 				<xsl:value-of select="str[@name='definition']"/>
 			</summary>
 			<link href="{$url}id/{str[@name='id']}"/>
-			<link rel="alternate rdf" type="application/rdf+xml" href="{$url}id/{str[@name='id']}.rdf"/>
+			<link rel="html" type="application/rdf+xml" href="{$url}id/{str[@name='id']}.html"/>
+			<link rel="rdf" type="application/rdf+xml" href="{$url}id/{str[@name='id']}.rdf"/>
 			<id>
 				<xsl:value-of select="str[@name='id']"/>
 			</id>
