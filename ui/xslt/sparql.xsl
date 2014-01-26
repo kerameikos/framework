@@ -35,7 +35,6 @@
 		<xsl:variable name="default-query">
 <![CDATA[PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX dcterms:  <http://purl.org/dc/terms/>
-PREFIX nm:       <http://nomisma.org/id/>
 PREFIX skos:      <http://www.w3.org/2004/02/skos/core#>
 PREFIX owl:      <http://www.w3.org/2002/07/owl#>
 
@@ -48,7 +47,7 @@ SELECT * WHERE {
 			<div class="yui3-u-1">
 				<div class="content">
 					<h1>SPARQL Query</h1>
-					<p class="desc">The SPARQL endpoint is not yet active.</p>
+					
 					<form action="{$display_path}query" method="GET" accept-charset="UTF-8">
 						<textarea name="query" rows="20" style="width:95%;margins:20px auto">
 							<xsl:value-of select="$default-query"/>
