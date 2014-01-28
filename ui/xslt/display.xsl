@@ -10,7 +10,7 @@
 	<xsl:variable name="uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 	<xsl:variable name="type" select="/content/rdf:RDF/*/name()"/>
 
-	<xsl:template match="/content/rdf:RDF">
+	<xsl:template match="/">
 		<html
 			prefix="dcterms: http://purl.org/dc/terms/
 			foaf: http://xmlns.com/foaf/0.1/
@@ -50,7 +50,7 @@
 		<div class="yui3-g">
 			<div class="yui3-u-3-4">
 				<div class="content">
-					<xsl:apply-templates select="*" mode="type"/>
+					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
 
 					<xsl:if test="$type='crm:E53_Place'">
 						<div id="mapcontainer"/>
