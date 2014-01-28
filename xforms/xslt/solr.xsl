@@ -17,6 +17,14 @@
 			<field name="id">
 				<xsl:value-of select="$id"/>
 			</field>
+			<field name="type">
+				<xsl:value-of select="name()"/>
+			</field>
+			<xsl:for-each select="rdf:type">
+				<field name="type">
+					<xsl:value-of select="@rdf:resource"/>
+				</field>
+			</xsl:for-each>
 			<field name="prefLabel">
 				<xsl:value-of select="skos:prefLabel[@xml:lang='en']"/>
 			</field>

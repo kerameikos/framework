@@ -81,7 +81,7 @@
 					<xsl:value-of select="if(string(str[@name='prefLabel'])) then str[@name='prefLabel'] else str[@name='id']"/>
 				</a>
 			</span>
-			<xsl:if test="string(str[@name='definition']) or not(contains($q, 'typeof'))">
+			<xsl:if test="string(str[@name='definition']) or not(contains($q, 'type'))">
 				<dl>
 					<xsl:if test="string(str[@name='definition'])">
 						<dt>Definition</dt>
@@ -89,13 +89,15 @@
 							<xsl:value-of select="str[@name='definition']"/>
 						</dd>
 					</xsl:if>
-					<xsl:if test="not(contains($q, 'typeof'))">
+					<xsl:if test="not(contains($q, 'type'))">
 						<dt>Type</dt>
 						<dd>
-							<xsl:for-each select="arr[@name='typeof']/str">
-								<a href="{.}">
+							<xsl:for-each select="arr[@name='type']/str">
+								<!--<a href="{.}">
 									<xsl:value-of select="."/>
-								</a>
+									</a>-->
+								<xsl:value-of select="."/>
+								
 								<xsl:if test="not(position()=last())">
 									<xsl:text>, </xsl:text>
 								</xsl:if>
@@ -114,7 +116,7 @@
 			</span>
 			<select id="search_filter">
 				<option value="">Select Type...</option>
-				<xsl:for-each select="descendant::lst[@name='typeof']/int">
+				<xsl:for-each select="descendant::lst[@name='type']/int">
 					<xsl:variable name="value" select="concat('typeof:&#x022;', @name, '&#x022;')"/>
 					<option value="{$value}">
 						<xsl:if test="contains($q, $value)">
@@ -128,8 +130,8 @@
 				<b>Keyword: </b>
 			</span>
 			<input type="text" id="search_text">
-				<xsl:if test="$tokenized_q[not(contains(., 'typeof'))]">
-					<xsl:attribute name="value" select="$tokenized_q[not(contains(., 'typeof'))]"/>
+				<xsl:if test="$tokenized_q[not(contains(., 'type'))]">
+					<xsl:attribute name="value" select="$tokenized_q[not(contains(., 'type'))]"/>
 				</xsl:if>
 			</input>
 			<input name="q" type="hidden"/>
