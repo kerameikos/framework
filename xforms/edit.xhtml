@@ -19,11 +19,15 @@
 				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:crm="http://erlangen-crm.org/current/"
 					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
-					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"/>
+					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"/>
 			</xforms:instance>
 
 			<xforms:instance id="dbpedia">
-				<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
+				<rdf:RDF/>
+			</xforms:instance>
+			
+			<xforms:instance id="pleiades">
+				<rdf:RDF/>
 			</xforms:instance>
 
 			<xforms:instance id="control-instance">
@@ -35,6 +39,7 @@
 					<delete-success/>
 					<status/>
 					<dbpedia/>
+					<pleiades/>
 					<type/>
 					<id_path>/usr/local/projects/ceramic-ids/id/</id_path>
 					<endpoint>http://localhost:3030/ceramics/</endpoint>
@@ -81,6 +86,7 @@
 				<classes xmlns="">
 					<class>foaf:Person</class>
 					<class>foaf:Organization</class>
+					<class>crm:E53_Place</class>
 				</classes>
 			</xforms:instance>
 
@@ -112,11 +118,11 @@
 			</xforms:instance>
 
 			<xforms:instance id="lat-template" xxforms:exclude-result-prefixes="#all">
-				<geo:lat/>
+				<geo:lat rdf:datatype="xsd:float"/>
 			</xforms:instance>
 
 			<xforms:instance id="long-template" xxforms:exclude-result-prefixes="#all">
-				<geo:long/>
+				<geo:long rdf:datatype="xsd:float"/>
 			</xforms:instance>
 
 			<xforms:instance id="comment-template" xxforms:exclude-result-prefixes="#all">
@@ -271,6 +277,25 @@
 				</xforms:action>
 			</xforms:submission>
 
+
+			<!-- ************* GET PLEIADES RDF **********************-->
+			<xforms:submission id="get-pleiades-rdf" action="{instance('control-instance')/pleiades}/rdf" ref="instance('pleiades')"
+				replace="instance" method="get">
+				<xforms:message ev:event="xforms-submit-error" level="modal">Failed to get Pleiades RDF.</xforms:message>
+				<xforms:action ev:event="xforms-submit-done">
+					<xforms:action if="not(instance('pleiades')//geo:lat) and not(instance('pleiades')//geo:long)">
+						<xforms:message level="modal">No coordinates available from Pleiades for this URI.</xforms:message>
+					</xforms:action>
+					<xforms:action if="instance('pleiades')//geo:lat and instance('pleiades')//geo:long">
+						<!-- insert lat and long templates -->
+						<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]" origin="instance('lat-template')"/>
+						<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]" origin="instance('long-template')"/>
+						<!-- set value of geo:lat and geo:long -->
+						<xforms:setvalue ref="instance('doc')//geo:lat" value="instance('pleiades')//geo:lat"/>
+						<xforms:setvalue ref="instance('doc')//geo:long" value="instance('pleiades')//geo:long"/>
+					</xforms:action>
+				</xforms:action>
+			</xforms:submission>
 			<!-- ************* SPARQL SUBMISSIONS **********************-->
 			<xforms:submission id="getRdf" action="http://localhost:8080/cocoon/ceramics/id/{instance('control-instance')/id}.rdf" ref="instance('rdf')"
 				replace="instance" method="get">
@@ -368,6 +393,7 @@
 								<strong>Alert:</strong> Definition languages must be unique. </p>
 						</div>
 					</xforms:group>
+					<!-- *************** TRIGGERS ***************-->
 					<div class="submission">
 						<xforms:trigger bind="save-trigger">
 							<xforms:label><img src="/ceramics/xforms/images/save.gif" alt="Save"/>Save</xforms:label>
@@ -394,6 +420,7 @@
 							<xforms:label class="file_control"><img src="/ceramics/xforms/images/remove.gif" alt="Delete"/>Delete</xforms:label>
 							<xforms:dispatch ev:event="DOMActivate" target="delete-dialog" name="fr-show"/>
 						</xforms:trigger>
+						<!-- import skos:prefLabels from dbpedia for those languages that are not already in the RDF -->
 						<xforms:group ref="instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]">
 							<xforms:trigger>
 								<xforms:label>Import Dbpedia Labels</xforms:label>
@@ -401,6 +428,18 @@
 									<xforms:setvalue ref="instance('control-instance')/dbpedia"
 										value="substring-after(instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]/@rdf:resource, 'resource/')"/>
 									<xforms:send submission="get-dbpedia-rdf"/>
+								</xforms:action>
+							</xforms:trigger>
+						</xforms:group>
+						<!-- extract coordinates from Pleiades if there is a Pleiades URI in owl:sameAs, but no geo:lat and geo:long -->
+						<xforms:group
+							ref=".[instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')] and not(instance('doc')//geo:lat) and not(instance('doc')//geo:long)]">
+							<xforms:trigger>
+								<xforms:label>Import Pleiades Coordinates</xforms:label>
+								<xforms:action ev:event="DOMActivate">
+									<xforms:setvalue ref="instance('control-instance')/pleiades"
+										value="instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')][1]/@rdf:resource"/>
+									<xforms:send submission="get-pleiades-rdf"/>
 								</xforms:action>
 							</xforms:trigger>
 						</xforms:group>
@@ -444,36 +483,18 @@
 					</xforms:group>
 					<div class="section">
 						<xforms:group ref="instance('doc')" id="form">
-							<!--<div>
-								<xforms:select1 ref="*/name()">
-									<xforms:label>Type</xforms:label>
-									<xforms:alert>Required</xforms:alert>
-									<xforms:item>
-										<xforms:label>Select...</xforms:label>
-										<xforms:value/>
-									</xforms:item>
-									<xforms:item>
-										<xforms:label>foaf:Person</xforms:label>
-										<xforms:value>foaf:Person</xforms:value>
-									</xforms:item>
-									<!-\-<xforms:itemset nodeset="instance('nt-response')/res:results/res:result">
-										<xforms:label ref="res:binding[@name='label']/res:literal"/>
-										<xforms:value ref="substring-after(res:binding[@name='uri']/res:uri, 'id/')"/>
-									</xforms:itemset>-\->
-								</xforms:select1>
-							</div>-->
-								<xforms:group ref="*">
+							<xforms:group ref="*">
 								<div class="trigger_container">
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>skos:prefLabel</xforms:label>
+											<img src="/ceramics/xforms/images/add.gif"/>Preferred Label</xforms:label>
 										<xforms:insert ev:event="DOMActivate" origin="instance('prefLabel-template')" context="."
 											nodeset="./child::node()[last()]"/>
 									</xforms:trigger>
 									<span> | </span>
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>skos:altLabel</xforms:label>
+											<img src="/ceramics/xforms/images/add.gif"/>Alternate Label</xforms:label>
 										<xforms:insert ev:event="DOMActivate" origin="instance('altLabel-template')" context="."
 											nodeset="./child::node()[last()]"/>
 									</xforms:trigger>
@@ -483,24 +504,24 @@
 										<xforms:insert ev:event="DOMActivate" origin="instance('comment-template')" context="."
 											nodeset="./child::node()[last()]"/>
 									</xforms:trigger>
-									<!--<xforms:group ref=".[count(geo:lat) = 0 and @typeof='mint']">
+									<xforms:group ref=".[count(geo:lat) = 0 and name()='crm:E53_Place']">
 										<xforms:trigger appearance="minimal">
-										<xforms:label>
-										<img src="/ceramics/xforms/images/add.gif"/>Coordinates</xforms:label>
-										<xforms:action ev:event="DOMActivate">
-										<xforms:insert context="." nodeset="./child::node()[last()]" origin="instance('lat-template')"/>
-										<xforms:insert context="." nodeset="./child::node()[last()]" origin="instance('long-template')"/>
-										</xforms:action>
+											<xforms:label>
+												<img src="/ceramics/xforms/images/add.gif"/>Coordinates</xforms:label>
+											<xforms:action ev:event="DOMActivate">
+												<xforms:insert context="." nodeset="./child::node()[last()]" origin="instance('lat-template')"/>
+												<xforms:insert context="." nodeset="./child::node()[last()]" origin="instance('long-template')"/>
+											</xforms:action>
 										</xforms:trigger>
-										</xforms:group>-->
+									</xforms:group>
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>skos:defintion</xforms:label>
+											<img src="/ceramics/xforms/images/add.gif"/>Definition</xforms:label>
 										<xforms:insert ev:event="DOMActivate" origin="instance('definition-template')" context="."/>
 									</xforms:trigger>
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>owl:sameAs</xforms:label>
+											<img src="/ceramics/xforms/images/add.gif"/>Same As</xforms:label>
 										<xforms:insert ev:event="DOMActivate" origin="instance('sameAs-template')" context="." nodeset="./child::node()[last()]"
 										/>
 									</xforms:trigger>
@@ -706,7 +727,7 @@
 							<fr:label>No</fr:label>
 						</fr:negative-choice>
 					</fr:alert-dialog>
-<!--					<fr:xforms-inspector/>-->
+					<fr:xforms-inspector/>
 				</div>
 			</div>
 		</div>

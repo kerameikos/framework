@@ -65,26 +65,41 @@ dd {
 	text-align:center;
 }
 /*
-  ****************************************
-  PAGINATION
-  ****************************************
+  ***************************************
+  PAGINATION/SEARCH RESULTS
+  ***************************************
  */
+ .result-doc {
+ 	margin-bottom:20px;
+ 	padding-bottom:20px;
+ 	border-bottom: 1px dotted silver;
+ }
+ .doc-label {
+ 	font-size:120%;
+ }
 .paging_div {
 	width:100%;
 	display:table;
 	padding-top:10px;
 	padding-bottom:10px;
 }
-.pagingBtn, .pagingSep {
-	padding:2px;
-	text-decoration:none;
+.paging li {
+	float: left;
+	list-style: none outside none;
+	margin: 2px;
+	position: relative;
+	width:30px;
+	text-align:center;
 }
-.pagingBtn {
-	font-weight:bold;
+.paging {
+	padding:0;
+	margin:0;	
 }
-.pagingBtn:hover {
-	background-color:#DDDDDD;
-	text-decoration:underline;
+.paging li a {
+	width:100%;
+}
+.filter-form {
+	display:inline;
 }
 /*
   ***************************************
@@ -140,11 +155,7 @@ div#timelinecontainer {
 }
 div#mapcontainer {
 	width:100%;
-	height: 600px;
-}
-div#display-mapcontainer {
-	width:100%;
-	height: 400px;
+	height: 500px;
 }
 div.olFramedCloudPopupContent {
 	width: 300px;

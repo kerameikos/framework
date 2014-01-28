@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
 	<xsl:include href="templates.xsl"/>
-	<xsl:variable name="display_path"/>
+	<xsl:variable name="display_path">./</xsl:variable>
 
 	<xsl:template match="/">
 		<html>
@@ -30,7 +30,21 @@
 			<div class="yui3-u-1-3">
 				<div class="content">
 					<h2>Sidebar</h2>
-					<a href="feed/"><img src="{$display_path}ui/images/atom-large.png"/></a>
+					<p class="desc">The sidebar will contain links to web services and downloads of data dumps.</p>
+					<div>
+						<h3>Search</h3>
+						<form action="id/" method="GET">
+							<input type="text" name="q"/>
+							<input type="submit" value="Search"/>
+						</form>
+					</div>
+					<div>
+						<h3>Atom Feed</h3>
+						<a href="feed/">
+							<img src="{$display_path}ui/images/atom-large.png"/>
+						</a>
+					</div>
+					
 				</div>
 			</div>
 		</div>

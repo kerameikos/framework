@@ -8,8 +8,8 @@
 			</span>
 			<xsl:text> | </xsl:text>
 			<a href="{$display_path}">Home</a>
-			<!--<xsl:text> | </xsl:text>
-			<a href="{$display_path}search/" >Search</a>-->
+			<xsl:text> | </xsl:text>
+			<a href="{$display_path}id/" >Browse</a>
 			<xsl:text> | </xsl:text>
 			<a href="{$display_path}sparql/">SPARQL</a>
 			<!--<xsl:text> | </xsl:text>

@@ -2,12 +2,13 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
 	xmlns:crm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
-	exclude-result-prefixes="#all" version="2.0">
+	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="templates.xsl"/>
 
 	<xsl:variable name="display_path">../</xsl:variable>
 	<xsl:variable name="id" select="substring-after(//@rdf:about, 'id/')"/>
 	<xsl:variable name="uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
+	<xsl:variable name="type" select="/content/rdf:RDF/*/name()"/>
 
 	<xsl:template match="/content/rdf:RDF">
 		<html
@@ -22,12 +23,16 @@
 			dcterms: http://purl.org/dc/terms/
 			crm: http://erlangen-crm.org/current/">
 			<head>
-				<title>Ceramic Project</title>
+				<title id="{$id}">Ceramic Project: <xsl:value-of select="//@rdf:about"/></title>
 				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 
 				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"/>
-				<!--<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.23/jquery-ui.min.js"/>-->
+				<xsl:if test="$type='crm:E53_Place'">
+					<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"/>
+					<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&amp;sensor=false"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
+				</xsl:if>
 			</head>
 			<body>
 				<xsl:call-template name="header"/>
@@ -39,13 +44,18 @@
 
 	<xsl:template name="body">
 		<div>
-			<p>Download options: <a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$uri}&amp;format=ttl">TTL</a> |
-					<a href="http://www.w3.org/2012/pyRdfa/extract?uri={$uri}&amp;format=json">JSON-LD</a></p>
+			<p>Download options: <a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$uri}&amp;format=ttl">TTL</a> | <a
+					href="http://www.w3.org/2012/pyRdfa/extract?uri={$uri}&amp;format=json">JSON-LD</a></p>
 		</div>
 		<div class="yui3-g">
 			<div class="yui3-u-3-4">
 				<div class="content">
 					<xsl:apply-templates select="*" mode="type"/>
+
+					<xsl:if test="$type='crm:E53_Place'">
+						<div id="mapcontainer"/>
+					</xsl:if>
+
 					<p class="desc">Below the RDF output, there can be maps showing the geographic distribution vases of this type or created by this person, as
 						well as a simple interface to render a graph showing the distribution of particular typologies (e.g., shape types or iconographic
 						motifs), generated from SPARQL</p>
@@ -73,23 +83,21 @@
 				<xsl:text>)</xsl:text>
 			</h2>
 			<dl>
-				<xsl:apply-templates select="skos:prefLabel">
+				<xsl:apply-templates select="skos:prefLabel" mode="list-item">
 					<xsl:sort select="@xml:lang"/>
 				</xsl:apply-templates>
-				<xsl:apply-templates select="skos:definition">
+				<xsl:apply-templates select="skos:definition" mode="list-item">
 					<xsl:sort select="@xml:lang"/>
 				</xsl:apply-templates>
-				<xsl:apply-templates select="rdf:type">
-					<xsl:sort select="@rdf:resource"/>
-				</xsl:apply-templates>
-				<xsl:apply-templates select="owl:sameAs">
+				<xsl:apply-templates select="*[not(name()='skos:prefLabel') and not(name()='skos:definition')]" mode="list-item">
+					<xsl:sort select="name()"/>
 					<xsl:sort select="@rdf:resource"/>
 				</xsl:apply-templates>
 			</dl>
 		</div>
 	</xsl:template>
 
-	<xsl:template match="skos:prefLabel|skos:definition|owl:sameAs|rdf:type">
+	<xsl:template match="*" mode="list-item">
 		<dt>
 			<xsl:value-of select="name()"/>
 		</dt>
@@ -99,9 +107,11 @@
 					<span property="{name()}" xml:lang="{@xml:lang}">
 						<xsl:value-of select="."/>
 					</span>
-					<span class="lang">
-						<xsl:value-of select="concat(' (', @xml:lang, ')')"/>
-					</span>
+					<xsl:if test="string(@xml:lang)">
+						<span class="lang">
+							<xsl:value-of select="concat(' (', @xml:lang, ')')"/>
+						</span>
+					</xsl:if>
 				</xsl:when>
 				<xsl:when test="string(@rdf:resource)">
 					<span>
@@ -111,9 +121,7 @@
 					</span>
 				</xsl:when>
 			</xsl:choose>
-
 		</dd>
-
 	</xsl:template>
 
 	<xsl:template name="dbpedia-abstract">

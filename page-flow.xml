@@ -23,23 +23,27 @@
 	* PUBLIC INTERFACE *
 	***************** -->
 
+	<!-- **** SERIALIZATION **** -->
 	<!-- RDF direct output -->
 	<page path="/ceramics/id/(.*)\.rdf" matcher="oxf:perl5-matcher" view="xpl/get-id.xpl"/>	
 	<!-- Object KML -->
 	<page path="/ceramics/id/(.*)\.kml" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/id-to-kml.xpl"/>	
 	<!-- public html view -->
 	<page path="/ceramics/id/(.*)\.html" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/display.xpl"/>
-	<!-- 303 redirect from official URI to .html -->
-	<page path="/ceramics/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/303-redirect.xpl"/>
 
 	<!-- Atom feed -->
-	<page path="/ceramics/feed/" model="xpl/solr-feed.xpl" view="xpl/feed.xpl"/>
+	<page path="/ceramics/feed/" model="xpl/solr-query.xpl" view="xpl/feed.xpl"/>
+	
+	<!-- SPARQL interface -->
+	<page path="/ceramics/query" view="xpl/query.xpl"/>
 	
 	<!-- **** PAGES **** -->
+	<page path="/ceramics/id/" model="xpl/solr-query.xpl" view="xpl/results.xpl"/>
 	<page path="/ceramics/sparql/" view="xpl/sparql.xpl"/>
-	<page path="/ceramics/query" view="xpl/query.xpl"/>
-	<!-- index -->
 	<page path="/ceramics/" view="xpl/index.xpl"/>
+	
+	<!-- 303 redirect from official URI to .html -->
+	<page path="/ceramics/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/303-redirect.xpl"/>
 
 	<epilogue url="oxf:/config/epilogue.xpl"/>
 </config>
