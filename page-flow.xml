@@ -34,8 +34,8 @@
 	<!-- Atom feed -->
 	<page path="/ceramics/feed/" model="xpl/solr-query.xpl" view="xpl/feed.xpl"/>
 	
-	<!-- SPARQL interface -->
-	<page path="/ceramics/query" view="xpl/query.xpl"/>
+	<!-- SPARQL wrapper (URL generator) -->
+	<page path="/ceramics/query" view="xpl/sparql-query.xpl"/>
 	
 	<!-- **** PAGES **** -->
 	<page path="/ceramics/id/" model="xpl/solr-query.xpl" view="xpl/results.xpl"/>

@@ -22,24 +22,19 @@
 					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"/>
 			</xforms:instance>
 
-			<xforms:instance id="dbpedia">
-				<rdf:RDF/>
-			</xforms:instance>
-			
-			<xforms:instance id="pleiades">
-				<rdf:RDF/>
-			</xforms:instance>
-
 			<xforms:instance id="control-instance">
 				<controls xmlns="">
 					<id/>
-					<original_id/>
+					<original-id/>
 					<save-trigger>false</save-trigger>
 					<delete-trigger/>
 					<delete-success/>
 					<status/>
-					<dbpedia/>
-					<pleiades/>
+					<dbpedia-id/>
+					<pleiades-id/>
+					<viaf-id/>
+					<viaf-query/>
+					<viaf-field/>
 					<type/>
 					<id_path>/usr/local/projects/ceramic-ids/id/</id_path>
 					<endpoint>http://localhost:3030/ceramics/</endpoint>
@@ -77,6 +72,27 @@
 				<dump xmlns=""/>
 			</xforms:instance>
 
+			<!-- REST responses -->
+			<xforms:instance id="dbpedia-rdf">
+				<rdf:RDF/>
+			</xforms:instance>
+
+			<xforms:instance id="pleiades-rdf">
+				<rdf:RDF/>
+			</xforms:instance>
+
+			<xforms:instance id="viaf-response">
+				<rss xmlns=""/>
+			</xforms:instance>
+
+			<xforms:instance id="viaf-rdf">
+				<rdf:RDF/>
+			</xforms:instance>
+
+			<xforms:instance id="viaf-options">
+				<options xmlns=""/>
+			</xforms:instance>
+
 			<!-- itemsets -->
 			<xforms:instance id="languages">
 				<xi:include href="instances/languages.xml"/>
@@ -84,9 +100,18 @@
 
 			<xforms:instance id="classes">
 				<classes xmlns="">
-					<class>foaf:Person</class>
-					<class>foaf:Organization</class>
-					<class>crm:E53_Place</class>
+					<class>
+						<label>Organization</label>
+						<type>foaf:Organization</type>
+					</class>
+					<class>
+						<label>Person</label>
+						<type>foaf:Person</type>
+					</class>
+					<class>
+						<label>Place</label>
+						<type>crm:E53_Place</type>
+					</class>
 				</classes>
 			</xforms:instance>
 
@@ -188,7 +213,7 @@
 				<!-- load id if parameter is passed -->
 				<xforms:action if="string(xxforms:get-request-parameter('id'))">
 					<xforms:setvalue ref="instance('control-instance')/id" value="xxforms:get-request-parameter('id')"/>
-					<xforms:setvalue ref="instance('control-instance')/original_id" value="xxforms:get-request-parameter('id')"/>
+					<xforms:setvalue ref="instance('control-instance')/original-id" value="xxforms:get-request-parameter('id')"/>
 					<xforms:setvalue ref="instance('load-config')/url"
 						value="concat('file://', instance('control-instance')/id_path, xxforms:get-request-parameter('id'), '.xml')"/>
 					<xforms:insert nodeset="instance('doc')"
@@ -250,6 +275,12 @@
 				<xforms:bind nodeset="save-trigger" type="xs:boolean"/>
 			</xforms:bind>
 
+			<xforms:bind nodeset="instance('viaf-options')">
+				<xforms:bind nodeset="option">
+					<xforms:bind nodeset="@select" type="xs:boolean"/>
+				</xforms:bind>
+			</xforms:bind>
+
 			<!-- only enable save button if doc is valid and save-trigger is true -->
 			<xforms:bind id="save-trigger" nodeset="instance('control-instance')/save-trigger" relevant=".= true()"/>
 
@@ -264,10 +295,10 @@
 			</xforms:action>
 
 			<!-- ************* GET DBPEDIA RDF **********************-->
-			<xforms:submission id="get-dbpedia-rdf" action="http://dbpedia.org/data/{instance('control-instance')/dbpedia}.rdf" ref="instance('dbpedia')"
+			<xforms:submission id="get-dbpedia-rdf" action="http://dbpedia.org/data/{instance('control-instance')/dbpedia-id}.rdf" ref="instance('dbpedia-rdf')"
 				replace="instance" method="get">
 				<xforms:message ev:event="xforms-submit-error" level="modal">Failed to get Dbpedia RDF.</xforms:message>
-				<xforms:action ev:event="xforms-submit-done" xxforms:iterate="instance('dbpedia')//rdfs:label">
+				<xforms:action ev:event="xforms-submit-done" xxforms:iterate="instance('dbpedia-rdf')//rdfs:label">
 					<xforms:var name="lang" select="@xml:lang"/>
 					<xforms:action if="not(instance('doc')/*/skos:prefLabel[@xml:lang=$lang])">
 						<xforms:insert context="instance('doc')/*" nodeset="./skos:prefLabel[last()]" origin="instance('prefLabel-template')"/>
@@ -277,29 +308,49 @@
 				</xforms:action>
 			</xforms:submission>
 
-
 			<!-- ************* GET PLEIADES RDF **********************-->
-			<xforms:submission id="get-pleiades-rdf" action="{instance('control-instance')/pleiades}/rdf" ref="instance('pleiades')"
-				replace="instance" method="get">
+			<xforms:submission id="get-pleiades-rdf" action="{instance('control-instance')/pleiades-id}/rdf" ref="instance('pleiades-rdf')" replace="instance"
+				method="get">
 				<xforms:message ev:event="xforms-submit-error" level="modal">Failed to get Pleiades RDF.</xforms:message>
 				<xforms:action ev:event="xforms-submit-done">
-					<xforms:action if="not(instance('pleiades')//geo:lat) and not(instance('pleiades')//geo:long)">
+					<xforms:action if="not(instance('pleiades-rdf')//geo:lat) and not(instance('pleiades-rdf')//geo:long)">
 						<xforms:message level="modal">No coordinates available from Pleiades for this URI.</xforms:message>
 					</xforms:action>
-					<xforms:action if="instance('pleiades')//geo:lat and instance('pleiades')//geo:long">
+					<xforms:action if="instance('pleiades-rdf')//geo:lat and instance('pleiades-rdf')//geo:long">
 						<!-- insert lat and long templates -->
 						<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]" origin="instance('lat-template')"/>
 						<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]" origin="instance('long-template')"/>
 						<!-- set value of geo:lat and geo:long -->
-						<xforms:setvalue ref="instance('doc')//geo:lat" value="instance('pleiades')//geo:lat"/>
-						<xforms:setvalue ref="instance('doc')//geo:long" value="instance('pleiades')//geo:long"/>
+						<xforms:setvalue ref="instance('doc')//geo:lat" value="instance('pleiades-rdf')//geo:lat"/>
+						<xforms:setvalue ref="instance('doc')//geo:long" value="instance('pleiades-rdf')//geo:long"/>
 					</xforms:action>
 				</xforms:action>
 			</xforms:submission>
-			<!-- ************* SPARQL SUBMISSIONS **********************-->
-			<xforms:submission id="getRdf" action="http://localhost:8080/cocoon/ceramics/id/{instance('control-instance')/id}.rdf" ref="instance('rdf')"
-				replace="instance" method="get">
-				<xforms:message ev:event="xforms-submit-error" level="modal">Failed to get RDF.</xforms:message>
+
+			<!-- ************* VIAF RESPONSES **********************-->
+			<xforms:submission id="query-viaf" serialization="none" method="get"
+				action="http://viaf.org/viaf/search?query={instance('control-instance')/viaf-field}+all+%22{instance('control-instance')/viaf-query}%22&amp;sortKeys=holdingscount&amp;maximumRecords=50&amp;httpAccept=application/rss%2bxml"
+				instance="viaf-response" replace="instance">
+				<xforms:message ev:event="xforms-submit-error" level="modal">Error querying VIAF.</xforms:message>
+				<xforms:action xxforms:iterate="instance('viaf-response')//item" ev:event="xforms-submit-done">
+					<xforms:var name="link" select="context()/link"/>
+					<xforms:var name="title" select="context()/title"/>
+					<xforms:insert context="instance('viaf-options')" nodeset="./child::node()[last()]"
+						origin="xforms:element('option', (xforms:attribute('select', false()), xforms:attribute('link', $link), $title))"/>
+				</xforms:action>
+			</xforms:submission>
+
+			<xforms:submission id="get-viaf-rdf" serialization="none" method="get" action="{instance('control-instance')/viaf-id}/rdf.xml" instance="viaf-rdf"
+				replace="instance">
+				<xforms:message ev:event="xforms-submit-error" level="modal">Failed to get VIAF RDF.</xforms:message>
+				<xforms:action ev:event="xforms-submit-done"
+					xxforms:iterate="instance('viaf-rdf')/rdf:Description[@rdf:about=instance('control-instance')/viaf-id]/owl:sameAs">
+					<xforms:var name="resource" select="context()/@rdf:resource"/>
+					<xforms:action if="not(instance('doc')//owl:sameAs[@rdf:resource=$resource])">
+						<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
+							origin="xforms:element('owl:sameAs', xforms:attribute('rdf:resource', $resource))"/>
+					</xforms:action>
+				</xforms:action>
 			</xforms:submission>
 
 			<!-- ************* SPARQL SUBMISSIONS **********************-->
@@ -425,7 +476,7 @@
 							<xforms:trigger>
 								<xforms:label>Import Dbpedia Labels</xforms:label>
 								<xforms:action ev:event="DOMActivate">
-									<xforms:setvalue ref="instance('control-instance')/dbpedia"
+									<xforms:setvalue ref="instance('control-instance')/dbpedia-id"
 										value="substring-after(instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]/@rdf:resource, 'resource/')"/>
 									<xforms:send submission="get-dbpedia-rdf"/>
 								</xforms:action>
@@ -437,9 +488,21 @@
 							<xforms:trigger>
 								<xforms:label>Import Pleiades Coordinates</xforms:label>
 								<xforms:action ev:event="DOMActivate">
-									<xforms:setvalue ref="instance('control-instance')/pleiades"
+									<xforms:setvalue ref="instance('control-instance')/pleiades-id"
 										value="instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')][1]/@rdf:resource"/>
 									<xforms:send submission="get-pleiades-rdf"/>
+								</xforms:action>
+							</xforms:trigger>
+						</xforms:group>
+						<!-- query VIAF to add associated URIs -->
+						<xforms:group ref=".[instance('doc')/*/name()='foaf:Person' or instance('doc')/*/name()='foaf:Organization']">
+							<xforms:var name="type" select="instance('doc')/*/name()"/>
+							<xforms:trigger>
+								<xforms:label>Import VIAF URIs</xforms:label>
+								<xforms:action ev:event="DOMActivate">
+									<xforms:setvalue ref="instance('control-instance')/viaf-field"
+										value="if ($type='foaf:Person') then 'local.personalNames' else 'local.corporateNames'"/>
+									<xxforms:show dialog="viaf-dialog"/>
 								</xforms:action>
 							</xforms:trigger>
 						</xforms:group>
@@ -466,8 +529,8 @@
 									<xforms:value/>
 								</xforms:item>
 								<xforms:itemset nodeset="instance('classes')/class">
-									<xforms:label ref="."/>
-									<xforms:value ref="."/>
+									<xforms:label ref="label"/>
+									<xforms:value ref="type"/>
 								</xforms:itemset>
 								<xforms:action ev:event="xforms-value-changed">
 									<xforms:var name="type" select="."/>
@@ -727,7 +790,56 @@
 							<fr:label>No</fr:label>
 						</fr:negative-choice>
 					</fr:alert-dialog>
-					<fr:xforms-inspector/>
+					<xxforms:dialog id="viaf-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+						<xforms:label>Query VIAF</xforms:label>
+						<div>
+							<xforms:input ref="instance('control-instance')/viaf-query">
+								<xforms:label>Name</xforms:label>
+							</xforms:input>
+						</div>
+						<xforms:group ref=".[count(instance('viaf-options')/option) &gt; 0]">
+							<table>
+								<thead>
+									<tr>
+										<th>Select</th>
+										<th>Name</th>
+									</tr>
+								</thead>
+								<tbody>
+									<xforms:repeat nodeset="instance('viaf-options')/option">
+										<tr>
+											<td><xforms:input ref="@select"/></td>
+											<td><xforms:output ref="."/></td>
+										</tr>
+									</xforms:repeat>
+								</tbody>
+							</table>
+							<xforms:trigger>
+								<xforms:label>Add Selected</xforms:label>
+								<xforms:action ev:event="DOMActivate">
+									<xforms:action xxforms:iterate="instance('viaf-options')/option[@select=true()]">
+										<xforms:var name="resource" select="context()/@link"/>
+										<xforms:setvalue ref="instance('control-instance')/viaf-id" value="$resource"/>
+										<xforms:action if="not(instance('doc')//owl:sameAs[@rdf:resource=$resource])">
+											<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
+												origin="xforms:element('owl:sameAs', xforms:attribute('rdf:resource', $resource))"/>
+										</xforms:action>
+										<xforms:send submission="get-viaf-rdf"/>
+									</xforms:action>
+									<xxforms:hide dialog="viaf-dialog"/>
+								</xforms:action>
+							</xforms:trigger>
+						</xforms:group>
+						<xforms:trigger>
+							<xforms:label>Search</xforms:label>
+							<!-- delete current options in the instance and initiate new query -->
+							<xforms:action ev:event="DOMActivate">
+								<xforms:delete context="instance('viaf-options')/*"/>
+								<xforms:send submission="query-viaf"/>
+							</xforms:action>
+						</xforms:trigger>
+					</xxforms:dialog>
+<!--					<fr:xforms-inspector/>-->
 				</div>
 			</div>
 		</div>
