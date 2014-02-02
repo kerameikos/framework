@@ -38,8 +38,9 @@
 	<page path="/ceramics/query" view="xpl/sparql-query.xpl"/>
 	
 	<!-- **** PAGES **** -->
-	<page path="/ceramics/id/" model="xpl/solr-query.xpl" view="xpl/results.xpl"/>
-	<page path="/ceramics/sparql/" view="xpl/sparql.xpl"/>
+	<page path="/ceramics/id/" model="xpl/solr-query.xpl" view="xpl/results.xpl"/>	
+	<page path="/ceramics/sparql" view="xpl/sparql.xpl"/>
+	<page path="/ceramics/ontology" view="xpl/ontology.xpl"/>
 	<page path="/ceramics/" view="xpl/index.xpl"/>
 	
 	<!-- **** DATA DUMPS **** -->
