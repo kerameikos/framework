@@ -1,4 +1,4 @@
-#write xhtml+rdfa file
+#generate RDF data dumps
 cd /usr/local/projects/ceramics
 echo "Generating RDF/XML."
 OUTPUT=dump/kerameikos.org.xml

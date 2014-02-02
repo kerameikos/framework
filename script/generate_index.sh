@@ -1,4 +1,4 @@
-#write xhtml+rdfa file
+#post data to Solr en masse
 cd /usr/local/projects/ceramics
 echo "Generating Solr XML"
 java -jar script/saxon9.jar config.xml script/generate_solr.xsl > add_doc.xml
