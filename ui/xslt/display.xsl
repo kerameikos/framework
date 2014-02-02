@@ -23,7 +23,7 @@
 			dcterms: http://purl.org/dc/terms/
 			crm: http://erlangen-crm.org/current/">
 			<head>
-				<title id="{$id}">Ceramic Project: <xsl:value-of select="//@rdf:about"/></title>
+				<title id="{$id}">Kerameikos.org: <xsl:value-of select="//@rdf:about"/></title>
 				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 

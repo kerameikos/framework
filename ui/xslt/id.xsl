@@ -34,6 +34,7 @@
 	<xsl:template match="/">
 		<html>
 			<head>
+				<title>Kerameikos.org: Browse</title>
 				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 				<link rel="alternate" type="application/atom+xml" href="feed/{if ($q = '*:*') then '' else concat('?q=', $q)}"/>

@@ -7,7 +7,7 @@
 	<xsl:template match="/">
 		<html>
 			<head>
-				<title>SPARQL Interface</title>
+				<title>Kerameikos.org: SPARQL</title>
 				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 
