@@ -5,7 +5,7 @@
 	xmlns:crm="http://erlangen-crm.org/current/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 	<head>
-		<title>Kylix: LOD Editor</title>
+		<title>Kerameikos: LOD Editor</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css"/>
 		<link rel="stylesheet" href="/fr/style/form-runner-bootstrap-override.css" type="text/css"/>
 		<link rel="stylesheet" href="/config/theme/examples.css" type="text/css" media="all"/>
@@ -161,7 +161,7 @@
 					PREFIX dcterms:  <http://purl.org/dc/terms/>
 					PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 					SELECT ?uri ?label WHERE {
-					?uri  rdf:type <http://example.org/id/TERM>.
+					?uri  rdf:type <http://kerameikos.org/id/TERM>.
 					?uri skos:prefLabel ?label .
 					FILTER (lang(?label) = "en")}
 					ORDER BY ASC(?label)
@@ -450,7 +450,7 @@
 							<xforms:label><img src="/ceramics/xforms/images/save.gif" alt="Save"/>Save</xforms:label>
 							<xforms:action ev:event="DOMActivate">
 								<!-- set id -->
-								<xforms:setvalue ref="instance('doc')/*/@rdf:about" value="concat('http://example.org/id/', instance('control-instance')/id)"/>
+								<xforms:setvalue ref="instance('doc')/*/@rdf:about" value="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>
 								<!-- save file back to disk -->
 								<xforms:setvalue ref="instance('save-config')/url"
 									value="concat('file://', instance('control-instance')/id_path, instance('control-instance')/id, '.xml')"/>
@@ -514,8 +514,8 @@
 							<xforms:alert>Required</xforms:alert>
 						</xforms:input>
 						<xforms:group ref=".[string-length(instance('control-instance')/id) &gt; 0]">
-							<a href="http://example.org/id/{instance('control-instance')/id}"> (<xforms:output
-									ref="concat('http://example.org/id/', instance('control-instance')/id)"/>)</a>
+							<a href="http://kerameikos.org/id/{instance('control-instance')/id}"> (<xforms:output
+									ref="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>)</a>
 						</xforms:group>
 					</div>
 					<xforms:group ref=".[not(instance('doc')/child::node())]">

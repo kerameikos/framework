@@ -5,7 +5,9 @@
 	<solr_published>http://localhost:8080/solr/ceramics/</solr_published>
 	<content>
 		<index>
-			<p>Here is content.</p>
+			<h1>Kerameikos.org</h1>
+			<p>Kerameikos.org is a collaborative project dedicated to defining the intellectual concepts of Greek pottery following the tenets of linked open
+				data.</p>
 		</index>
 	</content>
 </config>

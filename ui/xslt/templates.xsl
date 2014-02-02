@@ -4,7 +4,7 @@
 	<xsl:template name="header">
 		<div id="hd">
 			<span>
-				<b>Ceramic Prototype Site</b>
+				<b>Kerameikos.org</b>
 			</span>
 			<xsl:text> | </xsl:text>
 			<a href="{$display_path}">Home</a>

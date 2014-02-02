@@ -42,6 +42,9 @@
 	<page path="/ceramics/sparql/" view="xpl/sparql.xpl"/>
 	<page path="/ceramics/" view="xpl/index.xpl"/>
 	
+	<!-- **** DATA DUMPS **** -->
+	<page path="/ceramics/kerameikos.org.xml" view="dump/kerameikos.org.xml"/>
+	
 	<!-- 303 redirect from official URI to .html -->
 	<page path="/ceramics/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/303-redirect.xpl"/>
 

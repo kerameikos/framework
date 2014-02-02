@@ -48,13 +48,6 @@
 .xbl-component {
 	margin:5px 0;
 }
-.ui-state-error, .ui-state-highlight {
-	padding: 0pt 0.7em;
-	margin:20px auto;
-	width:400px;
-	font-size:12px;
-}
-
 /*
   ****************************************
   LAYOUT

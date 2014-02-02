@@ -44,7 +44,10 @@
 							<img src="{$display_path}ui/images/atom-large.png"/>
 						</a>
 					</div>
-					
+					<div>
+						<h3>Data Download</h3>
+						<a href="kerameikos.org.xml">RDF/XML</a>
+					</div>
 				</div>
 			</div>
 		</div>
