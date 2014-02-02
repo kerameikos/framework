@@ -3,7 +3,7 @@
 	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:foaf="http://xmlns.com/foaf/0.1/"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
 	xmlns:crm="http://erlangen-crm.org/current/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 	<head>
 		<title>Kerameikos: LOD Editor</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css"/>
@@ -19,7 +19,8 @@
 				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:crm="http://erlangen-crm.org/current/"
 					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
-					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"/>
+					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
+					xmlns:kon="http://kerameikos.org/ontology#"/>
 			</xforms:instance>
 
 			<xforms:instance id="control-instance">
@@ -111,6 +112,10 @@
 					<class>
 						<label>Place</label>
 						<type>crm:E53_Place</type>
+					</class>
+					<class>
+						<label>Shape</label>
+						<type>kon:Shape</type>
 					</class>
 				</classes>
 			</xforms:instance>
@@ -584,6 +589,12 @@
 									</xforms:trigger>
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
+											<img src="/ceramics/xforms/images/add.gif"/>Related Resource</xforms:label>
+										<xforms:insert ev:event="DOMActivate" origin="instance('related-template')" context="." nodeset="./child::node()[last()]"
+										/>
+									</xforms:trigger>
+									<xforms:trigger appearance="minimal">
+										<xforms:label>
 											<img src="/ceramics/xforms/images/add.gif"/>Same As</xforms:label>
 										<xforms:insert ev:event="DOMActivate" origin="instance('sameAs-template')" context="." nodeset="./child::node()[last()]"
 										/>
@@ -676,7 +687,7 @@
 									<xforms:repeat nodeset="rdfs:comment">
 										<div>
 											<xforms:input ref=".">
-												<xforms:label>Comment</xforms:label>
+												<xforms:label ref="name()"/>
 												<xforms:alert>Required</xforms:alert>
 											</xforms:input>
 											<xforms:select1 ref="@xml:lang">
@@ -699,6 +710,20 @@
 										</div>
 									</xforms:repeat>
 									<xforms:repeat nodeset="owl:sameAs">
+										<div>
+											<xforms:input ref="@rdf:resource">
+												<xforms:label ref="parent::node()/name()"/>
+												<xforms:alert>Required, must be URI</xforms:alert>
+											</xforms:input>
+											<xforms:trigger appearance="minimal">
+												<xforms:delete ev:event="DOMActivate" context="."/>
+												<xforms:label>
+													<img src="/ceramics/xforms/images/remove.gif"/>
+												</xforms:label>
+											</xforms:trigger>
+										</div>
+									</xforms:repeat>
+									<xforms:repeat nodeset="skos:related">
 										<div>
 											<xforms:input ref="@rdf:resource">
 												<xforms:label ref="parent::node()/name()"/>
@@ -839,7 +864,7 @@
 							</xforms:action>
 						</xforms:trigger>
 					</xxforms:dialog>
-<!--					<fr:xforms-inspector/>-->
+<!--										<fr:xforms-inspector/>-->
 				</div>
 			</div>
 		</div>

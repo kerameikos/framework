@@ -2,7 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
 	xmlns:crm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
-	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" exclude-result-prefixes="#all" version="2.0">
+	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="templates.xsl"/>
 
 	<xsl:variable name="display_path">../</xsl:variable>
@@ -21,7 +22,9 @@
 			rdf:  http://www.w3.org/1999/02/22-rdf-syntax-ns#
 			skos: http://www.w3.org/2004/02/skos/core#
 			dcterms: http://purl.org/dc/terms/
-			crm: http://erlangen-crm.org/current/">
+			crm: http://erlangen-crm.org/current/
+			kid: http://kerameikos.org/id/
+			kon: http://kerameikos.org/ontology#">
 			<head>
 				<title id="{$id}">Kerameikos.org: <xsl:value-of select="//@rdf:about"/></title>
 				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
@@ -79,7 +82,9 @@
 			<h2>
 				<xsl:value-of select="@rdf:about"/>
 				<xsl:text> (</xsl:text>
-				<xsl:value-of select="name()"/>
+				<a href="{concat(namespace-uri(.), local-name())}">
+					<xsl:value-of select="name()"/>
+				</a>
 				<xsl:text>)</xsl:text>
 			</h2>
 			<dl>
