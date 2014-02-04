@@ -2,7 +2,7 @@
 	xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:fr="http://orbeon.org/oxf/xml/form-runner"
 	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:foaf="http://xmlns.com/foaf/0.1/"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:crm="http://erlangen-crm.org/current/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 	<head>
 		<title>Kerameikos: LOD Editor</title>
@@ -17,7 +17,7 @@
 		<xforms:model>
 			<xforms:instance id="doc" xxforms:exclude-result-prefixes="#all">
 				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:crm="http://erlangen-crm.org/current/"
+					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:ecrm="http://erlangen-crm.org/current/"
 					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
 					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
 					xmlns:kon="http://kerameikos.org/ontology#"/>
@@ -111,7 +111,7 @@
 					</class>
 					<class>
 						<label>Place</label>
-						<type>crm:E53_Place</type>
+						<type>ecrm:E53_Place</type>
 					</class>
 					<class>
 						<label>Shape</label>
@@ -572,7 +572,7 @@
 										<xforms:insert ev:event="DOMActivate" origin="instance('comment-template')" context="."
 											nodeset="./child::node()[last()]"/>
 									</xforms:trigger>
-									<xforms:group ref=".[count(geo:lat) = 0 and name()='crm:E53_Place']">
+									<xforms:group ref=".[count(geo:lat) = 0 and name()='ecrm:E53_Place']">
 										<xforms:trigger appearance="minimal">
 											<xforms:label>
 												<img src="/ceramics/xforms/images/add.gif"/>Coordinates</xforms:label>

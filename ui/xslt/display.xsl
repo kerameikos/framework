@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:crm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
 	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 	exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="templates.xsl"/>
@@ -22,7 +22,7 @@
 			rdf:  http://www.w3.org/1999/02/22-rdf-syntax-ns#
 			skos: http://www.w3.org/2004/02/skos/core#
 			dcterms: http://purl.org/dc/terms/
-			crm: http://erlangen-crm.org/current/
+			ecrm: http://erlangen-crm.org/current/
 			kid: http://kerameikos.org/id/
 			kon: http://kerameikos.org/ontology#">
 			<head>
@@ -31,7 +31,7 @@
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 
 				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"/>
-				<xsl:if test="$type='crm:E53_Place'">
+				<xsl:if test="$type='ecrm:E53_Place'">
 					<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"/>
 					<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&amp;sensor=false"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
@@ -55,7 +55,7 @@
 				<div class="content">
 					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
 
-					<xsl:if test="$type='crm:E53_Place'">
+					<xsl:if test="$type='ecrm:E53_Place'">
 						<div id="mapcontainer"/>
 					</xsl:if>
 
