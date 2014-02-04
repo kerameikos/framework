@@ -102,8 +102,16 @@
 			<xforms:instance id="classes">
 				<classes xmlns="">
 					<class>
+						<label>Material</label>
+						<type>ecrm:E57_Material</type>
+					</class>
+					<class>
 						<label>Organization</label>
 						<type>foaf:Organization</type>
+					</class>
+					<class>
+						<label>Period</label>
+						<type>ecrm:E4_Period</type>
 					</class>
 					<class>
 						<label>Person</label>
@@ -116,6 +124,14 @@
 					<class>
 						<label>Shape</label>
 						<type>kon:Shape</type>
+					</class>
+					<class>
+						<label>Technique</label>
+						<type>kon:Technique</type>
+					</class>
+					<class>
+						<label>Ware</label>
+						<type>kon:Ware</type>
 					</class>
 				</classes>
 			</xforms:instance>
@@ -545,6 +561,9 @@
 									<xforms:insert context="instance('doc')/*" origin="xforms:element('skos:prefLabel', xforms:attribute('xml:lang', 'en'))"/>
 									<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
 										origin="xforms:element('skos:definition', xforms:attribute('xml:lang', 'en'))"/>
+									<!-- insert rdf:type as skos:Concept -->
+									<xforms:insert context="instance('doc')/*"
+										origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/2004/02/skos/core#Concept'))"/>
 								</xforms:action>
 							</xforms:select1>
 						</div>
@@ -552,6 +571,8 @@
 					<div class="section">
 						<xforms:group ref="instance('doc')" id="form">
 							<xforms:group ref="*">
+								<xforms:var name="type" select="name()"/>
+								<h3><xforms:output ref="instance('classes')/class[type=$type]/label"/></h3>
 								<div class="trigger_container">
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
@@ -590,8 +611,8 @@
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
 											<img src="/ceramics/xforms/images/add.gif"/>Related Resource</xforms:label>
-										<xforms:insert ev:event="DOMActivate" origin="instance('related-template')" context="." nodeset="./child::node()[last()]"
-										/>
+										<xforms:insert ev:event="DOMActivate" origin="instance('related-template')" context="."
+											nodeset="./child::node()[last()]"/>
 									</xforms:trigger>
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
@@ -864,7 +885,7 @@
 							</xforms:action>
 						</xforms:trigger>
 					</xxforms:dialog>
-<!--										<fr:xforms-inspector/>-->
+					<!--										<fr:xforms-inspector/>-->
 				</div>
 			</div>
 		</div>

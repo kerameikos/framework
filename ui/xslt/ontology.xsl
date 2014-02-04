@@ -29,9 +29,21 @@
 					<h1>Ontology</h1>
 					<p>This page is the placeholder for the Kerameikos.org ceramic ontology. This page will eventually be generated dynamically from RDF.</p>
 					<div>
-						<a name="#Shape"/>
-						<h2>Shape</h2>
-						<p>Vessel shape; considered object types by the British Museum thesaurus.</p>
+						<div>
+							<h2>Classes</h2>
+							<a name="#Shape"/>
+							<h3>Shape</h3>
+							<p>Vessel shape; considered object types by the British Museum thesaurus.</p>
+							<a name="#Technique"/>
+							<h3>Technique</h3>
+							<p>description</p>
+							<a name="#Ware"/>
+							<h3>Ware</h3>
+							<p>description</p>
+						</div>
+						<div>
+							<h2>Properties</h2>
+						</div>
 					</div>
 				</div>
 			</div>
