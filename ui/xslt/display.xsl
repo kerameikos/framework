@@ -8,8 +8,18 @@
 
 	<xsl:variable name="display_path">../</xsl:variable>
 	<xsl:variable name="id" select="substring-after(//@rdf:about, 'id/')"/>
-	<xsl:variable name="uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
+	<xsl:variable name="html-uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 	<xsl:variable name="type" select="/content/rdf:RDF/*/name()"/>
+	
+	<!-- definition of namespaces for turning in solr type field URIs into abbreviations -->
+	<xsl:variable name="namespaces" as="item()*">
+		<namespaces>
+			<namespace prefix="ecrm" uri="http://erlangen-crm.org/current/"/>
+			<namespace prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
+			<namespace prefix="kon" uri="http://kerameikos.org/ontology#"/>
+			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>			
+		</namespaces>
+	</xsl:variable>
 
 	<xsl:template match="/">
 		<html
@@ -47,8 +57,8 @@
 
 	<xsl:template name="body">
 		<div>
-			<p>Download options: <a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$uri}&amp;format=ttl">TTL</a> | <a
-					href="http://www.w3.org/2012/pyRdfa/extract?uri={$uri}&amp;format=json">JSON-LD</a></p>
+			<p>Download options: <a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=ttl">TTL</a> | <a
+				href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=json">JSON-LD</a></p>
 		</div>
 		<div class="yui3-g">
 			<div class="yui3-u-3-4">
@@ -121,7 +131,15 @@
 				<xsl:when test="string(@rdf:resource)">
 					<span>
 						<a href="{@rdf:resource}" rel="{name()}" title="{@rdf:resource}">
-							<xsl:value-of select="@rdf:resource"/>
+							<xsl:choose>
+								<xsl:when test="name()='rdf:type'">
+									<xsl:variable name="uri" select="@rdf:resource"/>
+									<xsl:value-of select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"/>							
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="@rdf:resource"/>
+								</xsl:otherwise>
+							</xsl:choose>
 						</a>
 					</span>
 				</xsl:when>

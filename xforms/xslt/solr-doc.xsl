@@ -12,7 +12,7 @@
 				<xsl:value-of select="$id"/>
 			</field>
 			<field name="type">
-				<xsl:value-of select="name()"/>
+				<xsl:value-of select="concat(namespace-uri(.), local-name())"/>
 			</field>
 			<xsl:for-each select="rdf:type">
 				<field name="type">

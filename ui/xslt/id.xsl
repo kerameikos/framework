@@ -30,6 +30,16 @@
 	<xsl:variable name="tokenized_q" select="tokenize($q, ' AND ')"/>
 	<xsl:variable name="numFound" select="//result[@name='response']/@numFound" as="xs:integer"/>
 	<xsl:variable name="display_path">../</xsl:variable>
+	
+	<!-- definition of namespaces for turning in solr type field URIs into abbreviations -->
+	<xsl:variable name="namespaces" as="item()*">
+		<namespaces>
+			<namespace prefix="ecrm" uri="http://erlangen-crm.org/current/"/>
+			<namespace prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
+			<namespace prefix="kon" uri="http://kerameikos.org/ontology#"/>
+			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>			
+		</namespaces>
+	</xsl:variable>
 
 	<xsl:template match="/">
 		<html>
@@ -63,6 +73,7 @@
 					<xsl:choose>
 						<xsl:when test="$numFound &gt; 0">
 							<xsl:call-template name="paging"/>
+							<xsl:value-of select="namespace-uri-from-QName(ecrm)"/>
 							<xsl:apply-templates select="descendant::doc"/>
 						</xsl:when>
 						<xsl:otherwise>
@@ -94,11 +105,11 @@
 						<dt>Type</dt>
 						<dd>
 							<xsl:for-each select="arr[@name='type']/str">
-								<!--<a href="{.}">
-									<xsl:value-of select="."/>
-									</a>-->
-								<xsl:value-of select="."/>
+								<xsl:variable name="uri" select="."/>
 								
+								<a href="{.}">
+									<xsl:value-of select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"/>
+								</a>								
 								<xsl:if test="not(position()=last())">
 									<xsl:text>, </xsl:text>
 								</xsl:if>

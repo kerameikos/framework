@@ -7,7 +7,7 @@
 				<b>Kerameikos.org</b>
 			</span>
 			<xsl:text> | </xsl:text>
-			<a href="{$display_path}">Home</a>
+			<a href="{$display_path}./">Home</a>
 			<xsl:text> | </xsl:text>
 			<a href="{$display_path}id/" >Browse</a>
 			<xsl:text> | </xsl:text>
