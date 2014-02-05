@@ -735,6 +735,18 @@
 										</div>
 									</xforms:repeat>
 								</div>
+								<xforms:group ref=".[count(skos:broader) &gt; 0]">
+									<div>
+										<h4>Semantic Relationships</h4>
+										<xforms:repeat nodeset="skos:broader">
+											<div>
+												<xforms:output ref="@rdf:resource">
+													<xforms:label ref="name()"/>
+												</xforms:output>
+											</div>
+										</xforms:repeat>
+									</div>
+								</xforms:group>
 								<div>
 									<h4>Miscellaneous Fields</h4>
 									<xforms:repeat nodeset="rdfs:comment">
