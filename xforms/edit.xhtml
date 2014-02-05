@@ -387,9 +387,9 @@
 			<!-- ************* QUERY ATOM **********************-->
 			<!-- query local atom feed to power skos:broader -->
 			<xforms:submission id="query-feed" serialization="none" method="get"
-				action="/ceramics/feed/?q=type:&#x022;{instance('control-instance')/atom-type}&#x022;+{instance('control-instance')/atom-search}&amp;sort=score+desc"
+				action="/ceramics/feed/?q=type:&#x022;{encode-for-uri(instance('control-instance')/atom-type)}&#x022;+{instance('control-instance')/atom-search}&amp;sort=score+desc"
 				instance="feed" replace="instance">
-				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to communicate with nomisma.org Atom feed.</xforms:message>
+				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to communicate with kerameikos.org Atom feed.</xforms:message>
 			</xforms:submission>
 
 			<!-- ************* SPARQL SUBMISSIONS **********************-->
@@ -945,7 +945,7 @@
 							<xforms:group ref=".[count(instance('feed')//atom:entry) &gt; 0]">
 								<h4>Results</h4>
 								<div>
-									<xforms:select1 ref="instance('control-instance')/atom-id" appearance="compact" id="nomisma-list">
+									<xforms:select1 ref="instance('control-instance')/atom-id" appearance="compact">
 										<xforms:itemset nodeset="instance('feed')//atom:entry">
 											<xforms:label ref="atom:title"/>
 											<xforms:value ref="atom:id"/>
