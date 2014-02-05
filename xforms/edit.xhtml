@@ -741,7 +741,7 @@
 										<xforms:repeat nodeset="skos:broader">
 											<div>
 												<xforms:output ref="@rdf:resource">
-													<xforms:label ref="name()"/>
+													<xforms:label ref="parent::node()/name()"/>
 												</xforms:output>
 											</div>
 										</xforms:repeat>
