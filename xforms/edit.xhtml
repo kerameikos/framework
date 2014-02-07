@@ -942,8 +942,10 @@ LIMIT 25]]>
 							<xforms:input ref="instance('control-instance')/getty-search"/>
 							<xforms:trigger>
 								<xforms:action ev:event="DOMActivate">
+									<xforms:var name="search_text" select="string-join(tokenize(instance('control-instance')/getty-search, ' '), ' AND ')"/>
 									<xforms:setvalue ref="instance('sparqlQuery')"
-										value="normalize-space(replace(instance('getty-sparql-template'), 'SEARCH_QUERY', instance('control-instance')/getty-search))"/>
+										value="normalize-space(replace(instance('getty-sparql-template'), 'SEARCH_QUERY', $search_text))"/>
+									<xforms:delete context="instance('getty-options')/*"/>
 									<xforms:send submission="query-aat"/>
 								</xforms:action>
 								<xforms:label>Search</xforms:label>
