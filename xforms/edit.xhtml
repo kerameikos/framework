@@ -42,6 +42,8 @@
 					<atom-search/>
 					<atom-id/>
 					<atom-summary/>
+					<getty-search/>
+					<getty-id/>
 					<id_path>/usr/local/projects/ceramic-ids/id/</id_path>
 					<endpoint>http://localhost:3030/ceramics/</endpoint>
 					<solr_url>http://localhost:8080/solr/ceramics/</solr_url>
@@ -96,6 +98,33 @@
 			</xforms:instance>
 
 			<xforms:instance id="viaf-options">
+				<options xmlns=""/>
+			</xforms:instance>
+
+			<xforms:instance id="getty-sparql-template">
+				<query><![CDATA[PREFIX gvp: <http://vocab.getty.edu/ontology#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX luc: <http://www.ontotext.com/owlim/lucene#>
+SELECT ?c ?label WHERE {
+?c rdf:type gvp:Concept .
+?c skos:inScheme <http://vocab.getty.edu/aat/> .
+?c skos:prefLabel ?label .
+?c luc:term "SEARCH_QUERY"
+FILTER langMatches(lang(?label), "en")}
+ORDER BY ASC(?label)
+LIMIT 25]]>
+				</query>
+			</xforms:instance>
+
+			<xforms:instance id="sparqlQuery">
+				<query xmlns=""/>
+			</xforms:instance>
+
+			<xforms:instance id="getty-response">
+				<sparql xmlns="http://www.w3.org/2005/sparql-results#"/>
+			</xforms:instance>
+
+			<xforms:instance id="getty-options">
 				<options xmlns=""/>
 			</xforms:instance>
 
@@ -185,38 +214,6 @@
 				<rdfs:comment xml:lang=""/>
 			</xforms:instance>
 
-			<!-- sparql queries -->
-			<xforms:instance id="sparqlQueryTemplate">
-				<query><![CDATA[
-					PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-					PREFIX dcterms:  <http://purl.org/dc/terms/>
-					PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
-					SELECT ?uri ?label WHERE {
-					?uri  rdf:type <http://kerameikos.org/id/TERM>.
-					?uri skos:prefLabel ?label .
-					FILTER (lang(?label) = "en")}
-					ORDER BY ASC(?label)
-					]]>
-				</query>
-			</xforms:instance>
-
-			<xforms:instance id="sparqlQuery">
-				<query/>
-			</xforms:instance>
-
-			<!-- preloaded instances -->
-			<xforms:instance id="sparqlResponse">
-				<sparql xmlns="http://www.w3.org/2005/sparql-results#"/>
-			</xforms:instance>
-
-			<xforms:instance id="nt-response">
-				<sparql xmlns="http://www.w3.org/2005/sparql-results#"/>
-			</xforms:instance>
-
-			<xforms:instance id="fon-response">
-				<sparql xmlns="http://www.w3.org/2005/sparql-results#"/>
-			</xforms:instance>
-
 			<!-- sparql update -->
 			<xforms:instance id="sparqlUpdate-template">
 				<query>
@@ -250,19 +247,7 @@
 					<xforms:insert nodeset="instance('doc')"
 						origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/load-id.xpl', 'file', instance('load-config'), 'data')"/>
 				</xforms:action>
-
-				<!-- gather sparqlQueries -->
-				<!--<xforms:setvalue ref="instance('sparqlQuery')" value="instance('sparqlQueryTemplate')"/>
-				<xforms:setvalue ref="instance('sparqlQuery')" value="replace(instance('sparqlQueryTemplate'), 'TERM', 'numismatic_term')"/>
-				<xforms:send submission="submit-sparqlQuery"/>
-				<xforms:insert context="instance('nt-response')" origin="instance('sparqlResponse')/*"/>
-				
-				<xforms:setvalue ref="instance('sparqlQuery')" value="instance('sparqlQueryTemplate')"/>
-				<xforms:setvalue ref="instance('sparqlQuery')" value="replace(instance('sparqlQueryTemplate'), 'TERM', 'field_of_numismatics')"/>
-				<xforms:send submission="submit-sparqlQuery"/>
-				<xforms:insert context="instance('fon-response')" origin="instance('sparqlResponse')/*"/>-->
 			</xforms:action>
-
 
 			<!-- **************** BINDINGS ********************** -->
 			<xforms:bind nodeset="instance('doc')">
@@ -307,6 +292,12 @@
 			</xforms:bind>
 
 			<xforms:bind nodeset="instance('viaf-options')">
+				<xforms:bind nodeset="option">
+					<xforms:bind nodeset="@select" type="xs:boolean"/>
+				</xforms:bind>
+			</xforms:bind>
+
+			<xforms:bind nodeset="instance('getty-options')">
 				<xforms:bind nodeset="option">
 					<xforms:bind nodeset="@select" type="xs:boolean"/>
 				</xforms:bind>
@@ -392,14 +383,19 @@
 				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to communicate with kerameikos.org Atom feed.</xforms:message>
 			</xforms:submission>
 
-			<!-- ************* SPARQL SUBMISSIONS **********************-->
-			<!-- SPARQL queries -->
-			<xforms:submission id="submit-sparqlQuery"
-				action="{instance('control-instance')/endpoint}query?query={encode-for-uri(instance('sparqlQuery'))}&amp;output=xml"
-				ref="instance('sparqlResponse')" replace="instance" method="get">
+			<!-- ************* QUERY GETTY **********************-->
+			<xforms:submission id="query-aat" action="http://vocab.getty.edu/sparql?query={encode-for-uri(instance('sparqlQuery'))}&amp;format=xml"
+				ref="instance('getty-response')" replace="instance" method="get">
 				<xforms:message ev:event="xforms-submit-error" level="modal">SPARQL query failed.</xforms:message>
+				<xforms:action xxforms:iterate="instance('getty-response')//res:result" ev:event="xforms-submit-done">
+					<xforms:var name="link" select="context()/res:binding[@name='c']/res:uri"/>
+					<xforms:var name="title" select="context()/res:binding[@name='label']/res:literal"/>
+					<xforms:insert context="instance('getty-options')" nodeset="./child::node()[last()]"
+						origin="xforms:element('option', (xforms:attribute('select', false()), xforms:attribute('link', $link), xforms:attribute('type', 'owl:sameAs'), $title))"/>
+				</xforms:action>
 			</xforms:submission>
 
+			<!-- ************* SPARQL SUBMISSIONS **********************-->
 			<xforms:submission id="delete-graph" action="{instance('control-instance')/endpoint}update" ref="instance('sparqlUpdate')"
 				serialization="text/plain" replace="none" method="post" mediatype="application/sparql-update">
 				<xforms:action ev:event="xforms-submit-error">
@@ -483,7 +479,7 @@
 								<strong>Alert:</strong> Definition languages must be unique. </p>
 						</div>
 					</xforms:group>
-					<!-- *************** TRIGGERS ***************-->
+					<!-- *************** SUBMISSIONS ***************-->
 					<div class="submission">
 						<xforms:trigger bind="save-trigger">
 							<xforms:label><img src="/ceramics/xforms/images/save.gif" alt="Save"/>Save</xforms:label>
@@ -510,41 +506,6 @@
 							<xforms:label class="file_control"><img src="/ceramics/xforms/images/remove.gif" alt="Delete"/>Delete</xforms:label>
 							<xforms:dispatch ev:event="DOMActivate" target="delete-dialog" name="fr-show"/>
 						</xforms:trigger>
-						<!-- import skos:prefLabels from dbpedia for those languages that are not already in the RDF -->
-						<xforms:group ref="instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]">
-							<xforms:trigger>
-								<xforms:label>Import Dbpedia Labels</xforms:label>
-								<xforms:action ev:event="DOMActivate">
-									<xforms:setvalue ref="instance('control-instance')/dbpedia-id"
-										value="substring-after(instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]/@rdf:resource, 'resource/')"/>
-									<xforms:send submission="get-dbpedia-rdf"/>
-								</xforms:action>
-							</xforms:trigger>
-						</xforms:group>
-						<!-- extract coordinates from Pleiades if there is a Pleiades URI in owl:sameAs, but no geo:lat and geo:long -->
-						<xforms:group
-							ref=".[instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')] and not(instance('doc')//geo:lat) and not(instance('doc')//geo:long)]">
-							<xforms:trigger>
-								<xforms:label>Import Pleiades Coordinates</xforms:label>
-								<xforms:action ev:event="DOMActivate">
-									<xforms:setvalue ref="instance('control-instance')/pleiades-id"
-										value="instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')][1]/@rdf:resource"/>
-									<xforms:send submission="get-pleiades-rdf"/>
-								</xforms:action>
-							</xforms:trigger>
-						</xforms:group>
-						<!-- query VIAF to add associated URIs -->
-						<xforms:group ref=".[instance('doc')/*/name()='foaf:Person' or instance('doc')/*/name()='foaf:Organization']">
-							<xforms:var name="type" select="instance('doc')/*/name()"/>
-							<xforms:trigger>
-								<xforms:label>Import VIAF URIs</xforms:label>
-								<xforms:action ev:event="DOMActivate">
-									<xforms:setvalue ref="instance('control-instance')/viaf-field"
-										value="if ($type='foaf:Person') then 'local.personalNames' else 'local.corporateNames'"/>
-									<xxforms:show dialog="viaf-dialog"/>
-								</xforms:action>
-							</xforms:trigger>
-						</xforms:group>
 					</div>
 					<h1>Edit ID</h1>
 					<div>
@@ -590,8 +551,59 @@
 						<xforms:group ref="instance('doc')" id="form">
 							<xforms:group ref="*">
 								<xforms:var name="type" select="name()"/>
-								<h3><xforms:output ref="instance('classes')/class[type=$type]/label"/></h3>
+								<h3>
+									<xforms:output ref="instance('classes')/class[type=$type]/label"/>
+								</h3>
 								<div class="trigger_container">
+									<span class="subhead">Import: </span>
+									<!-- import skos:prefLabels from dbpedia for those languages that are not already in the RDF -->
+									<xforms:group ref="instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]">
+										<xforms:trigger appearance="minimal">
+											<xforms:label>Dbpedia Labels</xforms:label>
+											<xforms:action ev:event="DOMActivate">
+												<xforms:setvalue ref="instance('control-instance')/dbpedia-id"
+													value="substring-after(instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]/@rdf:resource, 'resource/')"/>
+												<xforms:send submission="get-dbpedia-rdf"/>
+											</xforms:action>
+										</xforms:trigger>
+									</xforms:group>
+									<!-- import AAT URIs from Getty -->
+									<xforms:group
+										ref=".[contains(instance('doc')/*/name(), 'kon:') or instance('doc')/*/name()='ecrm:E4_Period' or instance('doc')/*/name()='ecrm:E57_Material']">
+										<xforms:trigger appearance="minimal">
+											<xforms:label>Getty AAT</xforms:label>
+											<xforms:action ev:event="DOMActivate">
+												<xxforms:show dialog="getty-dialog"/>
+											</xforms:action>
+										</xforms:trigger>
+									</xforms:group>
+									<!-- extract coordinates from Pleiades if there is a Pleiades URI in owl:sameAs, but no geo:lat and geo:long -->
+									<xforms:group
+										ref=".[instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')] and not(instance('doc')//geo:lat) and not(instance('doc')//geo:long)]">
+										<xforms:trigger appearance="minimal">
+											<xforms:label>Pleiades</xforms:label>
+											<xforms:action ev:event="DOMActivate">
+												<xforms:setvalue ref="instance('control-instance')/pleiades-id"
+													value="instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')][1]/@rdf:resource"/>
+												<xforms:send submission="get-pleiades-rdf"/>
+											</xforms:action>
+										</xforms:trigger>
+									</xforms:group>
+									<!-- query VIAF to add associated URIs -->
+									<xforms:group ref=".[instance('doc')/*/name()='foaf:Person' or instance('doc')/*/name()='foaf:Organization']">
+										<xforms:var name="type" select="instance('doc')/*/name()"/>
+										<xforms:trigger appearance="minimal">
+											<xforms:label>VIAF URIs</xforms:label>
+											<xforms:action ev:event="DOMActivate">
+												<xforms:setvalue ref="instance('control-instance')/viaf-field"
+													value="if ($type='foaf:Person') then 'local.personalNames' else 'local.corporateNames'"/>
+												<xxforms:show dialog="viaf-dialog"/>
+											</xforms:action>
+										</xforms:trigger>
+									</xforms:group>
+								</div>
+								<div class="trigger_container">
+									<span class="subhead">Insert: </span>
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
 											<img src="/ceramics/xforms/images/add.gif"/>Preferred Label</xforms:label>
@@ -635,11 +647,6 @@
 											</xforms:action>
 										</xforms:trigger>
 									</xforms:group>
-									<xforms:trigger appearance="minimal">
-										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>Definition</xforms:label>
-										<xforms:insert ev:event="DOMActivate" origin="instance('definition-template')" context="."/>
-									</xforms:trigger>
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
 											<img src="/ceramics/xforms/images/add.gif"/>Related Resource</xforms:label>
@@ -896,7 +903,7 @@
 							</xforms:trigger>
 						</div>
 						<xforms:group ref=".[count(instance('viaf-options')/option) &gt; 0]">
-							<table>
+							<table style="width:100%">
 								<thead>
 									<tr>
 										<th>Select</th>
@@ -929,6 +936,69 @@
 							</xforms:trigger>
 						</xforms:group>
 					</xxforms:dialog>
+					<xxforms:dialog id="getty-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+						<xforms:label>Query Getty</xforms:label>
+						<div>
+							<xforms:input ref="instance('control-instance')/getty-search"/>
+							<xforms:trigger>
+								<xforms:action ev:event="DOMActivate">
+									<xforms:setvalue ref="instance('sparqlQuery')"
+										value="normalize-space(replace(instance('getty-sparql-template'), 'SEARCH_QUERY', instance('control-instance')/getty-search))"/>
+									<xforms:send submission="query-aat"/>
+								</xforms:action>
+								<xforms:label>Search</xforms:label>
+							</xforms:trigger>
+						</div>
+						<div style="width:600px;">
+							<xforms:group ref=".[count(instance('getty-options')/option) &gt; 0]">
+								<table style="width:100%">
+									<thead>
+										<tr>
+											<th>Select</th>
+											<th>Name</th>
+											<th>Id</th>
+											<th>Type</th>
+										</tr>
+									</thead>
+									<tbody>
+										<xforms:repeat nodeset="instance('getty-options')/option">
+											<tr>
+												<td><xforms:input ref="@select"/></td>
+												<td><xforms:output ref="."/></td>
+												<td><a href="{@link}" target="_blank"><xforms:output ref="tokenize(@link, '/')[last()]"/></a></td>
+												<td>
+													<xforms:select1 ref="@type" class="short-input">
+														<xforms:item>
+															<xforms:label>Same As</xforms:label>
+															<xforms:value>owl:sameAs</xforms:value>
+														</xforms:item>
+														<xforms:item>
+															<xforms:label>Related</xforms:label>
+															<xforms:value>skos:related</xforms:value>
+														</xforms:item>
+													</xforms:select1>
+												</td>
+											</tr>
+										</xforms:repeat>
+									</tbody>
+								</table>
+								<xforms:trigger>
+									<xforms:label>Add Selected</xforms:label>
+									<xforms:action ev:event="DOMActivate">
+										<xforms:action xxforms:iterate="instance('getty-options')/option[@select=true()]">
+											<xforms:var name="resource" select="context()/@link"/>
+											<xforms:var name="type" select="context()/@type"/>
+											<xforms:action if="not(instance('doc')//owl:sameAs[@rdf:resource=$resource])">
+												<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
+													origin="xforms:element($type, xforms:attribute('rdf:resource', $resource))"/>
+											</xforms:action>
+										</xforms:action>
+										<xxforms:hide dialog="getty-dialog"/>
+									</xforms:action>
+								</xforms:trigger>
+							</xforms:group>
+						</div>
+					</xxforms:dialog>
 					<xxforms:dialog id="broader-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
 						<xforms:label>Broader Concept</xforms:label>
 						<div>
@@ -958,7 +1028,8 @@
 									<xforms:trigger>
 										<xforms:label>Select</xforms:label>
 										<xforms:action ev:event="DOMActivate">
-											<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]" origin="xforms:element('skos:broader', (xforms:attribute('rdf:resource', concat('http://kerameikos.org/id/', instance('control-instance')/atom-id)), ''))"/>
+											<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
+												origin="xforms:element('skos:broader', (xforms:attribute('rdf:resource', concat('http://kerameikos.org/id/', instance('control-instance')/atom-id)), ''))"/>
 											<!-- blank atom search nodes and atom feed -->
 											<xforms:delete nodeset="instance('feed')/*"/>
 											<xforms:setvalue ref="instance('control-instance')/atom-search"/>
