@@ -5,6 +5,7 @@
 	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0" exclude-result-prefixes="#all" version="2.0">
 	<xsl:variable name="id" select="substring-after(//@rdf:about, 'id/')"/>
 	<xsl:variable name="uri" select="concat(/content/config/url, 'id/', $id)"/>
+	<xsl:variable name="definition" select="//skos:definition[@xml:lang='en']"/>
 
 	<xsl:template match="/">
 		<xsl:call-template name="kml"/>
@@ -67,35 +68,58 @@
 				select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
 		</xsl:variable>
 
-		<xsl:if test="$lgpn-tei//tei:birth/tei:placeName[contains(@ref, 'pleiades')]">
-			<xsl:variable name="pleiades-uri" select="concat('http://pleiades.stoa.org/places/', substring-after($lgpn-tei//tei:birth/tei:placeName[contains(@ref, 'pleiades')]/@ref, ':'))"/>
-			<xsl:variable name="placeName" select="$lgpn-tei//tei:birth/tei:placeName"/>
-			<xsl:variable name="pleiades-rdf" as="item()*">
-				<xsl:copy-of select="document(concat($pleiades-uri, '/rdf'))/*"/>
-			</xsl:variable>
+		<Placemark xmlns="http://earth.google.com/kml/2.0">
+			<name>Birth</name>
+			<styleUrl>#origin</styleUrl>
 
-			<xsl:if test="$pleiades-rdf//geo:lat and $pleiades-rdf//geo:long">
-				<xsl:variable name="description">
-					<![CDATA[
-								<dl><dt>Latitude</dt><dd>]]><xsl:value-of select="$pleiades-rdf//geo:lat"/><![CDATA[</dd>
-								<dt>Longitude</dt><dd>]]><xsl:value-of select="$pleiades-rdf//geo:long"/><![CDATA[</dd>
-								<dt>URI</dt><dd><a href="]]><xsl:value-of select="$uri"/><![CDATA[">]]><xsl:value-of select="$pleiades-uri"/><![CDATA[</a></dd></dl>]]>
+
+			<xsl:if test="$lgpn-tei//tei:birth/tei:placeName[contains(@ref, 'pleiades')]">
+				<xsl:variable name="pleiades-uri"
+					select="concat('http://pleiades.stoa.org/places/', substring-after($lgpn-tei//tei:birth/tei:placeName[contains(@ref, 'pleiades')]/@ref, ':'))"/>
+				<xsl:variable name="placeName" select="$lgpn-tei//tei:birth/tei:placeName"/>
+				<xsl:variable name="pleiades-rdf" as="item()*">
+					<xsl:copy-of select="document(concat($pleiades-uri, '/rdf'))/*"/>
 				</xsl:variable>
-				<Placemark xmlns="http://earth.google.com/kml/2.0">
-					<name>
-						<xsl:text>Birthplace: </xsl:text><xsl:value-of select="$placeName"/>
-					</name>
-					<description>
-						<xsl:value-of select="normalize-space($description)"/>
-					</description>
-					<styleUrl>#origin</styleUrl>
+				<xsl:variable name="description">
+					<![CDATA[<p>Born: <a href="]]><xsl:value-of select="$pleiades-uri"/><![CDATA[">]]><xsl:value-of select="$placeName"/><![CDATA[</a></p>
+				<p>]]><xsl:value-of select="$definition"/><![CDATA[</p>]]>
+				</xsl:variable>
+				<description>
+					<xsl:value-of select="normalize-space($description)"/>
+				</description>
+				<xsl:if test="$pleiades-rdf//geo:lat and $pleiades-rdf//geo:long">
 					<Point>
 						<coordinates>
 							<xsl:value-of select="concat($pleiades-rdf//geo:long, ',', $pleiades-rdf//geo:lat)"/>
 						</coordinates>
 					</Point>
-				</Placemark>
+				</xsl:if>
 			</xsl:if>
-		</xsl:if>
+
+			<xsl:choose>
+				<xsl:when test="$lgpn-tei//tei:birth/@when">
+					<TimeStamp>
+						<when>
+							<xsl:value-of select="$lgpn-tei//tei:birth/@when"/>
+						</when>
+					</TimeStamp>
+				</xsl:when>
+				<xsl:when test="$lgpn-tei//tei:birth/@notBefore or $lgpn-tei//tei:birth/@notAfter or $lgpn-tei//tei:birth/@from or $lgpn-tei//tei:birth/@to">
+					<TimeSpan>
+						<xsl:if test="$lgpn-tei//tei:birth/@notBefore or $lgpn-tei//tei:birth/@from">
+							<begin>
+								<xsl:value-of select="if ($lgpn-tei//tei:birth/@notBefore) then $lgpn-tei//tei:birth/@notBefore else $lgpn-tei//tei:birth/@from"
+								/>
+							</begin>
+						</xsl:if>
+						<xsl:if test="$lgpn-tei//tei:birth/@notAfter or $lgpn-tei//tei:birth/@to">
+							<end>
+								<xsl:value-of select="if ($lgpn-tei//tei:birth/@notAfter) then $lgpn-tei//tei:birth/@notAfter else $lgpn-tei//tei:birth/@to"/>
+							</end>
+						</xsl:if>
+					</TimeSpan>
+				</xsl:when>
+			</xsl:choose>
+		</Placemark>
 	</xsl:template>
 </xsl:stylesheet>

@@ -38,14 +38,21 @@
 			<head>
 				<title id="{$id}">Kerameikos.org: <xsl:value-of select="//@rdf:about"/></title>
 				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
-				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
-
 				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"/>
 				<xsl:if test="$type='ecrm:E53_Place' or descendant::owl:sameAs[contains(@rdf:resource, 'clas-lgpn2.classics.ox.ac.uk')]">
+					<!-- mapping js -->
 					<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"/>
 					<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&amp;sensor=false"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/timeline-2.3.0.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/mxn.js"/>					
+					<script type="text/javascript" src="{$display_path}ui/javascript/timemap_full.pack.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/param.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/loaders/kml.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
+					<!-- timeline css -->
+					<link type="text/css" href="{$display_path}ui/css/timeline-2.3.0.css" rel="stylesheet"/>
 				</xsl:if>
+				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 			</head>
 			<body>
 				<xsl:call-template name="header"/>
@@ -66,7 +73,14 @@
 					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
 
 					<xsl:if test="$type='ecrm:E53_Place' or descendant::owl:sameAs[contains(@rdf:resource, 'clas-lgpn2.classics.ox.ac.uk')]">
-						<div id="mapcontainer"/>
+						<div id="timemap">
+							<div id="mapcontainer">
+								<div id="map"/>
+							</div>
+							<div id="timelinecontainer">
+								<div id="timeline"/>
+							</div>
+						</div>
 					</xsl:if>
 
 					<p class="desc">Below the RDF output, there can be maps showing the geographic distribution vases of this type or created by this person, as
