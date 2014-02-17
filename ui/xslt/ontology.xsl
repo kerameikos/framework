@@ -8,7 +8,7 @@
 		<html lang="en">
 			<head>
 				<title>Kerameikos.org: Ontology</title>
-				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
+				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
@@ -26,9 +26,9 @@
 	</xsl:template>
 
 	<xsl:template name="body">
-		<div class="yui3-g">
-			<div class="yui3-u-1">
-				<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
 					<h1>Ontology</h1>
 					<p>This page is the placeholder for the Kerameikos.org ceramic ontology. This page will eventually be generated dynamically from RDF.</p>
 					<div>
@@ -48,7 +48,7 @@
 							<h2>Properties</h2>
 						</div>
 					</div>
-				</div>
+				</div>				
 			</div>
 		</div>
 	</xsl:template>

@@ -7,7 +7,7 @@
 		<html lang="en">
 			<head>
 				<title>Kerameikos.org</title>
-				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
+				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
@@ -24,14 +24,12 @@
 	</xsl:template>
 
 	<xsl:template name="body">
-		<div class="yui3-g">
-			<div class="yui3-u-2-3">
-				<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-8">
 					<xsl:copy-of select="//index/*"/>
 				</div>
-			</div>
-			<div class="yui3-u-1-3">
-				<div class="content">
+				<div class="col-md-4">
 					<h2>Sidebar</h2>
 					<p class="desc">The sidebar will contain links to web services and downloads of data dumps.</p>					
 					<div>
@@ -48,5 +46,4 @@
 			</div>
 		</div>
 	</xsl:template>
-
 </xsl:stylesheet>

@@ -8,7 +8,7 @@
 		<html lang="en">
 			<head>
 				<title>Kerameikos.org: SPARQL</title>
-				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
+				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
@@ -51,9 +51,9 @@ SELECT * WHERE {
 }]]>
 		</xsl:variable>
 
-		<div class="yui3-g">
-			<div class="yui3-u-1">
-				<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
 					<h1>SPARQL Query</h1>
 					
 					<form action="{$display_path}query" method="GET" accept-charset="UTF-8">
@@ -64,8 +64,8 @@ SELECT * WHERE {
 							<option value="xml">XML</option>
 							<option value="json">JSON</option>
 							<!--<option value="text">Text</option>
-							<option value="csv">CSV</option>
-							<option value="tsv">TSV</option>-->
+								<option value="csv">CSV</option>
+								<option value="tsv">TSV</option>-->
 						</select>
 						<!--<br/> XSLT style sheet (blank for none): <input name="stylesheet" size="20" value="/xml-to-html.xsl"/>-->
 						<input type="submit" value="Get Results"/>

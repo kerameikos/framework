@@ -4,7 +4,7 @@
 	<xsl:template name="header">
 		<!-- Static navbar -->
 		<div class="navbar navbar-default navbar-static-top" role="navigation">
-			<div class="container">
+			<div class="container-fluid">
 				<div class="navbar-header">
 					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
 						<span class="sr-only">Toggle navigation</span>
@@ -71,9 +71,13 @@
 	</xsl:template>
 
 	<xsl:template name="footer">
-		<div id="ft">Kerameikos.org data are made available under the <a href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License</a>. Any
-			rights in individual contents of the database are licensed under the <a href="http://opendatacommons.org/licenses/dbcl/1.0/">Database Contents
-				License</a></div>
+		<div id="footer">
+			<div class="container-fluid">
+				<p class="text-muted">Kerameikos.org data are made available under the <a href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License</a>. Any
+					rights in individual contents of the database are licensed under the <a href="http://opendatacommons.org/licenses/dbcl/1.0/">Database Contents
+						License</a></p>
+			</div>
+		</div>
 	</xsl:template>
 
 </xsl:stylesheet>

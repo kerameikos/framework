@@ -45,7 +45,7 @@
 		<html lang="en">
 			<head>
 				<title>Kerameikos.org: Browse</title>
-				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
+				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
@@ -67,16 +67,15 @@
 	</xsl:template>
 
 	<xsl:template name="body">
-		<div class="yui3-g">
-			<div class="yui3-u-1">
-				<div class="content">
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
 					<p class="desc">The id/ path is the URI defining the thesaurus namespace.</p>
 					<!--<xsl:call-template name="filter"/>-->
-					<h2>Results</h2>
+					<h1>Results</h1>
 					<xsl:choose>
 						<xsl:when test="$numFound &gt; 0">
 							<xsl:call-template name="paging"/>
-							<xsl:value-of select="namespace-uri-from-QName(ecrm)"/>
 							<xsl:apply-templates select="descendant::doc"/>
 						</xsl:when>
 						<xsl:otherwise>

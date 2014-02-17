@@ -37,7 +37,7 @@
 			kon: http://kerameikos.org/ontology#">
 			<head>
 				<title id="{$id}">Kerameikos.org: <xsl:value-of select="//@rdf:about"/></title>
-				<!--<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>-->
+				<meta name="viewport" content="width=device-width, initial-scale=1"/>					
 				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
@@ -107,49 +107,6 @@
 				</div>
 			</div>
 		</div>
-
-		<!--<div class="yui3-g">
-			<div class="yui3-u-3-4">
-				<div class="content">
-					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
-
-					<xsl:if test="$type='ecrm:E53_Place' or descendant::owl:sameAs[contains(@rdf:resource, 'clas-lgpn2.classics.ox.ac.uk')]">
-						<div id="timemap">
-							<div id="mapcontainer">
-								<div id="map"/>
-							</div>
-							<div id="timelinecontainer">
-								<div id="timeline"/>
-							</div>
-						</div>
-					</xsl:if>
-
-					<p class="desc">Below the RDF output, there can be maps showing the geographic distribution vases of this type or created by this person, as
-						well as a simple interface to render a graph showing the distribution of particular typologies (e.g., shape types or iconographic
-						motifs), generated from SPARQL</p>
-				</div>
-			</div>
-			<div class="yui3-u-1-4">
-				<div class="content">
-					<p class="desc">The sidebar can show textual or visual information extracted from other LOD sources.</p>
-					<div>
-						<h3>Data Export</h3>
-						<p><a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=turtle">TTL</a> |
-							<a href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=json">JSON-LD</a></p>
-					</div>
-					<!-\-<xsl:if test="descendant::owl:sameAs[contains(@rdf:resource, 'dbpedia.org')]">
-						<xsl:call-template name="dbpedia-abstract">
-							<xsl:with-param name="uri" select="descendant::owl:sameAs[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
-						</xsl:call-template>
-					</xsl:if>-\->
-					<xsl:if test="descendant::owl:sameAs[contains(@rdf:resource, 'clas-lgpn2.classics.ox.ac.uk')]">
-						<xsl:call-template name="lgpn-bio">
-							<xsl:with-param name="uri" select="descendant::owl:sameAs[contains(@rdf:resource, 'clas-lgpn2.classics.ox.ac.uk')]/@rdf:resource"/>
-						</xsl:call-template>
-					</xsl:if>
-				</div>
-			</div>
-		</div>-->
 	</xsl:template>
 
 	<xsl:template match="*" mode="type">
