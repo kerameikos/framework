@@ -4,10 +4,13 @@
 	<xsl:variable name="display_path">./</xsl:variable>
 
 	<xsl:template match="/">
-		<html>
+		<html lang="en">
 			<head>
 				<title>Kerameikos.org</title>
 				<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
+				<!-- bootstrap -->
+				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
+				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 
 				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"/>
@@ -30,14 +33,7 @@
 			<div class="yui3-u-1-3">
 				<div class="content">
 					<h2>Sidebar</h2>
-					<p class="desc">The sidebar will contain links to web services and downloads of data dumps.</p>
-					<div>
-						<h3>Search</h3>
-						<form action="id/" method="GET">
-							<input type="text" name="q"/>
-							<input type="submit" value="Search"/>
-						</form>
-					</div>
+					<p class="desc">The sidebar will contain links to web services and downloads of data dumps.</p>					
 					<div>
 						<h3>Atom Feed</h3>
 						<a href="feed/">

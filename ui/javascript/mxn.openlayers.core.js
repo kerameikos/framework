@@ -42,7 +42,7 @@ mxn.register('openlayers', {
 			this.layers.gphys = new OpenLayers.Layer.Google("Google Physical", {
 				type: google.maps.MapTypeId.TERRAIN,
 				isBaseLayer: true,
-				numZoomLevels: 12
+				numZoomLevels: 16
 			});
 			
 			// deal with click
