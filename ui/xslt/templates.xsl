@@ -38,36 +38,10 @@
 							</div>
 						</form>
 					</div>
-					<!--<ul class="nav navbar-nav navbar-right">
-						<li>
-							<a href="../navbar/">Default</a>
-						</li>
-						<li class="active">
-							<a href="./">Static top</a>
-						</li>
-						<li>
-							<a href="../navbar-fixed-top/">Fixed top</a>
-						</li>
-					</ul>-->
 				</div>
 				<!--/.nav-collapse -->
 			</div>
 		</div>
-		<!--<div id="hd">
-			<span>
-				<b>Kerameikos.org</b>
-			</span>
-			<xsl:text> | </xsl:text>
-			<a href="{$display_path}./">Home</a>
-			<xsl:text> | </xsl:text>
-			<a href="{$display_path}id/" >Browse</a>
-			<xsl:text> | </xsl:text>
-			<a href="{$display_path}ontology">Ontology</a>
-			<xsl:text> | </xsl:text>
-			<a href="{$display_path}sparql">SPARQL</a>
-			<!-\-<xsl:text> | </xsl:text>
-			<a href="{$display_path}apis/">APIs</a>-\->
-		</div>-->
 	</xsl:template>
 
 	<xsl:template name="footer">

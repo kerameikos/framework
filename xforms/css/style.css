@@ -60,15 +60,6 @@
 h1, h2, h3, h4, h5{
 	display:inline;	
 }
-body {
-	margin:20px auto;
-	min-width:960px;
-	width:95%;
-	font-size:16px;
-}
-.content {
-	padding:5px;
-}
 .submission {
 	margin-left:auto;
 	margin-right:auto;

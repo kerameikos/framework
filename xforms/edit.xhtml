@@ -9,7 +9,9 @@
 		<title>Kerameikos: LOD Editor</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css"/>
 		<link rel="stylesheet" href="/fr/style/form-runner-bootstrap-override.css" type="text/css"/>
-		<link rel="stylesheet" href="/config/theme/examples.css" type="text/css" media="all"/>
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
+		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
 		<link rel="shortcut icon" href="/ops/images/orbeon-icon-16.ico"/>
 		<link rel="icon" href="/ops/images/orbeon-icon-16.png" type="image/png"/>
 		<link rel="stylesheet" type="text/css" href="http://yui.yahooapis.com/3.8.0/build/cssgrids/grids-min.css"/>
@@ -391,7 +393,8 @@ LIMIT 25]]>
 					<xforms:var name="link" select="context()/res:binding[@name='c']/res:uri"/>
 					<xforms:var name="title" select="context()/res:binding[@name='label']/res:literal"/>
 					<xforms:insert context="instance('getty-options')" nodeset="./child::node()[last()]"
-						origin="xforms:element('option', (xforms:attribute('select', false()), xforms:attribute('link', $link), xforms:attribute('type', 'owl:sameAs'), $title))"/>
+						origin="xforms:element('option', (xforms:attribute('select', false()), xforms:attribute('link', $link), xforms:attribute('type', 'owl:sameAs'), $title))"
+					/>
 				</xforms:action>
 			</xforms:submission>
 
@@ -451,13 +454,15 @@ LIMIT 25]]>
 	</head>
 
 	<body>
-		<div class="yui3-g">
-			<div class="yui3-u-1">
-				<div class="content">
+		<xforms:var name="display_path">../</xforms:var>
+		<xi:include href="header.xml"/>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<a href="../">&lt;&lt;Return to Admin</a>
 					<xforms:group ref=".[string-length(instance('control-instance')/status) &gt; 0]">
-						<div class="ui-state-highlight ui-corner-all">
+						<div class="info">
 							<p>
-								<span class="ui-icon ui-icon-info" style="float: left; margin-right: .3em;"/>
 								<strong>Status:</strong>
 								<xforms:output ref="instance('control-instance')/status"/>
 							</p>
@@ -465,17 +470,15 @@ LIMIT 25]]>
 					</xforms:group>
 					<xforms:group
 						ref=".[count(instance('doc')/*/skos:prefLabel/@xml:lang) &gt; count(instance('doc')/*/skos:prefLabel/@xml:lang[not(preceding::skos:prefLabel/@xml:lang = .)])]">
-						<div class="ui-state-error ui-corner-all">
+						<div class="warning">
 							<p>
-								<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"/>
 								<strong>Alert:</strong> Preferred label languages must be unique. </p>
 						</div>
 					</xforms:group>
 					<xforms:group
 						ref=".[count(instance('doc')/*/skos:definition/@xml:lang) &gt; count(instance('doc')/*/skos:definition/@xml:lang[not(preceding::skos:definition/@xml:lang = .)])]">
-						<div class="ui-state-error ui-corner-all" style="padding: 0 .7em;">
+						<div class="warning" style="padding: 0 .7em;">
 							<p>
-								<span class="ui-icon ui-icon-alert" style="float: left; margin-right: .3em;"/>
 								<strong>Alert:</strong> Definition languages must be unique. </p>
 						</div>
 					</xforms:group>
@@ -507,479 +510,416 @@ LIMIT 25]]>
 							<xforms:dispatch ev:event="DOMActivate" target="delete-dialog" name="fr-show"/>
 						</xforms:trigger>
 					</div>
-					<h1>Edit ID</h1>
 					<div>
-						<xforms:input ref="instance('control-instance')/id">
-							<xforms:label>id</xforms:label>
-							<xforms:alert>Required</xforms:alert>
-						</xforms:input>
-						<xforms:group ref=".[string-length(instance('control-instance')/id) &gt; 0]">
-							<a href="http://kerameikos.org/id/{instance('control-instance')/id}"> (<xforms:output
-									ref="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>)</a>
-						</xforms:group>
-					</div>
-					<xforms:group ref=".[not(instance('doc')/child::node())]">
-						<h3>Select Class</h3>
+						<h1>Edit ID</h1>
 						<div>
-							<xforms:select1 ref="instance('control-instance')/type">
-								<xforms:label>Type</xforms:label>
+							<xforms:input ref="instance('control-instance')/id">
+								<xforms:label>id</xforms:label>
 								<xforms:alert>Required</xforms:alert>
-								<xforms:item>
-									<xforms:label>Select...</xforms:label>
-									<xforms:value/>
-								</xforms:item>
-								<xforms:itemset nodeset="instance('classes')/class">
-									<xforms:label ref="label"/>
-									<xforms:value ref="type"/>
-								</xforms:itemset>
-								<xforms:action ev:event="xforms-value-changed">
-									<xforms:var name="type" select="."/>
-									<!-- create resource description -->
-									<xforms:insert context="instance('doc')" origin="xforms:element($type, xforms:attribute('rdf:about', ''))"/>
-									<!-- insert skos:prefLabel and skos:definition with @xml:lang='en'-->
-									<xforms:insert context="instance('doc')/*" origin="xforms:element('skos:prefLabel', xforms:attribute('xml:lang', 'en'))"/>
-									<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
-										origin="xforms:element('skos:definition', xforms:attribute('xml:lang', 'en'))"/>
-									<!-- insert rdf:type as skos:Concept -->
-									<xforms:insert context="instance('doc')/*"
-										origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/2004/02/skos/core#Concept'))"/>
-								</xforms:action>
-							</xforms:select1>
+							</xforms:input>
+							<xforms:group ref=".[string-length(instance('control-instance')/id) &gt; 0]">
+								<a href="http://kerameikos.org/id/{instance('control-instance')/id}"> (<xforms:output
+										ref="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>)</a>
+							</xforms:group>
 						</div>
-					</xforms:group>
-					<div class="section">
-						<xforms:group ref="instance('doc')" id="form">
-							<xforms:group ref="*">
-								<xforms:var name="type" select="name()"/>
-								<h3>
-									<xforms:output ref="instance('classes')/class[type=$type]/label"/>
-								</h3>
-								<div class="trigger_container">
-									<span class="subhead">Import: </span>
-									<!-- import skos:prefLabels from dbpedia for those languages that are not already in the RDF -->
-									<xforms:group ref="instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]">
+						<xforms:group ref=".[not(instance('doc')/child::node())]">
+							<h3>Select Class</h3>
+							<div>
+								<xforms:select1 ref="instance('control-instance')/type">
+									<xforms:label>Type</xforms:label>
+									<xforms:alert>Required</xforms:alert>
+									<xforms:item>
+										<xforms:label>Select...</xforms:label>
+										<xforms:value/>
+									</xforms:item>
+									<xforms:itemset nodeset="instance('classes')/class">
+										<xforms:label ref="label"/>
+										<xforms:value ref="type"/>
+									</xforms:itemset>
+									<xforms:action ev:event="xforms-value-changed">
+										<xforms:var name="type" select="."/>
+										<!-- create resource description -->
+										<xforms:insert context="instance('doc')" origin="xforms:element($type, xforms:attribute('rdf:about', ''))"/>
+										<!-- insert skos:prefLabel and skos:definition with @xml:lang='en'-->
+										<xforms:insert context="instance('doc')/*" origin="xforms:element('skos:prefLabel', xforms:attribute('xml:lang', 'en'))"/>
+										<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
+											origin="xforms:element('skos:definition', xforms:attribute('xml:lang', 'en'))"/>
+										<!-- insert rdf:type as skos:Concept -->
+										<xforms:insert context="instance('doc')/*"
+											origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/2004/02/skos/core#Concept'))"
+										/>
+									</xforms:action>
+								</xforms:select1>
+							</div>
+						</xforms:group>
+						<div class="section">
+							<xforms:group ref="instance('doc')" id="form">
+								<xforms:group ref="*">
+									<xforms:var name="type" select="name()"/>
+									<h3>
+										<xforms:output ref="instance('classes')/class[type=$type]/label"/>
+									</h3>
+									<div class="trigger_container">
+										<span class="subhead">Import: </span>
+										<!-- import skos:prefLabels from dbpedia for those languages that are not already in the RDF -->
+										<xforms:group ref="instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]">
+											<xforms:trigger appearance="minimal">
+												<xforms:label>Dbpedia Labels</xforms:label>
+												<xforms:action ev:event="DOMActivate">
+													<xforms:setvalue ref="instance('control-instance')/dbpedia-id"
+														value="substring-after(instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]/@rdf:resource, 'resource/')"/>
+													<xforms:send submission="get-dbpedia-rdf"/>
+												</xforms:action>
+											</xforms:trigger>
+										</xforms:group>
+										<!-- import AAT URIs from Getty -->
+										<xforms:group
+											ref=".[contains(instance('doc')/*/name(), 'kon:') or instance('doc')/*/name()='ecrm:E4_Period' or instance('doc')/*/name()='ecrm:E57_Material']">
+											<xforms:trigger appearance="minimal">
+												<xforms:label>Getty AAT</xforms:label>
+												<xforms:action ev:event="DOMActivate">
+													<xxforms:show dialog="getty-dialog"/>
+												</xforms:action>
+											</xforms:trigger>
+										</xforms:group>
+										<!-- extract coordinates from Pleiades if there is a Pleiades URI in owl:sameAs, but no geo:lat and geo:long -->
+										<xforms:group
+											ref=".[instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')] and not(instance('doc')//geo:lat) and not(instance('doc')//geo:long)]">
+											<xforms:trigger appearance="minimal">
+												<xforms:label>Pleiades</xforms:label>
+												<xforms:action ev:event="DOMActivate">
+													<xforms:setvalue ref="instance('control-instance')/pleiades-id"
+														value="instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')][1]/@rdf:resource"/>
+													<xforms:send submission="get-pleiades-rdf"/>
+												</xforms:action>
+											</xforms:trigger>
+										</xforms:group>
+										<!-- query VIAF to add associated URIs -->
+										<xforms:group ref=".[instance('doc')/*/name()='foaf:Person' or instance('doc')/*/name()='foaf:Organization']">
+											<xforms:var name="type" select="instance('doc')/*/name()"/>
+											<xforms:trigger appearance="minimal">
+												<xforms:label>VIAF URIs</xforms:label>
+												<xforms:action ev:event="DOMActivate">
+													<xforms:setvalue ref="instance('control-instance')/viaf-field"
+														value="if ($type='foaf:Person') then 'local.personalNames' else 'local.corporateNames'"/>
+													<xxforms:show dialog="viaf-dialog"/>
+												</xforms:action>
+											</xforms:trigger>
+										</xforms:group>
+									</div>
+									<div class="trigger_container">
+										<span class="subhead">Insert: </span>
 										<xforms:trigger appearance="minimal">
-											<xforms:label>Dbpedia Labels</xforms:label>
+											<xforms:label>
+												<img src="/ceramics/xforms/images/add.gif"/>Preferred Label</xforms:label>
+											<xforms:insert ev:event="DOMActivate" origin="instance('prefLabel-template')" context="."
+												nodeset="./child::node()[last()]"/>
+										</xforms:trigger>
+										<span> | </span>
+										<xforms:trigger appearance="minimal">
+											<xforms:label>
+												<img src="/ceramics/xforms/images/add.gif"/>Alternate Label</xforms:label>
+											<xforms:insert ev:event="DOMActivate" origin="instance('altLabel-template')" context="."
+												nodeset="./child::node()[last()]"/>
+										</xforms:trigger>
+										<xforms:trigger appearance="minimal">
+											<xforms:label>
+												<img src="/ceramics/xforms/images/add.gif"/>Broader Concept</xforms:label>
 											<xforms:action ev:event="DOMActivate">
-												<xforms:setvalue ref="instance('control-instance')/dbpedia-id"
-													value="substring-after(instance('doc')//owl:sameAs[contains(@rdf:resource, 'dbpedia')]/@rdf:resource, 'resource/')"/>
-												<xforms:send submission="get-dbpedia-rdf"/>
+												<xforms:setvalue ref="instance('control-instance')/atom-type"
+													value="concat(namespace-uri(instance('doc')/*), instance('doc')/*/local-name())"/>
+												<xxforms:show dialog="broader-dialog"/>
 											</xforms:action>
 										</xforms:trigger>
-									</xforms:group>
-									<!-- import AAT URIs from Getty -->
-									<xforms:group
-										ref=".[contains(instance('doc')/*/name(), 'kon:') or instance('doc')/*/name()='ecrm:E4_Period' or instance('doc')/*/name()='ecrm:E57_Material']">
 										<xforms:trigger appearance="minimal">
-											<xforms:label>Getty AAT</xforms:label>
-											<xforms:action ev:event="DOMActivate">
-												<xxforms:show dialog="getty-dialog"/>
-											</xforms:action>
+											<xforms:label>
+												<img src="/ceramics/xforms/images/add.gif"/>Definition</xforms:label>
+											<xforms:insert ev:event="DOMActivate" origin="instance('definition-template')" context="."/>
 										</xforms:trigger>
-									</xforms:group>
-									<!-- extract coordinates from Pleiades if there is a Pleiades URI in owl:sameAs, but no geo:lat and geo:long -->
-									<xforms:group
-										ref=".[instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')] and not(instance('doc')//geo:lat) and not(instance('doc')//geo:long)]">
-										<xforms:trigger appearance="minimal">
-											<xforms:label>Pleiades</xforms:label>
-											<xforms:action ev:event="DOMActivate">
-												<xforms:setvalue ref="instance('control-instance')/pleiades-id"
-													value="instance('doc')//owl:sameAs[contains(@rdf:resource, 'pleiades')][1]/@rdf:resource"/>
-												<xforms:send submission="get-pleiades-rdf"/>
-											</xforms:action>
-										</xforms:trigger>
-									</xforms:group>
-									<!-- query VIAF to add associated URIs -->
-									<xforms:group ref=".[instance('doc')/*/name()='foaf:Person' or instance('doc')/*/name()='foaf:Organization']">
-										<xforms:var name="type" select="instance('doc')/*/name()"/>
-										<xforms:trigger appearance="minimal">
-											<xforms:label>VIAF URIs</xforms:label>
-											<xforms:action ev:event="DOMActivate">
-												<xforms:setvalue ref="instance('control-instance')/viaf-field"
-													value="if ($type='foaf:Person') then 'local.personalNames' else 'local.corporateNames'"/>
-												<xxforms:show dialog="viaf-dialog"/>
-											</xforms:action>
-										</xforms:trigger>
-									</xforms:group>
-								</div>
-								<div class="trigger_container">
-									<span class="subhead">Insert: </span>
-									<xforms:trigger appearance="minimal">
-										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>Preferred Label</xforms:label>
-										<xforms:insert ev:event="DOMActivate" origin="instance('prefLabel-template')" context="."
-											nodeset="./child::node()[last()]"/>
-									</xforms:trigger>
-									<span> | </span>
-									<xforms:trigger appearance="minimal">
-										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>Alternate Label</xforms:label>
-										<xforms:insert ev:event="DOMActivate" origin="instance('altLabel-template')" context="."
-											nodeset="./child::node()[last()]"/>
-									</xforms:trigger>
-									<xforms:trigger appearance="minimal">
-										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>Broader Concept</xforms:label>
-										<xforms:action ev:event="DOMActivate">
-											<xforms:setvalue ref="instance('control-instance')/atom-type"
-												value="concat(namespace-uri(instance('doc')/*), instance('doc')/*/local-name())"/>
-											<xxforms:show dialog="broader-dialog"/>
-										</xforms:action>
-									</xforms:trigger>
-									<xforms:trigger appearance="minimal">
-										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>Definition</xforms:label>
-										<xforms:insert ev:event="DOMActivate" origin="instance('definition-template')" context="."/>
-									</xforms:trigger>
-									<!--<xforms:trigger appearance="minimal">
+										<!--<xforms:trigger appearance="minimal">
 										<xforms:label>
 											<img src="/ceramics/xforms/images/add.gif"/>Comment</xforms:label>
 										<xforms:insert ev:event="DOMActivate" origin="instance('comment-template')" context="."
 											nodeset="./child::node()[last()]"/>
 									</xforms:trigger>-->
-									<xforms:group ref=".[count(geo:lat) = 0 and name()='ecrm:E53_Place']">
+										<xforms:group ref=".[count(geo:lat) = 0 and name()='ecrm:E53_Place']">
+											<xforms:trigger appearance="minimal">
+												<xforms:label>
+													<img src="/ceramics/xforms/images/add.gif"/>Coordinates</xforms:label>
+												<xforms:action ev:event="DOMActivate">
+													<xforms:insert context="." nodeset="./child::node()[last()]" origin="instance('lat-template')"/>
+													<xforms:insert context="." nodeset="./child::node()[last()]" origin="instance('long-template')"/>
+												</xforms:action>
+											</xforms:trigger>
+										</xforms:group>
 										<xforms:trigger appearance="minimal">
 											<xforms:label>
-												<img src="/ceramics/xforms/images/add.gif"/>Coordinates</xforms:label>
-											<xforms:action ev:event="DOMActivate">
-												<xforms:insert context="." nodeset="./child::node()[last()]" origin="instance('lat-template')"/>
-												<xforms:insert context="." nodeset="./child::node()[last()]" origin="instance('long-template')"/>
-											</xforms:action>
+												<img src="/ceramics/xforms/images/add.gif"/>Related Resource</xforms:label>
+											<xforms:insert ev:event="DOMActivate" origin="instance('related-template')" context="."
+												nodeset="./child::node()[last()]"/>
 										</xforms:trigger>
-									</xforms:group>
-									<xforms:trigger appearance="minimal">
-										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>Related Resource</xforms:label>
-										<xforms:insert ev:event="DOMActivate" origin="instance('related-template')" context="."
-											nodeset="./child::node()[last()]"/>
-									</xforms:trigger>
-									<xforms:trigger appearance="minimal">
-										<xforms:label>
-											<img src="/ceramics/xforms/images/add.gif"/>Same As</xforms:label>
-										<xforms:insert ev:event="DOMActivate" origin="instance('sameAs-template')" context="." nodeset="./child::node()[last()]"
-										/>
-									</xforms:trigger>
-								</div>
-								<div class="section">
-									<h4>Labels and Definitions</h4>
-									<xforms:repeat nodeset="skos:prefLabel">
-										<div>
-											<xforms:input ref=".">
-												<xforms:label ref="name()"/>
-												<xforms:alert>Required</xforms:alert>
-											</xforms:input>
-											<xforms:select1 ref="@xml:lang">
-												<xforms:item>
-													<xforms:label>Select...</xforms:label>
-													<xforms:value/>
-												</xforms:item>
-												<xforms:itemset nodeset="instance('languages')/language">
-													<xforms:label ref="."/>
-													<xforms:value ref="@value"/>
-												</xforms:itemset>
-												<xforms:alert>Required; English label most occur once.</xforms:alert>
-											</xforms:select1>
-											<xforms:group ref=".[count(instance('doc')/*/skos:prefLabel) &gt; 1]">
-												<xforms:trigger appearance="minimal">
-													<xforms:delete ev:event="DOMActivate" context="."/>
-													<xforms:label>
-														<img src="/ceramics/xforms/images/remove.gif"/>
-													</xforms:label>
-												</xforms:trigger>
-											</xforms:group>
-										</div>
-									</xforms:repeat>
-									<xforms:repeat nodeset="skos:altLabel">
-										<div>
-											<xforms:input ref=".">
-												<xforms:label ref="name()"/>
-												<xforms:alert>Required</xforms:alert>
-											</xforms:input>
-											<xforms:select1 ref="@xml:lang">
-												<xforms:item>
-													<xforms:label>Select...</xforms:label>
-													<xforms:value/>
-												</xforms:item>
-												<xforms:itemset nodeset="instance('languages')/language">
-													<xforms:label ref="."/>
-													<xforms:value ref="@value"/>
-												</xforms:itemset>
-												<xforms:alert>Required</xforms:alert>
-											</xforms:select1>
-											<xforms:trigger appearance="minimal">
-												<xforms:delete ev:event="DOMActivate" context="."/>
-												<xforms:label>
-													<img src="/ceramics/xforms/images/remove.gif"/>
-												</xforms:label>
-											</xforms:trigger>
-										</div>
-									</xforms:repeat>
-									<xforms:repeat nodeset="skos:definition">
-										<div>
-											<xforms:textarea ref=".">
-												<xforms:label ref="name()"/>
-												<xforms:alert>Required</xforms:alert>
-											</xforms:textarea>
-											<xforms:select1 ref="@xml:lang">
-												<xforms:item>
-													<xforms:label>Select...</xforms:label>
-													<xforms:value/>
-												</xforms:item>
-												<xforms:itemset nodeset="instance('languages')/language">
-													<xforms:label ref="."/>
-													<xforms:value ref="@value"/>
-												</xforms:itemset>
-												<xforms:alert>Required; English label most occur once.</xforms:alert>
-											</xforms:select1>
-											<xforms:group ref=".[count(instance('doc')/*/skos:definition) &gt; 1]">
-												<xforms:trigger appearance="minimal">
-													<xforms:delete ev:event="DOMActivate" context="."/>
-													<xforms:label>
-														<img src="/ceramics/xforms/images/remove.gif"/>
-													</xforms:label>
-												</xforms:trigger>
-											</xforms:group>
-										</div>
-									</xforms:repeat>
-								</div>
-								<xforms:group ref=".[count(skos:broader) &gt; 0]">
-									<div>
-										<h4>Semantic Relationships</h4>
-										<xforms:repeat nodeset="skos:broader">
+										<xforms:trigger appearance="minimal">
+											<xforms:label>
+												<img src="/ceramics/xforms/images/add.gif"/>Same As</xforms:label>
+											<xforms:insert ev:event="DOMActivate" origin="instance('sameAs-template')" context="."
+												nodeset="./child::node()[last()]"/>
+										</xforms:trigger>
+									</div>
+									<div class="section">
+										<h4>Labels and Definitions</h4>
+										<xforms:repeat nodeset="skos:prefLabel">
 											<div>
-												<xforms:output ref="@rdf:resource">
-													<xforms:label ref="parent::node()/name()"/>
-												</xforms:output>
+												<xforms:input ref=".">
+													<xforms:label ref="name()"/>
+													<xforms:alert>Required</xforms:alert>
+												</xforms:input>
+												<xforms:select1 ref="@xml:lang">
+													<xforms:item>
+														<xforms:label>Select...</xforms:label>
+														<xforms:value/>
+													</xforms:item>
+													<xforms:itemset nodeset="instance('languages')/language">
+														<xforms:label ref="."/>
+														<xforms:value ref="@value"/>
+													</xforms:itemset>
+													<xforms:alert>Required; English label most occur once.</xforms:alert>
+												</xforms:select1>
+												<xforms:group ref=".[count(instance('doc')/*/skos:prefLabel) &gt; 1]">
+													<xforms:trigger appearance="minimal">
+														<xforms:delete ev:event="DOMActivate" context="."/>
+														<xforms:label>
+															<img src="/ceramics/xforms/images/remove.gif"/>
+														</xforms:label>
+													</xforms:trigger>
+												</xforms:group>
+											</div>
+										</xforms:repeat>
+										<xforms:repeat nodeset="skos:altLabel">
+											<div>
+												<xforms:input ref=".">
+													<xforms:label ref="name()"/>
+													<xforms:alert>Required</xforms:alert>
+												</xforms:input>
+												<xforms:select1 ref="@xml:lang">
+													<xforms:item>
+														<xforms:label>Select...</xforms:label>
+														<xforms:value/>
+													</xforms:item>
+													<xforms:itemset nodeset="instance('languages')/language">
+														<xforms:label ref="."/>
+														<xforms:value ref="@value"/>
+													</xforms:itemset>
+													<xforms:alert>Required</xforms:alert>
+												</xforms:select1>
+												<xforms:trigger appearance="minimal">
+													<xforms:delete ev:event="DOMActivate" context="."/>
+													<xforms:label>
+														<img src="/ceramics/xforms/images/remove.gif"/>
+													</xforms:label>
+												</xforms:trigger>
+											</div>
+										</xforms:repeat>
+										<xforms:repeat nodeset="skos:definition">
+											<div>
+												<xforms:textarea ref=".">
+													<xforms:label ref="name()"/>
+													<xforms:alert>Required</xforms:alert>
+												</xforms:textarea>
+												<xforms:select1 ref="@xml:lang">
+													<xforms:item>
+														<xforms:label>Select...</xforms:label>
+														<xforms:value/>
+													</xforms:item>
+													<xforms:itemset nodeset="instance('languages')/language">
+														<xforms:label ref="."/>
+														<xforms:value ref="@value"/>
+													</xforms:itemset>
+													<xforms:alert>Required; English label most occur once.</xforms:alert>
+												</xforms:select1>
+												<xforms:group ref=".[count(instance('doc')/*/skos:definition) &gt; 1]">
+													<xforms:trigger appearance="minimal">
+														<xforms:delete ev:event="DOMActivate" context="."/>
+														<xforms:label>
+															<img src="/ceramics/xforms/images/remove.gif"/>
+														</xforms:label>
+													</xforms:trigger>
+												</xforms:group>
 											</div>
 										</xforms:repeat>
 									</div>
-								</xforms:group>
-								<div>
-									<h4>Miscellaneous Fields</h4>
-									<xforms:repeat nodeset="rdfs:comment">
+									<xforms:group ref=".[count(skos:broader) &gt; 0]">
 										<div>
-											<xforms:input ref=".">
-												<xforms:label ref="name()"/>
-												<xforms:alert>Required</xforms:alert>
-											</xforms:input>
-											<xforms:select1 ref="@xml:lang">
-												<xforms:item>
-													<xforms:label>Select...</xforms:label>
-													<xforms:value/>
-												</xforms:item>
-												<xforms:itemset nodeset="instance('languages')/language">
-													<xforms:label ref="."/>
-													<xforms:value ref="@value"/>
-												</xforms:itemset>
-												<xforms:alert>Required</xforms:alert>
-											</xforms:select1>
-											<xforms:trigger appearance="minimal">
-												<xforms:delete ev:event="DOMActivate" context="."/>
-												<xforms:label>
-													<img src="/ceramics/xforms/images/remove.gif"/>
-												</xforms:label>
-											</xforms:trigger>
+											<h4>Semantic Relationships</h4>
+											<xforms:repeat nodeset="skos:broader">
+												<div>
+													<xforms:output ref="@rdf:resource">
+														<xforms:label ref="parent::node()/name()"/>
+													</xforms:output>
+												</div>
+											</xforms:repeat>
 										</div>
-									</xforms:repeat>
-									<xforms:repeat nodeset="owl:sameAs">
-										<div>
-											<xforms:input ref="@rdf:resource">
-												<xforms:label ref="parent::node()/name()"/>
-												<xforms:alert>Required, must be URI</xforms:alert>
-											</xforms:input>
-											<xforms:trigger appearance="minimal">
-												<xforms:delete ev:event="DOMActivate" context="."/>
-												<xforms:label>
-													<img src="/ceramics/xforms/images/remove.gif"/>
-												</xforms:label>
-											</xforms:trigger>
-										</div>
-									</xforms:repeat>
-									<xforms:repeat nodeset="skos:related">
-										<div>
-											<xforms:input ref="@rdf:resource">
-												<xforms:label ref="parent::node()/name()"/>
-												<xforms:alert>Required, must be URI</xforms:alert>
-											</xforms:input>
-											<xforms:trigger appearance="minimal">
-												<xforms:delete ev:event="DOMActivate" context="."/>
-												<xforms:label>
-													<img src="/ceramics/xforms/images/remove.gif"/>
-												</xforms:label>
-											</xforms:trigger>
-										</div>
-									</xforms:repeat>
-									<xforms:repeat nodeset="dcterms:isPartOf">
-										<div>
-											<xforms:select1 ref="@rdf:resource">
-												<xforms:label>Field</xforms:label>
-												<xforms:alert>Required</xforms:alert>
-												<xforms:item>
-													<xforms:label>Select...</xforms:label>
-													<xforms:value/>
-												</xforms:item>
-												<xforms:itemset nodeset="instance('fon-response')/res:results/res:result">
-													<xforms:label ref="res:binding[@name='label']/res:literal"/>
-													<xforms:value ref="substring-after(res:binding[@name='uri']/res:uri, 'id/')"/>
-												</xforms:itemset>
-											</xforms:select1>
-											<xforms:trigger appearance="minimal">
-												<xforms:delete ev:event="DOMActivate" context="."/>
-												<xforms:label>
-													<img src="/ceramics/xforms/images/remove.gif"/>
-												</xforms:label>
-											</xforms:trigger>
-										</div>
-									</xforms:repeat>
-								</div>
-								<xforms:group ref=".[count(geo:lat) = 1]">
+									</xforms:group>
 									<div>
-										<h4>Coordinates</h4>
-										<xforms:trigger appearance="minimal">
-											<xforms:action ev:event="DOMActivate">
-												<xforms:delete nodeset="geo:lat"/>
-												<xforms:delete nodeset="geo:long"/>
-											</xforms:action>
-											<xforms:label>
-												<img src="/ceramics/xforms/images/remove.gif"/>
-											</xforms:label>
-										</xforms:trigger>
-										<div>
-											<xforms:input ref="geo:lat">
-												<xforms:label>Latitude</xforms:label>
-												<xforms:alert>Must be decimal integer between -180 and 180</xforms:alert>
-											</xforms:input>
-										</div>
-										<div>
-											<xforms:input ref="geo:long">
-												<xforms:label>Longitude</xforms:label>
-												<xforms:alert>Must be decimal integer between -180 and 180</xforms:alert>
-											</xforms:input>
-										</div>
+										<h4>Miscellaneous Fields</h4>
+										<xforms:repeat nodeset="rdfs:comment">
+											<div>
+												<xforms:input ref=".">
+													<xforms:label ref="name()"/>
+													<xforms:alert>Required</xforms:alert>
+												</xforms:input>
+												<xforms:select1 ref="@xml:lang">
+													<xforms:item>
+														<xforms:label>Select...</xforms:label>
+														<xforms:value/>
+													</xforms:item>
+													<xforms:itemset nodeset="instance('languages')/language">
+														<xforms:label ref="."/>
+														<xforms:value ref="@value"/>
+													</xforms:itemset>
+													<xforms:alert>Required</xforms:alert>
+												</xforms:select1>
+												<xforms:trigger appearance="minimal">
+													<xforms:delete ev:event="DOMActivate" context="."/>
+													<xforms:label>
+														<img src="/ceramics/xforms/images/remove.gif"/>
+													</xforms:label>
+												</xforms:trigger>
+											</div>
+										</xforms:repeat>
+										<xforms:repeat nodeset="owl:sameAs">
+											<div>
+												<xforms:input ref="@rdf:resource">
+													<xforms:label ref="parent::node()/name()"/>
+													<xforms:alert>Required, must be URI</xforms:alert>
+												</xforms:input>
+												<xforms:trigger appearance="minimal">
+													<xforms:delete ev:event="DOMActivate" context="."/>
+													<xforms:label>
+														<img src="/ceramics/xforms/images/remove.gif"/>
+													</xforms:label>
+												</xforms:trigger>
+											</div>
+										</xforms:repeat>
+										<xforms:repeat nodeset="skos:related">
+											<div>
+												<xforms:input ref="@rdf:resource">
+													<xforms:label ref="parent::node()/name()"/>
+													<xforms:alert>Required, must be URI</xforms:alert>
+												</xforms:input>
+												<xforms:trigger appearance="minimal">
+													<xforms:delete ev:event="DOMActivate" context="."/>
+													<xforms:label>
+														<img src="/ceramics/xforms/images/remove.gif"/>
+													</xforms:label>
+												</xforms:trigger>
+											</div>
+										</xforms:repeat>
+										<xforms:repeat nodeset="dcterms:isPartOf">
+											<div>
+												<xforms:select1 ref="@rdf:resource">
+													<xforms:label>Field</xforms:label>
+													<xforms:alert>Required</xforms:alert>
+													<xforms:item>
+														<xforms:label>Select...</xforms:label>
+														<xforms:value/>
+													</xforms:item>
+													<xforms:itemset nodeset="instance('fon-response')/res:results/res:result">
+														<xforms:label ref="res:binding[@name='label']/res:literal"/>
+														<xforms:value ref="substring-after(res:binding[@name='uri']/res:uri, 'id/')"/>
+													</xforms:itemset>
+												</xforms:select1>
+												<xforms:trigger appearance="minimal">
+													<xforms:delete ev:event="DOMActivate" context="."/>
+													<xforms:label>
+														<img src="/ceramics/xforms/images/remove.gif"/>
+													</xforms:label>
+												</xforms:trigger>
+											</div>
+										</xforms:repeat>
 									</div>
+									<xforms:group ref=".[count(geo:lat) = 1]">
+										<div>
+											<h4>Coordinates</h4>
+											<xforms:trigger appearance="minimal">
+												<xforms:action ev:event="DOMActivate">
+													<xforms:delete nodeset="geo:lat"/>
+													<xforms:delete nodeset="geo:long"/>
+												</xforms:action>
+												<xforms:label>
+													<img src="/ceramics/xforms/images/remove.gif"/>
+												</xforms:label>
+											</xforms:trigger>
+											<div>
+												<xforms:input ref="geo:lat">
+													<xforms:label>Latitude</xforms:label>
+													<xforms:alert>Must be decimal integer between -180 and 180</xforms:alert>
+												</xforms:input>
+											</div>
+											<div>
+												<xforms:input ref="geo:long">
+													<xforms:label>Longitude</xforms:label>
+													<xforms:alert>Must be decimal integer between -180 and 180</xforms:alert>
+												</xforms:input>
+											</div>
+										</div>
+									</xforms:group>
 								</xforms:group>
 							</xforms:group>
-						</xforms:group>
-					</div>
-					<fr:alert-dialog id="delete-dialog">
-						<fr:label>Delete</fr:label>
-						<fr:message>Do you wish to delete this id from ceramics? It can only be restored from GitHub.</fr:message>
-						<fr:positive-choice>
-							<fr:label>Yes</fr:label>
-							<xforms:action ev:event="DOMActivate">
-								<!-- delete from solr -->
-								<xforms:setvalue ref="instance('deleteId')/id" value="instance('control-instance')/id"/>
-								<xforms:send submission="delete-id-from-solr"/>
-								<!-- delete from SPARQL -->
-								<xforms:setvalue ref="instance('sparqlUpdate')"
-									value="replace(instance('sparqlUpdate-template'), 'URI', instance('doc')/*/@rdf:about)"/>
-								<xforms:send submission="delete-graph"/>
-								<!-- delete id from disk -->
-								<xforms:setvalue ref="instance('delete-config')/delete/url"
-									value="concat('file://', instance('control-instance')/id_path, instance('control-instance')/id, '.xml')"/>
-								<xforms:insert nodeset="instance('dump')"
-									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/delete-id.xpl', 'file', instance('delete-config'), 'data')"/>
-								<!-- redirect to admin, only if all other processes completed successfully -->
-								<xforms:load resource="/ceramics/admin/" if="instance('control-instance')/delete-success = true()"/>
-							</xforms:action>
-						</fr:positive-choice>
-						<fr:negative-choice>
-							<fr:label>No</fr:label>
-						</fr:negative-choice>
-					</fr:alert-dialog>
-					<xxforms:dialog id="viaf-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
-						<xforms:label>Query VIAF</xforms:label>
-						<div>
-							<xforms:input ref="instance('control-instance')/viaf-query">
-								<xforms:label>Name</xforms:label>
-							</xforms:input>
-							<xforms:trigger>
-								<xforms:label>Search</xforms:label>
-								<!-- delete current options in the instance and initiate new query -->
-								<xforms:action ev:event="DOMActivate">
-									<xforms:delete context="instance('viaf-options')/*"/>
-									<xforms:send submission="query-viaf"/>
-								</xforms:action>
-							</xforms:trigger>
 						</div>
-						<xforms:group ref=".[count(instance('viaf-options')/option) &gt; 0]">
-							<table style="width:100%">
-								<thead>
-									<tr>
-										<th>Select</th>
-										<th>Name</th>
-									</tr>
-								</thead>
-								<tbody>
-									<xforms:repeat nodeset="instance('viaf-options')/option">
-										<tr>
-											<td><xforms:input ref="@select"/></td>
-											<td><xforms:output ref="."/></td>
-										</tr>
-									</xforms:repeat>
-								</tbody>
-							</table>
-							<xforms:trigger>
-								<xforms:label>Add Selected</xforms:label>
+						<fr:alert-dialog id="delete-dialog">
+							<fr:label>Delete</fr:label>
+							<fr:message>Do you wish to delete this id from ceramics? It can only be restored from GitHub.</fr:message>
+							<fr:positive-choice>
+								<fr:label>Yes</fr:label>
 								<xforms:action ev:event="DOMActivate">
-									<xforms:action xxforms:iterate="instance('viaf-options')/option[@select=true()]">
-										<xforms:var name="resource" select="context()/@link"/>
-										<xforms:setvalue ref="instance('control-instance')/viaf-id" value="$resource"/>
-										<xforms:action if="not(instance('doc')//owl:sameAs[@rdf:resource=$resource])">
-											<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
-												origin="xforms:element('owl:sameAs', xforms:attribute('rdf:resource', $resource))"/>
-										</xforms:action>
-										<xforms:send submission="get-viaf-rdf"/>
+									<!-- delete from solr -->
+									<xforms:setvalue ref="instance('deleteId')/id" value="instance('control-instance')/id"/>
+									<xforms:send submission="delete-id-from-solr"/>
+									<!-- delete from SPARQL -->
+									<xforms:setvalue ref="instance('sparqlUpdate')"
+										value="replace(instance('sparqlUpdate-template'), 'URI', instance('doc')/*/@rdf:about)"/>
+									<xforms:send submission="delete-graph"/>
+									<!-- delete id from disk -->
+									<xforms:setvalue ref="instance('delete-config')/delete/url"
+										value="concat('file://', instance('control-instance')/id_path, instance('control-instance')/id, '.xml')"/>
+									<xforms:insert nodeset="instance('dump')"
+										origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/delete-id.xpl', 'file', instance('delete-config'), 'data')"/>
+									<!-- redirect to admin, only if all other processes completed successfully -->
+									<xforms:load resource="/ceramics/admin/" if="instance('control-instance')/delete-success = true()"/>
+								</xforms:action>
+							</fr:positive-choice>
+							<fr:negative-choice>
+								<fr:label>No</fr:label>
+							</fr:negative-choice>
+						</fr:alert-dialog>
+						<xxforms:dialog id="viaf-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+							<xforms:label>Query VIAF</xforms:label>
+							<div>
+								<xforms:input ref="instance('control-instance')/viaf-query">
+									<xforms:label>Name</xforms:label>
+								</xforms:input>
+								<xforms:trigger>
+									<xforms:label>Search</xforms:label>
+									<!-- delete current options in the instance and initiate new query -->
+									<xforms:action ev:event="DOMActivate">
+										<xforms:delete context="instance('viaf-options')/*"/>
+										<xforms:send submission="query-viaf"/>
 									</xforms:action>
-									<xxforms:hide dialog="viaf-dialog"/>
-								</xforms:action>
-							</xforms:trigger>
-						</xforms:group>
-					</xxforms:dialog>
-					<xxforms:dialog id="getty-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
-						<xforms:label>Query Getty</xforms:label>
-						<div>
-							<xforms:input ref="instance('control-instance')/getty-search"/>
-							<xforms:trigger>
-								<xforms:action ev:event="DOMActivate">
-									<xforms:var name="search_text" select="string-join(tokenize(instance('control-instance')/getty-search, ' '), ' AND ')"/>
-									<xforms:setvalue ref="instance('sparqlQuery')"
-										value="normalize-space(replace(instance('getty-sparql-template'), 'SEARCH_QUERY', $search_text))"/>
-									<xforms:delete context="instance('getty-options')/*"/>
-									<xforms:send submission="query-aat"/>
-								</xforms:action>
-								<xforms:label>Search</xforms:label>
-							</xforms:trigger>
-						</div>
-						<div style="width:600px;">
-							<xforms:group ref=".[count(instance('getty-options')/option) &gt; 0]">
+								</xforms:trigger>
+							</div>
+							<xforms:group ref=".[count(instance('viaf-options')/option) &gt; 0]">
 								<table style="width:100%">
 									<thead>
 										<tr>
 											<th>Select</th>
 											<th>Name</th>
-											<th>Id</th>
-											<th>Type</th>
 										</tr>
 									</thead>
 									<tbody>
-										<xforms:repeat nodeset="instance('getty-options')/option">
+										<xforms:repeat nodeset="instance('viaf-options')/option">
 											<tr>
 												<td><xforms:input ref="@select"/></td>
 												<td><xforms:output ref="."/></td>
-												<td><a href="{@link}" target="_blank"><xforms:output ref="tokenize(@link, '/')[last()]"/></a></td>
-												<td>
-													<xforms:select1 ref="@type" class="short-input">
-														<xforms:item>
-															<xforms:label>Same As</xforms:label>
-															<xforms:value>owl:sameAs</xforms:value>
-														</xforms:item>
-														<xforms:item>
-															<xforms:label>Related</xforms:label>
-															<xforms:value>skos:related</xforms:value>
-														</xforms:item>
-													</xforms:select1>
-												</td>
 											</tr>
 										</xforms:repeat>
 									</tbody>
@@ -987,74 +927,141 @@ LIMIT 25]]>
 								<xforms:trigger>
 									<xforms:label>Add Selected</xforms:label>
 									<xforms:action ev:event="DOMActivate">
-										<xforms:action xxforms:iterate="instance('getty-options')/option[@select=true()]">
+										<xforms:action xxforms:iterate="instance('viaf-options')/option[@select=true()]">
 											<xforms:var name="resource" select="context()/@link"/>
-											<xforms:var name="type" select="context()/@type"/>
+											<xforms:setvalue ref="instance('control-instance')/viaf-id" value="$resource"/>
 											<xforms:action if="not(instance('doc')//owl:sameAs[@rdf:resource=$resource])">
 												<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
-													origin="xforms:element($type, xforms:attribute('rdf:resource', $resource))"/>
+													origin="xforms:element('owl:sameAs', xforms:attribute('rdf:resource', $resource))"/>
 											</xforms:action>
+											<xforms:send submission="get-viaf-rdf"/>
 										</xforms:action>
-										<xxforms:hide dialog="getty-dialog"/>
+										<xxforms:hide dialog="viaf-dialog"/>
 									</xforms:action>
 								</xforms:trigger>
 							</xforms:group>
-						</div>
-					</xxforms:dialog>
-					<xxforms:dialog id="broader-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
-						<xforms:label>Broader Concept</xforms:label>
-						<div>
-							<xforms:input ref="instance('control-instance')/atom-search"/>
-							<xforms:trigger>
-								<xforms:label>Search</xforms:label>
-								<!-- delete current options in the instance and initiate new query -->
-								<xforms:action ev:event="DOMActivate">
-									<xforms:send submission="query-feed"/>
-								</xforms:action>
-							</xforms:trigger>
-						</div>
-						<div style="width:400px;">
-							<xforms:group ref=".[count(instance('feed')//atom:entry) &gt; 0]">
-								<h4>Results</h4>
-								<div>
-									<xforms:select1 ref="instance('control-instance')/atom-id" appearance="compact">
-										<xforms:itemset nodeset="instance('feed')//atom:entry">
-											<xforms:label ref="atom:title"/>
-											<xforms:value ref="atom:id"/>
-										</xforms:itemset>
-										<xforms:action ev:event="xforms-value-changed">
-											<xforms:setvalue ref="instance('control-instance')/atom-summary"
-												value="instance('feed')//atom:entry[atom:id = instance('control-instance')/atom-id]/atom:summary"/>
-										</xforms:action>
-									</xforms:select1>
+						</xxforms:dialog>
+						<xxforms:dialog id="getty-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+							<xforms:label>Query Getty</xforms:label>
+							<div>
+								<xforms:input ref="instance('control-instance')/getty-search"/>
+								<xforms:trigger>
+									<xforms:action ev:event="DOMActivate">
+										<xforms:var name="search_text" select="string-join(tokenize(instance('control-instance')/getty-search, ' '), ' AND ')"/>
+										<xforms:setvalue ref="instance('sparqlQuery')"
+											value="normalize-space(replace(instance('getty-sparql-template'), 'SEARCH_QUERY', $search_text))"/>
+										<xforms:delete context="instance('getty-options')/*"/>
+										<xforms:send submission="query-aat"/>
+									</xforms:action>
+									<xforms:label>Search</xforms:label>
+								</xforms:trigger>
+							</div>
+							<div style="width:600px;">
+								<xforms:group ref=".[count(instance('getty-options')/option) &gt; 0]">
+									<table style="width:100%">
+										<thead>
+											<tr>
+												<th>Select</th>
+												<th>Name</th>
+												<th>Id</th>
+												<th>Type</th>
+											</tr>
+										</thead>
+										<tbody>
+											<xforms:repeat nodeset="instance('getty-options')/option">
+												<tr>
+													<td><xforms:input ref="@select"/></td>
+													<td><xforms:output ref="."/></td>
+													<td><a href="{@link}" target="_blank"><xforms:output ref="tokenize(@link, '/')[last()]"/></a></td>
+													<td>
+														<xforms:select1 ref="@type" class="short-input">
+															<xforms:item>
+																<xforms:label>Same As</xforms:label>
+																<xforms:value>owl:sameAs</xforms:value>
+															</xforms:item>
+															<xforms:item>
+																<xforms:label>Related</xforms:label>
+																<xforms:value>skos:related</xforms:value>
+															</xforms:item>
+														</xforms:select1>
+													</td>
+												</tr>
+											</xforms:repeat>
+										</tbody>
+									</table>
 									<xforms:trigger>
-										<xforms:label>Select</xforms:label>
+										<xforms:label>Add Selected</xforms:label>
 										<xforms:action ev:event="DOMActivate">
-											<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
-												origin="xforms:element('skos:broader', (xforms:attribute('rdf:resource', concat('http://kerameikos.org/id/', instance('control-instance')/atom-id)), ''))"/>
-											<!-- blank atom search nodes and atom feed -->
-											<xforms:delete nodeset="instance('feed')/*"/>
-											<xforms:setvalue ref="instance('control-instance')/atom-search"/>
-											<xforms:setvalue ref="instance('control-instance')/atom-id"/>
-											<xforms:setvalue ref="instance('control-instance')/atom-summary"/>
-											<xxforms:hide dialog="broader-dialog"/>
+											<xforms:action xxforms:iterate="instance('getty-options')/option[@select=true()]">
+												<xforms:var name="resource" select="context()/@link"/>
+												<xforms:var name="type" select="context()/@type"/>
+												<xforms:action if="not(instance('doc')//owl:sameAs[@rdf:resource=$resource])">
+													<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
+														origin="xforms:element($type, xforms:attribute('rdf:resource', $resource))"/>
+												</xforms:action>
+											</xforms:action>
+											<xxforms:hide dialog="getty-dialog"/>
 										</xforms:action>
 									</xforms:trigger>
-								</div>
-								<div>
-									<xforms:output ref="instance('control-instance')/atom-summary">
-										<xforms:label>Definition</xforms:label>
-									</xforms:output>
-								</div>
-							</xforms:group>
-							<xforms:group ref=".[count(instance('feed')//atom:entry) = 0 and string(instance('feed')/atom:title)]">
-								<h4>No results found.</h4>
-							</xforms:group>
-						</div>
-					</xxforms:dialog>
-					<!--<fr:xforms-inspector/>-->
+								</xforms:group>
+							</div>
+						</xxforms:dialog>
+						<xxforms:dialog id="broader-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+							<xforms:label>Broader Concept</xforms:label>
+							<div>
+								<xforms:input ref="instance('control-instance')/atom-search"/>
+								<xforms:trigger>
+									<xforms:label>Search</xforms:label>
+									<!-- delete current options in the instance and initiate new query -->
+									<xforms:action ev:event="DOMActivate">
+										<xforms:send submission="query-feed"/>
+									</xforms:action>
+								</xforms:trigger>
+							</div>
+							<div style="width:400px;">
+								<xforms:group ref=".[count(instance('feed')//atom:entry) &gt; 0]">
+									<h4>Results</h4>
+									<div>
+										<xforms:select1 ref="instance('control-instance')/atom-id" appearance="compact">
+											<xforms:itemset nodeset="instance('feed')//atom:entry">
+												<xforms:label ref="atom:title"/>
+												<xforms:value ref="atom:id"/>
+											</xforms:itemset>
+											<xforms:action ev:event="xforms-value-changed">
+												<xforms:setvalue ref="instance('control-instance')/atom-summary"
+													value="instance('feed')//atom:entry[atom:id = instance('control-instance')/atom-id]/atom:summary"/>
+											</xforms:action>
+										</xforms:select1>
+										<xforms:trigger>
+											<xforms:label>Select</xforms:label>
+											<xforms:action ev:event="DOMActivate">
+												<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]"
+													origin="xforms:element('skos:broader', (xforms:attribute('rdf:resource', concat('http://kerameikos.org/id/', instance('control-instance')/atom-id)), ''))"/>
+												<!-- blank atom search nodes and atom feed -->
+												<xforms:delete nodeset="instance('feed')/*"/>
+												<xforms:setvalue ref="instance('control-instance')/atom-search"/>
+												<xforms:setvalue ref="instance('control-instance')/atom-id"/>
+												<xforms:setvalue ref="instance('control-instance')/atom-summary"/>
+												<xxforms:hide dialog="broader-dialog"/>
+											</xforms:action>
+										</xforms:trigger>
+									</div>
+									<div>
+										<xforms:output ref="instance('control-instance')/atom-summary">
+											<xforms:label>Definition</xforms:label>
+										</xforms:output>
+									</div>
+								</xforms:group>
+								<xforms:group ref=".[count(instance('feed')//atom:entry) = 0 and string(instance('feed')/atom:title)]">
+									<h4>No results found.</h4>
+								</xforms:group>
+							</div>
+						</xxforms:dialog>
+						<!--<fr:xforms-inspector/>-->
+					</div>
 				</div>
 			</div>
 		</div>
+
 	</body>
 </html>
