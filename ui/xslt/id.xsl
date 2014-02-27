@@ -30,14 +30,14 @@
 	<xsl:variable name="tokenized_q" select="tokenize($q, ' AND ')"/>
 	<xsl:variable name="numFound" select="//result[@name='response']/@numFound" as="xs:integer"/>
 	<xsl:variable name="display_path">../</xsl:variable>
-	
+
 	<!-- definition of namespaces for turning in solr type field URIs into abbreviations -->
 	<xsl:variable name="namespaces" as="item()*">
 		<namespaces>
 			<namespace prefix="ecrm" uri="http://erlangen-crm.org/current/"/>
 			<namespace prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
 			<namespace prefix="kon" uri="http://kerameikos.org/ontology#"/>
-			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>			
+			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
 		</namespaces>
 	</xsl:variable>
 
@@ -71,13 +71,13 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12">
-					<p class="desc">The id/ path is the URI defining the thesaurus namespace.</p>
 					<!--<xsl:call-template name="filter"/>-->
 					<h1>Results</h1>
 					<xsl:choose>
 						<xsl:when test="$numFound &gt; 0">
 							<xsl:call-template name="paging"/>
 							<xsl:apply-templates select="descendant::doc"/>
+							<xsl:call-template name="paging"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<p>No results found for this query. <a href="../id/">Clear search</a>.</p>
@@ -89,15 +89,14 @@
 	</xsl:template>
 
 	<xsl:template match="doc">
-		<xsl:variable name="style" select="if(position() mod 2 = 0) then 'even-row' else 'odd-row'"/>
-		<div class="result-doc {$style}">
-			<span class="doc-label">
+		<div class="result-doc row">
+			<h4>
 				<a href="{str[@name='id']}" title="{if(string(str[@name='prefLabel'])) then str[@name='prefLabel'] else str[@name='id']}">
 					<xsl:value-of select="if(string(str[@name='prefLabel'])) then str[@name='prefLabel'] else str[@name='id']"/>
 				</a>
-			</span>
+			</h4>
 			<xsl:if test="string(str[@name='definition']) or not(contains($q, 'type'))">
-				<dl>
+				<dl class="dl-horizontal">
 					<xsl:if test="string(str[@name='definition'])">
 						<dt>Definition</dt>
 						<dd>
@@ -109,10 +108,12 @@
 						<dd>
 							<xsl:for-each select="arr[@name='type']/str">
 								<xsl:variable name="uri" select="."/>
-								
+
 								<a href="{.}">
-									<xsl:value-of select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"/>
-								</a>								
+									<xsl:value-of
+										select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
+									/>
+								</a>
 								<xsl:if test="not(position()=last())">
 									<xsl:text>, </xsl:text>
 								</xsl:if>
@@ -160,6 +161,15 @@
 	</xsl:template>
 
 	<xsl:template name="paging">
+		<xsl:variable name="start_var" as="xs:integer">
+			<xsl:choose>
+				<xsl:when test="string($start)">
+					<xsl:value-of select="$start"/>
+				</xsl:when>
+				<xsl:otherwise>0</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+
 		<xsl:variable name="next">
 			<xsl:value-of select="$start_var+$rows"/>
 		</xsl:variable>
@@ -176,8 +186,8 @@
 		<xsl:variable name="current" select="$start_var div $rows + 1"/>
 		<xsl:variable name="total" select="ceiling($numFound div $rows)"/>
 
-		<div class="paging_div">
-			<div style="float:left;">
+		<div class="paging_div row">
+			<div class="col-md-6">
 				<xsl:variable name="startRecord" select="$start_var + 1"/>
 				<xsl:variable name="endRecord">
 					<xsl:choose>
@@ -189,7 +199,6 @@
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
-
 				<span>
 					<b>
 						<xsl:value-of select="$startRecord"/>
@@ -206,120 +215,65 @@
 				</span>
 			</div>
 
+
+
 			<!-- paging functionality -->
-			<div style="float:right;">
-				<ul class="paging">
-					<xsl:choose>
-						<xsl:when test="$start_var &gt;= $rows">
-							<li>
-								<a class="pagingBtn"
-									href="?q={encode-for-uri($q)}&amp;start={$previous}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">«</a>
-							</li>
-
-						</xsl:when>
-						<xsl:otherwise>
-							<li>«</li>
-						</xsl:otherwise>
-					</xsl:choose>
-
-					<!-- always display links to the first two pages -->
-					<xsl:if test="$start_var div $rows &gt;= 3">
-						<li>
-							<a class="pagingBtn" href="?q={encode-for-uri($q)}&amp;start=0{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
-								<xsl:text>1</xsl:text>
-							</a>
-						</li>
-
-					</xsl:if>
-					<xsl:if test="$start_var div $rows &gt;= 4">
-						<li>
-							<a class="pagingBtn" href="?q={encode-for-uri($q)}&amp;start={$rows}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
-								<xsl:text>2</xsl:text>
-							</a>
-						</li>
-
-					</xsl:if>
-
-					<!-- display only if you are on page 6 or greater -->
-					<xsl:if test="$start_var div $rows &gt;= 5">
-						<li>...</li>
-					</xsl:if>
-
-					<!-- always display links to the previous two pages -->
-					<xsl:if test="$start_var div $rows &gt;= 2">
-						<li>
-							<a class="pagingBtn"
-								href="?q={encode-for-uri($q)}&amp;start={$start_var - ($rows * 2)}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
-								<xsl:value-of select="($start_var div $rows) -1"/>
-							</a>
-						</li>
-					</xsl:if>
-					<xsl:if test="$start_var div $rows &gt;= 1">
-						<li>
-							<a class="pagingBtn"
-								href="?q={encode-for-uri($q)}&amp;start={$start_var - $rows}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
-								<xsl:value-of select="$start_var div $rows"/>
-							</a>
-						</li>
-					</xsl:if>
-
-					<li>
-						<b>
-							<xsl:value-of select="$current"/>
-						</b>
-					</li>
-
-					<!-- next two pages -->
-					<xsl:if test="($start_var div $rows) + 1 &lt; $total">
-						<li>
-							<a class="pagingBtn"
-								href="?q={encode-for-uri($q)}&amp;start={$start_var + $rows}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
-								<xsl:value-of select="($start_var div $rows) +2"/>
-							</a>
-						</li>
-					</xsl:if>
-					<xsl:if test="($start_var div $rows) + 2 &lt; $total">
-						<li>
-							<a class="pagingBtn"
-								href="?q={encode-for-uri($q)}&amp;start={$start_var + ($rows * 2)}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
-								<xsl:value-of select="($start_var div $rows) +3"/>
-							</a>
-						</li>
-					</xsl:if>
-					<xsl:if test="$start_var div $rows &lt;= $total - 6">
-						<li>...</li>
-					</xsl:if>
-
-					<!-- last two pages -->
-					<xsl:if test="$start_var div $rows &lt;= $total - 5">
-						<li>
-							<a class="pagingBtn"
-								href="?q={encode-for-uri($q)}&amp;start={($total * $rows) - ($rows * 2)}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
-								<xsl:value-of select="$total - 1"/>
-							</a>
-						</li>
-					</xsl:if>
-					<xsl:if test="$start_var div $rows &lt;= $total - 4">
-						<li>
-							<a class="pagingBtn"
-								href="?q={encode-for-uri($q)}&amp;start={($total * $rows) - $rows}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
-								<xsl:value-of select="$total"/>
-							</a>
-						</li>
-					</xsl:if>
-
-					<xsl:choose>
-						<xsl:when test="$numFound - $start_var &gt; $rows">
-							<li>
-								<a class="pagingBtn"
-									href="?q={encode-for-uri($q)}&amp;start={$next}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">»</a>
-							</li>
-						</xsl:when>
-						<xsl:otherwise>
-							<li>»</li>
-						</xsl:otherwise>
-					</xsl:choose>
-				</ul>
+			<div class="col-md-6 page-nos">
+				<div class="btn-toolbar" role="toolbar">
+					<div class="btn-group" style="float:right">
+						<xsl:choose>
+							<xsl:when test="$start_var &gt;= $rows">
+								<a class="btn btn-default" title="First"
+									href="?q={encode-for-uri($q)}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
+									<span class="glyphicon glyphicon-fast-backward"/>
+								</a>
+								<a class="btn btn-default" title="Previous"
+									href="?q={encode-for-uri($q)}&amp;start={$previous}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
+									<span class="glyphicon glyphicon-backward"/>
+								</a>
+							</xsl:when>
+							<xsl:otherwise>
+								<a class="btn btn-default disabled" title="First"
+									href="?q={encode-for-uri($q)}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
+									<span class="glyphicon glyphicon-fast-backward"/>
+								</a>
+								<a class="btn btn-default disabled" title="Previous"
+									href="?q={encode-for-uri($q)}&amp;start={$previous}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
+									<span class="glyphicon glyphicon-backward"/>
+								</a>
+							</xsl:otherwise>
+						</xsl:choose>
+						<!-- current page -->
+						<button type="button" class="btn btn-default disabled">
+							<b>
+								<xsl:value-of select="$current"/>
+							</b>
+						</button>
+						<!-- next page -->
+						<xsl:choose>
+							<xsl:when test="$numFound - $start_var &gt; $rows">
+								<a class="btn btn-default" title="Next"
+									href="?q={encode-for-uri($q)}&amp;start={$next}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
+									<span class="glyphicon glyphicon-forward"/>
+								</a>
+								<a class="btn btn-default"
+									href="?q={encode-for-uri($q)}&amp;start={($total * $rows) - $rows}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
+									<span class="glyphicon glyphicon-fast-forward"/>
+								</a>
+							</xsl:when>
+							<xsl:otherwise>
+								<a class="btn btn-default disabled" title="Next"
+									href="?q={encode-for-uri($q)}&amp;start={$next}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
+									<span class="glyphicon glyphicon-forward"/>
+								</a>
+								<a class="btn btn-default disabled"
+									href="?q={encode-for-uri($q)}&amp;start={($total * $rows) - $rows}{if (string($sort)) then concat('&amp;sort=', $sort) else ''}">
+									<span class="glyphicon glyphicon-fast-forward"/>
+								</a>
+							</xsl:otherwise>
+						</xsl:choose>
+					</div>
+				</div>
 			</div>
 		</div>
 	</xsl:template>

@@ -11,10 +11,8 @@
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
-				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
+				<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
-
-				<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"/>
 			</head>
 			<body>
 				<xsl:call-template name="header"/>
@@ -32,7 +30,7 @@
 				</div>
 				<div class="col-md-4">
 					<h2>Sidebar</h2>
-					<p class="desc">The sidebar will contain links to web services and downloads of data dumps.</p>					
+					<p class="text-muted">The sidebar will contain links to web services and downloads of data dumps.</p>					
 					<div>
 						<h3>Atom Feed</h3>
 						<a href="feed/">

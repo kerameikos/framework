@@ -37,7 +37,7 @@
 			kon: http://kerameikos.org/ontology#">
 			<head>
 				<title id="{$id}">Kerameikos.org: <xsl:value-of select="//@rdf:about"/></title>
-				<meta name="viewport" content="width=device-width, initial-scale=1"/>					
+				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
@@ -83,12 +83,12 @@
 						</div>
 					</xsl:if>
 
-					<p class="desc">Below the RDF output, there can be maps showing the geographic distribution vases of this type or created by this person, as
+					<p class="text-muted">Below the RDF output, there can be maps showing the geographic distribution vases of this type or created by this person, as
 						well as a simple interface to render a graph showing the distribution of particular typologies (e.g., shape types or iconographic
 						motifs), generated from SPARQL</p>
 				</div>
 				<div class="col-md-4">
-					<p class="desc">The sidebar can show textual or visual information extracted from other LOD sources.</p>
+					<p class="text-muted">The sidebar can show textual or visual information extracted from other LOD sources.</p>
 					<div>
 						<h3>Data Export</h3>
 						<p><a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=turtle">TTL</a> | <a
@@ -113,13 +113,15 @@
 		<div typeof="{name()}" about="{@rdf:about}">
 			<h2>
 				<xsl:value-of select="@rdf:about"/>
-				<xsl:text> (</xsl:text>
-				<a href="{concat(namespace-uri(.), local-name())}">
-					<xsl:value-of select="name()"/>
-				</a>
-				<xsl:text>)</xsl:text>
+				<small>
+					<xsl:text> (</xsl:text>
+					<a href="{concat(namespace-uri(.), local-name())}">
+						<xsl:value-of select="name()"/>
+					</a>
+					<xsl:text>)</xsl:text>
+				</small>
 			</h2>
-			<dl>
+			<dl class="dl-horizontal">
 				<xsl:apply-templates select="skos:prefLabel" mode="list-item">
 					<xsl:sort select="@xml:lang"/>
 				</xsl:apply-templates>
