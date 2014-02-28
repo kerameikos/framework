@@ -27,11 +27,11 @@
 				<xsl:if test="$type='ecrm:E53_Place'">
 					<xsl:call-template name="place_placemark"/>
 				</xsl:if>
-				<xsl:if test="$type='foaf:Person' and descendant::owl:sameAs[contains(@rdf:resource, 'clas-lgpn2.classics.ox.ac.uk')]">
+				<!--<xsl:if test="$type='foaf:Person' and descendant::owl:sameAs[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 					<xsl:call-template name="lgpn-birthplace">
-						<xsl:with-param name="uri" select="descendant::owl:sameAs[contains(@rdf:resource, 'clas-lgpn2.classics.ox.ac.uk')]/@rdf:resource"/>
+						<xsl:with-param name="uri" select="descendant::owl:sameAs[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
 					</xsl:call-template>
-				</xsl:if>
+				</xsl:if>-->
 			</Document>
 		</kml>
 	</xsl:template>
@@ -71,7 +71,7 @@
 		<Placemark xmlns="http://earth.google.com/kml/2.0">
 			<name>Birth</name>
 			<styleUrl>#origin</styleUrl>
-
+			
 
 			<xsl:if test="$lgpn-tei//tei:birth/tei:placeName[contains(@ref, 'pleiades')]">
 				<xsl:variable name="pleiades-uri"
@@ -87,13 +87,14 @@
 				<description>
 					<xsl:value-of select="normalize-space($description)"/>
 				</description>
-				<xsl:if test="$pleiades-rdf//geo:lat and $pleiades-rdf//geo:long">
+				<xsl:copy-of select="$pleiades-rdf"/>
+				<!--<xsl:if test="$pleiades-rdf//geo:lat and $pleiades-rdf//geo:long">
 					<Point>
 						<coordinates>
 							<xsl:value-of select="concat($pleiades-rdf//geo:long, ',', $pleiades-rdf//geo:lat)"/>
 						</coordinates>
 					</Point>
-				</xsl:if>
+				</xsl:if>-->
 			</xsl:if>
 
 			<xsl:choose>
