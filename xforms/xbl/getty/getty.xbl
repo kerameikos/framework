@@ -1,0 +1,153 @@
+<xbl:xbl xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:xxbl="http://orbeon.org/oxf/xml/xbl"
+	xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:kerameikos="https://github.com/kerameikos/">
+	<xbl:binding id="kerameikos-getty" element="kerameikos|getty">
+		<xbl:template>
+			<xforms:group xbl:attr="model context ref bind" xxbl:scope="outer">
+				<xbl:content includes="xforms|label,xforms|help,xforms|hint,xforms|alert"/>
+				<xforms:group xxbl:scope="inner">
+					<xxforms:variable name="binding" as="node()?">
+						<xxforms:sequence select="." xxbl:scope="outer"/>
+					</xxforms:variable>
+					<xforms:trigger appearance="minimal">
+						<xforms:label><span class="glyphicon glyphicon-search"/>Getty AAT</xforms:label>
+						<xforms:action ev:event="DOMActivate">
+							<xxforms:show dialog="getty-dialog"/>
+						</xforms:action>
+					</xforms:trigger>				
+					<xxforms:dialog id="getty-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+						<xforms:label>Query Getty</xforms:label>
+						<div>
+							<xforms:input ref="instance('control-instance')/getty-search"/>
+							<xforms:trigger>
+								<xforms:action ev:event="DOMActivate">
+									<xforms:var name="search_text" select="string-join(tokenize(instance('control-instance')/getty-search, ' '), ' AND ')"/>
+									<xforms:setvalue ref="instance('sparqlQuery')"
+										value="normalize-space(replace(instance('getty-sparql-template'), 'SEARCH_QUERY', $search_text))"/>
+									<xforms:delete context="instance('getty-options')/*"/>
+									<xforms:send submission="query-aat"/>
+								</xforms:action>
+								<xforms:label>Search</xforms:label>
+							</xforms:trigger>
+						</div>
+						<div style="width:600px;">
+							<xforms:group ref=".[count(instance('getty-options')/option) &gt; 0]">
+								<table style="width:100%">
+									<thead>
+										<tr>
+											<th>Select</th>
+											<th>Name</th>
+											<th>Id</th>
+											<th>Type</th>
+										</tr>
+									</thead>
+									<tbody>
+										<xforms:repeat nodeset="instance('getty-options')/option">
+											<tr>
+												<td>
+													<xforms:input ref="@select"/>
+												</td>
+												<td>
+													<xforms:output ref="."/>
+												</td>
+												<td>
+													<a href="{@link}" target="_blank">
+														<xforms:output ref="tokenize(@link, '/')[last()]"/>
+													</a>
+												</td>
+												<td>
+													<xforms:select1 ref="@type" class="short-input">
+														<xforms:item>
+															<xforms:label>Same As</xforms:label>
+															<xforms:value>owl:sameAs</xforms:value>
+														</xforms:item>
+														<xforms:item>
+															<xforms:label>Related</xforms:label>
+															<xforms:value>skos:related</xforms:value>
+														</xforms:item>
+													</xforms:select1>
+												</td>
+											</tr>
+										</xforms:repeat>
+									</tbody>
+								</table>
+								<xforms:trigger>
+									<xforms:label>Add Selected</xforms:label>
+									<xforms:action ev:event="DOMActivate">
+										<xforms:action xxforms:iterate="instance('getty-options')/option[@select=true()]">
+											<xforms:var name="resource" select="context()/@link"/>
+											<xforms:var name="type" select="context()/@type"/>
+											<xforms:action if="not($binding/owl:sameAs[@rdf:resource=$resource])">
+												<xforms:insert context="$binding" nodeset="./child::node()[last()]"
+													origin="xforms:element($type, xforms:attribute('rdf:resource', $resource))"/>
+											</xforms:action>
+										</xforms:action>
+										<xxforms:hide dialog="getty-dialog"/>
+									</xforms:action>
+								</xforms:trigger>
+							</xforms:group>
+						</div>
+					</xxforms:dialog>
+					<!-- ***************** MODEL ***************-->
+					<xforms:model id="getty-model">
+						<!-- instances -->
+						<xforms:instance id="control-instance">
+							<controls xmlns="">
+								<getty-search/>
+								<getty-id/>
+							</controls>
+						</xforms:instance>
+
+						<xforms:instance id="getty-sparql-template">
+							<query><![CDATA[PREFIX gvp: <http://vocab.getty.edu/ontology#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX luc: <http://www.ontotext.com/owlim/lucene#>
+SELECT ?c ?label WHERE {
+?c rdf:type gvp:Concept .
+?c skos:inScheme <http://vocab.getty.edu/aat/> .
+?c skos:prefLabel ?label .
+?c luc:term "SEARCH_QUERY"
+FILTER langMatches(lang(?label), "en")}
+ORDER BY ASC(?label)
+LIMIT 25]]>
+							</query>
+						</xforms:instance>
+
+						<xforms:instance id="sparqlQuery">
+							<query xmlns=""/>
+						</xforms:instance>
+
+						<xforms:instance id="getty-response">
+							<sparql xmlns="http://www.w3.org/2005/sparql-results#"/>
+						</xforms:instance>
+
+						<xforms:instance id="getty-options">
+							<options xmlns=""/>
+						</xforms:instance>
+
+						<!-- bindings -->
+						<xforms:bind nodeset="instance('getty-options')">
+							<xforms:bind nodeset="option">
+								<xforms:bind nodeset="@select" type="xs:boolean"/>
+							</xforms:bind>
+						</xforms:bind>
+
+						<!-- submissions -->
+						<xforms:submission id="query-aat" action="http://vocab.getty.edu/sparql?query={encode-for-uri(instance('sparqlQuery'))}&amp;format=xml"
+							ref="instance('getty-response')" replace="instance" method="get">
+							<xforms:message ev:event="xforms-submit-error" level="modal">SPARQL query failed.</xforms:message>
+							<xforms:action xxforms:iterate="instance('getty-response')//res:result" ev:event="xforms-submit-done">
+								<xforms:var name="link" select="context()/res:binding[@name='c']/res:uri"/>
+								<xforms:var name="title" select="context()/res:binding[@name='label']/res:literal"/>
+								<xforms:insert context="instance('getty-options')" nodeset="./child::node()[last()]"
+									origin="xforms:element('option', (xforms:attribute('select', false()), xforms:attribute('link', $link), xforms:attribute('type', 'owl:sameAs'), $title))"
+								/>
+							</xforms:action>
+						</xforms:submission>
+					</xforms:model>
+				</xforms:group>
+			</xforms:group>
+		</xbl:template>
+	</xbl:binding>
+
+</xbl:xbl>
