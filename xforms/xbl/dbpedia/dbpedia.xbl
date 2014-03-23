@@ -7,14 +7,14 @@
 			<xforms:group xbl:attr="model context ref bind" xxbl:scope="outer">
 				<xbl:content includes="xforms|label,xforms|help,xforms|hint,xforms|alert"/>
 				<xforms:group xxbl:scope="inner">
-					<xxforms:variable name="binding" as="node()?">
+					<xforms:var name="binding" as="node()?">
 						<xxforms:sequence select="." xxbl:scope="outer"/>
-					</xxforms:variable>
+					</xforms:var>
 					<xforms:trigger appearance="minimal">
 						<xforms:label><span class="glyphicon glyphicon-plus"/>Dbpedia Labels</xforms:label>
 						<xforms:action ev:event="DOMActivate">
 							<xforms:setvalue ref="instance('control-instance')/dbpedia-id"
-								value="substring-after($binding/owl:sameAs[contains(@rdf:resource, 'dbpedia')]/@rdf:resource, 'resource/')"/>
+								value="substring-after($binding/skos:exactMatch[contains(@rdf:resource, 'dbpedia')]/@rdf:resource, 'resource/')"/>
 							<xforms:send submission="get-dbpedia-rdf"/>
 							<xforms:action ev:event="xforms-submit-done" xxforms:iterate="instance('dbpedia-rdf')//rdfs:label">
 								<xforms:var name="lang" select="@xml:lang"/>

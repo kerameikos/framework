@@ -43,7 +43,7 @@
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
 
-				<xsl:if test="$type='ecrm:E53_Place' or descendant::owl:sameAs[contains(@rdf:resource, 'clas-lgpn2.classics.ox.ac.uk')]">
+				<xsl:if test="$type='ecrm:E53_Place' or descendant::skos:exactMatch[contains(@rdf:resource, 'clas-lgpn2.classics.ox.ac.uk')]">
 					<!-- mapping js -->
 					<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"/>
 					<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&amp;sensor=false"/>
@@ -72,7 +72,7 @@
 				<div class="col-md-8">
 					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
 
-					<xsl:if test="$type='ecrm:E53_Place' or descendant::owl:sameAs[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
+					<xsl:if test="$type='ecrm:E53_Place' or descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 						<div id="timemap">
 							<div id="mapcontainer">
 								<div id="map"/>
@@ -94,14 +94,14 @@
 						<p><a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=turtle">TTL</a> | <a
 								href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=json">JSON-LD</a></p>
 					</div>
-					<!--<xsl:if test="descendant::owl:sameAs[contains(@rdf:resource, 'dbpedia.org')]">
+					<!--<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]">
 					<xsl:call-template name="dbpedia-abstract">
-					<xsl:with-param name="uri" select="descendant::owl:sameAs[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
+					<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
 					</xsl:call-template>
 					</xsl:if>-->
-					<xsl:if test="descendant::owl:sameAs[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
+					<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 						<xsl:call-template name="lgpn-bio">
-							<xsl:with-param name="uri" select="descendant::owl:sameAs[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
+							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
 						</xsl:call-template>
 					</xsl:if>
 				</div>

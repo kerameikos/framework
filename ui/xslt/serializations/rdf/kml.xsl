@@ -27,9 +27,9 @@
 				<xsl:if test="$type='ecrm:E53_Place'">
 					<xsl:call-template name="place_placemark"/>
 				</xsl:if>
-				<!--<xsl:if test="$type='foaf:Person' and descendant::owl:sameAs[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
+				<!--<xsl:if test="$type='foaf:Person' and descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 					<xsl:call-template name="lgpn-birthplace">
-						<xsl:with-param name="uri" select="descendant::owl:sameAs[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
+						<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
 					</xsl:call-template>
 				</xsl:if>-->
 			</Document>

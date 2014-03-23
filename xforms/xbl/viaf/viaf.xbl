@@ -62,17 +62,18 @@
 									<xforms:action xxforms:iterate="instance('viaf-options')/option[@select=true()]">
 										<xforms:var name="resource" select="context()/@link"/>
 										<xforms:setvalue ref="instance('control-instance')/viaf-id" value="$resource"/>
-										<xforms:action if="not($binding/owl:sameAs[@rdf:resource=$resource])">
+										<xforms:action if="not($binding/skos:exactMatch[@rdf:resource=$resource])">
 											<xforms:insert context="$binding" nodeset="./child::node()[last()]"
-												origin="xforms:element('owl:sameAs', xforms:attribute('rdf:resource', $resource))"/>
+												origin="xforms:element('skos:exactMatch', xforms:attribute('rdf:resource', $resource))"/>
 										</xforms:action>
 										<xforms:send submission="get-viaf-rdf"/>
+										<!-- process owl:sameAs links provided by VIAF -->
 										<xforms:action ev:event="xforms-submit-done"
 											xxforms:iterate="instance('viaf-rdf')/rdf:Description[@rdf:about=instance('control-instance')/viaf-id]/owl:sameAs">
 											<xforms:var name="resource" select="context()/@rdf:resource"/>
-											<xforms:action if="not($binding/owl:sameAs[@rdf:resource=$resource])">
+											<xforms:action if="not($binding/skos:exactMatch[@rdf:resource=$resource])">
 												<xforms:insert context="$binding" nodeset="./child::node()[last()]"
-													origin="xforms:element('owl:sameAs', xforms:attribute('rdf:resource', $resource))"/>
+													origin="xforms:element('skos:exactMatch', xforms:attribute('rdf:resource', $resource))"/>
 											</xforms:action>
 										</xforms:action>
 									</xforms:action>

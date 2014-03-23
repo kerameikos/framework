@@ -7,9 +7,9 @@
 			<xforms:group xbl:attr="model context ref bind" xxbl:scope="outer">
 				<xbl:content includes="xforms|label,xforms|help,xforms|hint,xforms|alert"/>
 				<xforms:group xxbl:scope="inner">
-					<xxforms:variable name="binding" as="node()?">
+					<xforms:var name="binding" as="node()?">
 						<xxforms:sequence select="." xxbl:scope="outer"/>
-					</xxforms:variable>
+					</xforms:var>
 					<xforms:trigger appearance="minimal">
 						<xforms:label><span class="glyphicon glyphicon-search"/>Pleiades</xforms:label>
 						<xforms:action ev:event="DOMActivate">
@@ -50,12 +50,12 @@
 							<xforms:trigger>
 								<xforms:label>Select</xforms:label>
 								<xforms:action ev:event="DOMActivate">
-									<!-- create owl:sameAs, set resource -->
+									<!-- create skos:exactMatch, set resource -->
 									<xforms:insert context="$binding" nodeset="./child::node()[last()]"
-										origin="xforms:element('owl:sameAs', xforms:attribute('rdf:resource', instance('control-instance')/uri))"/>
+										origin="xforms:element('skos:exactMatch', xforms:attribute('rdf:resource', instance('control-instance')/uri))"/>
 									<!-- extract lat and lon from RDF -->
 									<!--<xforms:setvalue ref="instance('pleiades-rdf-config')/url"
-										value="concat($binding/owl:sameAs[contains(@rdf:resource, 'pleiades')][1]/@rdf:resource, '/rdf')"/>
+										value="concat($binding/skos:exactMatch[contains(@rdf:resource, 'pleiades')][1]/@rdf:resource, '/rdf')"/>
 									<xforms:insert nodeset="instance('feed')"
 										origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/query-pleiades-rdf.xpl', 'file', instance('pleiades-rdf-config'), 'data')"/>
 									<xforms:action if="not(instance('pleiades-rdf')//geo:lat) and not(instance('pleiades-rdf')//geo:long)">

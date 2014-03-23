@@ -141,8 +141,8 @@
 				<skos:related rdf:resource=""/>
 			</xforms:instance>
 
-			<xforms:instance id="sameAs-template" xxforms:exclude-result-prefixes="#all">
-				<owl:sameAs rdf:resource=""/>
+			<xforms:instance id="exactMatch-template" xxforms:exclude-result-prefixes="#all">
+				<skos:exactMatch rdf:resource=""/>
 			</xforms:instance>
 
 			<xforms:instance id="isPartOf-template" xxforms:exclude-result-prefixes="#all">
@@ -159,6 +159,10 @@
 
 			<xforms:instance id="comment-template" xxforms:exclude-result-prefixes="#all">
 				<rdfs:comment xml:lang=""/>
+			</xforms:instance>
+
+			<xforms:instance id="seeAlso-template" xxforms:exclude-result-prefixes="#all">
+				<rdfs:seeAlso rdf:resource=""/>
 			</xforms:instance>
 
 			<!-- sparql update -->
@@ -218,10 +222,13 @@
 					<xforms:bind nodeset="rdfs:comment" required="true()">
 						<xforms:bind nodeset="@xml:lang" constraint="string-length(.) &gt; 0"/>
 					</xforms:bind>
+					<xforms:bind nodeset="rdfs:seeAlso">
+						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
+					</xforms:bind>
 					<xforms:bind nodeset="skos:related">
 						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
 					</xforms:bind>
-					<xforms:bind nodeset="owl:sameAs">
+					<xforms:bind nodeset="skos:exactMatch">
 						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
 					</xforms:bind>
 					<xforms:bind nodeset="dcterms:isPartOf">
@@ -449,17 +456,6 @@
 												<xxforms:show dialog="broader-dialog"/>
 											</xforms:action>
 										</xforms:trigger>
-										<xforms:trigger appearance="minimal">
-											<xforms:label>
-												<span class="glyphicon glyphicon-plus"/>Definition</xforms:label>
-											<xforms:insert ev:event="DOMActivate" origin="instance('definition-template')" context="."/>
-										</xforms:trigger>
-										<!--<xforms:trigger appearance="minimal">
-										<xforms:label>
-											<span class="glyphicon glyphicon-plus"/>Comment</xforms:label>
-										<xforms:insert ev:event="DOMActivate" origin="instance('comment-template')" context="."
-											nodeset="./child::node()[last()]"/>
-									</xforms:trigger>-->
 										<xforms:group ref=".[count(geo:lat) = 0 and name()='ecrm:E53_Place']">
 											<xforms:trigger appearance="minimal">
 												<xforms:label>
@@ -472,14 +468,31 @@
 										</xforms:group>
 										<xforms:trigger appearance="minimal">
 											<xforms:label>
-												<span class="glyphicon glyphicon-plus"/>Related Resource</xforms:label>
+												<span class="glyphicon glyphicon-plus"/>Definition</xforms:label>
+											<xforms:insert ev:event="DOMActivate" origin="instance('definition-template')" context="."/>
+										</xforms:trigger>
+										<!--<xforms:trigger appearance="minimal">
+										<xforms:label>
+											<span class="glyphicon glyphicon-plus"/>Comment</xforms:label>
+										<xforms:insert ev:event="DOMActivate" origin="instance('comment-template')" context="."
+											nodeset="./child::node()[last()]"/>
+									</xforms:trigger>-->
+										<xforms:trigger appearance="minimal">
+											<xforms:label>
+												<span class="glyphicon glyphicon-plus"/>Exact Concept</xforms:label>
+											<xforms:insert ev:event="DOMActivate" origin="instance('exactMatch-template')" context="."
+												nodeset="./child::node()[last()]"/>
+										</xforms:trigger>
+										<xforms:trigger appearance="minimal">
+											<xforms:label>
+												<span class="glyphicon glyphicon-plus"/>Related Concept</xforms:label>
 											<xforms:insert ev:event="DOMActivate" origin="instance('related-template')" context="."
 												nodeset="./child::node()[last()]"/>
 										</xforms:trigger>
 										<xforms:trigger appearance="minimal">
 											<xforms:label>
-												<span class="glyphicon glyphicon-plus"/>Same As</xforms:label>
-											<xforms:insert ev:event="DOMActivate" origin="instance('sameAs-template')" context="."
+												<span class="glyphicon glyphicon-plus"/>Related Web Page</xforms:label>
+											<xforms:insert ev:event="DOMActivate" origin="instance('seeAlso-template')" context="."
 												nodeset="./child::node()[last()]"/>
 										</xforms:trigger>
 									</div>
@@ -573,6 +586,12 @@
 													<xforms:output ref="@rdf:resource">
 														<xforms:label ref="parent::node()/name()"/>
 													</xforms:output>
+													<xforms:trigger appearance="minimal">
+														<xforms:delete ev:event="DOMActivate" context="."/>
+														<xforms:label>
+															<span class="glyphicon glyphicon-remove"/>
+														</xforms:label>
+													</xforms:trigger>
 												</div>
 											</xforms:repeat>
 										</div>
@@ -604,7 +623,7 @@
 												</xforms:trigger>
 											</div>
 										</xforms:repeat>
-										<xforms:repeat nodeset="owl:sameAs">
+										<xforms:repeat nodeset="skos:exactMatch">
 											<div>
 												<xforms:input ref="@rdf:resource">
 													<xforms:label ref="parent::node()/name()"/>
@@ -619,6 +638,20 @@
 											</div>
 										</xforms:repeat>
 										<xforms:repeat nodeset="skos:related">
+											<div>
+												<xforms:input ref="@rdf:resource">
+													<xforms:label ref="parent::node()/name()"/>
+													<xforms:alert>Required, must be URI</xforms:alert>
+												</xforms:input>
+												<xforms:trigger appearance="minimal">
+													<xforms:delete ev:event="DOMActivate" context="."/>
+													<xforms:label>
+														<span class="glyphicon glyphicon-remove"/>
+													</xforms:label>
+												</xforms:trigger>
+											</div>
+										</xforms:repeat>
+										<xforms:repeat nodeset="rdfs:seeAlso">
 											<div>
 												<xforms:input ref="@rdf:resource">
 													<xforms:label ref="parent::node()/name()"/>
@@ -768,7 +801,7 @@
 					<xforms:group ref="instance('doc')/*">
 						<h3>Import</h3>
 						<!-- import skos:prefLabels from dbpedia for those languages that are not already in the RDF -->
-						<xforms:group ref=".[owl:sameAs[contains(@rdf:resource, 'dbpedia')]]">
+						<xforms:group ref=".[skos:exactMatch[contains(@rdf:resource, 'dbpedia')]]">
 							<kerameikos:dbpedia/>
 						</xforms:group>
 						<!-- import AAT URIs from Getty -->
@@ -776,8 +809,8 @@
 							ref=".[contains(instance('doc')/*/name(), 'kon:') or instance('doc')/*/name()='ecrm:E4_Period' or instance('doc')/*/name()='ecrm:E57_Material']">
 							<kerameikos:getty/>
 						</xforms:group>
-						<!-- extract coordinates from Pleiades if there is a Pleiades URI in owl:sameAs, but no geo:lat and geo:long -->
-						<xforms:group ref=".[name()='ecrm:E53_Place' and not(owl:sameAs[contains(@rdf:resource, 'pleiades.stoa.org')])]">
+						<!-- extract coordinates from Pleiades if there is a Pleiades URI in skos:exactMatch, but no geo:lat and geo:long -->
+						<xforms:group ref=".[name()='ecrm:E53_Place' and not(skos:exactMatch[contains(@rdf:resource, 'pleiades.stoa.org')])]">
 							<kerameikos:pleiades/>
 						</xforms:group>
 						<!-- query VIAF to add associated URIs -->

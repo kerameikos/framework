@@ -6,9 +6,9 @@
 			<xforms:group xbl:attr="model context ref bind" xxbl:scope="outer">
 				<xbl:content includes="xforms|label,xforms|help,xforms|hint,xforms|alert"/>
 				<xforms:group xxbl:scope="inner">
-					<xxforms:variable name="binding" as="node()?">
+					<xforms:var name="binding" as="node()?">
 						<xxforms:sequence select="." xxbl:scope="outer"/>
-					</xxforms:variable>
+					</xforms:var>
 					<xforms:trigger appearance="minimal">
 						<xforms:label><span class="glyphicon glyphicon-search"/>Getty AAT</xforms:label>
 						<xforms:action ev:event="DOMActivate">
@@ -22,17 +22,18 @@
 							<xforms:trigger>
 								<xforms:action ev:event="DOMActivate">
 									<xforms:var name="search_text" select="string-join(tokenize(instance('control-instance')/getty-search, ' '), ' AND ')"/>
+									<xforms:var name="type" select="$binding/name()"/>
 									<xforms:setvalue ref="instance('sparqlQuery')"
-										value="normalize-space(replace(instance('getty-sparql-template'), 'SEARCH_QUERY', $search_text))"/>
+										value="normalize-space(replace(replace(instance('getty-sparql-template'), 'SEARCH_QUERY', $search_text), 'FACET', instance('getty-facets')//facet[@type=$type]/text()))"/>
 									<xforms:delete context="instance('getty-options')/*"/>
 									<xforms:send submission="query-aat"/>
 								</xforms:action>
 								<xforms:label>Search</xforms:label>
 							</xforms:trigger>
 						</div>
-						<div style="width:600px;">
+						<div>
 							<xforms:group ref=".[count(instance('getty-options')/option) &gt; 0]">
-								<table style="width:100%">
+								<table class="table">
 									<thead>
 										<tr>
 											<th>Select</th>
@@ -48,7 +49,7 @@
 													<xforms:input ref="@select"/>
 												</td>
 												<td>
-													<xforms:output ref="."/>
+													<xforms:output ref="." style="width:20px"/>
 												</td>
 												<td>
 													<a href="{@link}" target="_blank">
@@ -58,8 +59,8 @@
 												<td>
 													<xforms:select1 ref="@type" class="short-input">
 														<xforms:item>
-															<xforms:label>Same As</xforms:label>
-															<xforms:value>owl:sameAs</xforms:value>
+															<xforms:label>Exact Match</xforms:label>
+															<xforms:value>skos:exactMatch</xforms:value>
 														</xforms:item>
 														<xforms:item>
 															<xforms:label>Related</xforms:label>
@@ -77,7 +78,7 @@
 										<xforms:action xxforms:iterate="instance('getty-options')/option[@select=true()]">
 											<xforms:var name="resource" select="context()/@link"/>
 											<xforms:var name="type" select="context()/@type"/>
-											<xforms:action if="not($binding/owl:sameAs[@rdf:resource=$resource])">
+											<xforms:action if="not($binding/skos:exactMatch[@rdf:resource=$resource])">
 												<xforms:insert context="$binding" nodeset="./child::node()[last()]"
 													origin="xforms:element($type, xforms:attribute('rdf:resource', $resource))"/>
 											</xforms:action>
@@ -97,19 +98,28 @@
 								<getty-id/>
 							</controls>
 						</xforms:instance>
+						
+						<xforms:instance id="getty-facets">
+							<facets xmlns="">
+								<facet type="ecrm:E57_Material">300264091</facet>
+								<facet type="ecrm:E4_Period">300264088</facet>
+								<facet type="kon:Shape">300264092</facet>
+								<facet type="kon:Technique">300264090</facet>
+								<facet type="kon:Ware">300264088</facet>
+							</facets>
+						</xforms:instance>
 
 						<xforms:instance id="getty-sparql-template">
 							<query><![CDATA[PREFIX gvp: <http://vocab.getty.edu/ontology#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX luc: <http://www.ontotext.com/owlim/lucene#>
+PREFIX aat: <http://vocab.getty.edu/aat/>
 SELECT ?c ?label WHERE {
-?c rdf:type gvp:Concept .
-?c skos:inScheme <http://vocab.getty.edu/aat/> .
-?c skos:prefLabel ?label .
-?c luc:term "SEARCH_QUERY"
-FILTER langMatches(lang(?label), "en")}
-ORDER BY ASC(?label)
-LIMIT 25]]>
+?c a gvp:Concept; skos:inScheme aat: ;
+gvp:broaderTransitive aat:FACET ;
+gvp:prefLabelGVP/xl:literalForm ?label ;
+luc:term "SEARCH_QUERY"
+FILTER langMatches(lang(?label), "en")} LIMIT 25]]>
 							</query>
 						</xforms:instance>
 
@@ -140,7 +150,7 @@ LIMIT 25]]>
 								<xforms:var name="link" select="context()/res:binding[@name='c']/res:uri"/>
 								<xforms:var name="title" select="context()/res:binding[@name='label']/res:literal"/>
 								<xforms:insert context="instance('getty-options')" nodeset="./child::node()[last()]"
-									origin="xforms:element('option', (xforms:attribute('select', false()), xforms:attribute('link', $link), xforms:attribute('type', 'owl:sameAs'), $title))"
+									origin="xforms:element('option', (xforms:attribute('select', false()), xforms:attribute('link', $link), xforms:attribute('type', 'skos:exactMatch'), $title))"
 								/>
 							</xforms:action>
 						</xforms:submission>

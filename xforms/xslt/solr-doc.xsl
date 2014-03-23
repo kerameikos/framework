@@ -30,7 +30,7 @@
 					<xsl:value-of select="."/>
 				</field>
 			</xsl:for-each>
-			<xsl:for-each select="owl:sameAs|skos:related">
+			<xsl:for-each select="skos:exactMatch|skos:related">
 				<field name="{local-name()}">
 					<xsl:value-of select="@rdf:resource"/>
 				</field>

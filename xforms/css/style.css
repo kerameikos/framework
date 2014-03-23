@@ -51,6 +51,9 @@
 .short-input select {
 	width:25px;	
 }
+.orbeon .xforms-input input[type=checkbox] {
+	width:5em;	
+}
 /*
   ****************************************
   LAYOUT

@@ -18,6 +18,7 @@
 	* ADMIN INTERFACE *
 	***************** -->
 	<page path="/ceramics/admin/edit/" view="xforms/edit.xhtml"/>
+	<page path="/ceramics/admin/manage/" view="xforms/manage.xhtml"/>
 	<page path="/ceramics/admin/" view="xforms/admin.xhtml"/>
 	<page path="/ceramics/login" view="xforms/login.xhtml"/>
 	
