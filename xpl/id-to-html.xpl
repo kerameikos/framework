@@ -22,7 +22,7 @@
 	<p:processor name="oxf:unsafe-xslt">
 		<p:input name="request" href="#request"/>
 		<p:input name="data" href="aggregate('content', #data, ../config.xml)"/>
-		<p:input name="config" href="../ui/xslt/display.xsl"/>
+		<p:input name="config" href="../ui/xslt/serializations/rdf/html.xsl"/>
 		<p:output name="data" id="model"/>
 	</p:processor>
 

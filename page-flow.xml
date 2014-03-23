@@ -31,7 +31,7 @@
 	<!-- Object KML -->
 	<page path="/ceramics/id/(.*)\.kml" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/id-to-kml.xpl"/>	
 	<!-- public html view -->
-	<page path="/ceramics/id/(.*)\.html" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/display.xpl"/>
+	<page path="/ceramics/id/(.*)\.html" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/id-to-html.xpl"/>
 
 	<!-- Atom feed -->
 	<page path="/ceramics/feed/" model="xpl/solr-query.xpl" view="xpl/feed.xpl"/>
@@ -40,10 +40,10 @@
 	<page path="/ceramics/query" view="xpl/sparql-query.xpl"/>
 	
 	<!-- **** PAGES **** -->
-	<page path="/ceramics/id/" model="xpl/solr-query.xpl" view="xpl/results.xpl"/>	
-	<page path="/ceramics/sparql" view="xpl/sparql.xpl"/>
-	<page path="/ceramics/ontology" view="xpl/ontology.xpl"/>
-	<page path="/ceramics/" view="xpl/index.xpl"/>
+	<page path="/ceramics/id/" model="xpl/solr-query.xpl" view="xpl/page-results.xpl"/>	
+	<page path="/ceramics/sparql" view="xpl/page-sparql.xpl"/>
+	<page path="/ceramics/ontology" view="xpl/page-ontology.xpl"/>
+	<page path="/ceramics/" view="xpl/page-index.xpl"/>
 	
 	<!-- **** DATA DUMPS **** -->
 	<page path="/ceramics/kerameikos.org.xml" view="dump/kerameikos.org.xml"/>
