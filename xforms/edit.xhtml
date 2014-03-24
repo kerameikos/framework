@@ -452,7 +452,7 @@
 												<span class="glyphicon glyphicon-plus"/>Broader Concept</xforms:label>
 											<xforms:action ev:event="DOMActivate">
 												<xforms:setvalue ref="instance('control-instance')/atom-type"
-													value="concat(namespace-uri(instance('doc')/*), instance('doc')/*/local-name())"/>
+													value="if (instance('doc')/*/name()='foaf:Person') then concat(namespace-uri(instance('doc')/*), 'Organization') else concat(namespace-uri(instance('doc')/*), instance('doc')/*/local-name())"/>
 												<xxforms:show dialog="broader-dialog"/>
 											</xforms:action>
 										</xforms:trigger>

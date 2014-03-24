@@ -1,0 +1,87 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:fr="http://orbeon.org/oxf/xml/form-runner"
+	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:foaf="http://xmlns.com/foaf/0.1/"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:atom="http://www.w3.org/2005/Atom">
+	<head>
+		<title>Kerameikos: Manage Datasets</title>
+		<!--<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css"/>
+		<link rel="stylesheet" href="/fr/style/form-runner-bootstrap-override.css" type="text/css"/>-->
+		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
+		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
+		<link rel="shortcut icon" href="/ops/images/orbeon-icon-16.ico"/>
+		<link rel="icon" href="/ops/images/orbeon-icon-16.png" type="image/png"/>
+		<link rel="stylesheet" href="/apps/ceramics/xforms/css/style.css"/>
+
+		<xforms:model>
+			<xforms:instance id="doc" xxforms:exclude-result-prefixes="#all">
+				<rdf:RDF/>
+			</xforms:instance>
+
+			<xforms:instance id="control-instance">
+				<controls xmlns="">
+					<id_path>/usr/local/projects/ceramic-ids/id/</id_path>
+					<endpoint>http://localhost:3030/ceramics/</endpoint>
+					<solr_url>http://localhost:8080/solr/ceramics/</solr_url>
+					<dump/>
+				</controls>
+			</xforms:instance>
+
+			<xforms:instance id="dump">
+				<dump xmlns=""/>
+			</xforms:instance>
+
+			<!-- sparql update -->
+			<xforms:instance id="sparqlUpdate-template">
+				<query>
+					<![CDATA[DELETE {?s ?p ?o} WHERE { <URI> ?p ?o . ?s ?p ?o . FILTER (?s = <URI>) }]]>
+				</query>
+			</xforms:instance>
+
+			<xforms:instance id="sparqlUpdate">
+				<query/>
+			</xforms:instance>
+
+			<!-- ************* SPARQL SUBMISSIONS **********************-->
+			<xforms:submission id="delete-graph" action="{instance('control-instance')/endpoint}update" ref="instance('sparqlUpdate')"
+				serialization="text/plain" replace="none" method="post" mediatype="application/sparql-update">
+				<xforms:action ev:event="xforms-submit-error">
+					<xforms:message level="modal">SPARQL update failed.</xforms:message>
+					<xforms:setvalue ref="instance('control-instance')/delete-success" value="false()"/>
+				</xforms:action>
+				<xforms:action ev:event="xforms-submit-done">
+					<xforms:setvalue ref="instance('control-instance')/delete-success" value="true()"/>
+				</xforms:action>
+			</xforms:submission>
+
+			<xforms:submission id="post-new" action="{instance('control-instance')/endpoint}data?default" ref="instance('doc')" replace="none" method="post"
+				mediatype="application/rdf+xml">
+				<xforms:setvalue ev:event="xforms-submit-done" ref="instance('control-instance')/status">Successfully posted to endpoint.</xforms:setvalue>
+				<xforms:message ev:event="xforms-submit-error" level="modal">Post to endpoint failed.</xforms:message>
+			</xforms:submission>
+
+			<!-- ************************* SOLR SUBMISSIONS ************************** -->
+		</xforms:model>
+	</head>
+
+	<body>
+		<xforms:var name="display_path">./</xforms:var>
+		<xi:include href="header.xml"/>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<h1>Manage Datasets</h1>
+					<div>
+						<h2>Datasets</h2>
+					</div>
+					<div>
+						<h2>Ontologies</h2>
+					</div>
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
