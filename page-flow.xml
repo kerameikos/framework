@@ -37,6 +37,9 @@
 	<!-- Atom feed -->
 	<page path="/ceramics/feed/" model="xpl/solr-query.xpl" view="xpl/feed.xpl"/>
 	
+	<!-- APIs -->
+	<page path-info="/ceramics/api/get" model="xpl/get-id.xpl" view="xpl/api-get.xpl"/>
+	
 	<!-- SPARQL wrapper (URL generator) -->
 	<page path="/ceramics/query" view="xpl/sparql-query.xpl"/>
 	

@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
-	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-	xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
+	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:ecrm="http://erlangen-crm.org/current/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#"
+	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 
 	<xsl:variable name="display_path">../</xsl:variable>
@@ -43,16 +42,16 @@
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
 
-				<xsl:if test="$type='ecrm:E53_Place' or descendant::skos:exactMatch[contains(@rdf:resource, 'clas-lgpn2.classics.ox.ac.uk')]">
+				<xsl:if test="$type='ecrm:E53_Place' or descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 					<!-- mapping js -->
 					<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"/>
 					<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&amp;sensor=false"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/timeline-2.3.0.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/mxn.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/timemap_full.pack.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/timemap_full.pack.js"/>					
+					<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/param.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/loaders/kml.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
 					<!-- timeline css -->
 					<link type="text/css" href="{$display_path}ui/css/timeline-2.3.0.css" rel="stylesheet"/>
 				</xsl:if>
@@ -83,9 +82,8 @@
 						</div>
 					</xsl:if>
 
-					<p class="text-muted">Below the RDF output, there can be maps showing the geographic distribution vases of this type or created by this person, as
-						well as a simple interface to render a graph showing the distribution of particular typologies (e.g., shape types or iconographic
-						motifs), generated from SPARQL</p>
+					<p class="text-muted">Below the RDF output, there can be maps showing the geographic distribution vases of this type or created by this person, as well as a simple interface to
+						render a graph showing the distribution of particular typologies (e.g., shape types or iconographic motifs), generated from SPARQL</p>
 				</div>
 				<div class="col-md-4">
 					<p class="text-muted">The sidebar can show textual or visual information extracted from other LOD sources.</p>
@@ -94,11 +92,11 @@
 						<p><a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=turtle">TTL</a> | <a
 								href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=json">JSON-LD</a></p>
 					</div>
-					<!--<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]">
-					<xsl:call-template name="dbpedia-abstract">
-					<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
-					</xsl:call-template>
-					</xsl:if>-->
+					<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]">
+						<xsl:call-template name="dbpedia-abstract">
+							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
+						</xsl:call-template>
+					</xsl:if>
 					<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 						<xsl:call-template name="lgpn-bio">
 							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
@@ -158,9 +156,7 @@
 							<xsl:choose>
 								<xsl:when test="name()='rdf:type'">
 									<xsl:variable name="uri" select="@rdf:resource"/>
-									<xsl:value-of
-										select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
-									/>
+									<xsl:value-of select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"/>
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:value-of select="@rdf:resource"/>
@@ -189,8 +185,7 @@
 		<xsl:param name="uri"/>
 
 		<xsl:variable name="lgpn-tei" as="element()*">
-			<xsl:copy-of
-				select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
+			<xsl:copy-of select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
 		</xsl:variable>
 
 		<xsl:if test="$lgpn-tei/descendant::tei:birth">

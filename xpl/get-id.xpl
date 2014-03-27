@@ -22,20 +22,28 @@
 				<xsl:output indent="yes"/>
 				<xsl:template match="/">					
 					<xsl:variable name="path" select="substring-after(doc('input:request')/request/request-url, 'id/')"/>
+					
 					<xsl:variable name="doc">
 						<xsl:choose>
-							<xsl:when test="contains($path, '.')">
-								<xsl:variable name="pieces" select="tokenize($path, '\.')"/>
-								
-								<xsl:for-each select="$pieces[not(position()=last())]">
-									<xsl:value-of select="."/>
-									<xsl:if test="not(position()=last())">
-										<xsl:text>.</xsl:text>
-									</xsl:if>
-								</xsl:for-each>
+							<xsl:when test="string(doc('input:request')/request/parameters/parameter[name='id']/value)">
+								<xsl:value-of select="doc('input:request')/request/parameters/parameter[name='id']/value"/>
 							</xsl:when>
 							<xsl:otherwise>
-								<xsl:value-of select="$path"/>
+								<xsl:choose>
+									<xsl:when test="contains($path, '.')">
+										<xsl:variable name="pieces" select="tokenize($path, '\.')"/>
+										
+										<xsl:for-each select="$pieces[not(position()=last())]">
+											<xsl:value-of select="."/>
+											<xsl:if test="not(position()=last())">
+												<xsl:text>.</xsl:text>
+											</xsl:if>
+										</xsl:for-each>
+									</xsl:when>
+									<xsl:otherwise>
+										<xsl:value-of select="$path"/>
+									</xsl:otherwise>
+								</xsl:choose>
 							</xsl:otherwise>
 						</xsl:choose>
 					</xsl:variable>
