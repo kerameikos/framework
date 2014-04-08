@@ -118,7 +118,7 @@
 
 						<!-- submissions -->
 						<xforms:submission id="query-viaf" serialization="none" method="get"
-							action="http://viaf.org/viaf/search?query={instance('control-instance')/viaf-field}+all+%22{instance('control-instance')/viaf-query}%22&amp;sortKeys=holdingscount&amp;maximumRecords=50&amp;httpAccept=application/rss%2bxml"
+							action="http://viaf.org/viaf/search?query={instance('control-instance')/viaf-field}+all+%22{instance('control-instance')/viaf-query}%22&amp;sortKeys=holdingscount&amp;maximumRecords=10&amp;httpAccept=application/rss%2bxml"
 							instance="viaf-response" replace="instance">
 							<xforms:message ev:event="xforms-submit-error" level="modal">Error querying VIAF.</xforms:message>
 							<xforms:action xxforms:iterate="instance('viaf-response')//item" ev:event="xforms-submit-done">

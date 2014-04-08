@@ -7,7 +7,7 @@
 	xmlns:atom="http://www.w3.org/2005/Atom" xmlns:kerameikos="https://github.com/kerameikos/">
 	<head>
 		<title>Kerameikos: LOD Editor</title>
-		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css"/>
+		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css"/> 
 		<link rel="stylesheet" href="/fr/style/form-runner-bootstrap-override.css" type="text/css"/>
 
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
@@ -87,6 +87,14 @@
 
 			<xforms:instance id="classes">
 				<classes xmlns="">
+					<class>
+						<label>Collection</label>
+						<type>ecrm:E78_Collection</type>
+					</class>
+					<class>
+						<label>Institution</label>
+						<type>ecrm:E40_Legal_Body</type>
+					</class>
 					<class>
 						<label>Material</label>
 						<type>ecrm:E57_Material</type>
@@ -174,6 +182,29 @@
 			<xforms:instance id="sparqlUpdate">
 				<query/>
 			</xforms:instance>
+			
+			<!-- sparql queries -->			
+			<xforms:instance id="queryTemplates">
+				<queries xmlns="">
+					<query id="institution"><![CDATA[PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX ecrm:	<http://erlangen-crm.org/current/>
+SELECT ?uri ?label WHERE {
+?uri  rdf:type ecrm:E40_Legal_Body .
+?uri skos:prefLabel ?label .
+FILTER (lang(?label) = "en")}
+ORDER BY ASC(?label)
+]]></query>
+				</queries>
+			</xforms:instance>
+			
+			<xforms:instance id="sparqlQuery">
+				<query xmlns=""/>
+			</xforms:instance>
+			
+			<xforms:instance id="sparqlResponse">
+				<sparql xmlns="http://www.w3.org/2005/sparql-results#"/>
+			</xforms:instance>
 
 			<!-- Solr instances -->
 			<xforms:instance id="addIndex">
@@ -222,6 +253,12 @@
 					<xforms:bind nodeset="rdfs:comment" required="true()">
 						<xforms:bind nodeset="@xml:lang" constraint="string-length(.) &gt; 0"/>
 					</xforms:bind>
+					<xforms:bind nodeset="ecrm:P50_has_current_keeper">
+						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
+					</xforms:bind>
+					<xforms:bind nodeset="foaf:homepage">
+						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
+					</xforms:bind>
 					<xforms:bind nodeset="rdfs:seeAlso">
 						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
 					</xforms:bind>
@@ -267,6 +304,12 @@
 			</xforms:submission>
 
 			<!-- ************* SPARQL SUBMISSIONS **********************-->
+			<xforms:submission id="submit-sparqlQuery"
+				action="{instance('control-instance')/endpoint}query?query={encode-for-uri(instance('sparqlQuery'))}&amp;output=xml"
+				ref="instance('sparqlResponse')" replace="instance" method="get">
+				<xforms:message ev:event="xforms-submit-error" level="modal">SPARQL query failed.</xforms:message>
+			</xforms:submission>
+			
 			<xforms:submission id="delete-graph" action="{instance('control-instance')/endpoint}update" ref="instance('sparqlUpdate')"
 				serialization="text/plain" replace="none" method="post" mediatype="application/sparql-update">
 				<xforms:action ev:event="xforms-submit-error">
@@ -421,6 +464,16 @@
 										<xforms:insert context="instance('doc')/*"
 											origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/2004/02/skos/core#Concept'))"
 										/>
+										<!-- insert related foaf:webpage for an institution -->
+										<xforms:action if="$type='ecrm:E40_Legal_Body'">
+											<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]" origin="xforms:element('foaf:homepage', xforms:attribute('rdf:resource', ''))"/>
+										</xforms:action>
+										<!-- insert P50_has_current_keeper for a collection, query SPARQL for available legal bodies -->	
+										<xforms:action if="$type='ecrm:E78_Collection'">
+											<xforms:insert context="instance('doc')/*" nodeset="./child::node()[last()]" origin="xforms:element('ecrm:P50_has_current_keeper', xforms:attribute('rdf:resource', ''))"/>
+											<xforms:setvalue ref="instance('sparqlQuery')" value="instance('queryTemplates')/query[@id='institution']"/>
+											<xforms:send submission="submit-sparqlQuery"/>
+										</xforms:action>
 									</xforms:action>
 								</xforms:select1>
 							</div>
@@ -431,6 +484,7 @@
 									<xforms:var name="type" select="name()"/>
 									<h3>
 										<xforms:output ref="instance('classes')/class[type=$type]/label"/>
+										<small> (<xforms:output ref="instance('classes')/class[type=$type]/type"/>)</small>
 									</h3>
 									<div class="trigger_container">
 										<span class="subhead">Insert: </span>
@@ -623,6 +677,30 @@
 												</xforms:trigger>
 											</div>
 										</xforms:repeat>
+										<xforms:group ref="ecrm:P50_has_current_keeper">
+											<div>
+												<xforms:select1 ref="@rdf:resource">
+													<xforms:label>Institution</xforms:label>
+													<xforms:item>
+														<xforms:label>Select...</xforms:label>
+														<xforms:value/>
+													</xforms:item>
+													<xforms:itemset nodeset="instance('sparqlResponse')//res:result">
+														<xforms:label ref="res:binding[@name='label']/res:literal"/>
+														<xforms:value ref="res:binding[@name='uri']/res:uri"/>
+													</xforms:itemset>
+													<xforms:alert>Required, must be URI</xforms:alert>
+												</xforms:select1>
+											</div>
+										</xforms:group>
+										<xforms:group ref="foaf:homepage">
+											<div>
+												<xforms:input ref="@rdf:resource">
+													<xforms:label ref="parent::node()/name()"/>
+													<xforms:alert>Required, must be URI</xforms:alert>
+												</xforms:input>
+											</div>
+										</xforms:group>
 										<xforms:repeat nodeset="skos:exactMatch">
 											<div>
 												<xforms:input ref="@rdf:resource">
@@ -799,6 +877,7 @@
 				</div>
 				<div class="col-md-3">
 					<xforms:group ref="instance('doc')/*">
+						<xforms:var name="type" select="local-name()"/>
 						<h3>Import</h3>
 						<!-- import skos:prefLabels from dbpedia for those languages that are not already in the RDF -->
 						<xforms:group ref=".[skos:exactMatch[contains(@rdf:resource, 'dbpedia')]]">
@@ -806,15 +885,15 @@
 						</xforms:group>
 						<!-- import AAT URIs from Getty -->
 						<xforms:group
-							ref=".[contains(instance('doc')/*/name(), 'kon:') or instance('doc')/*/name()='ecrm:E4_Period' or instance('doc')/*/name()='ecrm:E57_Material']">
+							ref=".[contains($type, 'kon:') or $type='E4_Period' or $type='E57_Material']">
 							<kerameikos:getty/>
 						</xforms:group>
 						<!-- extract coordinates from Pleiades if there is a Pleiades URI in skos:exactMatch, but no geo:lat and geo:long -->
-						<xforms:group ref=".[name()='ecrm:E53_Place' and not(skos:exactMatch[contains(@rdf:resource, 'pleiades.stoa.org')])]">
+						<xforms:group ref=".[$type='E53_Place' and not(skos:exactMatch[contains(@rdf:resource, 'pleiades.stoa.org')])]">
 							<kerameikos:pleiades/>
 						</xforms:group>
 						<!-- query VIAF to add associated URIs -->
-						<xforms:group ref=".[instance('doc')/*/name()='foaf:Person' or instance('doc')/*/name()='foaf:Organization']">
+						<xforms:group ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type='E40_Legal_Body']">
 							<kerameikos:viaf/>
 						</xforms:group>
 					</xforms:group>
