@@ -2,7 +2,7 @@
 	xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:fr="http://orbeon.org/oxf/xml/form-runner"
 	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:foaf="http://xmlns.com/foaf/0.1/"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"	
 	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:atom="http://www.w3.org/2005/Atom" xmlns:kerameikos="https://github.com/kerameikos/">
 	<head>
@@ -228,6 +228,11 @@ ORDER BY ASC(?label)
 						value="concat('file://', instance('control-instance')/id_path, xxforms:get-request-parameter('id'), '.xml')"/>
 					<xforms:insert nodeset="instance('doc')"
 						origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/load-id.xpl', 'file', instance('load-config'), 'data')"/>
+				</xforms:action>
+				<!-- insert P50_has_current_keeper for a collection, query SPARQL for available legal bodies -->	
+				<xforms:action if="instance('doc')/*/name()='ecrm:E78_Collection'">
+					<xforms:setvalue ref="instance('sparqlQuery')" value="instance('queryTemplates')/query[@id='institution']"/>
+					<xforms:send submission="submit-sparqlQuery"/>
 				</xforms:action>
 			</xforms:action>
 
@@ -877,7 +882,7 @@ ORDER BY ASC(?label)
 				</div>
 				<div class="col-md-3">
 					<xforms:group ref="instance('doc')/*">
-						<xforms:var name="type" select="local-name()"/>
+						<xforms:var name="type" select="name()"/>
 						<h3>Import</h3>
 						<!-- import skos:prefLabels from dbpedia for those languages that are not already in the RDF -->
 						<xforms:group ref=".[skos:exactMatch[contains(@rdf:resource, 'dbpedia')]]">
@@ -885,15 +890,15 @@ ORDER BY ASC(?label)
 						</xforms:group>
 						<!-- import AAT URIs from Getty -->
 						<xforms:group
-							ref=".[contains($type, 'kon:') or $type='E4_Period' or $type='E57_Material']">
+							ref=".[contains($type, 'kon:') or $type='ecrm:E4_Period' or $type='ecrm:E57_Material']">
 							<kerameikos:getty/>
 						</xforms:group>
 						<!-- extract coordinates from Pleiades if there is a Pleiades URI in skos:exactMatch, but no geo:lat and geo:long -->
-						<xforms:group ref=".[$type='E53_Place' and not(skos:exactMatch[contains(@rdf:resource, 'pleiades.stoa.org')])]">
+						<xforms:group ref=".[$type='ecrm:E53_Place' and not(skos:exactMatch[contains(@rdf:resource, 'pleiades.stoa.org')])]">
 							<kerameikos:pleiades/>
 						</xforms:group>
 						<!-- query VIAF to add associated URIs -->
-						<xforms:group ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type='E40_Legal_Body']">
+						<xforms:group ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type='ecrm:E40_Legal_Body']">
 							<kerameikos:viaf/>
 						</xforms:group>
 					</xforms:group>
