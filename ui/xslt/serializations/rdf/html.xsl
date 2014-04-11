@@ -1,14 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-	xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:dbpedia-owl="http://dbpedia.org/ontology/"
-	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
-	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-	xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:kerameikos="http://kerameikos.org/"
-	exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
+	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
+	xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
+	<xsl:include href="html-templates.xsl"/>
 
 	<xsl:variable name="display_path">../</xsl:variable>
 	<xsl:variable name="id" select="substring-after(//@rdf:about, 'id/')"/>
@@ -44,12 +41,13 @@
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
-				<link rel="stylesheet"
-					href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
+				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
-
-				<xsl:if
-					test="$type='ecrm:E53_Place' or descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
+				<!-- fancybox -->
+				<script type="text/javascript" src="{$display_path}ui/javascript/jquery.fancybox.pack.js"/>
+				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>	
+				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
+				<xsl:if test="$type='ecrm:E53_Place' or descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 					<!-- mapping js -->
 					<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"/>
 					<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&amp;sensor=false"/>
@@ -60,8 +58,7 @@
 					<script type="text/javascript" src="{$display_path}ui/javascript/param.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/loaders/kml.js"/>
 					<!-- timeline css -->
-					<link type="text/css" href="{$display_path}ui/css/timeline-2.3.0.css"
-						rel="stylesheet"/>
+					<link type="text/css" href="{$display_path}ui/css/timeline-2.3.0.css" rel="stylesheet"/>
 				</xsl:if>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 			</head>
@@ -79,8 +76,7 @@
 				<div class="col-md-8">
 					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
 
-					<xsl:if
-						test="$type='ecrm:E53_Place' or descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
+					<xsl:if test="$type='ecrm:E53_Place' or descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 						<div id="timemap">
 							<div id="mapcontainer">
 								<div id="map"/>
@@ -89,39 +85,27 @@
 								<div id="timeline"/>
 							</div>
 						</div>
-					</xsl:if>
-
-					<p class="text-muted">Below the RDF output, there can be maps showing the
-						geographic distribution vases of this type or created by this person, as
-						well as a simple interface to render a graph showing the distribution of
-						particular typologies (e.g., shape types or iconographic motifs), generated
-						from SPARQL</p>
+					</xsl:if>					
+					<xsl:call-template name="associatedObjects">
+						<xsl:with-param name="id" select="$id"/>
+						<xsl:with-param name="type" select="$type"/>
+					</xsl:call-template>
 				</div>
 				<div class="col-md-4">
-					<p class="text-muted">The sidebar can show textual or visual information
-						extracted from other LOD sources.</p>
+					<p class="text-muted">The sidebar can show textual or visual information extracted from other LOD sources.</p>
 					<div>
 						<h3>Data Export</h3>
-						<p><a href="{$id}.rdf">RDF/XML</a> | <a
-								href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=turtle"
-								>TTL</a> | <a
-								href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=json"
-								>JSON-LD</a></p>
+						<p><a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=turtle">TTL</a> | <a
+								href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=json">JSON-LD</a></p>
 					</div>
-					<xsl:if
-						test="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]">
+					<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]">
 						<xsl:call-template name="dbpedia-abstract">
-							<xsl:with-param name="uri"
-								select="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"
-							/>
+							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
 						</xsl:call-template>
 					</xsl:if>
-					<xsl:if
-						test="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
+					<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 						<xsl:call-template name="lgpn-bio">
-							<xsl:with-param name="uri"
-								select="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"
-							/>
+							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
 						</xsl:call-template>
 					</xsl:if>
 				</div>
@@ -150,9 +134,7 @@
 				<xsl:apply-templates select="skos:definition" mode="list-item">
 					<xsl:sort select="@xml:lang"/>
 				</xsl:apply-templates>
-				<xsl:apply-templates
-					select="*[not(name()='skos:prefLabel') and not(name()='skos:definition')]"
-					mode="list-item">
+				<xsl:apply-templates select="*[not(name()='skos:prefLabel') and not(name()='skos:definition')]" mode="list-item">
 					<xsl:sort select="name()"/>
 					<xsl:sort select="@rdf:resource"/>
 				</xsl:apply-templates>
@@ -201,9 +183,7 @@
 		<xsl:param name="uri"/>
 
 		<xsl:variable name="dbpedia-rdf" as="item()*">
-			<xsl:copy-of
-				select="document(concat('http://dbpedia.org/data/', substring-after($uri, 'resource/'), '.rdf'))/*"
-			/>
+			<xsl:copy-of select="document(concat('http://dbpedia.org/data/', substring-after($uri, 'resource/'), '.rdf'))/*"/>
 		</xsl:variable>
 		<div>
 			<h3>Abstract (dbpedia)</h3>
@@ -215,9 +195,7 @@
 		<xsl:param name="uri"/>
 
 		<xsl:variable name="lgpn-tei" as="element()*">
-			<xsl:copy-of
-				select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"
-			/>
+			<xsl:copy-of select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
 		</xsl:variable>
 
 		<xsl:if test="$lgpn-tei/descendant::tei:birth">
