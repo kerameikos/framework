@@ -32,6 +32,17 @@ OPTIONAL {?object foaf:depiction ?ref}}]]>
 		
 		<xsl:variable name="select">
 			<xsl:choose>
+				<xsl:when test="$type='ecrm:E4_Period'">
+					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
+{?object ecrm:P108i_was_produced_by ?prod .
+?prod  ecrm:P10_falls_within kid:RDFID}
+UNION {kid:RDFID skos:exactMatch ?matches .
+?object ecrm:P10_falls_within ?prod .
+?prod ecrm:P7_took_place_at ?matches}
+UNION {?types skos:broader kid:RDFID .
+?types skos:exactMatch ?matches .
+?object ecrm:P10_falls_within ?matches]]>
+				</xsl:when>	
 				<xsl:when test="$type='ecrm:E57_Material'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
 {?object ecrm:P45_consists_of kid:RDFID }
@@ -42,6 +53,22 @@ UNION {?types skos:broader kid:RDFID .
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
 ?object ecrm:P45_consists_of ?matches}]]>
+				</xsl:when>
+				<xsl:when test="$type='ecrm:E53_Place'">
+					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
+{?object ecrm:P108i_was_produced_by ?prod .
+?prod ecrm:P7_took_place_at kid:RDFID}
+UNION {kid:RDFID skos:exactMatch ?matches .
+?object ecrm:P108i_was_produced_by ?prod .
+?prod ecrm:P7_took_place_at ?matches}
+UNION {?types ecrm:P88i_forms_part_of kid:RDFID .
+?types skos:exactMatch ?matches .
+?object ecrm:P108i_was_produced_by ?prod .
+?prod ecrm:P7_took_place_at ?matches}]]>
+				</xsl:when>
+				<xsl:when test="$type='ecrm:E40_Legal_Body'">
+					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
+?object ecrm:P50_has_current_keeper kid:RDFID .]]>
 				</xsl:when>
 				<xsl:when test="$type='kon:Shape'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
@@ -65,6 +92,17 @@ UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
 ?object ecrm:P32_used_general_technique ?matches}]]>
 				</xsl:when>
+				<!--<xsl:when test="$type='kon:Ware'">
+					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
+{?object kon:hasShape kid:RDFID }
+UNION {kid:RDFID skos:exactMatch ?matches .
+?object kon:hasShape ?matches}
+UNION {?types skos:broader kid:RDFID .
+?object kon:hasShape ?types}
+UNION {?types skos:broader kid:RDFID .
+?types skos:exactMatch ?matches .
+?object kon:hasShape ?matches}]]>
+				</xsl:when>-->
 				<xsl:when test="$type='foaf:Person'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
 {?object ecrm:P108i_was_produced_by ?prod .
@@ -87,9 +125,11 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 		<xsl:variable name="query" select="concat($prefixes, replace($select, 'RDFID', $id), $metadata)"/> 
 		<xsl:variable name="service" select="concat(/content/config/sparql, '?query=', encode-for-uri(normalize-space($query)), '&amp;output=xml')"/>
 		
-		<div class="row">
-			<xsl:apply-templates select="document($service)/descendant::res:result" mode="display"/>
-		</div>	
+		<xsl:if test="string-length($query) &gt; 0">
+			<div class="row">
+				<xsl:apply-templates select="document($service)/descendant::res:result" mode="display"/>
+			</div>
+		</xsl:if>
 	</xsl:template>
 	
 	<xsl:template match="res:result" mode="display">
