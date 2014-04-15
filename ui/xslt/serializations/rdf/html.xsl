@@ -47,19 +47,16 @@
 				<script type="text/javascript" src="{$display_path}ui/javascript/jquery.fancybox.pack.js"/>
 				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>	
 				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
-				<xsl:if test="$type='ecrm:E53_Place' or descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
-					<!-- mapping js -->
-					<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"/>
-					<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&amp;sensor=false"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/timeline-2.3.0.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/mxn.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/timemap_full.pack.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/param.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/loaders/kml.js"/>
-					<!-- timeline css -->
-					<link type="text/css" href="{$display_path}ui/css/timeline-2.3.0.css" rel="stylesheet"/>
-				</xsl:if>
+				<!-- mapping js -->
+				<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"/>
+				<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&amp;sensor=false"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/timeline-2.3.0.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/mxn.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/timemap_full.pack.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/param.js"/>				
+				<!-- timeline css -->
+				<link type="text/css" href="{$display_path}ui/css/timeline-2.3.0.css" rel="stylesheet"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 			</head>
 			<body>
@@ -76,16 +73,14 @@
 				<div class="col-md-8">
 					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
 
-					<xsl:if test="$type='ecrm:E53_Place' or descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
-						<div id="timemap">
-							<div id="mapcontainer">
-								<div id="map"/>
-							</div>
-							<div id="timelinecontainer">
-								<div id="timeline"/>
-							</div>
+					<div id="timemap">
+						<div id="mapcontainer">
+							<div id="map"/>
 						</div>
-					</xsl:if>					
+						<div id="timelinecontainer">
+							<div id="timeline"/>
+						</div>
+					</div>					
 					<xsl:call-template name="associatedObjects">
 						<xsl:with-param name="id" select="$id"/>
 						<xsl:with-param name="type" select="$type"/>
@@ -98,11 +93,11 @@
 						<p><a href="{$id}.rdf">RDF/XML</a> | <a href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=turtle">TTL</a> | <a
 								href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=json">JSON-LD</a></p>
 					</div>
-					<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]">
+					<!--<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]">
 						<xsl:call-template name="dbpedia-abstract">
 							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
 						</xsl:call-template>
-					</xsl:if>
+					</xsl:if>-->
 					<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 						<xsl:call-template name="lgpn-bio">
 							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>

@@ -10,9 +10,9 @@ function initialize_timemap(id) {
 	datasets.push({
 		id: 'dist',
 		title: "Distribution",
-		type: "kml",
+		type: "json",
 		options: {
-			url: id + '.kml'
+			url: '../api/get?model=timemap&format=json&id=' + id
 		}
 	});
 	
