@@ -5,6 +5,8 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:spatial="http://geovocab.org/spatial#"
 	xmlns:kml="http://earth.google.com/kml/2.0" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="templates-timemap.xsl"/>
+	<xsl:include href="../functions.xsl"/>
+	<xsl:output name="default" method="xml"/>
 
 	<!-- url params -->
 	<xsl:param name="id" select="doc('input:request')/request/parameters/parameter[name='id']/value"/>

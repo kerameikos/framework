@@ -127,7 +127,10 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 		
 		<xsl:if test="string-length($query) &gt; 0">
 			<div class="row">
-				<xsl:apply-templates select="document($service)/descendant::res:result" mode="display"/>
+				<div class="col-md-12">
+					<h2>Objects of this Typology</h2>
+					<xsl:apply-templates select="document($service)/descendant::res:result" mode="display"/>
+				</div>				
 			</div>
 		</xsl:if>
 	</xsl:template>
@@ -145,6 +148,18 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 					<img src="{res:binding[@name='thumb']/res:uri}" title="{$title}" class="thumb"/>
 				</xsl:otherwise>
 			</xsl:choose>
+		</div>
+	</xsl:template>
+	
+	<xsl:template name="quant">
+		<div class="row">
+			<div class="col-md-12">
+				<h2>Quantitative Analysis</h2>
+				<form role="form" action="{$display_path}id/{$id}.html" method="get">
+					<input type="hidden" name="calculate" id="calculate-input" value=""/>					
+					<input type="submit" value="Generate" class="btn btn-default" id="visualize-submit"/>
+				</form>
+			</div>
 		</div>
 	</xsl:template>
 	

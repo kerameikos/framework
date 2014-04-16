@@ -21,20 +21,13 @@ function initialize_timemap(id) {
 		mapId: "map", // Id of map div element (required)
 		timelineId: "timeline", // Id of timeline div element (required)
 		options: {
+			mapType: "physical",
 			eventIconPath: "../ui/images/timemap/"
 			//mapFilter:'true'
 		},
 		datasets: datasets,
 		bandIntervals:[
-		Timeline.DateTime.YEAR,
-		Timeline.DateTime.DECADE]
+		Timeline.DateTime.DECADE,
+		Timeline.DateTime.CENTURY]
 	});
-	
-	function toggleDataset(dsid, toggle) {
-		if (toggle) {
-			tm.datasets[dsid].show();
-		} else {
-			tm.datasets[dsid].hide();
-		}
-	}
 }

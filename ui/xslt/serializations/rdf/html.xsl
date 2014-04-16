@@ -5,6 +5,7 @@
 	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
 	xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
+	<xsl:include href="../../functions.xsl"/>
 	<xsl:include href="html-templates.xsl"/>
 
 	<xsl:variable name="display_path">../</xsl:variable>
@@ -80,11 +81,12 @@
 						<div id="timelinecontainer">
 							<div id="timeline"/>
 						</div>
-					</div>					
+					</div>				
 					<xsl:call-template name="associatedObjects">
 						<xsl:with-param name="id" select="$id"/>
 						<xsl:with-param name="type" select="$type"/>
 					</xsl:call-template>
+					<xsl:call-template name="quant"/>
 				</div>
 				<div class="col-md-4">
 					<p class="text-muted">The sidebar can show textual or visual information extracted from other LOD sources.</p>
@@ -207,7 +209,7 @@
 		<xsl:for-each select="@when|@notBefore|@notAfter|@from|@to">
 			<xsl:value-of select="name()"/>
 			<xsl:text>: </xsl:text>
-			<xsl:value-of select="kerameikos:normalize_date(.)"/>
+			<xsl:value-of select="kerameikos:normalizeYear(.)"/>
 			<xsl:if test="not(position()=last())">
 				<xsl:text>, </xsl:text>
 			</xsl:if>
