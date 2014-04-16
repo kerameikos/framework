@@ -51,10 +51,10 @@ body {
   SPARQL
   ***************************************
  */
- #sparqlForm {
+ #sparqlForm, #calculateForm {
  	margin:20px 0;
  }
- #sparqlForm select {
+ #sparqlForm select, #calculateForm select {
  	width:200px;	
  }
 /*

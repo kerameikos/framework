@@ -7,11 +7,16 @@
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:include href="../../functions.xsl"/>
 	<xsl:include href="html-templates.xsl"/>
+	
+	<!-- URL parameters for generating charts -->
+	<xsl:param name="category" select="doc('input:request')/request/parameters/parameter[name='category']/value"/>
 
+	<!-- config and global variables -->
 	<xsl:variable name="display_path">../</xsl:variable>
 	<xsl:variable name="id" select="substring-after(//@rdf:about, 'id/')"/>
 	<xsl:variable name="html-uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 	<xsl:variable name="type" select="/content/rdf:RDF/*/name()"/>
+	<xsl:variable name="title" select="/content/rdf:RDF/*/skos:prefLabel[@xml:lang='en']"/>
 
 	<!-- definition of namespaces for turning in solr type field URIs into abbreviations -->
 	<xsl:variable name="namespaces" as="item()*">
@@ -58,7 +63,11 @@
 				<script type="text/javascript" src="{$display_path}ui/javascript/param.js"/>				
 				<!-- timeline css -->
 				<link type="text/css" href="{$display_path}ui/css/timeline-2.3.0.css" rel="stylesheet"/>
-				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
+				<!-- highcharts -->
+				<script type="text/javascript" src="{$display_path}ui/javascript/highcharts.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/modules/data.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/modules/exporting.js"/>
+				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>				
 			</head>
 			<body>
 				<xsl:call-template name="header"/>
@@ -71,7 +80,7 @@
 	<xsl:template name="body">
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-8">
+				<div class="col-md-9">
 					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
 
 					<div id="timemap">
@@ -88,7 +97,7 @@
 					</xsl:call-template>
 					<xsl:call-template name="quant"/>
 				</div>
-				<div class="col-md-4">
+				<div class="col-md-3">
 					<p class="text-muted">The sidebar can show textual or visual information extracted from other LOD sources.</p>
 					<div>
 						<h3>Data Export</h3>

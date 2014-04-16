@@ -9,4 +9,41 @@ $(document).ready(function () {
 			}
 		}
 	});
+	
+	$('#container').highcharts({
+		data: {
+			table: document.getElementById('calculate')
+		},
+		chart: {
+			type: 'column'
+		},
+		title: {
+			text: $(this).children('caption').text()
+		},
+		legend: {
+			enabled: true
+		},
+		xAxis: {
+			labels: {
+				rotation: - 45,
+				align: 'right',
+				style: {
+					fontSize: '11px',
+					fontFamily: 'Verdana, sans-serif'
+				}
+			}
+		},
+		yAxis: {
+			allowDecimals: false,
+			title: {
+				text: 'Occurrences'
+			}
+		},
+		tooltip: {
+			formatter: function () {
+				return '<b>' + this.point.name + '</b><br/>' +
+				'Count: ' + this.point.y;
+			}
+		}
+	});
 });
