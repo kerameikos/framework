@@ -196,16 +196,17 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 		</div>
 	</xsl:template>
 
-	<xsl:template name="quant">
+	<xsl:template name="quant">		
 		<div class="row">
 			<div class="col-md-12">
+				<a name="quant"/>
 				<h2>Quantitative Analysis</h2>
 
 				<xsl:if test="string($category)">
 					<xsl:call-template name="construct-table"/>
 				</xsl:if>
 
-				<form role="form" id="calculateForm" action="{$display_path}id/{$id}.html" method="get">
+				<form role="form" id="calculateForm" action="{$display_path}id/{$id}.html#quant" method="get">
 					<p>Select a category below to generate a graph showing the quantitative distribution for this typology.</p>
 					<div class="form-group">
 						<label for="categorySelect">Category</label>
