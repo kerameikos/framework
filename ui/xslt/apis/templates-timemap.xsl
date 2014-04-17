@@ -69,7 +69,7 @@ UNION {?types skos:broader kid:RDFID .
 ?object ecrm:P10_falls_within ?matches .
 ?object ecrm:P108i_was_produced_by ?prod
 OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82a_end_of_the_end ?toDate }
+?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
 {?prod ecrm:P7_took_place_at ?place }
 UNION {?prod ecrm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
@@ -85,7 +85,7 @@ UNION {?types skos:broader kid:RDFID .
 ?object ecrm:P45_consists_of ?matches}
 ?object ecrm:P108i_was_produced_by ?prod
 OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82a_end_of_the_end ?toDate }
+?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
 {?prod ecrm:P7_took_place_at ?place }
 UNION {?prod ecrm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
@@ -105,7 +105,7 @@ UNION {?types ecrm:P88i_forms_part_of kid:RDFID .
 					<![CDATA[?object ecrm:P50_has_current_keeper kid:RDFID .
 ?object ecrm:P108i_was_produced_by ?prod
 OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82a_end_of_the_end ?toDate }
+?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
 {?prod ecrm:P7_took_place_at ?place }
 UNION {?prod ecrm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
@@ -121,7 +121,7 @@ UNION {?types skos:broader kid:RDFID .
 ?object kon:hasShape ?matches}
 ?object ecrm:P108i_was_produced_by ?prod
 OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82a_end_of_the_end ?toDate }
+?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
 {?prod ecrm:P7_took_place_at ?place }
 UNION {?prod ecrm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
@@ -137,7 +137,7 @@ UNION {?types skos:broader kid:RDFID .
 ?object ecrm:P32_used_general_technique ?matches}
 ?object ecrm:P108i_was_produced_by ?prod
 OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82a_end_of_the_end ?toDate }
+?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
 {?prod ecrm:P7_took_place_at ?place }
 UNION {?prod ecrm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
@@ -164,7 +164,7 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 ?prod ecrm:P14_carried_out_by ?matches}
 ?object ecrm:P108i_was_produced_by ?prod
 OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82a_end_of_the_end ?toDate }
+?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
 {?prod ecrm:P7_took_place_at ?place }
 UNION {?prod ecrm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
@@ -177,7 +177,7 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 ?prod ecrm:P14_carried_out_by ?matches}
 ?object ecrm:P108i_was_produced_by ?prod
 OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82a_end_of_the_end ?toDate }
+?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
 {?prod ecrm:P7_took_place_at ?place }
 UNION {?prod ecrm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
