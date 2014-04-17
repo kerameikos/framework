@@ -71,7 +71,7 @@ dcterms:identifier ?id .
 {?object ecrm:P50_has_current_keeper ?kuri .
 ?kuri skos:prefLabel ?keeper .
 FILTER ( lang(?keeper) = "en" )} 
-?object foaf:thumbnail ?thumb .
+OPTIONAL {?object foaf:thumbnail ?thumb} .
 OPTIONAL {?object foaf:depiction ?ref}}]]>
 		</xsl:variable>
 
@@ -182,21 +182,24 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 
 	<xsl:template match="res:result" mode="display">
 		<xsl:variable name="title" select="concat(res:binding[@name='keeper']/res:literal, ': ', res:binding[@name='title']/res:literal, ' (' , res:binding[@name='id']/res:literal, ')')"/>
-		<div class="col-md-2">
-			<xsl:choose>
-				<xsl:when test="res:binding[@name='ref']/res:uri">
+
+		<xsl:choose>
+			<xsl:when test="string(res:binding[@name='ref']/res:uri)">
+				<div class="col-md-2">
 					<a href="{res:binding[@name='ref']/res:uri}" title="{$title}" rel="gallery" class="fancybox" id="{res:binding[@name='object']/res:uri}">
-						<img src="{res:binding[@name='thumb']/res:uri}" title="{$title}" class="thumb"/>
+						<img src="{if (string(res:binding[@name='thumb']/res:uri)) then res:binding[@name='thumb']/res:uri else res:binding[@name='ref']/res:uri}" title="{$title}" class="thumb"/>
 					</a>
-				</xsl:when>
-				<xsl:otherwise>
+				</div>
+			</xsl:when>
+			<xsl:when test="string(res:binding[@name='thumb']/res:uri)">
+				<div class="col-md-2">
 					<img src="{res:binding[@name='thumb']/res:uri}" title="{$title}" class="thumb"/>
-				</xsl:otherwise>
-			</xsl:choose>
-		</div>
+				</div>
+			</xsl:when>
+		</xsl:choose>
 	</xsl:template>
 
-	<xsl:template name="quant">		
+	<xsl:template name="quant">
 		<div class="row">
 			<div class="col-md-12">
 				<a name="quant"/>
