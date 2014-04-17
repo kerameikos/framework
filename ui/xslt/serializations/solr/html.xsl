@@ -50,6 +50,7 @@
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/result_functions.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 				<link rel="alternate" type="application/atom+xml" href="feed/{if ($q = '*:*') then '' else concat('?q=', $q)}"/>
 				<!-- opensearch compliance -->
@@ -71,7 +72,7 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12">
-					<!--<xsl:call-template name="filter"/>-->
+					<xsl:call-template name="filter"/>
 					<h1>Results</h1>
 					<xsl:choose>
 						<xsl:when test="$numFound &gt; 0">
@@ -126,36 +127,40 @@
 	</xsl:template>
 
 	<xsl:template name="filter">
-		<form action="." class="filter-form">
-			<span>
-				<b>Filter: </b>
-			</span>
-			<select id="search_filter">
-				<option value="">Select Type...</option>
-				<xsl:for-each select="descendant::lst[@name='type']/int">
-					<xsl:variable name="value" select="concat('typeof:&#x022;', @name, '&#x022;')"/>
-					<option value="{$value}">
-						<xsl:if test="contains($q, $value)">
-							<xsl:attribute name="selected">selected</xsl:attribute>
-						</xsl:if>
-						<xsl:value-of select="@name"/>
-					</option>
-				</xsl:for-each>
-			</select>
-			<span>
-				<b>Keyword: </b>
-			</span>
-			<input type="text" id="search_text">
-				<xsl:if test="$tokenized_q[not(contains(., 'type'))]">
-					<xsl:attribute name="value" select="$tokenized_q[not(contains(., 'type'))]"/>
-				</xsl:if>
-			</input>
+		<form action="." class="filter-form form-inline" method="get" role="form">
+			<h3>Filter</h3>
+			<div class="form-group">
+				<label for="search_filter">Type</label>
+				<select id="search_filter" class="form-control">
+					<option value="">Select...</option>
+					<xsl:for-each select="descendant::lst[@name='type']/int">
+						<xsl:variable name="uri" select="@name"/>
+						<xsl:variable name="value" select="concat('type:&#x022;', $uri, '&#x022;')"/>
+						<option value="{$value}">
+							<xsl:if test="contains($q, $value)">
+								<xsl:attribute name="selected">selected</xsl:attribute>
+							</xsl:if>
+							<xsl:value-of
+								select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
+							/>
+						</option>
+					</xsl:for-each>
+				</select>
+			</div>
+			<div class="form-group">
+				<label for="search_text">Keyword</label>
+				<input type="text" id="search_text" class="form-control">
+					<xsl:if test="$tokenized_q[not(contains(., 'type'))]">
+						<xsl:attribute name="value" select="$tokenized_q[not(contains(., 'type'))]"/>
+					</xsl:if>
+				</input>
+			</div>	
 			<input name="q" type="hidden"/>
-			<button id="search_button">Submit</button>
+			<button id="search_button" class="btn btn-default">Submit</button>
 		</form>
 		<xsl:if test="string($q)">
-			<form action="../id/" class="filter-form">
-				<button>Clear</button>
+			<form action="../id/" role="form" method="get" class="filter-form">
+				<button class="btn btn-default">Clear</button>
 			</form>
 		</xsl:if>
 	</xsl:template>

@@ -104,6 +104,7 @@
 								<facet type="ecrm:E57_Material">300264091</facet>
 								<facet type="ecrm:E4_Period">300264088</facet>
 								<facet type="kon:Shape">300264092</facet>
+								<facet type="kon:Style">300264088</facet>
 								<facet type="kon:Technique">300264090</facet>
 								<facet type="kon:Ware">300264088</facet>
 							</facets>

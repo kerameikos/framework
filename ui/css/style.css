@@ -44,7 +44,10 @@ body {
 	text-align:right;
 }
 .filter-form {
-	display:inline;
+	display:inline;	
+}
+.filter-form input, .filter-form select, .filter-form button {
+	margin: 0 10px;
 }
 /*
   ***************************************
