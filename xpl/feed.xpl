@@ -27,12 +27,16 @@
 		<p:output name="data" id="model"/>
 	</p:processor>
 	
-	<p:processor name="oxf:xml-serializer">
+	<p:processor name="oxf:xml-converter">
 		<p:input name="data" href="#model"/>
 		<p:input name="config">
 			<config>
-				<content-type>application/atom+xml</content-type>
+				<method>xml</method>
+				<encoding>utf-8</encoding>
+				<version>1.0</version>
 				<indent>true</indent>
+				<indent-amount>4</indent-amount>
+				<content-type>application/atom+xml</content-type>				
 			</config>
 		</p:input>
 		<p:output name="data" ref="data"/>
