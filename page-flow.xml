@@ -27,11 +27,10 @@
 	***************** -->
 
 	<!-- **** SERIALIZATION **** -->
-	<!-- RDF direct output -->
-	<page path="/ceramics/id/(.*)\.rdf" matcher="oxf:perl5-matcher" view="xpl/get-id.xpl"/>	
-	<!-- Object KML -->
-	<page path="/ceramics/id/(.*)\.kml" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/id-to-kml.xpl"/>	
-	<!-- public html view -->
+	<!-- RDF direct output -->	
+	<page path="/ceramics/id/(.*)\.rdf" matcher="oxf:perl5-matcher" view="xpl/get-id.xpl"/>
+	<page path="/ceramics/id/(.*)\.ttl" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/serializations/rdf/ttl.xpl"/>
+	<page path="/ceramics/id/(.*)\.kml" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/id-to-kml.xpl"/>
 	<page path="/ceramics/id/(.*)\.html" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/id-to-html.xpl"/>
 
 	<!-- Atom feed -->
