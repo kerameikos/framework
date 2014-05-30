@@ -1,8 +1,7 @@
-<xbl:xbl xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events"
-	xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:xxbl="http://orbeon.org/oxf/xml/xbl"
-	xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:rss="http://purl.org/rss/1.0/" xmlns:kerameikos="https://github.com/kerameikos/">
-	<xbl:binding id="kerameikos-pleiades" element="kerameikos|pleiades">
+<xbl:xbl xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms"
+	xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:xxbl="http://orbeon.org/oxf/xml/xbl" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:rss="http://purl.org/rss/1.0/" xmlns:nomisma="https://github.com/nomisma">
+	<xbl:binding id="nomisma-pleiades" element="nomisma|pleiades">
 		<xbl:template>
 			<xforms:group xbl:attr="model context ref bind" xxbl:scope="outer">
 				<xbl:content includes="xforms|label,xforms|help,xforms|hint,xforms|alert"/>
@@ -25,16 +24,12 @@
 							<xforms:trigger>
 								<xforms:action ev:event="DOMActivate">
 									<xforms:delete context="instance('feed')/*"/>
-									<xforms:setvalue ref="instance('pleiades-rss-config')/url"
-										value="concat('http://pleiades.stoa.org/search_rss?Title=', encode-for-uri(instance('control-instance')/query), '&amp;portal_type=Place')"/>
-									<xforms:insert nodeset="instance('feed')"
-										origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/query-pleiades-rss.xpl', 'file', instance('pleiades-rss-config'), 'data')"
-									/>
+									<xforms:send submission="query-pleiades"/>
 								</xforms:action>
 								<xforms:label>Search</xforms:label>
 							</xforms:trigger>
 						</div>
-
+						
 						<xforms:group ref=".[count(instance('feed')//rss:item) &gt; 0]">
 							<xforms:select1 ref="instance('control-instance')/uri" appearance="compact" size="10">
 								<xforms:label>Location</xforms:label>
@@ -43,36 +38,37 @@
 									<xforms:value ref="rss:link"/>
 								</xforms:itemset>
 								<xforms:action ev:event="xforms-value-changed">
-									<xforms:setvalue ref="instance('control-instance')/description"
-										value="instance('feed')//rss:item[rss:link = instance('control-instance')/uri]/rss:description"/>
+									<xforms:setvalue ref="instance('control-instance')/description" value="instance('feed')//rss:item[rss:link = instance('control-instance')/uri]/rss:description"/>
 								</xforms:action>
 							</xforms:select1>
 							<xforms:trigger>
 								<xforms:label>Select</xforms:label>
 								<xforms:action ev:event="DOMActivate">
-									<!-- create skos:exactMatch, set resource -->
+									<!-- create skos:relatedMatch, set resource -->
 									<xforms:insert context="$binding" nodeset="./child::node()[last()]"
-										origin="xforms:element('skos:exactMatch', xforms:attribute('rdf:resource', instance('control-instance')/uri))"/>
-									<!-- extract lat and lon from RDF -->
-									<!--<xforms:setvalue ref="instance('pleiades-rdf-config')/url"
-										value="concat($binding/skos:exactMatch[contains(@rdf:resource, 'pleiades')][1]/@rdf:resource, '/rdf')"/>
-									<xforms:insert nodeset="instance('feed')"
-										origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/query-pleiades-rdf.xpl', 'file', instance('pleiades-rdf-config'), 'data')"/>
-									<xforms:action if="not(instance('pleiades-rdf')//geo:lat) and not(instance('pleiades-rdf')//geo:long)">
-										<xforms:message level="modal">No coordinates available from Pleiades for this URI.</xforms:message>
+										origin="xforms:element('skos:relatedMatch', xforms:attribute('rdf:resource', instance('control-instance')/uri))"/>
+									<!-- if there aren't already coordinates, then get the coordinates from the Pleiades RDF -->
+									<xforms:action if="not($binding//geo:lat) and not($binding//geo:long)">
+										<xforms:send submission="get-pleiades-rdf"/>
+										<xforms:action ev:event="xforms-submit-done">
+											<xforms:action if="instance('rdf')//geo:lat and instance('rdf')//geo:long">
+												<xforms:insert context="$binding" nodeset="./child::node()[last()]" origin="instance('lat-template')"/>
+												<xforms:insert context="$binding" nodeset="./child::node()[last()]" origin="instance('long-template')"/>
+												<xforms:setvalue ref="$binding/geo:lat" value="instance('rdf')//geo:lat"/>
+												<xforms:setvalue ref="$binding/geo:long" value="instance('rdf')//geo:long"/>
+											</xforms:action>
+											<xforms:action if="not(instance('rdf')//geo:lat) and not(instance('rdf')//geo:long)">
+												<xforms:message level="modal">Coordinates are not available.</xforms:message>
+											</xforms:action>
+										</xforms:action>
 									</xforms:action>
-									<xforms:action if="instance('pleiades-rdf')//geo:lat and instance('pleiades-rdf')//geo:long">
-										<xforms:insert context="$binding" nodeset="./child::node()[last()]" origin="instance('lat-template')"/>
-										<xforms:insert context="$binding" nodeset="./child::node()[last()]" origin="instance('long-template')"/>
-										<xforms:setvalue ref="$binding/geo:lat" value="instance('pleiades-rdf')//geo:lat"/>
-										<xforms:setvalue ref="$binding/geo:long" value="instance('pleiades-rdf')//geo:long"/>
-									</xforms:action>-->
+									
 									<!-- close dialog -->
 									<xxforms:hide dialog="pleiades-dialog"/>
 								</xforms:action>
 							</xforms:trigger>
 						</xforms:group>
-
+						
 						<xforms:group ref=".[string(instance('control-instance')/uri)]">
 							<div>
 								<xforms:output ref="instance('control-instance')/description">
@@ -87,7 +83,7 @@
 							</div>
 						</xforms:group>
 					</xxforms:dialog>
-
+					
 					<!-- ***************** MODEL ***************-->
 					<xforms:model id="pleiades-model">
 						<!-- instances -->
@@ -98,50 +94,44 @@
 								<description/>
 							</controls>
 						</xforms:instance>
-
+						
 						<xforms:instance id="feed">
 							<feed xmlns=""/>
 						</xforms:instance>
-
+						
 						<xforms:instance id="rdf">
 							<rdf:RDF/>
 						</xforms:instance>
-
-						<xforms:instance id="pleiades-rdf-config">
-							<config xmlns="">
-								<url/>
-								<content-type>application/xml</content-type>
-								<mode>xml</mode>
-								<header>
-									<name>User-Agent</name>
-									<value>Kerameikos.org/XForms</value>
-								</header>
-							</config>
-						</xforms:instance>
-
-						<xforms:instance id="pleiades-rss-config">
-							<config xmlns="">
-								<url/>
-								<content-type>application/xml</content-type>
-								<mode>xml</mode>
-								<header>
-									<name>User-Agent</name>
-									<value>Kerameikos.org/XForms</value>
-								</header>
-							</config>
-						</xforms:instance>
-
+						
 						<xforms:instance id="lat-template" xxforms:exclude-result-prefixes="#all">
 							<geo:lat rdf:datatype="xsd:float"/>
 						</xforms:instance>
-
+						
 						<xforms:instance id="long-template" xxforms:exclude-result-prefixes="#all">
 							<geo:long rdf:datatype="xsd:float"/>
 						</xforms:instance>
+						
+						<!-- ********* SUBMISSIONS ***********-->
+						<xforms:submission id="query-pleiades" serialization="none" method="get"
+							action="http://pleiades.stoa.org/search_rss?Title={instance('control-instance')/query}&amp;portal_type=Place" instance="feed" replace="instance">
+							<xforms:header>
+								<xforms:name>User-Agent</xforms:name>
+								<xforms:value>XForms/Kerameikos.org</xforms:value>
+							</xforms:header>
+							<xforms:message ev:event="xforms-submit-error" level="modal">Unable to communicate with Pleiades RSS feed.</xforms:message>
+						</xforms:submission>
+						
+						<xforms:submission id="get-pleiades-rdf" serialization="none" method="get" action="{instance('control-instance')/uri}/rdf" instance="rdf" replace="instance">
+							<xforms:header>
+								<xforms:name>User-Agent</xforms:name>
+								<xforms:value>XForms/Kerameikos.org</xforms:value>
+							</xforms:header>
+							<xforms:message level="modal">Unable to extract RDF/XML from Pleiades.</xforms:message>
+						</xforms:submission>
 					</xforms:model>
 				</xforms:group>
 			</xforms:group>
 		</xbl:template>
 	</xbl:binding>
-
+	
 </xbl:xbl>

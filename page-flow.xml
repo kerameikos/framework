@@ -26,27 +26,27 @@
 	* PUBLIC INTERFACE *
 	***************** -->
 
-	<!-- **** SERIALIZATION **** -->
-	<!-- RDF direct output -->	
-	<page path="/ceramics/id/(.*)\.rdf" matcher="oxf:perl5-matcher" view="xpl/get-id.xpl"/>
-	<page path="/ceramics/id/(.*)\.ttl" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/serializations/rdf/ttl.xpl"/>
-	<page path="/ceramics/id/(.*)\.kml" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/id-to-kml.xpl"/>
-	<page path="/ceramics/id/(.*)\.html" matcher="oxf:perl5-matcher" model="xpl/get-id.xpl" view="xpl/id-to-html.xpl"/>
-
-	<!-- Atom feed -->
-	<page path="/ceramics/feed/" model="xpl/solr-query.xpl" view="xpl/feed.xpl"/>
+	<!-- **** SERIALIZATIONS **** -->
+	<!-- RDF -->
+	<page path="/ceramics/id/(.*)\.rdf" matcher="oxf:perl5-matcher" view="xpl/models/get-id.xpl"/>	
+	<page path="/ceramics/id/(.*)\.kml" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/kml.xpl"/>
+	<page path="/ceramics/id/(.*)\.ttl" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/ttl.xpl"/>	
+	<page path="/ceramics/id/(.*)\.html" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/html.xpl"/>
 	
-	<!-- APIs -->
-	<page path-info="/ceramics/api/get" model="xpl/get-id.xpl" view="xpl/api-get.xpl"/>
+	<!-- Solr -->
+	<page path="/ceramics/id/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/html.xpl"/>	
+	<page path="/ceramics/feed/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/atom.xpl"/>
 	
 	<!-- SPARQL wrapper (URL generator) -->
-	<page path="/ceramics/query" view="xpl/sparql-query.xpl"/>
+	<page path="/ceramics/query" view="xpl/serializations/sparql/query.xpl"/>
 	
 	<!-- **** PAGES **** -->
-	<page path="/ceramics/id/" model="xpl/solr-query.xpl" view="xpl/page-results.xpl"/>	
-	<page path="/ceramics/sparql" view="xpl/page-sparql.xpl"/>
-	<page path="/ceramics/ontology" view="xpl/page-ontology.xpl"/>
-	<page path="/ceramics/" view="xpl/page-index.xpl"/>
+	<page path="/ceramics/sparql" view="xpl/page/sparql.xpl"/>
+	<page path="/ceramics/ontology" view="xpl/page/ontology.xpl"/>
+	<page path="/ceramics/" view="xpl/page/index.xpl"/>
+	
+	<!-- **** APIs **** -->
+	<page path-info="/ceramics/api/get" model="xpl/models/get-id.xpl" view="xpl/api/get.xpl"/>
 	
 	<!-- **** DATA DUMPS **** -->
 	<page path="/ceramics/kerameikos.org.xml" view="dump/kerameikos.org.xml"/>

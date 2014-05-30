@@ -5,7 +5,8 @@
 	Apache License 2.0: http://code.google.com/p/eaditor/
 	
 -->
-<p:config xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors">
+<p:config xmlns:p="http://www.orbeon.com/oxf/pipeline"
+	xmlns:oxf="http://www.orbeon.com/oxf/processors">
 
 	<p:param type="input" name="data"/>
 	<p:param type="output" name="data"/>
@@ -21,22 +22,24 @@
 
 	<p:processor name="oxf:unsafe-xslt">
 		<p:input name="request" href="#request"/>
-		<p:input name="data" href="aggregate('content', #data, ../config.xml)"/>
-		<p:input name="config" href="../ui/xslt/serializations/rdf/html.xsl"/>
+		<p:input name="data" href="aggregate('content', #data, ../../../config.xml)"/>
+		<p:input name="config" href="../../../ui/xslt/serializations/solr/atom.xsl"/>
 		<p:output name="data" id="model"/>
 	</p:processor>
-
-	<p:processor name="oxf:html-converter">
+	
+	<p:processor name="oxf:xml-converter">
 		<p:input name="data" href="#model"/>
 		<p:input name="config">
 			<config>
-				<version>5.0</version>
-				<indent>true</indent>
-				<content-type>text/html</content-type>
+				<method>xml</method>
 				<encoding>utf-8</encoding>
+				<version>1.0</version>
+				<indent>true</indent>
 				<indent-amount>4</indent-amount>
+				<content-type>application/atom+xml</content-type>				
 			</config>
 		</p:input>
 		<p:output name="data" ref="data"/>
 	</p:processor>
+
 </p:config>

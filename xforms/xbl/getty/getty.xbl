@@ -63,8 +63,8 @@
 															<xforms:value>skos:exactMatch</xforms:value>
 														</xforms:item>
 														<xforms:item>
-															<xforms:label>Related</xforms:label>
-															<xforms:value>skos:related</xforms:value>
+															<xforms:label>Related Match</xforms:label>
+															<xforms:value>skos:relatedMatch</xforms:value>
 														</xforms:item>
 													</xforms:select1>
 												</td>

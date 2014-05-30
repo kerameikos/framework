@@ -16,7 +16,7 @@
 	
 	<p:processor name="oxf:unsafe-xslt">
 		<p:input name="request" href="#request"/>
-		<p:input name="data" href="../config.xml"/>
+		<p:input name="data" href="../../config.xml"/>
 		<p:input name="config">
 			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:output indent="yes"/>
@@ -48,7 +48,7 @@
 						</xsl:choose>
 					</xsl:variable>
 					
-					<xsl:copy-of select="document(concat('file:///usr/local/projects/ceramic-ids/id/', $doc, '.xml'))/*"/>					
+					<xsl:copy-of select="document(concat('file://', /config/id_path, '/', $doc, '.xml'))/*"/>					
 				</xsl:template>
 			</xsl:stylesheet>
 		</p:input>

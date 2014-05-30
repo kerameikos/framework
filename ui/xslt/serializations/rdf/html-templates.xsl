@@ -168,7 +168,7 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 		</xsl:variable>
 
 		<xsl:variable name="query" select="concat($prefixes, replace($select, 'RDFID', $id), $metadata)"/>
-		<xsl:variable name="service" select="concat(/content/config/sparql, '?query=', encode-for-uri(normalize-space($query)), '&amp;output=xml')"/>
+		<xsl:variable name="service" select="concat(/content/config/sparql/query, '?query=', encode-for-uri(normalize-space($query)), '&amp;output=xml')"/>
 
 		<xsl:if test="string-length($query) &gt; 0">
 			<div class="row">
@@ -366,7 +366,7 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 		</xsl:variable>
 
 		<xsl:variable name="query" select="concat($prefixes, replace($select, 'RDFID', $id), $category-select, $metadata)"/>
-		<xsl:variable name="service" select="concat(/content/config/sparql, '?query=', encode-for-uri(normalize-space($query)), '&amp;output=xml')"/>
+		<xsl:variable name="service" select="concat(/content/config/sparql/query, '?query=', encode-for-uri(normalize-space($query)), '&amp;output=xml')"/>
 
 		<xsl:apply-templates select="document($service)/descendant::res:results" mode="table"/>
 

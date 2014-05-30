@@ -196,7 +196,7 @@ UNION {?prod ecrm:P7_took_place_at ?relPlace .
 		</xsl:variable>-->
 
 		<xsl:variable name="query" select="concat($prefixes, replace($select, 'RDFID', $id), $metadata)"/>
-		<xsl:variable name="service" select="concat(/content/config/sparql, '?query=', encode-for-uri(normalize-space($query)), '&amp;output=xml')"/>
+		<xsl:variable name="service" select="concat(/content/config/sparql/query, '?query=', encode-for-uri(normalize-space($query)), '&amp;output=xml')"/>
 
 		<xsl:if test="string-length($select) &gt; 0">
 			<xsl:apply-templates select="document($service)/descendant::res:result" mode="timemap"/>

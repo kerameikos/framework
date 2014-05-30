@@ -7,9 +7,8 @@
 	xmlns:atom="http://www.w3.org/2005/Atom">
 	<head>
 		<title>Kerameikos: Manage Datasets</title>
-		<!--<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css"/>
-		<link rel="stylesheet" href="/fr/style/form-runner-bootstrap-override.css" type="text/css"/>-->
-		<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
+		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css"/>
+		<link rel="stylesheet" href="/fr/style/form-runner-bootstrap-override.css" type="text/css"/>
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
 		<link rel="shortcut icon" href="/ops/images/orbeon-icon-16.ico"/>
@@ -20,12 +19,13 @@
 			<xforms:instance id="doc" xxforms:exclude-result-prefixes="#all">
 				<rdf:RDF/>
 			</xforms:instance>
+			
+			<xforms:instance id="config" xxforms:exclude-result-prefixes="#all">
+				<xi:include href="../config.xml"/>
+			</xforms:instance>
 
 			<xforms:instance id="control-instance">
 				<controls xmlns="">
-					<id_path>/usr/local/projects/ceramic-ids/id/</id_path>
-					<endpoint>http://localhost:3030/ceramics/</endpoint>
-					<solr_url>http://localhost:8080/solr/ceramics/</solr_url>
 					<dump/>
 				</controls>
 			</xforms:instance>

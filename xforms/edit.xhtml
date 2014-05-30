@@ -9,7 +9,6 @@
 		<title>Kerameikos: LOD Editor</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css"/> 
 		<link rel="stylesheet" href="/fr/style/form-runner-bootstrap-override.css" type="text/css"/>
-
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
 		<link rel="shortcut icon" href="/ops/images/orbeon-icon-16.ico"/>
@@ -23,6 +22,10 @@
 					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
 					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
 					xmlns:kon="http://kerameikos.org/ontology#"/>
+			</xforms:instance>
+			
+			<xforms:instance id="config" xxforms:exclude-result-prefixes="#all">
+				<xi:include href="../config.xml"/>
 			</xforms:instance>
 
 			<xforms:instance id="control-instance">
@@ -38,9 +41,6 @@
 					<atom-search/>
 					<atom-id/>
 					<atom-summary/>
-					<id_path>/usr/local/projects/ceramic-ids/id/</id_path>
-					<endpoint>http://localhost:3030/ceramics/</endpoint>
-					<solr_url>http://localhost:8080/solr/ceramics/</solr_url>
 					<dump/>
 				</controls>
 			</xforms:instance>
@@ -149,8 +149,8 @@
 				<skos:definition xml:lang=""/>
 			</xforms:instance>
 
-			<xforms:instance id="related-template" xxforms:exclude-result-prefixes="#all">
-				<skos:related rdf:resource=""/>
+			<xforms:instance id="relatedMatch-template" xxforms:exclude-result-prefixes="#all">
+				<skos:relatedMatch rdf:resource=""/>
 			</xforms:instance>
 
 			<xforms:instance id="exactMatch-template" xxforms:exclude-result-prefixes="#all">
@@ -167,10 +167,6 @@
 
 			<xforms:instance id="long-template" xxforms:exclude-result-prefixes="#all">
 				<geo:long rdf:datatype="xsd:float"/>
-			</xforms:instance>
-
-			<xforms:instance id="comment-template" xxforms:exclude-result-prefixes="#all">
-				<rdfs:comment xml:lang=""/>
 			</xforms:instance>
 
 			<xforms:instance id="seeAlso-template" xxforms:exclude-result-prefixes="#all">
@@ -229,9 +225,9 @@ ORDER BY ASC(?label)
 					<xforms:setvalue ref="instance('control-instance')/id" value="xxforms:get-request-parameter('id')"/>
 					<xforms:setvalue ref="instance('control-instance')/original-id" value="xxforms:get-request-parameter('id')"/>
 					<xforms:setvalue ref="instance('load-config')/url"
-						value="concat('file://', instance('control-instance')/id_path, xxforms:get-request-parameter('id'), '.xml')"/>
+						value="concat('file://', instance('config')/id_path, '/', xxforms:get-request-parameter('id'), '.xml')"/>
 					<xforms:insert nodeset="instance('doc')"
-						origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/load-id.xpl', 'file', instance('load-config'), 'data')"/>
+						origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/load-id.xpl', 'file', instance('load-config'), 'data')"/>
 				</xforms:action>
 				<!-- insert P50_has_current_keeper for a collection, query SPARQL for available legal bodies -->	
 				<xforms:action if="instance('doc')/*/name()='ecrm:E78_Collection'">
@@ -259,27 +255,9 @@ ORDER BY ASC(?label)
 							constraint="string-length(.) &gt; 0 and count(parent::node()/parent::node()/skos:definition[@xml:lang='en']) = 1 and count(parent::node()/parent::node()/skos:definition/@xml:lang) = count(distinct-values(parent::node()/parent::node()/skos:definition/@xml:lang))"
 						/>
 					</xforms:bind>
-					<xforms:bind nodeset="rdfs:comment" required="true()">
-						<xforms:bind nodeset="@xml:lang" constraint="string-length(.) &gt; 0"/>
-					</xforms:bind>
-					<xforms:bind nodeset="ecrm:P50_has_current_keeper">
-						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
-					</xforms:bind>
-					<xforms:bind nodeset="foaf:homepage">
-						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
-					</xforms:bind>
-					<xforms:bind nodeset="rdfs:seeAlso">
-						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
-					</xforms:bind>
-					<xforms:bind nodeset="skos:related">
-						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
-					</xforms:bind>
-					<xforms:bind nodeset="skos:exactMatch">
-						<xforms:bind nodeset="@rdf:resource" required="true()" type="xs:anyURI"/>
-					</xforms:bind>
-					<xforms:bind nodeset="dcterms:isPartOf">
-						<xforms:bind nodeset="@rdf:resource" required="true()"/>
-					</xforms:bind>
+					<xforms:bind nodeset="//@rdf:resource" required="true()" type="xs:anyURI"/>
+				</xforms:bind>
+				<xforms:bind nodeset="geo:spatialThing">
 					<xforms:bind nodeset="geo:lat" constraint="(number(.) &gt; -180 and number(.) &lt; 180)"/>
 					<xforms:bind nodeset="geo:long" constraint="(number(.) &gt; -180 and number(.) &lt; 180)"/>
 				</xforms:bind>
@@ -314,12 +292,12 @@ ORDER BY ASC(?label)
 
 			<!-- ************* SPARQL SUBMISSIONS **********************-->
 			<xforms:submission id="submit-sparqlQuery"
-				action="{instance('control-instance')/endpoint}query?query={encode-for-uri(instance('sparqlQuery'))}&amp;output=xml"
+				action="{instance('config')/sparql/query}?query={encode-for-uri(instance('sparqlQuery'))}&amp;output=xml"
 				ref="instance('sparqlResponse')" replace="instance" method="get">
 				<xforms:message ev:event="xforms-submit-error" level="modal">SPARQL query failed.</xforms:message>
 			</xforms:submission>
 			
-			<xforms:submission id="delete-graph" action="{instance('control-instance')/endpoint}update" ref="instance('sparqlUpdate')"
+			<xforms:submission id="delete-graph" action="{instance('config')/sparql/update}" ref="instance('sparqlUpdate')"
 				serialization="text/plain" replace="none" method="post" mediatype="application/sparql-update">
 				<xforms:action ev:event="xforms-submit-error">
 					<xforms:message level="modal">SPARQL update failed.</xforms:message>
@@ -330,7 +308,7 @@ ORDER BY ASC(?label)
 				</xforms:action>
 			</xforms:submission>
 
-			<xforms:submission id="post-new" action="{instance('control-instance')/endpoint}data?default" ref="instance('doc')" replace="none" method="post"
+			<xforms:submission id="post-new" action="{instance('config')/sparql/store}?default" ref="instance('doc')" replace="none" method="post"
 				mediatype="application/rdf+xml">
 				<xforms:setvalue ev:event="xforms-submit-done" ref="instance('control-instance')/status">Successfully posted to endpoint.</xforms:setvalue>
 				<xforms:message ev:event="xforms-submit-error" level="modal">Post to endpoint failed.</xforms:message>
@@ -338,14 +316,14 @@ ORDER BY ASC(?label)
 
 			<!-- ************************* SOLR SUBMISSIONS ************************** -->
 			<!-- post instance to Solr -->
-			<xforms:submission id="post-solr-doc" action="{instance('control-instance')/solr_url}update" ref="instance('addIndex')" instance="addIndex"
+			<xforms:submission id="post-solr-doc" action="{instance('config')/solr_published}update" ref="instance('addIndex')" instance="addIndex"
 				replace="instance" method="post">
 				<xforms:message ev:event="xforms-submit-error" level="modal">Data Failed to POST to Solr. Index may be offline or URL is
 					incorrect.</xforms:message>
 				<xforms:send submission="submit-commit" ev:event="xforms-submit-done"/>
 			</xforms:submission>
 
-			<xforms:submission id="delete-id-from-solr" action="{instance('control-instance')/solr_url}update" ref="instance('deleteId')" instance="deleteId"
+			<xforms:submission id="delete-id-from-solr" action="{instance('config')/solr_published}update" ref="instance('deleteId')" instance="deleteId"
 				replace="instance" method="post">
 				<xforms:action ev:event="xforms-submit-error">
 					<xforms:message level="modal">Data Failed to POST to Solr. Index may be offline or URL is incorrect.</xforms:message>
@@ -358,7 +336,7 @@ ORDER BY ASC(?label)
 			</xforms:submission>
 
 			<!-- send commit -->
-			<xforms:submission id="submit-commit" action="{instance('control-instance')/solr_url}update" ref="instance('sendCommit')" instance="sendCommit"
+			<xforms:submission id="submit-commit" action="{instance('config')/solr_published}update" ref="instance('sendCommit')" instance="sendCommit"
 				replace="none" method="post">
 				<xforms:action ev:event="xforms-submit-error">
 					<xforms:message level="modal">Failed to commit to Solr index.</xforms:message>
@@ -416,9 +394,9 @@ ORDER BY ASC(?label)
 								<xforms:setvalue ref="instance('doc')/*/@rdf:about" value="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>
 								<!-- save file back to disk -->
 								<xforms:setvalue ref="instance('save-config')/url"
-									value="concat('file://', instance('control-instance')/id_path, instance('control-instance')/id, '.xml')"/>
+									value="concat('file://', instance('config')/id_path, '/', instance('control-instance')/id, '.xml')"/>
 								<xforms:insert nodeset="instance('dump')"
-									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/save-id.xpl', ('doc', 'configuration'), (instance('doc'), instance('save-config')), 'data')"/>
+									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('doc'), instance('save-config')), 'data')"/>
 								<!-- first RDF to triplestore -->
 								<xforms:setvalue ref="instance('sparqlUpdate')"
 									value="replace(instance('sparqlUpdate-template'), 'URI', instance('doc')/*/@rdf:about)"/>
@@ -426,13 +404,9 @@ ORDER BY ASC(?label)
 								<xforms:send submission="post-new"/>
 								<!-- post to Solr -->
 								<xforms:insert nodeset="instance('addIndex')"
-									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/id-to-solr.xpl', 'data', instance('doc'), 'data')"/>
+									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/serializations/rdf/solr.xpl', 'data', instance('doc'), 'data')"/>
 								<xforms:send submission="post-solr-doc"/>
 							</xforms:action>
-						</xforms:trigger>
-						<xforms:trigger bind="delete-trigger">
-							<xforms:label class="file_control"><span class="glyphicon glyphicon-remove"/>Delete</xforms:label>
-							<xforms:dispatch ev:event="DOMActivate" target="delete-dialog" name="fr-show"/>
 						</xforms:trigger>
 					</div>
 					<div>
@@ -674,31 +648,6 @@ ORDER BY ASC(?label)
 									</xforms:group>
 									<div>
 										<h4>Miscellaneous Fields</h4>
-										<xforms:repeat nodeset="rdfs:comment">
-											<div>
-												<xforms:input ref=".">
-													<xforms:label ref="name()"/>
-													<xforms:alert>Required</xforms:alert>
-												</xforms:input>
-												<xforms:select1 ref="@xml:lang">
-													<xforms:item>
-														<xforms:label>Select...</xforms:label>
-														<xforms:value/>
-													</xforms:item>
-													<xforms:itemset nodeset="instance('languages')/language">
-														<xforms:label ref="."/>
-														<xforms:value ref="@value"/>
-													</xforms:itemset>
-													<xforms:alert>Required</xforms:alert>
-												</xforms:select1>
-												<xforms:trigger appearance="minimal">
-													<xforms:delete ev:event="DOMActivate" context="."/>
-													<xforms:label>
-														<span class="glyphicon glyphicon-remove"/>
-													</xforms:label>
-												</xforms:trigger>
-											</div>
-										</xforms:repeat>
 										<xforms:group ref="ecrm:P50_has_current_keeper">
 											<div>
 												<xforms:select1 ref="@rdf:resource">
@@ -737,7 +686,7 @@ ORDER BY ASC(?label)
 												</xforms:trigger>
 											</div>
 										</xforms:repeat>
-										<xforms:repeat nodeset="skos:related">
+										<xforms:repeat nodeset="skos:relatedMatch">
 											<div>
 												<xforms:input ref="@rdf:resource">
 													<xforms:label ref="parent::node()/name()"/>
@@ -817,32 +766,6 @@ ORDER BY ASC(?label)
 								</xforms:group>
 							</xforms:group>
 						</div>
-						<fr:alert-dialog id="delete-dialog">
-							<fr:label>Delete</fr:label>
-							<fr:message>Do you wish to delete this id from ceramics? It can only be restored from GitHub.</fr:message>
-							<fr:positive-choice>
-								<fr:label>Yes</fr:label>
-								<xforms:action ev:event="DOMActivate">
-									<!-- delete from solr -->
-									<xforms:setvalue ref="instance('deleteId')/id" value="instance('control-instance')/id"/>
-									<xforms:send submission="delete-id-from-solr"/>
-									<!-- delete from SPARQL -->
-									<xforms:setvalue ref="instance('sparqlUpdate')"
-										value="replace(instance('sparqlUpdate-template'), 'URI', instance('doc')/*/@rdf:about)"/>
-									<xforms:send submission="delete-graph"/>
-									<!-- delete id from disk -->
-									<xforms:setvalue ref="instance('delete-config')/delete/url"
-										value="concat('file://', instance('control-instance')/id_path, instance('control-instance')/id, '.xml')"/>
-									<xforms:insert nodeset="instance('dump')"
-										origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/delete-id.xpl', 'file', instance('delete-config'), 'data')"/>
-									<!-- redirect to admin, only if all other processes completed successfully -->
-									<xforms:load resource="/ceramics/admin/" if="instance('control-instance')/delete-success = true()"/>
-								</xforms:action>
-							</fr:positive-choice>
-							<fr:negative-choice>
-								<fr:label>No</fr:label>
-							</fr:negative-choice>
-						</fr:alert-dialog>
 						<xxforms:dialog id="broader-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
 							<xforms:label>Broader Concept</xforms:label>
 							<div>

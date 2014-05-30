@@ -6,10 +6,10 @@
 	
 -->
 <p:config xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors">
-
+	
 	<p:param type="input" name="data"/>
 	<p:param type="output" name="data"/>
-
+	
 	<p:processor name="oxf:request">
 		<p:input name="config">
 			<config>
@@ -18,7 +18,7 @@
 		</p:input>
 		<p:output name="data" id="request"/>
 	</p:processor>
-
+	
 	<p:processor name="oxf:xslt">
 		<p:input name="data" href="#request"/>
 		<p:input name="config">
@@ -26,7 +26,7 @@
 				<xsl:param name="format" select="/request/parameters/parameter[name='format']/value"/>
 				<xsl:param name="mode" select="/request/parameters/parameter[name='mode']/value"/>
 				<xsl:param name="model" select="/request/parameters/parameter[name='model']/value"/>
-
+				
 				<xsl:template match="/">
 					<format>
 						<xsl:choose>
@@ -39,14 +39,14 @@
 		</p:input>
 		<p:output name="data" id="serializer-config"/>
 	</p:processor>
-
+	
 	<p:processor name="oxf:unsafe-xslt">
 		<p:input name="request" href="#request"/>
-		<p:input name="data" href="aggregate('content', #data, ../config.xml)"/>
-		<p:input name="config" href="../ui/xslt/apis/get.xsl"/>
+		<p:input name="data" href="aggregate('content', #data, ../../config.xml)"/>
+		<p:input name="config" href="../../ui/xslt/apis/get.xsl"/>
 		<p:output name="data" id="model"/>
 	</p:processor>
-
+	
 	<p:choose href="#serializer-config">
 		<p:when test="format='text'">
 			<p:processor name="oxf:text-serializer">

@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <config>
 	<url>http://localhost:8080/orbeon/ceramics/</url>
-	<sparql>http://localhost:3030/ceramics/query</sparql>
 	<solr_published>http://localhost:8080/solr/ceramics/</solr_published>
+	<id_path>/usr/local/projects/ceramic-ids/id</id_path>
+	<sparql>
+		<query>http://localhost:3030/ceramics/query</query>
+		<update>http://localhost:3030/ceramics/update</update>
+		<store>http://localhost:3030/ceramics/data</store>
+	</sparql>
 	<content>
 		<index>
 			<h1>Kerameikos.org</h1>
