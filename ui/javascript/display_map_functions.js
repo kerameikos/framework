@@ -8,11 +8,22 @@ function initialize_timemap(id) {
 	
 	//first dataset
 	datasets.push({
-		id: 'dist',
-		title: "Distribution",
+		id: 'places',
+		title: "Places",
 		type: "json",
 		options: {
-			url: '../api/get?model=timemap&format=json&id=' + id
+			url: '../api/get?model=timemap&format=json&mode=places&id=' + id,
+			theme: "red"
+		}
+	});	
+	datasets.push({
+		id: 'objects',
+		title: "Objects",
+		type: "json",
+		placemarkVisible: false,
+		options: {
+			url: '../api/get?model=timemap&format=json&mode=objects&id=' + id,
+			theme: "blue"
 		}
 	});
 	
@@ -30,4 +41,7 @@ function initialize_timemap(id) {
 		Timeline.DateTime.DECADE,
 		Timeline.DateTime.CENTURY]
 	});
+	
+	//hide objects from map
+	//tm.datasets["objects"].visible=false;
 }

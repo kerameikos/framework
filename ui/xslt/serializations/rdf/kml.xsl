@@ -31,7 +31,7 @@
 					</PolyStyle>
 				</Style>
 				<xsl:if test="$type='ecrm:E53_Place'">
-					<xsl:apply-templates select="descendant::geo:spatialThing"/>
+					<xsl:apply-templates select="descendant::geo:SpatialThing"/>
 				</xsl:if>
 				<xsl:if test="$type='foaf:Person' and descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 					<xsl:call-template name="lgpn-birthplace">
@@ -42,7 +42,7 @@
 		</kml>
 	</xsl:template>
 
-	<xsl:template match="geo:spatialThing">
+	<xsl:template match="geo:SpatialThing">
 		<Placemark xmlns="http://earth.google.com/kml/2.0">
 			<name>
 				<xsl:value-of select="descendant::skos:prefLabel[@xml:lang='en']"/>

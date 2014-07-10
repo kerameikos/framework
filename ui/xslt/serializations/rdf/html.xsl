@@ -113,7 +113,7 @@
 							<li>
 								<a href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=json">JSON-LD</a>
 							</li>
-							<xsl:if test="/content/rdf:RDF/geo:spatialThing">
+							<xsl:if test="/content/rdf:RDF/geo:SpatialThing">
 								<li>
 									<a href="{$id}.kml">KML</a>
 								</li>
