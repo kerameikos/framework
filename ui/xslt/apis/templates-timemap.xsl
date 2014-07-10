@@ -2,30 +2,56 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:nm="http://nomisma.org/id/"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:eac="urn:isbn:1-931666-33-4" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:res="http://www.w3.org/2005/sparql-results#"
 	xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:spatial="http://geovocab.org/spatial#" xmlns:kml="http://earth.google.com/kml/2.0" xmlns:saxon="http://saxon.sf.net/"
-	xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
-
-	<xsl:variable name="type" select="descendant::rdf:RDF/*/name()"/>
+	xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:kml="http://earth.google.com/kml/2.0" xmlns:saxon="http://saxon.sf.net/" xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all"
+	version="2.0">
+	<xsl:output method="text" encoding="UTF-8"/>
+	<xsl:variable name="type" select="descendant::rdf:RDF/*[1]/name()"/>
 
 	<xsl:template name="timemap">
 		<xsl:variable name="response">
 			<xsl:text>[</xsl:text>
-			<xsl:if test="descendant::geo:lat and descendant::geo:long">
-				<xsl:call-template name="origin"/>
-				<xsl:text>,</xsl:text>
-			</xsl:if>
-			<xsl:call-template name="production-places"/>
+			<xsl:choose>
+				<xsl:when test="$type='ecrm:E53_Place'">
+					<xsl:apply-templates select="descendant::geo:spatialThing"/>
+					<xsl:text>, </xsl:text>
+					<xsl:call-template name="production-places"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:call-template name="production-places"/>
+				</xsl:otherwise>
+			</xsl:choose>
 			<xsl:text>]</xsl:text>
 		</xsl:variable>
 		<xsl:value-of select="normalize-space($response)"/>
 	</xsl:template>
 
-	<xsl:template name="origin">
-		<xsl:variable name="name" select="descendant::skos:prefLabel[@xml:lang='en']"/>
-		<xsl:variable name="description" select="descendant::skos:definition[@xml:lang='en']"/>
-		<xsl:variable name="theme">red</xsl:variable> { "point": {"lon": <xsl:value-of select="descendant::geo:long"/>,"lat": <xsl:value-of select="descendant::geo:lat"/>}, "title": "<xsl:value-of
-			select="normalize-space(replace($name, '&#x022;', '\\&#x022;'))"/>", "options": { "theme": "<xsl:value-of select="$theme"/>"<xsl:if test="string($description)">, "description":
-				"<xsl:value-of select="normalize-space(replace($description, '&#x022;', '\\&#x022;'))"/>"</xsl:if>, "href": "<xsl:value-of select="concat(/content/config/url, 'id/', $id)"/>" } } </xsl:template>
+	<xsl:template match="geo:spatialThing">
+		<xsl:variable name="name" select="parent::node()/*[1]/skos:prefLabel[@xml:lang='en']"/>
+		<xsl:variable name="description" select="parent::node()/*[1]/skos:definition[@xml:lang='en']"/>
+		<xsl:variable name="theme">red</xsl:variable>
+		<xsl:variable name="coordinates">
+			<xsl:choose>
+				<xsl:when test="number(geo:lat) and number(geo:long)">{ "point": {"lon": <xsl:value-of select="geo:long"/>,"lat": <xsl:value-of select="geo:lat"/>}</xsl:when>
+				<xsl:when test="string(osgeo:asGeoJSON)">
+					<xsl:text>"polygon" : [</xsl:text>
+					<xsl:analyze-string select="osgeo:asGeoJSON" regex="\[(\d[^\]]+)\]">
+						<xsl:matching-substring>
+							<xsl:text>{"lat":</xsl:text>
+							<xsl:value-of select="normalize-space(tokenize(regex-group(1), ',')[2])"/>
+							<xsl:text>,"lon":</xsl:text>
+							<xsl:value-of select="normalize-space(tokenize(regex-group(1), ',')[1])"/>
+							<xsl:text>}</xsl:text>
+							<xsl:if test="not(position()=last()-1)">
+								<xsl:text>,</xsl:text>
+							</xsl:if>
+						</xsl:matching-substring>
+					</xsl:analyze-string>
+					<xsl:text>]</xsl:text>
+				</xsl:when>
+			</xsl:choose>
+		</xsl:variable> {<xsl:value-of select="$coordinates"/>, "title": "<xsl:value-of select="normalize-space(replace($name, '&#x022;', '\\&#x022;'))"/>", "options": { "theme": "<xsl:value-of
+			select="$theme"/>"<xsl:if test="string($description)">, "description": "<xsl:value-of select="normalize-space(replace($description, '&#x022;', '\\&#x022;'))"/>"</xsl:if>, "href":
+			"<xsl:value-of select="concat(/content/config/url, 'id/', $id)"/>" } } </xsl:template>
 
 	<xsl:template name="production-places">
 		<xsl:variable name="prefixes">
@@ -90,17 +116,21 @@ OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
 UNION {?prod ecrm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
-				<!--<xsl:when test="$type='ecrm:E53_Place'">
+				<xsl:when test="$type='ecrm:E53_Place'">
 					<![CDATA[{?object ecrm:P108i_was_produced_by ?prod .
 ?prod ecrm:P7_took_place_at kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
 ?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at ?matches}
-UNION {?types ecrm:P88i_forms_part_of kid:RDFID .
+?prod ecrm:P7_took_place_at ?matches .
+OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
+?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }}
+UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
 ?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at ?matches}]]>
-				</xsl:when>-->
+?prod ecrm:P7_took_place_at ?matches .
+OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
+?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }}]]>
+				</xsl:when>
 				<xsl:when test="$type='ecrm:E40_Legal_Body'">
 					<![CDATA[?object ecrm:P50_has_current_keeper kid:RDFID .
 ?object ecrm:P108i_was_produced_by ?prod
@@ -253,12 +283,12 @@ UNION {?prod ecrm:P7_took_place_at ?relPlace .
 				</xsl:when>
 				<xsl:when test="res:binding[@name='json']/res:literal">
 					<xsl:text>"polygon" : [</xsl:text>
-					<xsl:analyze-string select="res:binding[@name='json']/res:literal" regex="\[([0-9]+\.[0-9]+), ([0-9]+\.[0-9]+)\]">
+					<xsl:analyze-string select="res:binding[@name='json']/res:literal" regex="\[(\d[^\]]+)\]">
 						<xsl:matching-substring>
 							<xsl:text>{"lat":</xsl:text>
-							<xsl:value-of select="regex-group(2)"/>
+							<xsl:value-of select="normalize-space(tokenize(regex-group(1), ',')[2])"/>
 							<xsl:text>,"lon":</xsl:text>
-							<xsl:value-of select="regex-group(1)"/>
+							<xsl:value-of select="normalize-space(tokenize(regex-group(1), ',')[1])"/>
 							<xsl:text>}</xsl:text>
 							<xsl:if test="not(position()=last()-1)">
 								<xsl:text>,</xsl:text>
@@ -268,8 +298,10 @@ UNION {?prod ecrm:P7_took_place_at ?relPlace .
 					<xsl:text>]</xsl:text>
 				</xsl:when>
 			</xsl:choose>
-		</xsl:variable> {<xsl:value-of select="$coords"/>, "title": "<xsl:value-of select="normalize-space(replace($title, '&#x022;', '\\&#x022;'))"/>", <xsl:if
-			test="string(res:binding[@name='fromDate']/res:literal)">"start": "<xsl:value-of select="res:binding[@name='fromDate']/res:literal"/>",</xsl:if>
+		</xsl:variable> { <xsl:if test="not($type='ecrm:E53_Place')">
+			<xsl:value-of select="$coords"/><xsl:text>, </xsl:text>
+		</xsl:if>"title": "<xsl:value-of select="normalize-space(replace($title, '&#x022;', '\\&#x022;'))"/>", <xsl:if test="string(res:binding[@name='fromDate']/res:literal)">"start": "<xsl:value-of
+				select="res:binding[@name='fromDate']/res:literal"/>",</xsl:if>
 		<xsl:if test="string(res:binding[@name='toDate']/res:literal)">"end": "<xsl:value-of select="res:binding[@name='toDate']/res:literal"/>",</xsl:if> "options": { "theme": "<xsl:value-of
 			select="$theme"/>"<xsl:if test="string($description)">, "description": "<xsl:value-of select="normalize-space(replace(saxon:serialize($description, 'default'), '&#x022;', '\\&#x022;'))"
 			/>"</xsl:if>, "href": "<xsl:value-of select="res:binding[@name='object']/res:uri"/>" }} <xsl:if test="not(position()=last())">

@@ -2,8 +2,8 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:ecrm="http://erlangen-crm.org/current/"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
-	exclude-result-prefixes="#all" version="2.0">
-	<xsl:variable name="id" select="substring-after(//@rdf:about, 'id/')"/>
+	xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" exclude-result-prefixes="#all" version="2.0">
+	<xsl:variable name="id" select="substring-after(//rdf:RDF/*[1]/@rdf:about, 'id/')"/>
 	<xsl:variable name="uri" select="concat(/content/config/url, 'id/', $id)"/>
 	<xsl:variable name="definition" select="//skos:definition[@xml:lang='en']"/>
 
@@ -20,12 +20,18 @@
 						<scale>1</scale>
 						<hotSpot x="0.5" y="0" xunits="fraction" yunits="fraction"/>
 						<Icon>
-							<href>http://maps.google.com/mapfiles/ms/micons/green-dot.png</href>
+							<href>http://maps.google.com/mapfiles/ms/micons/blue-dot.png</href>
 						</Icon>
 					</IconStyle>
 				</Style>
+				<Style id="polygon">
+					<PolyStyle>
+						<color>50F00014</color>
+						<outline>1</outline>
+					</PolyStyle>
+				</Style>
 				<xsl:if test="$type='ecrm:E53_Place'">
-					<xsl:call-template name="place_placemark"/>
+					<xsl:apply-templates select="descendant::geo:spatialThing"/>
 				</xsl:if>
 				<xsl:if test="$type='foaf:Person' and descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 					<xsl:call-template name="lgpn-birthplace">
@@ -36,27 +42,46 @@
 		</kml>
 	</xsl:template>
 
-	<xsl:template name="place_placemark">
-		<xsl:variable name="description">
-			<![CDATA[
-								<dl><dt>Latitude</dt><dd>]]><xsl:value-of select="descendant::geo:lat"/><![CDATA[</dd>
-								<dt>Longitude</dt><dd>]]><xsl:value-of select="descendant::geo:long"/><![CDATA[</dd>
-								<dt>URI</dt><dd><a href="]]><xsl:value-of select="$uri"/><![CDATA[">]]><xsl:value-of select="$uri"/><![CDATA[</a></dd></dl>]]>
-		</xsl:variable>
-
+	<xsl:template match="geo:spatialThing">
 		<Placemark xmlns="http://earth.google.com/kml/2.0">
 			<name>
 				<xsl:value-of select="descendant::skos:prefLabel[@xml:lang='en']"/>
 			</name>
 			<description>
-				<xsl:value-of select="normalize-space($description)"/>
+				<xsl:value-of select="$definition"/>
 			</description>
-			<styleUrl>#origin</styleUrl>
-			<Point>
-				<coordinates>
-					<xsl:value-of select="concat(descendant::geo:long, ',', descendant::geo:lat)"/>
-				</coordinates>
-			</Point>
+			<xsl:choose>
+				<xsl:when test="number(geo:lat) and number(geo:long)">
+					<styleUrl>#origin</styleUrl>
+					<Point>
+						<coordinates>
+							<xsl:value-of select="concat(geo:long, ',', geo:lat)"/>
+						</coordinates>
+					</Point>
+				</xsl:when>
+				<xsl:when test="string(osgeo:asGeoJSON)">
+					<styleUrl>#polygon</styleUrl>
+					<Polygon>
+						<outerBoundaryIs>
+							<LinearRing>
+								<coordinates>
+									<xsl:analyze-string regex="\[(\d[^\]]+)\]" select="osgeo:asGeoJSON">
+										<xsl:matching-substring>
+											<xsl:for-each select="regex-group(1)">
+												<xsl:value-of select="normalize-space(tokenize(., ',')[1])"/>
+												<xsl:text>, </xsl:text>
+												<xsl:value-of select="normalize-space(tokenize(., ',')[2])"/>
+												<xsl:text>, 0. </xsl:text>
+											</xsl:for-each>
+										</xsl:matching-substring>
+									</xsl:analyze-string>
+								</coordinates>
+							</LinearRing>
+						</outerBoundaryIs>
+					</Polygon>
+				</xsl:when>
+			</xsl:choose>
+			
 		</Placemark>
 	</xsl:template>
 

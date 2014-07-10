@@ -1,4 +1,10 @@
 $(document).ready(function () {
+	$('.toggle-geoJSON').click(function () {
+		$('#geoJSON-fragment').toggle();
+		$('#geoJSON-full').toggle();
+		return false;
+	});
+	
 	$('.fancybox').fancybox({
 		beforeShow: function () {
 			this.title = '<a href="' + this.element.attr('id') + '">' + this.element.attr('title') + '</a>'
