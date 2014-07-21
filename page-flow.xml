@@ -34,6 +34,11 @@
 	<page path="/ceramics/id/(.*)\.html" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/html.xpl"/>
 	<page path="/ceramics/id/(.*)\.jsonld" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/json-ld.xpl"/>
 	
+	<!-- ONTOLOGY -->
+	<page path="/ceramics/ontology" model="xpl/models/get-ontology.xpl" view="xpl/page/ontology.xpl"/>
+	<page path="/ceramics/ontology.rdf" view="xpl/models/get-ontology.xpl"/>
+	<page path="/ceramics/ontology.ttl" model="xpl/models/get-ontology.xpl" view="xpl/serializations/rdf/ttl.xpl"/>
+	
 	<!-- Solr -->
 	<page path="/ceramics/id/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/html.xpl"/>	
 	<page path="/ceramics/feed/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/atom.xpl"/>
@@ -43,7 +48,6 @@
 	
 	<!-- **** PAGES **** -->
 	<page path="/ceramics/sparql" view="xpl/page/sparql.xpl"/>
-	<page path="/ceramics/ontology" view="xpl/page/ontology.xpl"/>
 	<page path="/ceramics/" view="xpl/page/index.xpl"/>
 	
 	<!-- **** APIs **** -->

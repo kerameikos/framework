@@ -1,5 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xs" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" exclude-result-prefixes="#all"
+	version="2.0">
 	<xsl:include href="templates.xsl"/>
 
 	<xsl:variable name="display_path"/>
@@ -28,28 +31,80 @@
 		<div class="container-fluid">
 			<div class="row">
 				<div class="col-md-12">
-					<h1>Ontology</h1>
-					<p>This page is the placeholder for the Kerameikos.org ceramic ontology. This page will eventually be generated dynamically from RDF.</p>
+					<xsl:apply-templates select="descendant::owl:Ontology"/>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+					<ul>
+						<li>
+							<h4>Classes</h4>
+							<ul>
+
+								<xsl:apply-templates select="descendant::owl:Class" mode="toc"/>
+							</ul>
+						</li>
+
+						<li>
+							<h4>Properties</h4>
+							<ul>
+
+								<xsl:apply-templates select="descendant::owl:ObjectProperty" mode="toc"/>
+							</ul>
+						</li>
+						<li>
+							<h4>Alternative Serializations</h4>
+							<ul>
+								<li>
+									<a href="./ontology.rdf">RDF/XML</a>
+								</li>
+								<li>
+									<a href="./ontology.ttl">TTL</a>
+								</li>
+							</ul>
+						</li>
+					</ul>
+				</div>
+				<div class="col-md-9">
 					<div>
 						<div>
 							<h2>Classes</h2>
-							<a name="#Shape"/>
-							<h3>Shape</h3>
-							<p>Vessel shape; considered object types by the British Museum thesaurus.</p>
-							<a name="#Technique"/>
-							<h3>Technique</h3>
-							<p>description</p>
-							<a name="#Ware"/>
-							<h3>Ware</h3>
-							<p>description</p>
+							<xsl:apply-templates select="descendant::owl:Class" mode="body"/>
 						</div>
 						<div>
 							<h2>Properties</h2>
+							<xsl:apply-templates select="descendant::owl:ObjectProperty" mode="body"/>
 						</div>
 					</div>
-				</div>				
+				</div>
 			</div>
 		</div>
+	</xsl:template>
+
+	<xsl:template match="owl:Ontology">
+		<h1>
+			<xsl:value-of select="rdfs:label[@xml:lang='en']"/>
+		</h1>
+		<p>
+			<xsl:value-of select="rdfs:comment[@xml:lang='en']"/>
+		</p>
+	</xsl:template>
+
+	<xsl:template match="owl:Class|owl:ObjectProperty" mode="toc">
+		<li>
+			<a href="#{substring-after(@rdf:about, '#')}">
+				<xsl:value-of select="rdfs:label[@xml:lang='en']"/>
+			</a>
+		</li>
+	</xsl:template>
+
+	<xsl:template match="owl:Class|owl:ObjectProperty" mode="body">
+		<h3 id="{substring-after(@rdf:about, '#')}">
+			<xsl:value-of select="rdfs:label[@xml:lang='en']"/>
+		</h3>
+		<p>
+			<xsl:value-of select="rdfs:comment[@xml:lang='en']"/>
+		</p>
 	</xsl:template>
 
 </xsl:stylesheet>
