@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:ecrm="http://erlangen-crm.org/current/"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#"
-	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
+	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
+	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
+	xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:include href="../../functions.xsl"/>
 	<xsl:include href="html-templates.xsl"/>
@@ -20,31 +21,23 @@
 	<!-- definition of namespaces for turning in solr type field URIs into abbreviations -->
 	<xsl:variable name="namespaces" as="item()*">
 		<namespaces>
-			<namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
-			<namespace prefix="ecrm" uri="http://erlangen-crm.org/current/"/>
-			<namespace prefix="geo" uri="http://www.w3.org/2003/01/geo/wgs84_pos#"/>
-			<namespace prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
-			<namespace prefix="kon" uri="http://kerameikos.org/ontology#"/>
-			<namespace prefix="osgeo" uri="http://data.ordnancesurvey.co.uk/ontology/geometry/"/>
-			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
-			<namespace prefix="un" uri="http://www.owl-ontologies.com/Ontology1181490123.owl#"/>
+			<xsl:for-each select="//rdf:RDF/namespace::*[not(name()='xml')]">
+				<namespace prefix="{name()}" uri="{.}"/>
+			</xsl:for-each>
 		</namespaces>
 	</xsl:variable>
 
+	<xsl:variable name="prefix">
+		<xsl:for-each select="$namespaces/namespace">
+			<xsl:value-of select="concat(@prefix, ':', @uri)"/>
+			<xsl:if test="not(position()=last())">
+				<xsl:text> </xsl:text>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:variable>
+
 	<xsl:template match="/">
-		<html lang="en"
-			prefix="dcterms: http://purl.org/dc/terms/
-			foaf: http://xmlns.com/foaf/0.1/
-			geo:  http://www.w3.org/2003/01/geo/wgs84_pos#
-			rdfs: http://www.w3.org/2000/01/rdf-schema#
-			rdfa: http://www.w3.org/ns/rdfa#
-			rdf:  http://www.w3.org/1999/02/22-rdf-syntax-ns#
-			skos: http://www.w3.org/2004/02/skos/core#
-			dcterms: http://purl.org/dc/terms/
-			ecrm: http://erlangen-crm.org/current/
-			osgeo: http://data.ordnancesurvey.co.uk/ontology/geometry/
-			kid: http://kerameikos.org/id/
-			kon: http://kerameikos.org/ontology#">
+		<html lang="en" prefix="{$prefix}">
 			<head>
 				<title id="{$id}">Kerameikos.org: <xsl:value-of select="//@rdf:about"/></title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
@@ -111,7 +104,7 @@
 								<a href="{$id}.ttl">TTL</a>
 							</li>
 							<li>
-								<a href="http://www.w3.org/2012/pyRdfa/extract?uri={$html-uri}&amp;format=json">JSON-LD</a>
+								<a href="{$id}.jsonld">JSON-LD</a>
 							</li>
 							<xsl:if test="/content/rdf:RDF/geo:SpatialThing">
 								<li>
@@ -183,7 +176,7 @@
 			</dl>
 		</div>
 	</xsl:template>
-	
+
 	<xsl:template match="skos:prefLabel" mode="prefLabel">
 		<span property="{name()}" xml:lang="{@xml:lang}">
 			<xsl:value-of select="."/>
@@ -237,7 +230,9 @@
 							<xsl:choose>
 								<xsl:when test="name()='rdf:type'">
 									<xsl:variable name="uri" select="@rdf:resource"/>
-									<xsl:value-of select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"/>
+									<xsl:value-of
+										select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
+									/>
 								</xsl:when>
 								<xsl:otherwise>
 									<xsl:value-of select="@rdf:resource"/>
