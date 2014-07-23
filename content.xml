@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<content>
+	<index>
+		
+
+		
+	</index>
+	<apis>
+		<h1>Nomisma API Documentation</h1>
+		<table class="table">
+			<thead>
+				<tr>
+					<th style="width:50%">API</th>
+					<th>XML</th>
+					<th>JSON</th>
+					<th>Turtle</th>
+				</tr>
+			</thead>
+			<tbody>
+				<!--<tr>
+					<td>
+						<a href="#getLabel">getLabel</a>
+					</td>
+					<td>
+						<a href="api/getLabel?uri=http://nomisma.org/id/ar&amp;lang=fr">XML</a>
+					</td>
+					<td>
+						<a href="api/getLabel?uri=http://nomisma.org/id/ar&amp;lang=fr&amp;format=json">JSON</a>
+					</td>
+					<td/>
+				</tr>-->
+				<tr>
+					<td>
+						<a href="#getRdf">getRdf</a>
+					</td>
+					<td>
+						<a href="api/getRdf?identifiers=attica|black_figure|exekias">RDF/XML</a>
+					</td>
+					<td/>
+					<td>
+						<a href="api/getRdf?identifiers=attica|black_figure|exekias&amp;format=ttl">RDF/TTL</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+		<!--<div class="highlight">
+			<a name="getLabel"/>
+			<h2>Get Label</h2>
+			<p>Get the label of a Nomisma ID given its URI and language code.<br/>
+				<b>Webservice Type</b> : REST<br/>
+				<b>Url</b> : nomisma.org/getLabel?<br/>
+				<b>Parameters</b> : uri (of Nomisma ID), lang (two-letter ISO language code), format ('json' or 'xml', default 'xml')<br/>
+				<b>Result</b> : returns the label in given language, or English as default.<br/>
+				<b>Examples</b>: <a href="api/getLabel?uri=http://nomisma.org/id/ar&amp;lang=fr">api/getLabel?uri=http://nomisma.org/id/ar&amp;lang=fr</a>
+			</p>
+		</div>-->
+		<div class="highlight">
+			<a name="getRdf"/>
+			<h2>Get RDF</h2>
+			<p>Aggregate RDF for Nomisma ids.<br/>
+				<b>Webservice Type</b> : REST<br/>
+				<b>Url</b> : nomisma.org/getRdf?<br/>
+				<b>Parameters</b> : identifiers (Nomisma ids divided by a pipe '|'), format ('xml', 'ttl', default 'xml')<br/>
+				<b>Result</b> : RDF/XML, RDF/TTL. Other RDF formats will be supported eventually.<br/>
+				<b>Examples</b>: <a href="api/getRdf?identifiers=attica|black_figure|exekias">api/getRdf?identifiers=attica|black_figure|exekias</a>
+			</p>
+		</div>
+	</apis>
+</content>

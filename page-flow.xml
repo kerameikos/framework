@@ -47,11 +47,13 @@
 	<page path="/ceramics/query" view="xpl/serializations/sparql/query.xpl"/>
 	
 	<!-- **** PAGES **** -->
+	<page path="/ceramics/apis" view="xpl/page/apis.xpl"/>
 	<page path="/ceramics/sparql" view="xpl/page/sparql.xpl"/>
 	<page path="/ceramics/" view="xpl/page/index.xpl"/>
 	
 	<!-- **** APIs **** -->
-	<page path-info="/ceramics/api/get" model="xpl/models/get-id.xpl" view="xpl/api/get.xpl"/>
+	<page path="/ceramics/api/get" model="xpl/models/get-id.xpl" view="xpl/api/get.xpl"/>
+	<page path="/ceramics/api/getRdf" model="xpl/models/aggregate-ids.xpl" view="xpl/api/getRdf.xpl"/>
 	
 	<!-- **** DATA DUMPS **** -->
 	<page path="/ceramics/kerameikos.org.xml" view="dump/kerameikos.org.xml"/>

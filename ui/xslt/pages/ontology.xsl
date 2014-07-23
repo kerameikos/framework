@@ -3,7 +3,7 @@
 	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:owl="http://www.w3.org/2002/07/owl#"
 	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" exclude-result-prefixes="#all"
 	version="2.0">
-	<xsl:include href="templates.xsl"/>
+	<xsl:include href="../templates.xsl"/>
 
 	<xsl:variable name="display_path"/>
 

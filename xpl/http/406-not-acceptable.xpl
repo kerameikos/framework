@@ -47,14 +47,20 @@
 					<config>
 						<status-code>406</status-code>
 						<content-type>text/plain</content-type>
-						<header>
-							<name>Accept</name>
-							<value>text/html</value>
-						</header>
-						<header>
-							<name>Accept</name>
-							<value>application/atom+xml</value>
-						</header>
+						<xsl:choose>
+							<xsl:when test="string-length(substring-after(/request/request-url, 'id/')) &gt; 0">
+								<header>
+									<name>Accept</name>
+									<value>text/html, application/rdf+xml, application/rdf+xml, text/turtle, application/vnd.google-earth.kml+xml, application/json</value>
+								</header>
+							</xsl:when>
+							<xsl:otherwise>
+								<header>
+									<name>Accept</name>
+									<value>text/html, application/atom+xml</value>
+								</header>
+							</xsl:otherwise>
+						</xsl:choose>
 					</config>
 				</xsl:template>
 			</xsl:stylesheet>
