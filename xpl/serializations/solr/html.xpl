@@ -33,7 +33,7 @@
 					<content-type>
 						<xsl:choose>
 							<xsl:when test="$content-type='application/atom+xml'">atom</xsl:when>
-							<xsl:when test="$content-type='text/html' or $content-type='text/plain' or $content-type='application/html' or not(string($content-type))">html</xsl:when>
+							<xsl:when test="$content-type='text/html' or not(string($content-type))">html</xsl:when>
 							<xsl:otherwise>error</xsl:otherwise>
 						</xsl:choose>
 					</content-type>
