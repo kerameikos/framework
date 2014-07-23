@@ -57,7 +57,7 @@
 	<page path="/ceramics/kerameikos.org.xml" view="dump/kerameikos.org.xml"/>
 	
 	<!-- 303 redirect from official URI to .html -->
-	<page path="/ceramics/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/conneg.xpl"/>
+	<page path="/ceramics/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/http/conneg.xpl"/>
 
 	<epilogue url="oxf:/config/epilogue.xpl"/>
 </config>
