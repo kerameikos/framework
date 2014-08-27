@@ -97,7 +97,7 @@
 											<th>Select</th>
 											<th>Name</th>
 											<th>Id</th>
-											<th>Description</th>
+											<th style="width:20em">Description</th>
 											<th>Type</th>
 										</tr>
 									</thead>
@@ -105,10 +105,10 @@
 										<xforms:repeat nodeset="instance('getty-options')/option">
 											<tr>
 												<td>
-													<xforms:input ref="@select"/>
+													<xforms:input ref="@select" class="checkbox"/>
 												</td>
 												<td>
-													<xforms:output ref="." style="width:50px"/>
+													<xforms:output ref="."/>
 												</td>
 												<td>
 													<a href="{@link}" target="_blank">
@@ -179,11 +179,12 @@ PREFIX luc: <http://www.ontotext.com/owlim/lucene#>
 PREFIX aat: <http://vocab.getty.edu/aat/>
 SELECT ?c ?label ?scopeNote WHERE {
 ?c a gvp:Concept; skos:inScheme aat: ;
-gvp:broaderTransitive aat:FACET ;
+gvp:broaderExtended aat:FACET ;
 gvp:prefLabelGVP/xl:literalForm ?label ;
 skos:scopeNote/rdf:value ?scopeNote ;
 luc:term "SEARCH_QUERY"
-FILTER langMatches(lang(?label), "en")} LIMIT 25]]>
+FILTER langMatches(lang(?label), "en")
+FILTER langMatches(lang(?scopeNote), "en")} LIMIT 25]]>
 							</query>
 						</xforms:instance>
 						
