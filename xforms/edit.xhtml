@@ -1023,9 +1023,12 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							<kerameikos:getty/>
 						</xforms:group>
 						<!-- extract coordinates from Pleiades if there is a Pleiades URI in skos:exactMatch, but no geo:lat and geo:long -->
-						<xforms:group ref=".[$type='ecrm:E53_Place' and not(skos:exactMatch[contains(@rdf:resource, 'pleiades.stoa.org')])]">
-							<kerameikos:pleiades/>
-						</xforms:group>
+						<xforms:group ref=".[$type='ecrm:E53_Place']">
+							<xforms:group ref=".[not(skos:relatedMatch[contains(@rdf:resource, 'pleiades.stoa.org')])]">
+								<kerameikos:pleiades/>
+							</xforms:group>
+							<kerameikos:getty/>
+						</xforms:group>						
 						<!-- query VIAF to add associated URIs -->
 						<xforms:group ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type='ecrm:E40_Legal_Body']">
 							<kerameikos:viaf/>
