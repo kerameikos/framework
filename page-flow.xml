@@ -44,7 +44,7 @@
 	<page path="/ceramics/feed/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/atom.xpl"/>
 	
 	<!-- SPARQL wrapper (URL generator) -->
-	<page path="/ceramics/query" view="xpl/serializations/sparql/query.xpl"/>
+	<page path="/ceramics/query" view="xpl/http/conneg-sparql.xpl"/>
 	
 	<!-- **** PAGES **** -->
 	<page path="/ceramics/apis" view="xpl/page/apis.xpl"/>
@@ -59,7 +59,7 @@
 	<page path="/ceramics/kerameikos.org.xml" view="dump/kerameikos.org.xml"/>
 	
 	<!-- 303 redirect from official URI to .html -->
-	<page path="/ceramics/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/http/conneg.xpl"/>
+	<page path="/ceramics/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/http/conneg-id.xpl"/>
 
 	<epilogue url="oxf:/config/epilogue.xpl"/>
 </config>

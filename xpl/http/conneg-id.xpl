@@ -20,7 +20,7 @@
 			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:output indent="yes"/>
 				
-				<xsl:variable name="content-type" select="//header[name[.='content-type']]/value"/>
+				<xsl:variable name="content-type" select="//header[name[.='accept']]/value"/>
 				
 				<xsl:template match="/">
 					<content-type>
@@ -30,7 +30,7 @@
 							<xsl:when test="$content-type='application/rdf+xml' or $content-type='application/xml' or $content-type='text/xml'">xml</xsl:when>
 							<xsl:when test="$content-type='text/turtle'">turtle</xsl:when>
 							<xsl:when test="$content-type='text/html'">html</xsl:when>
-							<xsl:when test="not(string($content-type))">303</xsl:when>
+							<xsl:when test="not(string($content-type)) or $content-type='*/*' or contains($content-type, 'text/html')">303</xsl:when>
 							<xsl:otherwise>error</xsl:otherwise>
 						</xsl:choose>
 					</content-type>
