@@ -74,7 +74,7 @@
 	</xsl:template>
 
 	<xsl:template name="body">
-		<div class="container-fluid">
+		<div class="container-fluid content">
 			<div class="row">
 				<div class="col-md-9">
 					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
@@ -192,8 +192,11 @@
 	</xsl:template>
 
 	<xsl:template match="*" mode="list-item">
+		<xsl:variable name="name" select="name()"/>
 		<dt>
-			<xsl:value-of select="name()"/>
+			<a href="{concat($namespaces//namespace[@prefix=substring-before($name, ':')]/@uri, substring-after($name, ':'))}">
+				<xsl:value-of select="name()"/>
+			</a>
 		</dt>
 		<dd>
 			<xsl:choose>

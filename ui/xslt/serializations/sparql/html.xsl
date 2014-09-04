@@ -6,15 +6,19 @@
 	
 	<xsl:variable name="namespaces" as="item()*">
 		<namespaces>
+			<namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
 			<namespace prefix="ecrm" uri="http://erlangen-crm.org/current/"/>
-			<namespace prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
 			<namespace prefix="geo" uri="http://www.w3.org/2003/01/geo/wgs84_pos#"/>
-			<!--<namespace prefix="kid" uri="http://kerameikos.org/id/"/>-->
+			<namespace prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
+			<namespace prefix="kid" uri="http://kerameikos.org/id/"/>
 			<namespace prefix="kon" uri="http://kerameikos.org/ontology#"/>
-			<namespace prefix="owl" uri="http://www.w3.org/2002/07/owl#"/>
+			<namespace prefix="org" uri="http://www.w3.org/ns/org#"/>
+			<namespace prefix="osgeo" uri="http://data.ordnancesurvey.co.uk/ontology/geometry/"/>
 			<namespace prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
-			<namespace prefix="rdfs" uri="www.w3.org/TR/rdf-schema/"/>
+			<namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
 			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
+			<namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+			<namespace prefix="un" uri="http://www.owl-ontologies.com/Ontology1181490123.owl#"/>
 		</namespaces>
 	</xsl:variable>
 
@@ -38,7 +42,7 @@
 	</xsl:template>
 
 	<xsl:template name="body">
-		<div class="container-fluid">
+		<div class="container-fluid content">
 			<div class="row">
 				<div class="col-md-12">
 					<h1>Results</h1>
@@ -89,11 +93,15 @@
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="res:literal"/>
-					<xsl:if test="@xml:lang">
-						<i> (<xsl:value-of select="@xml:lang"/>)</i>
+					<xsl:if test="res:literal/@xml:lang">
+						<i> (<xsl:value-of select="res:literal/@xml:lang"/>)</i>
 					</xsl:if>
-					<xsl:if test="@datatype">
-						<i> (<xsl:value-of select="@datatype"/>)</i>
+					<xsl:if test="res:literal/@datatype">
+						<xsl:variable name="uri" select="res:literal/@datatype"/>
+						<i> (<a href="{$uri}">
+							<xsl:value-of
+								select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
+							/></a>)</i>
 					</xsl:if>
 				</xsl:otherwise>
 			</xsl:choose>
