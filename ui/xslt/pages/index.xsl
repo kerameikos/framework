@@ -29,18 +29,18 @@
 					<xsl:copy-of select="//index/*"/>
 				</div>
 				<div class="col-md-4">
-					<h2>Sidebar</h2>
-					<p class="text-muted">The sidebar will contain links to web services and downloads of data dumps.</p>					
+					<div>
+						<h3>Data Export</h3>
+						<h4>Kerameikos Linked Data</h4>
+						<a href="kerameikos.org.xml">RDF/XML</a>
+					</div>
 					<div>
 						<h3>Atom Feed</h3>
 						<a href="feed/">
 							<img src="{$display_path}ui/images/atom-large.png"/>
 						</a>
 					</div>
-					<div>
-						<h3>Data Download</h3>
-						<a href="kerameikos.org.xml">RDF/XML</a>
-					</div>
+					
 				</div>
 			</div>
 		</div>

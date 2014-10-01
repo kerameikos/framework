@@ -48,12 +48,14 @@
 	</xsl:template>
 
 	<xsl:template name="footer">
-		<div id="footer">
-			<div class="container-fluid">
-				<p class="text-muted">Kerameikos.org data are made available under the <a href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License</a>. Any
-					rights in individual contents of the database are licensed under the <a href="http://opendatacommons.org/licenses/dbcl/1.0/">Database Contents
-						License</a></p>
-			</div>
+		<div class="container-fluid" id="footer">
+			<div class="row">
+				<div class="col-md-12">
+					<p class="text-muted">Kerameikos.org data are made available under the <a href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License</a>. Any
+						rights in individual contents of the database are licensed under the <a href="http://opendatacommons.org/licenses/dbcl/1.0/">Database Contents
+							License</a></p>
+				</div>
+			</div>			
 		</div>
 	</xsl:template>
 

@@ -8,13 +8,5 @@
 		<query>http://localhost:3030/ceramics/query</query>
 		<update>http://localhost:3030/ceramics/update</update>
 		<store>http://localhost:3030/ceramics/data</store>
-	</sparql>
-	<content>
-		<index>
-			<h1>Kerameikos.org</h1>
-			<p>Kerameikos.org is a collaborative project dedicated to defining the intellectual concepts of Greek pottery following the tenets of linked open
-				data. See the github account at <a href="https://github.com/kerameikos">https://github.com/kerameikos</a>, which contains repositories for the
-				RDF data and the publication framework. This framework could be applied to other linked data thesauri.</p>
-		</index>
-	</content>
+	</sparql>	
 </config>

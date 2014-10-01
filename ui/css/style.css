@@ -9,12 +9,9 @@ body {
 .navbar {
 	margin-bottom:0;
 }
-.row {
-	background-color:white;
-}
-
 .content {
 	padding-bottom:10px;
+	background-color:white;
 }
 /*
   ***************************************

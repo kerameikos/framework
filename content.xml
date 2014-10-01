@@ -1,12 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
 	<index>
+		<h1>Kerameikos.org</h1>
+		<p>Kerameikos.org is a collaborative project dedicated to defining the intellectual concepts of pottery following the tenets of linked open data and the formulation of an ontology for
+			representing and sharing ceramic data across disparate data systems. While the project is focused primarily on the definition of concepts within Greek black- and red-figure pottery,
+			Kerameikos.org is extensible toward the definition of concepts in other fields of pottery studies.</p>
+		<p>See the github account at <a href="https://github.com/kerameikos"
+				>https://github.com/kerameikos</a>, which contains repositories for the RDF data and the publication framework. This framework could be applied to other linked data thesauri.</p>
 		
-
-		
+		<h2>Scientific Committee</h2>
+		<p>The scientific committee includes both pottery and cultural heritage informatics experts.</p>
+		<ul>
+			<li>Vladimir Alexiev, Ontotext</li>
+			<li>Renee Gondek, George Washington University</li>
+			<li>Ethan Gruber, American Numismatic Society</li>
+			<li>Thomas Mannack, Oxford University</li>
+			<li>Aybuke Ozturk, Université Lumière Lyon 2</li>
+			<li>Tyler Jo Smith, University of Virginia</li>
+			<li>Anne-Violaine Szabados, Lexicon Iconographicum Mythologiae Classicae (LIMC-France)</li>
+			<li>Karsten Tolle, DBIS, University of Frankfurt</li>
+		</ul>
 	</index>
 	<apis>
-		<h1>Nomisma API Documentation</h1>
+		<h1>Kerameikos API Documentation</h1>
 		<table class="table">
 			<thead>
 				<tr>
@@ -22,10 +38,10 @@
 						<a href="#getLabel">getLabel</a>
 					</td>
 					<td>
-						<a href="api/getLabel?uri=http://nomisma.org/id/ar&amp;lang=fr">XML</a>
+						<a href="api/getLabel?uri=http://Kerameikos.org/id/ar&amp;lang=fr">XML</a>
 					</td>
 					<td>
-						<a href="api/getLabel?uri=http://nomisma.org/id/ar&amp;lang=fr&amp;format=json">JSON</a>
+						<a href="api/getLabel?uri=http://Kerameikos.org/id/ar&amp;lang=fr&amp;format=json">JSON</a>
 					</td>
 					<td/>
 				</tr>-->
@@ -46,21 +62,21 @@
 		<!--<div class="highlight">
 			<a name="getLabel"/>
 			<h2>Get Label</h2>
-			<p>Get the label of a Nomisma ID given its URI and language code.<br/>
+			<p>Get the label of a Kerameikos ID given its URI and language code.<br/>
 				<b>Webservice Type</b> : REST<br/>
-				<b>Url</b> : nomisma.org/getLabel?<br/>
-				<b>Parameters</b> : uri (of Nomisma ID), lang (two-letter ISO language code), format ('json' or 'xml', default 'xml')<br/>
+				<b>Url</b> : kerameikos.org/getLabel?<br/>
+				<b>Parameters</b> : uri (of Kerameikos ID), lang (two-letter ISO language code), format ('json' or 'xml', default 'xml')<br/>
 				<b>Result</b> : returns the label in given language, or English as default.<br/>
-				<b>Examples</b>: <a href="api/getLabel?uri=http://nomisma.org/id/ar&amp;lang=fr">api/getLabel?uri=http://nomisma.org/id/ar&amp;lang=fr</a>
+				<b>Examples</b>: <a href="api/getLabel?uri=http://kerameikos.org/id/ar&amp;lang=fr">api/getLabel?uri=http://kerameikos.org/id/ar&amp;lang=fr</a>
 			</p>
 		</div>-->
 		<div class="highlight">
 			<a name="getRdf"/>
 			<h2>Get RDF</h2>
-			<p>Aggregate RDF for Nomisma ids.<br/>
+			<p>Aggregate RDF for Kerameikos ids.<br/>
 				<b>Webservice Type</b> : REST<br/>
-				<b>Url</b> : nomisma.org/getRdf?<br/>
-				<b>Parameters</b> : identifiers (Nomisma ids divided by a pipe '|'), format ('xml', 'ttl', default 'xml')<br/>
+				<b>Url</b> : kerameikos.org/getRdf?<br/>
+				<b>Parameters</b> : identifiers (Kerameikos ids divided by a pipe '|'), format ('xml', 'ttl', default 'xml')<br/>
 				<b>Result</b> : RDF/XML, RDF/TTL. Other RDF formats will be supported eventually.<br/>
 				<b>Examples</b>: <a href="api/getRdf?identifiers=attica|black_figure|exekias">api/getRdf?identifiers=attica|black_figure|exekias</a>
 			</p>
