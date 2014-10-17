@@ -1,0 +1,124 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:fr="http://orbeon.org/oxf/xml/form-runner">
+	<head>
+		<title>Kerameikos: Invite Editor</title>
+		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css" />
+		<link rel="stylesheet" href="/fr/style/form-runner-bootstrap-override.css" type="text/css" />
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" />
+		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+		<link rel="shortcut icon" href="/ops/images/orbeon-icon-16.ico" />
+		<link rel="icon" href="/ops/images/orbeon-icon-16.png" type="image/png" />
+		<link rel="stylesheet" href="/apps/ceramics/xforms/css/style.css" />
+
+		<xforms:model>
+			<xforms:instance id="email" xxforms:exclude-result-prefixes="#all">
+				<email xmlns=""></email>
+			</xforms:instance>
+
+			<xforms:instance id="control-instance">
+				<controls xmlns="">
+					<invite-trigger>false</invite-trigger>
+				</controls>
+			</xforms:instance>
+			
+			<xforms:instance id="config" xxforms:exclude-result-prefixes="#all">
+				<xi:include href="../config.xml"></xi:include>
+			</xforms:instance>
+			
+			<xforms:instance id="email-input">
+				<message xmlns="">
+					<smtp-host>localhost</smtp-host>
+					<from>
+						<email/>
+						<name/>
+					</from>
+					<to>
+						<email/>
+						<name/>
+					</to>
+					<subject>Invitation to Kerameikos.org editors group</subject>
+					<body content-type="text/html">
+						<html>
+							<body>
+								<p>You have been invited to join the Kerameikos.org editors group. Please <a href="">click here</a> to set your password.</p>
+							</body>
+						</html>
+					</body>
+				</message>
+			</xforms:instance>
+			
+			<xforms:instance id="save-config">
+				<config xmlns="">
+					<url></url>
+					<content-type>text/plain</content-type>
+					<make-directories>false</make-directories>
+					<append>false</append>
+				</config>
+			</xforms:instance>
+			
+			<xforms:instance id="dump">
+				<dump xmlns=""/>
+			</xforms:instance>
+			
+			<!-- **************** VALIDATION ********************** -->
+			<xforms:bind nodeset="instance('email')" type="emailAddress"></xforms:bind>
+			
+			<xforms:bind nodeset="instance('control-instance')/invite-trigger" id="invite-trigger" type="xs:boolean" readonly=". != true()"/>
+
+			<xsd:schema xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+				<xsd:simpleType name="emailAddress">
+					<xsd:restriction base="xsd:string">
+						<xsd:pattern value="[^@]+@[^\.]+\..+"></xsd:pattern>
+					</xsd:restriction>
+				</xsd:simpleType>
+			</xsd:schema>
+			
+			<!-- **************** DYNAMIC VALIDATION CONTROLS ********************** -->
+			<xforms:action ev:event="xxforms-invalid" ev:observer="email">
+				<xforms:setvalue ref="instance('control-instance')/invite-trigger" value="false()"></xforms:setvalue>
+			</xforms:action>
+			
+			<xforms:action ev:event="xxforms-valid" ev:observer="email">
+				<xforms:setvalue ref="instance('control-instance')/invite-trigger" value="true()"></xforms:setvalue>
+			</xforms:action>
+		</xforms:model>
+	</head>
+
+
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<p><a href="../"><span class="glyphicon glyphicon-arrow-left"></span>Return to Admin</a></p>
+					<h1>Invite Editor</h1>
+					<div>
+						<xforms:input ref="instance('email')">
+							<xforms:label>Email</xforms:label>
+							<xforms:alert>Must conform to email address type.</xforms:alert>
+						</xforms:input>
+						<xforms:trigger bind="invite-trigger">
+							<xforms:label><span class="glyphicon glyphicon-envelope"></span>Send Invitation</xforms:label>
+							<xforms:action ev:event="DOMActivate">
+								<xforms:var name="hash" select="xforms:digest(instance('email'), 'SHA-256', 'hex')"/>
+								<!-- save authentication fragment -->
+								<xforms:setvalue ref="instance('save-config')/url" value="concat('oxf:/apps/ceramics/auth/', $hash, '.xml')"/>
+								<xforms:insert nodeset="instance('dump')"
+									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('email'), instance('save-config')), 'data')"/>
+								
+								<!-- send email -->
+								<xforms:setvalue ref="instance('email-input')/body/html/body/p/a/@href" value="concat(instance('config')/url, 'signup?auth=', $hash)"/>
+								<xforms:setvalue ref="instance('email-input')/from/email" value="instance('config')/admin_email_from"/>
+								<xforms:setvalue ref="instance('email-input')/from/name" value="instance('config')/admin_email_from"/>
+								<xforms:setvalue ref="instance('email-input')/to/email" value="instance('email')"/>
+								<xforms:setvalue ref="instance('email-input')/to/name" value="instance('email')"/>
+								<xforms:insert nodeset="instance('dump')"
+									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/send-email.xpl', 'email-input', instance('email-input'))"/>
+							</xforms:action>
+						</xforms:trigger>
+					</div>
+					<!--<fr:xforms-inspector></fr:xforms-inspector>-->
+				</div>
+			</div>
+		</div>
+	</body>
+</html>
