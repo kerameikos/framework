@@ -112,7 +112,7 @@
 								<xforms:setvalue ref="instance('email-input')/to/email" value="instance('email')"/>
 								<xforms:setvalue ref="instance('email-input')/to/name" value="instance('email')"/>
 								<xforms:insert nodeset="instance('dump')"
-									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/send-email.xpl', 'email-input', instance('email-input'))"/>
+									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/send-email.xpl', 'email-input', instance('email-input'), 'data')"/>
 							</xforms:action>
 						</xforms:trigger>
 					</div>
