@@ -17,16 +17,16 @@
 	<!-- ****************
 	* ADMIN INTERFACE *
 	***************** -->
-	<page path="/ceramics/admin/edit/" view="xforms/edit.xhtml"/>
-	<page path="/ceramics/admin/invite/" view="xforms/invite.xhtml"/>
-	<page path="/ceramics/admin/manage/" view="xforms/manage.xhtml"/>
-	<page path="/ceramics/admin/" view="xforms/admin.xhtml"/>
+	<page path="/kerameikos/admin/edit/" view="xforms/edit.xhtml"/>
+	<page path="/kerameikos/admin/invite/" view="xforms/invite.xhtml"/>
+	<page path="/kerameikos/admin/manage/" view="xforms/manage.xhtml"/>
+	<page path="/kerameikos/admin/" view="xforms/admin.xhtml"/>
 	
 	<!-- authentication -->
-	<page path="/ceramics/signup" view="xforms/signup.xhtml"/>
-	<page path="/ceramics/login" view="xforms/login.html"/>
-	<page path="/ceramics/login-failed" view="xforms/login-failed.html"/>
-	<page path="/ceramics/admin/logout">
+	<page path="/kerameikos/signup" view="xforms/signup.xhtml"/>
+	<page path="/kerameikos/login" view="xforms/login.html"/>
+	<page path="/kerameikos/login-failed" view="xforms/login-failed.html"/>
+	<page path="/kerameikos/admin/logout">
 		<action action="xpl/xforms/logout.xpl">
 			<result page="index"/>
 		</action>
@@ -39,38 +39,38 @@
 
 	<!-- **** SERIALIZATIONS **** -->
 	<!-- RDF -->
-	<page path="/ceramics/id/(.*)\.rdf" matcher="oxf:perl5-matcher" view="xpl/models/get-id.xpl"/>	
-	<page path="/ceramics/id/(.*)\.kml" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/kml.xpl"/>
-	<page path="/ceramics/id/(.*)\.ttl" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/ttl.xpl"/>	
-	<page path="/ceramics/id/(.*)\.html" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/html.xpl"/>
-	<page path="/ceramics/id/(.*)\.jsonld" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/json-ld.xpl"/>
+	<page path="/kerameikos/id/(.*)\.rdf" matcher="oxf:perl5-matcher" view="xpl/models/get-id.xpl"/>	
+	<page path="/kerameikos/id/(.*)\.kml" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/kml.xpl"/>
+	<page path="/kerameikos/id/(.*)\.ttl" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/ttl.xpl"/>	
+	<page path="/kerameikos/id/(.*)\.html" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/html.xpl"/>
+	<page path="/kerameikos/id/(.*)\.jsonld" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/json-ld.xpl"/>
 	
 	<!-- ONTOLOGY -->
-	<page path="/ceramics/ontology" model="xpl/models/get-ontology.xpl" view="xpl/page/ontology.xpl"/>
-	<page path="/ceramics/ontology.rdf" view="xpl/models/get-ontology.xpl"/>
-	<page path="/ceramics/ontology.ttl" model="xpl/models/get-ontology.xpl" view="xpl/serializations/rdf/ttl.xpl"/>
+	<page path="/kerameikos/ontology" model="xpl/models/get-ontology.xpl" view="xpl/page/ontology.xpl"/>
+	<page path="/kerameikos/ontology.rdf" view="xpl/models/get-ontology.xpl"/>
+	<page path="/kerameikos/ontology.ttl" model="xpl/models/get-ontology.xpl" view="xpl/serializations/rdf/ttl.xpl"/>
 	
 	<!-- Solr -->
-	<page path="/ceramics/id/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/html.xpl"/>	
-	<page path="/ceramics/feed/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/atom.xpl"/>
+	<page path="/kerameikos/id/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/html.xpl"/>	
+	<page path="/kerameikos/feed/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/atom.xpl"/>
 	
 	<!-- SPARQL wrapper (URL generator) -->
-	<page path="/ceramics/query" view="xpl/http/conneg-sparql.xpl"/>
+	<page path="/kerameikos/query" view="xpl/http/conneg-sparql.xpl"/>
 	
 	<!-- **** PAGES **** -->
-	<page path="/ceramics/apis" view="xpl/page/apis.xpl"/>
-	<page path="/ceramics/sparql" view="xpl/page/sparql.xpl"/>
-	<page path="/ceramics/" view="xpl/page/index.xpl"/>
+	<page path="/kerameikos/apis" view="xpl/page/apis.xpl"/>
+	<page path="/kerameikos/sparql" view="xpl/page/sparql.xpl"/>
+	<page path="/kerameikos/" view="xpl/page/index.xpl"/>
 	
 	<!-- **** APIs **** -->
-	<page path="/ceramics/api/get" model="xpl/models/get-id.xpl" view="xpl/api/get.xpl"/>
-	<page path="/ceramics/api/getRdf" model="xpl/models/aggregate-ids.xpl" view="xpl/api/getRdf.xpl"/>
+	<page path="/kerameikos/api/get" model="xpl/models/get-id.xpl" view="xpl/api/get.xpl"/>
+	<page path="/kerameikos/api/getRdf" model="xpl/models/aggregate-ids.xpl" view="xpl/api/getRdf.xpl"/>
 	
 	<!-- **** DATA DUMPS **** -->
-	<page path="/ceramics/kerameikos.org.xml" view="dump/kerameikos.org.xml"/>
+	<page path="/kerameikos/kerameikos.org.xml" view="dump/kerameikos.org.xml"/>
 	
 	<!-- 303 redirect from official URI to .html -->
-	<page path="/ceramics/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/http/conneg-id.xpl"/>
+	<page path="/kerameikos/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/http/conneg-id.xpl"/>
 
 	<epilogue url="oxf:/config/epilogue.xpl"/>
 </config>
