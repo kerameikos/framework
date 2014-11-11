@@ -13,7 +13,7 @@
 	
 	<p:processor name="oxf:unsafe-xslt">		
 		<p:input name="data" href="#data"/>		
-		<p:input name="config" href="../../../ui/xslt/serializations/rdf/ttl.xsl"/>
+		<p:input name="config" href="../../../../ui/xslt/serializations/rdf/json-ld.xsl"/>
 		<p:output name="data" id="model"/>		
 	</p:processor>
 
@@ -21,7 +21,7 @@
 		<p:input name="data" href="#model"/>
 		<p:input name="config">
 			<config>
-				<content-type>text/turtle</content-type>
+				<content-type>application/ld+json</content-type>
 				<encoding>utf-8</encoding>
 			</config>
 		</p:input>

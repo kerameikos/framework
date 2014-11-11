@@ -12,7 +12,7 @@
 
     The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
 -->
-<config xmlns="http://www.orbeon.com/oxf/controller" xmlns:oxf="http://www.orbeon.com/oxf/processors">
+<config xmlns="http://www.orbeon.com/oxf/controller" xmlns:oxf="http://www.orbeon.com/oxf/processors" matcher="oxf:perl5-matcher">
 
 	<!-- ****************
 	* ADMIN INTERFACE *
@@ -39,38 +39,38 @@
 
 	<!-- **** SERIALIZATIONS **** -->
 	<!-- RDF -->
-	<page path="/kerameikos/id/(.*)\.rdf" matcher="oxf:perl5-matcher" view="xpl/models/get-id.xpl"/>	
-	<page path="/kerameikos/id/(.*)\.kml" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/kml.xpl"/>
-	<page path="/kerameikos/id/(.*)\.ttl" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/ttl.xpl"/>	
-	<page path="/kerameikos/id/(.*)\.html" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/html.xpl"/>
-	<page path="/kerameikos/id/(.*)\.jsonld" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/serializations/rdf/json-ld.xpl"/>
+	<page path="/kerameikos/id/(.*)\.rdf" view="xpl/models/get-id.xpl"/>	
+	<page path="/kerameikos/id/(.*)\.kml" model="xpl/models/get-id.xpl" view="xpl/views/serializations/rdf/kml.xpl"/>
+	<page path="/kerameikos/id/(.*)\.ttl" model="xpl/models/get-id.xpl" view="xpl/views/serializations/rdf/ttl.xpl"/>	
+	<page path="/kerameikos/id/(.*)\.html" model="xpl/models/get-id.xpl" view="xpl/views/serializations/rdf/html.xpl"/>
+	<page path="/kerameikos/id/(.*)\.jsonld" model="xpl/models/get-id.xpl" view="xpl/views/serializations/rdf/json-ld.xpl"/>
 	
 	<!-- ONTOLOGY -->
-	<page path="/kerameikos/ontology" model="xpl/models/get-ontology.xpl" view="xpl/page/ontology.xpl"/>
+	<page path="/kerameikos/ontology" model="xpl/models/get-ontology.xpl" view="xpl/views/pages/ontology.xpl"/>
 	<page path="/kerameikos/ontology.rdf" view="xpl/models/get-ontology.xpl"/>
-	<page path="/kerameikos/ontology.ttl" model="xpl/models/get-ontology.xpl" view="xpl/serializations/rdf/ttl.xpl"/>
+	<page path="/kerameikos/ontology.ttl" model="xpl/models/get-ontology.xpl" view="xpl/views/serializations/rdf/ttl.xpl"/>
 	
 	<!-- Solr -->
-	<page path="/kerameikos/id/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/html.xpl"/>	
-	<page path="/kerameikos/feed/" model="xpl/models/solr-query.xpl" view="xpl/serializations/solr/atom.xpl"/>
+	<page path="/kerameikos/id/" model="xpl/models/solr-query.xpl" view="xpl/controllers/conneg-results.xpl"/>	
+	<page path="/kerameikos/feed/" model="xpl/models/solr-query.xpl" view="xpl/views/serializations/solr/atom.xpl"/>
 	
 	<!-- SPARQL wrapper (URL generator) -->
-	<page path="/kerameikos/query" view="xpl/http/conneg-sparql.xpl"/>
+	<page path="/kerameikos/query" view="xpl/controllers/conneg-sparql.xpl"/>
 	
 	<!-- **** PAGES **** -->
-	<page path="/kerameikos/apis" view="xpl/page/apis.xpl"/>
-	<page path="/kerameikos/sparql" view="xpl/page/sparql.xpl"/>
-	<page path="/kerameikos/" view="xpl/page/index.xpl"/>
+	<page path="/kerameikos/apis" view="xpl/views/pages/apis.xpl"/>
+	<page path="/kerameikos/sparql" view="xpl/views/pages/sparql.xpl"/>
+	<page path="/kerameikos/" view="xpl/views/pages/index.xpl"/>
 	
 	<!-- **** APIs **** -->
-	<page path="/kerameikos/api/get" model="xpl/models/get-id.xpl" view="xpl/api/get.xpl"/>
-	<page path="/kerameikos/api/getRdf" model="xpl/models/aggregate-ids.xpl" view="xpl/api/getRdf.xpl"/>
+	<page path="/kerameikos/api/get" model="xpl/models/get-id.xpl" view="xpl/views/apis/get.xpl"/>
+	<page path="/kerameikos/api/getRdf" model="xpl/models/aggregate-ids.xpl" view="xpl/views/apis/getRdf.xpl"/>
 	
 	<!-- **** DATA DUMPS **** -->
 	<page path="/kerameikos/kerameikos.org.xml" view="dump/kerameikos.org.xml"/>
 	
-	<!-- 303 redirect from official URI to .html -->
-	<page path="/kerameikos/id/(.*)" matcher="oxf:perl5-matcher" model="xpl/models/get-id.xpl" view="xpl/http/conneg-id.xpl"/>
+	<!-- 303 redirect -->
+	<page path="/kerameikos/id/(.*)" model="xpl/models/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
 
 	<epilogue url="oxf:/config/epilogue.xpl"/>
 </config>

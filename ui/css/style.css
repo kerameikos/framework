@@ -13,6 +13,13 @@ body {
 	padding-bottom:10px;
 	background-color:white;
 }
+.highlight{
+	background-color:#F8F8F8;
+	border:1px solid #E7E7E7;
+	border-radius:4px;
+	margin-bottom:14px;
+	padding:9px 14px;
+}
 /*
   ***************************************
   FOOTER

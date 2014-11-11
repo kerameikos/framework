@@ -179,7 +179,7 @@
 		<p:when test="content-type='html'">
 			<p:processor name="oxf:pipeline">
 				<p:input name="data" href="#model"/>
-				<p:input name="config" href="../serializations/sparql/html.xpl"/>		
+				<p:input name="config" href="../views/serializations/sparql/html.xpl"/>		
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>

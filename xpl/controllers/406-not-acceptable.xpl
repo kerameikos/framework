@@ -51,10 +51,10 @@
 							<xsl:when test="string-length(substring-after(/request/request-url, 'id/')) &gt; 0">
 								<header>
 									<name>Accept</name>
-									<value>text/html, application/rdf+xml, text/turtle, application/vnd.google-earth.kml+xml, application/json</value>
+									<value>text/html, application/rdf+xml, text/turtle, application/vnd.google-earth.kml+xml, application/ld+json</value>
 								</header>
 							</xsl:when>
-							<xsl:when test="string-length(substring-after(/request/request-url, 'query/')) &gt; 0">
+							<xsl:when test="contains(/request/request-url, '/query')">
 								<header>
 									<name>Accept</name>
 									<value>text/html, text/csv, text/plain, application/sparql-results+xml, application/sparql-results+json</value>

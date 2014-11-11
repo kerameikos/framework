@@ -42,8 +42,8 @@
 	
 	<p:processor name="oxf:unsafe-xslt">
 		<p:input name="request" href="#request"/>
-		<p:input name="data" href="aggregate('content', #data, ../../config.xml)"/>
-		<p:input name="config" href="../../ui/xslt/apis/get.xsl"/>
+		<p:input name="data" href="aggregate('content', #data, ../../../config.xml)"/>
+		<p:input name="config" href="../../../ui/xslt/apis/get.xsl"/>
 		<p:output name="data" id="model"/>
 	</p:processor>
 	

@@ -34,6 +34,7 @@
 						<xsl:choose>
 							<xsl:when test="$content-type='application/rdf+xml' or $content-type='application/xml' or $content-type='text/xml'">xml</xsl:when>
 							<xsl:when test="$content-type='text/turtle'">turtle</xsl:when>
+							<xsl:when test="$content-type='ld+json'">json-ld</xsl:when>
 							<xsl:otherwise>html</xsl:otherwise>
 						</xsl:choose>
 					</content-type>
@@ -46,21 +47,28 @@
 	<p:choose href="#conneg-config">
 		<p:when test="content-type='xml'">
 			<p:processor name="oxf:pipeline">
-				<p:input name="config" href="../models/get-ontology.xpl"/>		
+				<p:input name="config" href="../../models/get-ontology.xpl"/>		
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>
 		<p:when test="content-type='turtle'">
 			<p:processor name="oxf:pipeline">
-				<p:input name="config" href="../serializations/rdf/ttl.xpl"/>	
+				<p:input name="config" href="../../serializations/rdf/ttl.xpl"/>	
+				<p:input name="data" href="#data"/>				
+				<p:output name="data" ref="data"/>
+			</p:processor>
+		</p:when>
+		<p:when test="content-type='json-ld'">
+			<p:processor name="oxf:pipeline">
+				<p:input name="config" href="../../serializations/rdf/json-ld.xpl"/>	
 				<p:input name="data" href="#data"/>				
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>
 		<p:otherwise>
 			<p:processor name="oxf:unsafe-xslt">
-				<p:input name="data" href="aggregate('content', #data, ../../config.xml)"/>		
-				<p:input name="config" href="../../ui/xslt/pages/ontology.xsl"/>
+				<p:input name="data" href="aggregate('content', #data, ../../../config.xml)"/>		
+				<p:input name="config" href="../../../ui/xslt/pages/ontology.xsl"/>
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:otherwise>

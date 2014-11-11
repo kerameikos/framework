@@ -55,15 +55,15 @@
 		<p:when test="content-type='html'">
 			<p:processor name="oxf:unsafe-xslt">
 				<p:input name="request" href="#request"/>
-				<p:input name="data" href="aggregate('content', #data, ../../../config.xml)"/>
-				<p:input name="config" href="../../../ui/xslt/serializations/solr/html.xsl"/>
+				<p:input name="data" href="aggregate('content', #data, ../../../../config.xml)"/>
+				<p:input name="config" href="../../../../ui/xslt/serializations/solr/html.xsl"/>
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>
 		<p:otherwise>
 			<p:processor name="oxf:pipeline">
 				<p:input name="data" href="#data"/>
-				<p:input name="config" href="../../http/406-not-acceptable.xpl"/>		
+				<p:input name="config" href="../../../controllers/406-not-acceptable.xpl"/>		
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:otherwise>

@@ -25,7 +25,7 @@
 				<xsl:template match="/">
 					<content-type>
 						<xsl:choose>
-							<xsl:when test="$content-type='application/json'">json-ld</xsl:when>
+							<xsl:when test="$content-type='application/ld+json'">json-ld</xsl:when>
 							<xsl:when test="$content-type='application/vnd.google-earth.kml+xml'">kml</xsl:when>
 							<xsl:when test="$content-type='application/rdf+xml' or $content-type='application/xml' or $content-type='text/xml'">xml</xsl:when>
 							<xsl:when test="$content-type='text/turtle'">turtle</xsl:when>
@@ -49,28 +49,28 @@
 		</p:when>
 		<p:when test="content-type='json-ld'">
 			<p:processor name="oxf:pipeline">
-				<p:input name="config" href="../serializations/rdf/json-ld.xpl"/>	
+				<p:input name="config" href="../views/serializations/rdf/json-ld.xpl"/>	
 				<p:input name="data" href="#data"/>				
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>
 		<p:when test="content-type='turtle'">
 			<p:processor name="oxf:pipeline">
-				<p:input name="config" href="../serializations/rdf/ttl.xpl"/>
+				<p:input name="config" href="../views/serializations/rdf/ttl.xpl"/>
 				<p:input name="data" href="#data"/>				
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>
 		<p:when test="content-type='kml'">
 			<p:processor name="oxf:pipeline">
-				<p:input name="config" href="../serializations/rdf/kml.xpl"/>
+				<p:input name="config" href="../views/serializations/rdf/kml.xpl"/>
 				<p:input name="data" href="#data"/>		
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>
 		<p:when test="content-type='html'">
 			<p:processor name="oxf:pipeline">
-				<p:input name="config" href="../serializations/rdf/html.xpl"/>
+				<p:input name="config" href="../views/serializations/rdf/html.xpl"/>
 				<p:input name="data" href="#data"/>		
 				<p:output name="data" ref="data"/>
 			</p:processor>

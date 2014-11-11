@@ -30,6 +30,7 @@
 					<mode>
 						<xsl:choose>
 							<xsl:when test="$format='ttl'">ttl</xsl:when>
+							<xsl:when test="$format='json'">json</xsl:when>
 							<xsl:otherwise>xml</xsl:otherwise>
 						</xsl:choose>
 					</mode>
@@ -43,7 +44,7 @@
 		<p:when test="mode='ttl'">
 			<p:processor name="oxf:unsafe-xslt">		
 				<p:input name="data" href="#data"/>		
-				<p:input name="config" href="../../ui/xslt/serializations/rdf/ttl.xsl"/>
+				<p:input name="config" href="../../../ui/xslt/serializations/rdf/ttl.xsl"/>
 				<p:output name="data" id="model"/>		
 			</p:processor>
 			
@@ -52,6 +53,24 @@
 				<p:input name="config">
 					<config>
 						<content-type>text/turtle</content-type>
+						<encoding>utf-8</encoding>
+					</config>
+				</p:input>
+				<p:output name="data" ref="data"/>
+			</p:processor>
+		</p:when>
+		<p:when test="mode='json'">
+			<p:processor name="oxf:unsafe-xslt">		
+				<p:input name="data" href="#data"/>		
+				<p:input name="config" href="../../../ui/xslt/serializations/rdf/json-ld.xsl"/>
+				<p:output name="data" id="model"/>		
+			</p:processor>
+			
+			<p:processor name="oxf:text-converter">
+				<p:input name="data" href="#model"/>
+				<p:input name="config">
+					<config>
+						<content-type>application/ld+json</content-type>
 						<encoding>utf-8</encoding>
 					</config>
 				</p:input>
