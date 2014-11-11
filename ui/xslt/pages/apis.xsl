@@ -181,8 +181,8 @@
 									<tr>
 										<td>HTML</td>
 										<td>
-											<a href="{concat(/content/config/url, 'results')}">
-												<xsl:value-of select="concat(/content/config/url, 'results')"/>
+											<a href="{concat(/content/config/url, 'id/')}">
+												<xsl:value-of select="concat(/content/config/url, 'id/')"/>
 											</a>
 										</td>
 										<td>
