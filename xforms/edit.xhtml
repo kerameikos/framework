@@ -12,12 +12,12 @@
 		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
 		<link rel="shortcut icon" href="/ops/images/orbeon-icon-16.ico"/>
 		<link rel="icon" href="/ops/images/orbeon-icon-16.png" type="image/png"/>
-		<link rel="stylesheet" href="/apps/ceramics/xforms/css/style.css"/>
+		<link rel="stylesheet" href="/apps/kerameikos/xforms/css/style.css"/>
 
 		<!-- mapping -->
 		<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"/>
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.9&amp;sensor=false"/>
-		<script type="text/javascript" src="/apps/ceramics/xforms/javascript/georeference.js"/>
+		<script type="text/javascript" src="/apps/kerameikos/xforms/javascript/georeference.js"/>
 
 		<xforms:model>
 			<xforms:instance id="doc" xxforms:exclude-result-prefixes="#all">
@@ -272,7 +272,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 					<xforms:setvalue ref="instance('control-instance')/id" value="xxforms:get-request-parameter('id')"/>
 					<xforms:setvalue ref="instance('control-instance')/new_id" value="false()"/>
 					<xforms:setvalue ref="instance('load-config')/url" value="concat('file://', instance('config')/id_path, '/', xxforms:get-request-parameter('id'), '.xml')"/>
-					<xforms:insert nodeset="instance('doc')" origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/load-id.xpl', 'file', instance('load-config'), 'data')"/>
+					<xforms:insert nodeset="instance('doc')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/load-id.xpl', 'file', instance('load-config'), 'data')"/>
 
 					<!-- set geo values -->
 					<xforms:setvalue ref="instance('control-instance')/geo/lat" value="instance('doc')/geo:SpatialThing/geo:lat"/>
@@ -478,7 +478,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 								<!-- save file back to disk -->
 								<xforms:setvalue ref="instance('save-config')/url" value="concat('file://', instance('config')/id_path, '/', instance('control-instance')/id, '.xml')"/>
 								<xforms:insert nodeset="instance('dump')"
-									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('doc'), instance('save-config')), 'data')"/>
+									origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('doc'), instance('save-config')), 'data')"/>
 								<!-- delete graphs from triplestore -->
 								<xforms:action xxforms:iterate="instance('doc')/*">
 									<xforms:setvalue ref="instance('sparqlUpdate')" value="replace(instance('sparqlUpdate-template'), 'URI', context()/@rdf:about)"/>
@@ -486,7 +486,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 								</xforms:action>
 								<xforms:send submission="post-new"/>
 								<!-- post to Solr -->
-								<xforms:insert nodeset="instance('addIndex')" origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/serializations/rdf/solr.xpl', 'data', instance('doc'), 'data')"/>
+								<xforms:insert nodeset="instance('addIndex')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/serializations/rdf/solr.xpl', 'data', instance('doc'), 'data')"/>
 								<xforms:send submission="post-solr-doc"/>
 							</xforms:action>
 						</xforms:trigger>

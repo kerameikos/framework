@@ -11,7 +11,7 @@
 		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 		<link rel="shortcut icon" href="/ops/images/orbeon-icon-16.ico" />
 		<link rel="icon" href="/ops/images/orbeon-icon-16.png" type="image/png" />
-		<link rel="stylesheet" href="/apps/ceramics/xforms/css/style.css" />
+		<link rel="stylesheet" href="/apps/kerameikos/xforms/css/style.css" />
 
 		<xforms:model>
 			<xforms:instance id="form" xxforms:exclude-result-prefixes="#all">
@@ -97,8 +97,8 @@
 			<!-- **************** MODEL-CONSTRUCT-DONE ********************** -->
 			<xforms:action ev:event="xforms-model-construct-done">
 				<xforms:action if="string(xxforms:get-request-parameter('auth'))">
-					<xforms:setvalue ref="instance('load-config')/url" value="concat('oxf:/apps/ceramics/auth/', xxforms:get-request-parameter('auth'), '.xml')"></xforms:setvalue>
-					<xforms:insert nodeset="instance('email')" origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/load-auth.xpl', 'file', instance('load-config'), 'data')"></xforms:insert>
+					<xforms:setvalue ref="instance('load-config')/url" value="concat('oxf:/apps/kerameikos/auth/', xxforms:get-request-parameter('auth'), '.xml')"></xforms:setvalue>
+					<xforms:insert nodeset="instance('email')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/load-auth.xpl', 'file', instance('load-config'), 'data')"></xforms:insert>
 
 					<!-- if loading the XML does not result in an error -->
 					<xforms:action if="instance('email')/local-name() = 'email'">
@@ -165,7 +165,7 @@
 									<xforms:setvalue ref="instance('email-input')/to/email" value="instance('config')/admin_email_to"/>
 									<xforms:setvalue ref="instance('email-input')/to/name" value="instance('config')/admin_email_to"/>
 									<xforms:insert nodeset="instance('dump')"
-										origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/send-email.xpl', 'email-input', instance('email-input'), 'data')"/>
+										origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/send-email.xpl', 'email-input', instance('email-input'), 'data')"/>
 									<!-- toggle success case -->
 									<xforms:toggle case="success"/>
 								</xforms:action>

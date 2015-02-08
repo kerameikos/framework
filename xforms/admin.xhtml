@@ -13,7 +13,7 @@
 		<link rel="icon" href="/ops/images/orbeon-icon-16.png" type="image/png"/>
 		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
 		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
-		<link rel="stylesheet" href="/apps/ceramics/xforms/css/style.css"/>
+		<link rel="stylesheet" href="/apps/kerameikos/xforms/css/style.css"/>
 
 		<xforms:model>
 			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="#all">
@@ -499,9 +499,9 @@
 				<fr:label>Yes</fr:label>
 				<xforms:action ev:event="DOMActivate">
 					<xforms:setvalue ref="instance('save-rdfxml-config')/url" value="concat('file://', instance('config')/dump_path, '/kerameikos.org.rdf')"/>
-					<xforms:insert nodeset="instance('rdf')" origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/models/aggregate-all.xpl', 'config-xml', instance('config'), 'data')"/>
+					<xforms:insert nodeset="instance('rdf')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/models/aggregate-all.xpl', 'config-xml', instance('config'), 'data')"/>
 					<xforms:insert nodeset="instance('dump')"
-						origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/save-rdfxml.xpl', ('rdf', 'configuration'), (instance('rdf'), instance('save-rdfxml-config')), 'data')"
+						origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-rdfxml.xpl', ('rdf', 'configuration'), (instance('rdf'), instance('save-rdfxml-config')), 'data')"
 					/>
 				</xforms:action>
 			</fr:positive-choice>
@@ -518,8 +518,8 @@
 					<!-- delete all objects -->
 					<xforms:send submission="delete-all"/>
 					<!-- gather RDF dump -->
-					<xforms:insert nodeset="instance('rdf')" origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/models/aggregate-all.xpl', 'config-xml', instance('config'), 'data')"/>
-					<xforms:insert nodeset="instance('addIndex')" origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
+					<xforms:insert nodeset="instance('rdf')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/models/aggregate-all.xpl', 'config-xml', instance('config'), 'data')"/>
+					<xforms:insert nodeset="instance('addIndex')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
 					<xforms:send submission="post-to-solr"/>
 					<xforms:send submission="optimize" ev:event="xforms-submit-done"/>
 				</xforms:action>

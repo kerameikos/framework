@@ -8,7 +8,7 @@
 		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
 		<link rel="shortcut icon" href="/ops/images/orbeon-icon-16.ico" />
 		<link rel="icon" href="/ops/images/orbeon-icon-16.png" type="image/png" />
-		<link rel="stylesheet" href="/apps/ceramics/xforms/css/style.css" />
+		<link rel="stylesheet" href="/apps/kerameikos/xforms/css/style.css" />
 
 		<xforms:model>
 			<xforms:instance id="email" xxforms:exclude-result-prefixes="#all">
@@ -101,9 +101,9 @@
 							<xforms:action ev:event="DOMActivate">
 								<xforms:var name="hash" select="xforms:digest(instance('email'), 'SHA-256', 'hex')"/>
 								<!-- save authentication fragment -->
-								<xforms:setvalue ref="instance('save-config')/url" value="concat('oxf:/apps/ceramics/auth/', $hash, '.xml')"/>
+								<xforms:setvalue ref="instance('save-config')/url" value="concat('oxf:/apps/kerameikos/auth/', $hash, '.xml')"/>
 								<xforms:insert nodeset="instance('dump')"
-									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('email'), instance('save-config')), 'data')"/>
+									origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('email'), instance('save-config')), 'data')"/>
 								
 								<!-- send email -->
 								<xforms:setvalue ref="instance('email-input')/body/html/body/p/a/@href" value="concat(instance('config')/url, 'signup?auth=', $hash)"/>
@@ -112,7 +112,7 @@
 								<xforms:setvalue ref="instance('email-input')/to/email" value="instance('email')"/>
 								<xforms:setvalue ref="instance('email-input')/to/name" value="instance('email')"/>
 								<xforms:insert nodeset="instance('dump')"
-									origin="xxforms:call-xpl('oxf:/apps/ceramics/xpl/xforms/send-email.xpl', 'email-input', instance('email-input'), 'data')"/>
+									origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/send-email.xpl', 'email-input', instance('email-input'), 'data')"/>
 							</xforms:action>
 						</xforms:trigger>
 					</div>
