@@ -3,6 +3,7 @@
 	<title>Kerameikos.org</title>
 	<url>http://localhost:8080/orbeon/kerameikos/</url>
 	<solr_published>http://localhost:8080/solr/kerameikos/</solr_published>
+	<solr_fuseki>http://localhost:8080/solr/kerameikos-fuseki/</solr_fuseki>
 	<id_path>/usr/local/projects/ceramic-ids/id</id_path>
 	<ontology_path>/usr/local/projects/ontology/</ontology_path>
 	<sparql>
