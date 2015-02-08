@@ -457,7 +457,7 @@
 							</xforms:group>
 						</xforms:group>
 					</xforms:group>
-					<fr:xforms-inspector/>
+<!--					<fr:xforms-inspector/>-->
 				</div>
 				<div class="col-md-3">
 					<h2>Actions</h2>
@@ -519,7 +519,7 @@
 					<xforms:send submission="delete-all"/>
 					<!-- gather RDF dump -->
 					<xforms:insert nodeset="instance('rdf')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/models/aggregate-all.xpl', 'config-xml', instance('config'), 'data')"/>
-					<xforms:insert nodeset="instance('addIndex')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
+					<xforms:insert nodeset="instance('addIndex')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/erializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
 					<xforms:send submission="post-to-solr"/>
 					<xforms:send submission="optimize" ev:event="xforms-submit-done"/>
 				</xforms:action>

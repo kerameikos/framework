@@ -486,7 +486,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 								</xforms:action>
 								<xforms:send submission="post-new"/>
 								<!-- post to Solr -->
-								<xforms:insert nodeset="instance('addIndex')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/serializations/rdf/solr.xpl', 'data', instance('doc'), 'data')"/>
+								<xforms:insert nodeset="instance('addIndex')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('doc'), 'data')"/>
 								<xforms:send submission="post-solr-doc"/>
 							</xforms:action>
 						</xforms:trigger>
