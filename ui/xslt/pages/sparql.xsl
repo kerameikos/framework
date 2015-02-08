@@ -39,9 +39,10 @@ PREFIX ecrm:	<http://erlangen-crm.org/current/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX spatial: <http://jena.apache.org/spatial#>
 
 SELECT * WHERE {
-?s ?p ?o
+  ?s ?p ?o
 } LIMIT 100]]></xsl:variable>
 
 		<div class="container-fluid content">

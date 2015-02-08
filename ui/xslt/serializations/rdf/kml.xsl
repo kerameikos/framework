@@ -30,7 +30,7 @@
 						<outline>1</outline>
 					</PolyStyle>
 				</Style>
-				<xsl:if test="$type='ecrm:E53_Place'">
+				<xsl:if test="$type='kon:ProductionPlace'">
 					<xsl:apply-templates select="descendant::geo:SpatialThing"/>
 				</xsl:if>
 				<xsl:if test="$type='foaf:Person' and descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">

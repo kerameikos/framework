@@ -33,7 +33,7 @@
 			</class>
 			<class>
 				<label>Place</label>
-				<type>ecrm:E53_Place</type>
+				<type>kon:ProductionPlace</type>
 			</class>
 			<class>
 				<label>Shape</label>
@@ -99,7 +99,7 @@ UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
 ?object ecrm:P45_consists_of ?matches}]]>
 				</xsl:when>
-				<xsl:when test="$type='ecrm:E53_Place'">
+				<xsl:when test="$type='kon:ProductionPlace'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
 {?object ecrm:P108i_was_produced_by ?prod .
 ?prod ecrm:P7_took_place_at kid:RDFID}
@@ -260,7 +260,7 @@ ORDER BY ?label]]>
 				<xsl:when test="$category='ecrm:E57_Material'">
 					<![CDATA[?object ecrm:P45_consists_of ?target]]>
 				</xsl:when>
-				<xsl:when test="$category='ecrm:E53_Place'">
+				<xsl:when test="$category='kon:ProductionPlace'">
 					<![CDATA[?object ecrm:P108i_was_produced_by ?prod .
 ?prod ecrm:P7_took_place_at ?target]]>
 				</xsl:when>
@@ -311,7 +311,7 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 UNION {kid:RDFID skos:exactMatch ?matches .
 ?object ecrm:P45_consists_of ?matches}]]>
 				</xsl:when>
-				<xsl:when test="$type='ecrm:E53_Place'">
+				<xsl:when test="$type='kon:ProductionPlace'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
 {?object ecrm:P108i_was_produced_by ?prod .
 ?prod ecrm:P7_took_place_at kid:RDFID}

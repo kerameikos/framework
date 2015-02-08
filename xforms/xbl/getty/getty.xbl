@@ -17,7 +17,7 @@
 								<xforms:setvalue ref="instance('control-instance')/getty-search" value="$binding/skos:prefLabel[@xml:lang='en']"/>
 								<xforms:var name="search_text" select="string-join(tokenize(instance('control-instance')/getty-search, ' '), ' AND ')"/>
 								<xforms:var name="type" select="$binding/name()"/>
-								<xforms:var name="scheme" select="if ($type='ecrm:E53_Place') then 'tgn' else 'aat'"/>
+								<xforms:var name="scheme" select="if ($type='kon:ProductionPlace') then 'tgn' else 'aat'"/>
 								<xforms:action if="$scheme = 'aat'">
 									<xforms:setvalue ref="instance('sparqlQuery')"
 										value="normalize-space(replace(replace(instance('getty-aat-template'), 'SEARCH_QUERY', $search_text), 'FACET', instance('getty-facets')//facet[@type=$type]/text()))"/>
@@ -48,7 +48,7 @@
 									<xxforms:hide dialog="getty-search-dialog"/>g
 									<xforms:var name="search_text" select="string-join(tokenize(instance('control-instance')/getty-search, ' '), ' AND ')"/>
 									<xforms:var name="type" select="$binding/name()"/>
-									<xforms:var name="scheme" select="if ($type='ecrm:E53_Place') then 'tgn' else 'aat'"/>
+									<xforms:var name="scheme" select="if ($type='kon:ProductionPlace') then 'tgn' else 'aat'"/>
 									<xforms:action if="$scheme = 'aat'">
 										<xforms:setvalue ref="instance('sparqlQuery')"
 											value="normalize-space(replace(replace(instance('getty-aat-template'), 'SEARCH_QUERY', $search_text), 'FACET', instance('getty-facets')//facet[@type=$type]/text()))"/>

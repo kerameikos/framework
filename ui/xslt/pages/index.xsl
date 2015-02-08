@@ -32,7 +32,17 @@
 					<div>
 						<h3>Data Export</h3>
 						<h4>Kerameikos Linked Data</h4>
-						<a href="kerameikos.org.xml">RDF/XML</a>
+						<ul>
+							<li>
+								<a href="kerameikos.org.rdf">RDF/XML</a>
+							</li>
+							<li>
+								<a href="kerameikos.org.ttl">Turtle</a>
+							</li>
+							<li>
+								<a href="kerameikos.org.jsonld">JSON-LD</a>
+							</li>
+						</ul>
 					</div>
 					<div>
 						<h3>Atom Feed</h3>
@@ -40,7 +50,7 @@
 							<img src="{$display_path}ui/images/atom-large.png"/>
 						</a>
 					</div>
-					
+
 				</div>
 			</div>
 		</div>
