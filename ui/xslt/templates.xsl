@@ -17,7 +17,7 @@
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
 						<li>
-							<a href="{$display_path}id/">Browse</a>
+							<a href="{$display_path}browse/">Browse</a>
 						</li>
 						<li>
 							<a href="{$display_path}ontology">Ontology</a>
