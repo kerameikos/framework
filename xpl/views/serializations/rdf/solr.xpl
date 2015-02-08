@@ -23,7 +23,7 @@
 	<p:processor name="oxf:unsafe-xslt">
 		<p:input name="request" href="#request"/>
 		<p:input name="data" href="#data"/>		
-		<p:input name="config" href="../../../../xforms/xslt/solr.xsl"/>
+		<p:input name="config" href="../../../../ui/xslt/serializations/rdf/solr.xsl"/>
 		<p:output name="data" ref="data"/>
 	</p:processor>
 
