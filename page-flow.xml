@@ -44,7 +44,6 @@
 	<page path="/kerameikos/id/(.*)\.ttl" model="xpl/models/get-id.xpl" view="xpl/views/serializations/rdf/ttl.xpl"/>	
 	<page path="/kerameikos/id/(.*)\.html" model="xpl/models/get-id.xpl" view="xpl/views/serializations/rdf/html.xpl"/>
 	<page path="/kerameikos/id/(.*)\.jsonld" model="xpl/models/get-id.xpl" view="xpl/views/serializations/rdf/json-ld.xpl"/>
-	<page path="/kerameikos/id/(.*)" model="xpl/models/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
 	
 	<!-- ONTOLOGY -->
 	<page path="/kerameikos/ontology" model="xpl/models/get-ontology.xpl" view="xpl/views/pages/ontology.xpl"/>
@@ -72,7 +71,10 @@
 	<!--<page path="/kerameikos/pelagios.rdf" model="xpl/models/solr/pelagios.xpl" view="xpl/views/serializations/solr/pelagios.xpl"/>-->
 	<page path="/kerameikos/kerameikos.org.rdf" view="xpl/controllers/serialize-dump.xpl"/>
 	<page path="/kerameikos/kerameikos.org.jsonld" view="xpl/controllers/serialize-dump.xpl"/>
-	<page path="/kerameikos/kerameikos.org.ttl" view="xpl/controllers/serialize-dump.xpl"/>	
+	<page path="/kerameikos/kerameikos.org.ttl" view="xpl/controllers/serialize-dump.xpl"/>
+
+	<!-- 303 redirect -->
+	<page path="/kerameikos/id/(.*)" model="xpl/models/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
 
 	<epilogue url="oxf:/config/epilogue.xpl"/>
 </config>
