@@ -96,7 +96,7 @@
 	<xsl:template match="doc">
 		<div class="result-doc row">
 			<h4>
-				<a href="{str[@name='id']}" title="{if(string(str[@name='prefLabel'])) then str[@name='prefLabel'] else str[@name='id']}">
+				<a href="{$display_path}id/{str[@name='id']}" title="{if(string(str[@name='prefLabel'])) then str[@name='prefLabel'] else str[@name='id']}">
 					<xsl:value-of select="if(string(str[@name='prefLabel'])) then str[@name='prefLabel'] else str[@name='id']"/>
 				</a>
 			</h4>

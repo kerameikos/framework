@@ -271,7 +271,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				<xforms:action if="string(xxforms:get-request-parameter('id'))">
 					<xforms:setvalue ref="instance('control-instance')/id" value="xxforms:get-request-parameter('id')"/>
 					<xforms:setvalue ref="instance('control-instance')/new_id" value="false()"/>
-					<xforms:setvalue ref="instance('load-config')/url" value="concat('file://', instance('config')/id_path, '/', xxforms:get-request-parameter('id'), '.rdf')"/>
+					<xforms:setvalue ref="instance('load-config')/url" value="concat('file://', instance('config')/data_path, '/id/', xxforms:get-request-parameter('id'), '.rdf')"/>
 					<xforms:insert nodeset="instance('doc')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/load-id.xpl', 'file', instance('load-config'), 'data')"/>
 
 					<!-- set geo values -->
@@ -476,7 +476,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 								<!-- set id -->
 								<xforms:setvalue ref="instance('doc')/*[1]/@rdf:about" value="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>
 								<!-- save file back to disk -->
-								<xforms:setvalue ref="instance('save-config')/url" value="concat('file://', instance('config')/id_path, '/', instance('control-instance')/id, '.rdf')"/>
+								<xforms:setvalue ref="instance('save-config')/url" value="concat('file://', instance('config')/data_path, '/id/', instance('control-instance')/id, '.rdf')"/>
 								<xforms:insert nodeset="instance('dump')"
 									origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('doc'), instance('save-config')), 'data')"/>
 								<!-- delete graphs from triplestore -->

@@ -73,6 +73,9 @@
 	<page path="/kerameikos/kerameikos.org.jsonld" view="xpl/controllers/serialize-dump.xpl"/>
 	<page path="/kerameikos/kerameikos.org.ttl" view="xpl/controllers/serialize-dump.xpl"/>
 
+	<!-- **** CONCEPT SCHEMES **** -->
+	<page path="/kerameikos/(.*)/" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
+
 	<!-- 303 redirect -->
 	<page path="/kerameikos/id/(.*)" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
 

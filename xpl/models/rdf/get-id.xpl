@@ -21,7 +21,9 @@
 			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
 				<xsl:output indent="yes"/>
 				<xsl:template match="/">
-					<xsl:variable name="path" select="substring-after(doc('input:request')/request/request-url, 'id/')"/>
+					<xsl:variable name="request-url" select="doc('input:request')/request/request-url"/>
+					<xsl:variable name="pieces" select="tokenize($request-url, '/')"/>
+					<xsl:variable name="scheme" select="$pieces[count($pieces) - 1]"/>					
 					
 					<xsl:variable name="doc">
 						<xsl:choose>
@@ -30,23 +32,30 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:choose>
-									<xsl:when test="contains(substring-after(doc('input:request')/request/request-url, 'id/'), '.rdf')">
-										<xsl:value-of select="substring-before(substring-after(doc('input:request')/request/request-url, 'id/'), '.rdf')"/>
-									</xsl:when>
-									<xsl:when test="contains(substring-after(doc('input:request')/request/request-url, 'id/'), '.kml')">
-										<xsl:value-of select="substring-before(substring-after(doc('input:request')/request/request-url, 'id/'), '.kml')"/>
-									</xsl:when>
-									<xsl:when test="contains(substring-after(doc('input:request')/request/request-url, 'id/'), '.ttl')">
-										<xsl:value-of select="substring-before(substring-after(doc('input:request')/request/request-url, 'id/'), '.ttl')"/>
-									</xsl:when>
-									<xsl:when test="contains(substring-after(doc('input:request')/request/request-url, 'id/'), '.jsonld')">
-										<xsl:value-of select="substring-before(substring-after(doc('input:request')/request/request-url, 'id/'), '.jsonld')"/>
-									</xsl:when>
-									<xsl:when test="contains(substring-after(doc('input:request')/request/request-url, 'id/'), '.html')">
-										<xsl:value-of select="substring-before(substring-after(doc('input:request')/request/request-url, 'id/'), '.html')"/>
+									<xsl:when test="string-length($pieces[last()]) &gt; 0">
+										<xsl:choose>
+											<xsl:when test="contains($pieces[last()], '.rdf')">
+												<xsl:value-of select="substring-before($pieces[last()], '.rdf')"/>
+											</xsl:when>
+											<xsl:when test="contains($pieces[last()], '.kml')">
+												<xsl:value-of select="substring-before($pieces[last()], '.kml')"/>
+											</xsl:when>
+											<xsl:when test="contains($pieces[last()], '.ttl')">
+												<xsl:value-of select="substring-before($pieces[last()], '.ttl')"/>
+											</xsl:when>
+											<xsl:when test="contains($pieces[last()], '.jsonld')">
+												<xsl:value-of select="substring-before($pieces[last()], '.jsonld')"/>
+											</xsl:when>
+											<xsl:when test="contains($pieces[last()], '.html')">
+												<xsl:value-of select="substring-before($pieces[last()], '.html')"/>
+											</xsl:when>
+											<xsl:otherwise>
+												<xsl:value-of select="$pieces[last()]"/>
+											</xsl:otherwise>
+										</xsl:choose>
 									</xsl:when>
 									<xsl:otherwise>
-										<xsl:value-of select="substring-after(doc('input:request')/request/request-url, 'id/')"/>
+										<xsl:value-of select="$scheme"/>
 									</xsl:otherwise>
 								</xsl:choose>
 							</xsl:otherwise>
@@ -55,7 +64,17 @@
 					
 					<config>
 						<url>
-							<xsl:value-of select="concat('file://', /config/id_path, '/', $doc, '.rdf')"/>
+							<xsl:choose>
+								<xsl:when test="string(doc('input:request')/request/parameters/parameter[name='id']/value)">
+									<xsl:value-of select="concat('file://', /config/data_path, '/id/', $doc, '.rdf')"/>
+								</xsl:when>
+								<xsl:when test="string-length($pieces[last()]) &gt; 0">
+									<xsl:value-of select="concat('file://', /config/data_path, '/', $scheme, '/', $doc, '.rdf')"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="concat('file://', /config/data_path, '/', $doc, '.rdf')"/>
+								</xsl:otherwise>
+							</xsl:choose>
 						</url>						
 						<mode>xml</mode>
 						<content-type>application/xml</content-type>

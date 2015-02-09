@@ -6,7 +6,7 @@
 	<xsl:output method="xml" indent="yes" encoding="UTF-8"/>
 	
 	<xsl:template match="/">
-		<xsl:variable name="collection" select="concat('file://', /config/id_path, '/?select=*.rdf')"/>
+		<xsl:variable name="collection" select="concat('file://', /config/data_path, '/id/?select=*.rdf')"/>
 		<rdf:RDF>
 			<xsl:for-each select="collection($collection)">
 				<xsl:copy-of select="document(document-uri(.))/rdf:RDF/*"/>

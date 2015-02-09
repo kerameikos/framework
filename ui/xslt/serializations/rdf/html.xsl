@@ -79,51 +79,55 @@
 				<div class="col-md-9">
 					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
 
-					<div id="timemap">
-						<div id="mapcontainer">
-							<div id="map"/>
+					<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
+						<div id="timemap">
+							<div id="mapcontainer">
+								<div id="map"/>
+							</div>
+							<div id="timelinecontainer">
+								<div id="timeline"/>
+							</div>
 						</div>
-						<div id="timelinecontainer">
-							<div id="timeline"/>
-						</div>
-					</div>
-					<xsl:call-template name="associatedObjects">
-						<xsl:with-param name="id" select="$id"/>
-						<xsl:with-param name="type" select="$type"/>
-					</xsl:call-template>
-					<xsl:call-template name="quant"/>
-				</div>
-				<div class="col-md-3">
-					<div>
-						<h3>Data Export</h3>
-						<ul>
-							<li>
-								<a href="{$id}.rdf">RDF/XML</a>
-							</li>
-							<li>
-								<a href="{$id}.ttl">TTL</a>
-							</li>
-							<li>
-								<a href="{$id}.jsonld">JSON-LD</a>
-							</li>
-							<xsl:if test="/content/rdf:RDF/geo:SpatialThing">
-								<li>
-									<a href="{$id}.kml">KML</a>
-								</li>
-							</xsl:if>
-						</ul>
-					</div>
-					<!--<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]">
-						<xsl:call-template name="dbpedia-abstract">
-							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
+						<xsl:call-template name="associatedObjects">
+							<xsl:with-param name="id" select="$id"/>
+							<xsl:with-param name="type" select="$type"/>
 						</xsl:call-template>
-					</xsl:if>-->
-					<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
-						<xsl:call-template name="lgpn-bio">
-							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
-						</xsl:call-template>
+						<xsl:call-template name="quant"/>
 					</xsl:if>
 				</div>
+				<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
+					<div class="col-md-3">
+						<div>
+							<h3>Data Export</h3>
+							<ul>
+								<li>
+									<a href="{$id}.rdf">RDF/XML</a>
+								</li>
+								<li>
+									<a href="{$id}.ttl">TTL</a>
+								</li>
+								<li>
+									<a href="{$id}.jsonld">JSON-LD</a>
+								</li>
+								<xsl:if test="/content/rdf:RDF/geo:SpatialThing">
+									<li>
+										<a href="{$id}.kml">KML</a>
+									</li>
+								</xsl:if>
+							</ul>
+						</div>
+						<!--<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]">
+							<xsl:call-template name="dbpedia-abstract">
+							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
+							</xsl:call-template>
+							</xsl:if>-->
+						<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
+							<xsl:call-template name="lgpn-bio">
+								<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
+							</xsl:call-template>
+						</xsl:if>
+					</div>
+				</xsl:if>
 			</div>
 		</div>
 	</xsl:template>

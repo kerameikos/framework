@@ -27,10 +27,16 @@
 						<xsl:choose>
 							<xsl:when test="$content-type='application/ld+json'">json-ld</xsl:when>
 							<xsl:when test="$content-type='application/vnd.google-earth.kml+xml'">kml</xsl:when>
-							<xsl:when test="$content-type='application/rdf+xml' or $content-type='application/xml' or $content-type='text/xml'">xml</xsl:when>
+							<xsl:when test="$content-type='application/rdf+xml'">xml</xsl:when>
 							<xsl:when test="$content-type='text/turtle'">turtle</xsl:when>
 							<xsl:when test="$content-type='text/html'">html</xsl:when>
-							<xsl:when test="not(string($content-type)) or $content-type='*/*' or contains($content-type, 'text/html')">303</xsl:when>
+							<xsl:when test="not(string($content-type)) or $content-type='*/*' or contains($content-type, 'text/html')">
+								<xsl:variable name="pieces" select="tokenize(/request/request-url, '/')"/>
+								<xsl:choose>
+									<xsl:when test="string-length($pieces[last()]) &gt; 0">303</xsl:when>
+									<xsl:otherwise>html</xsl:otherwise>
+								</xsl:choose>
+							</xsl:when>
 							<xsl:otherwise>error</xsl:otherwise>
 						</xsl:choose>
 					</content-type>
@@ -42,8 +48,8 @@
 	
 	<p:choose href="#conneg-config">
 		<p:when test="content-type='xml'">
-			<p:processor name="oxf:pipeline">
-				<p:input name="config" href="../models/get-id.xpl"/>		
+			<p:processor name="oxf:identity">
+				<p:input name="data" href="#data"/>		
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>

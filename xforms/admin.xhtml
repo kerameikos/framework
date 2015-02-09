@@ -439,7 +439,7 @@
 						</xforms:group>
 						<xforms:group ref=".[$numFound = 0]">
 							<xforms:group ref=".[instance('control-instance')/solr-query = '*:*']">
-								<h1>No ids found in <xforms:output value="instance('config')/id_path"/></h1>
+								<h1>No ids found in <xforms:output value="instance('config')/data_path"/></h1>
 							</xforms:group>
 							<xforms:group ref=".[instance('control-instance')/solr-query != '*:*']">
 								<h1>No objects that match query: <xforms:output ref="instance('control-instance')/solr-query"/>
