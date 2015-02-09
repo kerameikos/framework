@@ -31,18 +31,31 @@
 				<div class="col-md-4">
 					<div>
 						<h3>Data Export</h3>
-						<h4>Kerameikos Linked Data</h4>
-						<ul>
-							<li>
-								<a href="kerameikos.org.rdf">RDF/XML</a>
-							</li>
-							<li>
-								<a href="kerameikos.org.ttl">Turtle</a>
-							</li>
-							<li>
-								<a href="kerameikos.org.jsonld">JSON-LD</a>
-							</li>
-						</ul>
+						<div>
+							<h4>Kerameikos Linked Data</h4>
+							<ul>
+								<li>
+									<a href="kerameikos.org.rdf">RDF/XML</a>
+								</li>
+								<li>
+									<a href="kerameikos.org.ttl">Turtle</a>
+								</li>
+								<li>
+									<a href="kerameikos.org.jsonld">JSON-LD</a>
+								</li>
+							</ul>
+						</div>
+						<div>
+							<h4>Pelagios</h4>
+							<ul>
+								<li>
+									<a href="pelagios.void.rdf">VoID</a>
+								</li>
+								<li>
+									<a href="pelagios.rdf">Pelagios RDF/XML</a>
+								</li>
+							</ul>
+						</div>
 					</div>
 					<div>
 						<h3>Atom Feed</h3>
