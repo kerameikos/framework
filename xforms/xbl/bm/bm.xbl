@@ -1,0 +1,175 @@
+<xbl:xbl xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms"
+	xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:xxbl="http://orbeon.org/oxf/xml/xbl" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+	xmlns:kerameikos="https://github.com/kerameikos/">
+	<xbl:binding id="kerameikos-bm" element="kerameikos|bm">
+		<xbl:template>
+			<xforms:group xbl:attr="model context ref bind" xxbl:scope="outer">
+				<xbl:content includes="xforms|label,xforms|help,xforms|hint,xforms|alert"/>
+				<xforms:group xxbl:scope="inner">
+					<xforms:var name="binding" as="node()?">
+						<xxforms:sequence select="." xxbl:scope="outer"/>
+					</xforms:var>
+					<xforms:trigger appearance="minimal">
+						<xforms:label>
+							<span class="glyphicon glyphicon-search"/> British Museum</xforms:label>
+						<xforms:action ev:event="DOMActivate">
+							<!-- if there is a skos:prefLabel and no Getty URIs, automatically submit the label -->
+							<xforms:action if="count($binding//@rdf:resource[contains(., 'britishmuseum.org')]) = 0 and string-length($binding/skos:prefLabel[@xml:lang='en']) &gt; 0">
+								<xforms:setvalue ref="instance('control-instance')/bm-search" value="$binding/skos:prefLabel[@xml:lang='en']"/>
+								<xforms:var name="search_text" select="instance('control-instance')/bm-search"/>
+								<xforms:var name="type" select="$binding/name()"/>								
+								<xforms:setvalue ref="instance('sparqlQuery')" value="normalize-space(replace(replace(instance('bm-template'), 'SEARCH_QUERY', $search_text), 'SCHEME',
+									instance('bm-facets')//facet[@type=$type]/text()))"/>								
+								<xforms:delete context="instance('bm-options')/*"/>
+								<xforms:send submission="query-bm"/>
+								<xxforms:show dialog="bm-results-dialog"/>
+							</xforms:action>
+							<!-- else, just show search dialog -->
+							<xforms:action if="not(count($binding//@rdf:resource[contains(., 'britishmuseum.org')]) = 0 and string-length($binding/skos:prefLabel[@xml:lang='en']) &gt; 0)">
+								<xxforms:show dialog="bm-search-dialog"/>
+							</xforms:action>
+						</xforms:action>
+					</xforms:trigger>
+
+					<!-- separate search and results dialog for recentering -->
+					<xxforms:dialog id="bm-search-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+						<xforms:label>Query Getty</xforms:label>
+						<div>
+							<xforms:input ref="instance('control-instance')/bm-search"/>
+							<xforms:trigger>
+								<xforms:action ev:event="DOMActivate">
+									<xxforms:hide dialog="bm-search-dialog"/>
+									<xforms:var name="search_text" select="instance('control-instance')/bm-search"/>
+									<xforms:var name="type" select="$binding/name()"/>									
+									<xforms:setvalue ref="instance('sparqlQuery')" value="normalize-space(replace(replace(instance('bm-template'), 'SEARCH_QUERY', $search_text), 'SCHEME',
+										instance('bm-facets')//facet[@type=$type]/text()))"/>
+									<xforms:delete context="instance('bm-options')/*"/>
+									<xforms:send submission="query-bm"/>
+									<xxforms:show dialog="bm-results-dialog"/>
+								</xforms:action>
+								<xforms:label>Search</xforms:label>
+							</xforms:trigger>
+						</div>
+					</xxforms:dialog>
+
+					<xxforms:dialog id="bm-results-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+						<xforms:label>Query British Museum</xforms:label>
+						<div>
+							<xforms:input ref="instance('control-instance')/bm-search"/>
+							<xforms:trigger>
+								<xforms:action ev:event="DOMActivate">
+									<xforms:var name="search_text" select="instance('control-instance')/bm-search"/>
+									<xforms:var name="type" select="$binding/name()"/>
+									<xforms:setvalue ref="instance('sparqlQuery')" value="normalize-space(replace(replace(instance('bm-template'), 'SEARCH_QUERY', $search_text), 'SCHEME',
+										instance('bm-facets')//facet[@type=$type]/text()))"/>
+									<xforms:delete context="instance('bm-options')/*"/>
+									<xforms:send submission="query-bm"/>
+								</xforms:action>
+								<xforms:label>Search</xforms:label>
+							</xforms:trigger>
+						</div>
+						<div>
+							
+							<xforms:group ref=".[count(instance('bm-options')/option) &gt; 0]">
+								<xforms:select1 ref="instance('control-instance')/uri" appearance="compact" size="10">
+									<xforms:label>Identifier</xforms:label>
+									<xforms:itemset nodeset="instance('bm-options')/option">
+										<xforms:label ref="."/>
+										<xforms:value ref="@link"/>
+									</xforms:itemset>								
+								</xforms:select1>
+								<xforms:trigger>
+									<xforms:label>Add Selected</xforms:label>
+									<xforms:action ev:event="DOMActivate">
+										<xforms:insert context="$binding" nodeset="./child::node()[last()]"
+											origin="xforms:element('skos:exactMatch', xforms:attribute('rdf:resource', instance('control-instance')/uri))"/>
+										<xxforms:hide dialog="bm-results-dialog"/>
+									</xforms:action>
+								</xforms:trigger>
+								
+							</xforms:group>
+						</div>
+					</xxforms:dialog>
+					<!-- ***************** MODEL ***************-->
+					<xforms:model id="bm-model">
+						<!-- instances -->
+						<xforms:instance id="control-instance">
+							<controls xmlns="">
+								<bm-search/>
+								<bm-id/>
+								<uri/>
+							</controls>
+						</xforms:instance>
+
+						<xforms:instance id="bm-facets">
+							<facets xmlns="">
+								<facet type="ecrm:E57_Material">http://collection.britishmuseum.org/id/thesauri/material</facet>
+								<facet type="ecrm:E4_Period">http://collection.britishmuseum.org/id/thesauri/matcult</facet>
+								<facet type="foaf:Person">http://collection.britishmuseum.org/id/person-institution</facet>
+								<facet type="foaf:Organization">http://collection.britishmuseum.org/id/person-institution</facet>
+								<facet type="kon:ProductionPlace">http://collection.britishmuseum.org/id/place</facet>
+								<facet type="kon:Shape">http://collection.britishmuseum.org/id/thesauri/object</facet>
+								<facet type="kon:Style">http://collection.britishmuseum.org/id/thesauri/series-type</facet>
+								<facet type="kon:Technique">http://collection.britishmuseum.org/id/thesauri/ware</facet>
+								<facet type="kon:Ware">http://collection.britishmuseum.org/id/thesauri/ware</facet>
+							</facets>
+						</xforms:instance>
+
+						<xforms:instance id="bm-template">
+							<query><![CDATA[PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?c ?label WHERE {
+?c a skos:Concept; 
+skos:inScheme <SCHEME> ;
+skos:prefLabel ?label 
+FILTER regex(?label, "^SEARCH_QUERY", "i" )} LIMIT 25]]>
+							</query>
+						</xforms:instance>						
+
+						<xforms:instance id="sparqlQuery">
+							<query xmlns=""/>
+						</xforms:instance>
+
+						<xforms:instance id="bm-response">
+							<sparql xmlns="http://www.w3.org/2005/sparql-results#"/>
+						</xforms:instance>
+
+						<xforms:instance id="bm-options">
+							<options xmlns=""/>
+						</xforms:instance>
+
+						<!-- bindings -->
+						<xforms:bind nodeset="instance('bm-options')">
+							<xforms:bind nodeset="option">
+								<xforms:bind nodeset="@select" type="xs:boolean"/>
+							</xforms:bind>
+						</xforms:bind>
+
+						<!-- submissions -->
+						<xforms:submission id="query-bm" action="http://collection.britishmuseum.org/sparql?query={encode-for-uri(instance('sparqlQuery'))}" ref="instance('bm-response')" replace="instance"
+							method="get">
+							<xforms:header>
+								<xforms:name>User-Agent</xforms:name>
+								<xforms:value>XForms/Kerameikos.org</xforms:value>
+							</xforms:header>
+							<xforms:header>
+								<xforms:name>Accept</xforms:name>
+								<xforms:value>application/sparql-results+xml</xforms:value>
+							</xforms:header>
+							<xforms:message ev:event="xforms-submit-error" level="modal">
+								<!--SPARQL query failed.-->
+								<xforms:output value="event('response-headers')"/>
+							</xforms:message>
+							<xforms:action xxforms:iterate="instance('bm-response')//res:result" ev:event="xforms-submit-done">
+								<xforms:var name="link" select="context()/res:binding[@name='c']/res:uri"/>
+								<xforms:var name="title" select="context()/res:binding[@name='label']/res:literal"/>								
+								<xforms:insert context="instance('bm-options')" nodeset="./child::node()[last()]" origin="xforms:element('option', (xforms:attribute('select', false()),
+									xforms:attribute('link', $link), xforms:attribute('type', 'skos:exactMatch'), $title))"/>
+							</xforms:action>
+						</xforms:submission>
+					</xforms:model>
+				</xforms:group>
+			</xforms:group>
+		</xbl:template>
+	</xbl:binding>
+
+</xbl:xbl>
