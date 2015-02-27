@@ -306,8 +306,12 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				</xforms:action>
 			</xforms:action>
 
-			<!-- on xforms-ready -->
+			<!-- **************** XFORMS-READY ********************** -->
 			<xforms:action ev:event="xforms-ready">
+				<!-- enable save trigger if the document is valid on ready -->
+				<xforms:setvalue ref="instance('control-instance')/save-trigger" value="true()" if="xxforms:valid(instance('doc'), true())"></xforms:setvalue>
+
+				<!-- set geographic controls -->
 				<xforms:setvalue ref="instance('control-instance')/geo/type"
 					value="if (instance('doc')/geo:SpatialThing/geo:lat) then 'point' else if (instance('doc')/geo:SpatialThing/osgeo:asGeoJSON) then 'polygon' else ''"></xforms:setvalue>
 				<xforms:setvalue ref="instance('control-instance')/geo/hasFeature"
@@ -356,22 +360,21 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				<xforms:bind nodeset="id" required="true()" type="xs:anyURI" readonly="../new_id != true()"></xforms:bind>
 				<xforms:bind nodeset="new_id" type="xs:boolean"></xforms:bind>
 				<xforms:bind nodeset="delete-success" type="xs:boolean"></xforms:bind>
-				<xforms:bind nodeset="save-trigger" type="xs:boolean"></xforms:bind>
+				<xforms:bind id="save-trigger" nodeset="save-trigger" type="xs:boolean" readonly=". != true()"></xforms:bind>
 				<xforms:bind nodeset="geo">
 					<xforms:bind nodeset="type" constraint="string-length(.) &gt; 0"></xforms:bind>
 					<xforms:bind nodeset="hasFeature" type="xs:boolean"></xforms:bind>
 				</xforms:bind>
 			</xforms:bind>
 
-			<!-- only enable save button if doc is valid and save-trigger is true -->
-			<xforms:bind id="save-trigger" nodeset="instance('control-instance')/save-trigger" relevant=".= true()"></xforms:bind>
-
 			<!-- bind the delete trigger only to those ids which exist on disk (either loaded or recently saved) -->
-			<xforms:bind id="delete-trigger" nodeset="instance('control-instance')/delete-trigger" relevant="string(instance('control-instance')/id)"></xforms:bind>
+			<!--<xforms:bind id="delete-trigger" nodeset="instance('control-instance')/delete-trigger" relevant="string(instance('control-instance')/id)"></xforms:bind>-->
 
+			<!-- **************** DYNAMIC VALIDATION CONTROLS ********************** -->
 			<xforms:action ev:event="xxforms-invalid" ev:observer="doc">
 				<xforms:setvalue ref="instance('control-instance')/save-trigger" value="false()"></xforms:setvalue>
 			</xforms:action>
+
 			<xforms:action ev:event="xxforms-valid" ev:observer="doc">
 				<xforms:setvalue ref="instance('control-instance')/save-trigger" value="true()"></xforms:setvalue>
 			</xforms:action>
@@ -475,28 +478,31 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 						</div>
 					</xforms:group>
 					<!-- *************** SUBMISSIONS ***************-->
-					<div class="submission">
-						<xforms:trigger bind="save-trigger">
-							<xforms:label><span class="glyphicon glyphicon-floppy-disk"></span>Save</xforms:label>
-							<xforms:action ev:event="DOMActivate">
-								<!-- set id -->
-								<xforms:setvalue ref="instance('doc')/*[1]/@rdf:about" value="concat('http://kerameikos.org/id/', instance('control-instance')/id)"></xforms:setvalue>
-								<!-- save file back to disk -->
-								<xforms:setvalue ref="instance('save-config')/url" value="concat('file://', instance('config')/data_path, '/id/', instance('control-instance')/id, '.rdf')"></xforms:setvalue>
-								<xforms:insert nodeset="instance('dump')"
-									origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('doc'), instance('save-config')), 'data')"></xforms:insert>
-								<!-- delete graphs from triplestore -->
-								<xforms:action xxforms:iterate="instance('doc')/*">
-									<xforms:setvalue ref="instance('sparqlUpdate')" value="replace(instance('sparqlUpdate-template'), 'URI', context()/@rdf:about)"></xforms:setvalue>
-									<xforms:send submission="delete-graph"></xforms:send>
+					<xforms:group ref=".[instance('doc')/child::node()]">
+						<div class="submission">
+							<xforms:trigger bind="save-trigger">
+								<xforms:label><span class="glyphicon glyphicon-floppy-disk"></span>Save</xforms:label>
+								<xforms:action ev:event="DOMActivate">
+									<!-- set id -->
+									<xforms:setvalue ref="instance('doc')/*[1]/@rdf:about" value="concat('http://kerameikos.org/id/', instance('control-instance')/id)"></xforms:setvalue>
+									<!-- save file back to disk -->
+									<xforms:setvalue ref="instance('save-config')/url" value="concat('file://', instance('config')/data_path, '/id/', instance('control-instance')/id, '.rdf')"></xforms:setvalue>
+									<xforms:insert nodeset="instance('dump')"
+										origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('doc'), instance('save-config')), 'data')"></xforms:insert>
+									<!-- delete graphs from triplestore -->
+									<xforms:action xxforms:iterate="instance('doc')/*">
+										<xforms:setvalue ref="instance('sparqlUpdate')" value="replace(instance('sparqlUpdate-template'), 'URI', context()/@rdf:about)"></xforms:setvalue>
+										<xforms:send submission="delete-graph"></xforms:send>
+									</xforms:action>
+									<xforms:send submission="post-new"></xforms:send>
+									<!-- post to Solr -->
+									<xforms:insert nodeset="instance('addIndex')"
+										origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('doc'), 'data')"></xforms:insert>
+									<xforms:send submission="post-solr-doc"></xforms:send>
 								</xforms:action>
-								<xforms:send submission="post-new"></xforms:send>
-								<!-- post to Solr -->
-								<xforms:insert nodeset="instance('addIndex')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('doc'), 'data')"></xforms:insert>
-								<xforms:send submission="post-solr-doc"></xforms:send>
-							</xforms:action>
-						</xforms:trigger>
-					</div>
+							</xforms:trigger>
+						</div>
+					</xforms:group>
 				</div>
 			</div>
 			<div class="row">
