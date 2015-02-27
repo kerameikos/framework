@@ -34,6 +34,7 @@
 					<confirm-password></confirm-password>
 					<authorized>false</authorized>
 					<submit-trigger>false</submit-trigger>
+					<hash/>
 				</controls>
 			</xforms:instance>
 
@@ -75,7 +76,7 @@
 
 			<!-- **************** BINDINGS ********************** -->
 			<xforms:bind nodeset="instance('form')">
-				<xforms:bind nodeset="*" required="true()"></xforms:bind>
+				<!--<xforms:bind nodeset="*" required="true()"></xforms:bind>-->
 				<xforms:bind nodeset="password" constraint=".= instance('control-instance')/confirm-password and matches(., '^([a-zA-Z0-9@*#!$%&amp;]{7,15})$')"></xforms:bind>
 			</xforms:bind>
 
@@ -106,6 +107,7 @@
 						<xforms:setvalue ref="instance('control-instance')/authorized">true</xforms:setvalue>
 					</xforms:action>
 				</xforms:action>
+				<xforms:setvalue ref="instance('control-instance')/authorized">true</xforms:setvalue>
 			</xforms:action>
 
 			<!-- if authorized, show the sign up form -->
@@ -129,18 +131,18 @@
 								upon submission, so your credential will not be compromised. Your email address will be your login username.</p>
 							<p>The password must be between 7 and 24 characters, and can accept upper case and lower case letters, numbers, and the '@*#!$%&amp;' characters.</p>
 							<xforms:group ref="instance('form')">
-								<div>
+								<!--<div>
 									<xforms:input ref="name">
 										<xforms:label>Name</xforms:label>
 										<xforms:alert>Required</xforms:alert>
 									</xforms:input>
-								</div>
-								<div>
+								</div>-->
+								<!--<div>
 									<xforms:output ref="email">
 										<xforms:label>Email</xforms:label>
 										<xforms:alert>Required</xforms:alert>
 									</xforms:output>
-								</div>
+								</div>-->
 								<div>
 									<xforms:secret ref="password">
 										<xforms:label>Password</xforms:label>
@@ -158,14 +160,15 @@
 								<xforms:label>Submit</xforms:label>
 								<xforms:action ev:event="DOMActivate">
 									<xforms:var name="hash" select="xforms:digest(instance('form')/password, 'SHA-256', 'hex')"></xforms:var>
+									<xforms:setvalue ref="instance('control-instance')/hash" value="$hash"/>
 									<!-- send email -->
-									<xforms:setvalue ref="instance('email-input')/body" value="concat('Name: ', instance('form')/name, '&#xD;Email: ', instance('form')/email, '&#xD;Password: ', $hash)"/>
+									<!--<xforms:setvalue ref="instance('email-input')/body" value="concat('Name: ', instance('form')/name, '&#xD;Email: ', instance('form')/email, '&#xD;Password: ', $hash)"/>
 									<xforms:setvalue ref="instance('email-input')/from/email" value="instance('config')/admin_email_from"/>
 									<xforms:setvalue ref="instance('email-input')/from/name" value="instance('config')/admin_email_from"/>
 									<xforms:setvalue ref="instance('email-input')/to/email" value="instance('config')/admin_email_to"/>
 									<xforms:setvalue ref="instance('email-input')/to/name" value="instance('config')/admin_email_to"/>
 									<xforms:insert nodeset="instance('dump')"
-										origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/send-email.xpl', 'email-input', instance('email-input'), 'data')"/>
+										origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/send-email.xpl', 'email-input', instance('email-input'), 'data')"/>-->
 									<!-- toggle success case -->
 									<xforms:toggle case="success"/>
 								</xforms:action>
@@ -173,7 +176,10 @@
 						</xforms:case>
 						<xforms:case id="success">
 							<h1>Submitted</h1>
-							<p>Your credentials have been submitted. Access to the system will not be immediate. You will receive notification via email when your account is established. Click <a href="{instance('config')/url}">here</a> to return to <xforms:output ref="instance('config')/url"/></p>
+							<xforms:output ref="instance('control-instance')/hash">
+								<xforms:label>Password:</xforms:label>
+							</xforms:output>
+							<!--<p>Your credentials have been submitted. Access to the system will not be immediate. You will receive notification via email when your account is established. Click <a href="{instance('config')/url}">here</a> to return to <xforms:output ref="instance('config')/url"/></p>-->
 						</xforms:case>
 					</xforms:switch>
 					<!--<fr:xforms-inspector></fr:xforms-inspector>-->
