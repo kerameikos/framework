@@ -128,7 +128,7 @@
 						<xforms:case id="auth">
 							<h1>Sign Up</h1>
 							<p>Please enter the following information to become a Kerameikos.org editor. Your password will be encrypted into <a href="http://en.wikipedia.org/wiki/SHA-2">SHA-2</a>
-								upon submission, so your credential will not be compromised. Your email address will be your login username.</p>
+								upon submission, so your credentials will not be compromised. Your email address will be your login username.</p>
 							<p>The password must be between 7 and 24 characters, and can accept upper case and lower case letters, numbers, and the '@*#!$%&amp;' characters.</p>
 							<xforms:group ref="instance('form')">
 								<!--<div>
@@ -144,13 +144,13 @@
 									</xforms:output>
 								</div>-->
 								<div>
-									<xforms:secret ref="password">
+									<xforms:secret ref="password" incremental="true">
 										<xforms:label>Password</xforms:label>
 										<xforms:alert>Required</xforms:alert>
 									</xforms:secret>
 								</div>
 								<div>
-									<xforms:secret ref="instance('control-instance')/confirm-password">
+									<xforms:secret ref="instance('control-instance')/confirm-password" incremental="true">
 										<xforms:label>Confirm Password</xforms:label>
 										<xforms:alert>Required</xforms:alert>
 									</xforms:secret>
