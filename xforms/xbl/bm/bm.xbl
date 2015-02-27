@@ -22,38 +22,17 @@
 									instance('bm-facets')//facet[@type=$type]/text()))"/>								
 								<xforms:delete context="instance('bm-options')/*"/>
 								<xforms:send submission="query-bm"/>
-								<xxforms:show dialog="bm-results-dialog"/>
+								<xxforms:show dialog="bm-dialog"/>
 							</xforms:action>
 							<!-- else, just show search dialog -->
 							<xforms:action if="not(count($binding//@rdf:resource[contains(., 'britishmuseum.org')]) = 0 and string-length($binding/skos:prefLabel[@xml:lang='en']) &gt; 0)">
-								<xxforms:show dialog="bm-search-dialog"/>
+								<xxforms:show dialog="bm-dialog"/>
 							</xforms:action>
 						</xforms:action>
 					</xforms:trigger>
-
-					<!-- separate search and results dialog for recentering -->
-					<xxforms:dialog id="bm-search-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
-						<xforms:label>Query Getty</xforms:label>
-						<div>
-							<xforms:input ref="instance('control-instance')/bm-search"/>
-							<xforms:trigger>
-								<xforms:action ev:event="DOMActivate">
-									<xxforms:hide dialog="bm-search-dialog"/>
-									<xforms:var name="search_text" select="instance('control-instance')/bm-search"/>
-									<xforms:var name="type" select="$binding/name()"/>									
-									<xforms:setvalue ref="instance('sparqlQuery')" value="normalize-space(replace(replace(instance('bm-template'), 'SEARCH_QUERY', $search_text), 'SCHEME',
-										instance('bm-facets')//facet[@type=$type]/text()))"/>
-									<xforms:delete context="instance('bm-options')/*"/>
-									<xforms:send submission="query-bm"/>
-									<xxforms:show dialog="bm-results-dialog"/>
-								</xforms:action>
-								<xforms:label>Search</xforms:label>
-							</xforms:trigger>
-						</div>
-					</xxforms:dialog>
-
-					<xxforms:dialog id="bm-results-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
-						<xforms:label>Query British Museum</xforms:label>
+					
+					<xxforms:dialog id="bm-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+						<xforms:label>Query British Museum</xforms:label>						
 						<div>
 							<xforms:input ref="instance('control-instance')/bm-search"/>
 							<xforms:trigger>
@@ -83,7 +62,7 @@
 									<xforms:action ev:event="DOMActivate">
 										<xforms:insert context="$binding" nodeset="./child::node()[last()]"
 											origin="xforms:element('skos:exactMatch', xforms:attribute('rdf:resource', instance('control-instance')/uri))"/>
-										<xxforms:hide dialog="bm-results-dialog"/>
+										<xxforms:hide dialog="bm-dialog"/>
 									</xforms:action>
 								</xforms:trigger>
 								

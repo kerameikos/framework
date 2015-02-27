@@ -379,8 +379,8 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 			<!-- ************* QUERY ATOM **********************-->
 			<!-- query local atom feed to power skos:broader -->
 			<xforms:submission id="query-feed" serialization="none" method="get"
-				action="/ceramics/feed/?q=type:&#x022;{encode-for-uri(instance('control-instance')/atom-type)}&#x022;+{instance('control-instance')/atom-search}&amp;sort=score+desc" instance="feed"
-				replace="instance">
+				action="/kerameikos/feed/?q=type:&#x022;{encode-for-uri(instance('control-instance')/atom-type)}&#x022;+AND+label:{instance('control-instance')/atom-search}&amp;sort=score+desc"
+				instance="feed" replace="instance">
 				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to communicate with kerameikos.org Atom feed.</xforms:message>
 			</xforms:submission>
 
@@ -566,8 +566,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											></xforms:output>
 										</xforms:label>
 										<xforms:action ev:event="DOMActivate">
-											<xforms:setvalue ref="instance('control-instance')/atom-type"
-												value="if ($type='kon:ProductionPlace') then concat(namespace-uri(instance('doc')/*[1]), 'ProductionPlace') else concat(namespace-uri(instance('doc')/*[1]), $type)"></xforms:setvalue>
+											<xforms:setvalue ref="instance('control-instance')/atom-type" value="concat(namespace-uri(instance('doc')/*[1]), substring-after($type, ':'))"></xforms:setvalue>
 											<xxforms:show dialog="broader-dialog"></xxforms:show>
 										</xforms:action>
 									</xforms:trigger>
@@ -1047,7 +1046,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</div>
 						</xforms:group>
 					</xforms:group>
-					<!--<fr:xforms-inspector/>-->
+					<!--<fr:xforms-inspector></fr:xforms-inspector>-->
 				</div>
 				<div class="col-md-2">
 					<xforms:group ref="instance('doc')/*[1]">
@@ -1057,7 +1056,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 						<xforms:group ref=".[skos:exactMatch[contains(@rdf:resource, 'dbpedia.org/resource')]]">
 							<kerameikos:dbpedia></kerameikos:dbpedia>
 						</xforms:group>
-						<xforms:group ref=".[contains($type, 'kon:') or contains(@type, 'foaf:') or $type='ecrm:E4_Period' or $type='ecrm:E57_Material']">
+						<xforms:group ref=".[contains($type, 'kon:') or contains($type, 'foaf:') or $type='ecrm:E4_Period' or $type='ecrm:E57_Material']">
 							<xforms:group ref=".[not(skos:exactMatch[contains(@rdf:resource, 'britishmuseum.org')])]">
 								<kerameikos:bm></kerameikos:bm>
 							</xforms:group>
