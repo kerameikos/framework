@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:res="http://www.w3.org/2005/sparql-results#"
-	exclude-result-prefixes="#all" version="2.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:res="http://www.w3.org/2005/sparql-results#" exclude-result-prefixes="#all"
+	version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:variable name="display_path"/>
-	
+
 	<xsl:variable name="namespaces" as="item()*">
 		<namespaces>
 			<namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
@@ -45,32 +45,54 @@
 		<div class="container-fluid content">
 			<div class="row">
 				<div class="col-md-12">
-					<h1>Results</h1>
-					<table class="table table-striped">
-						<thead>
-							<tr>
-								<xsl:for-each select="//res:result[1]/res:binding">
-									<th>
-										<xsl:value-of select="@name"/>
-									</th>
-								</xsl:for-each>
-							</tr>
-						</thead>
-						<tbody>
-							<xsl:apply-templates select="descendant::res:result"/>
-						</tbody>
-					</table>
+					<xsl:apply-templates select="descendant::res:sparql"/>
 				</div>
 			</div>
 		</div>
 	</xsl:template>
-	
+
+	<xsl:template match="res:sparql">
+		<!-- evaluate the type of response to handle ASK and SELECT -->
+		<xsl:choose>
+			<xsl:when test="res:results">
+				<h1>Results</h1>
+				<xsl:choose>
+					<xsl:when test="count(res:result) &gt; 0">
+						<table class="table table-striped">
+							<thead>
+								<tr>
+									<xsl:for-each select="//res:result[1]/res:binding">
+										<th>
+											<xsl:value-of select="@name"/>
+										</th>
+									</xsl:for-each>
+								</tr>
+							</thead>
+							<tbody>
+								<xsl:apply-templates select="descendant::res:result"/>
+							</tbody>
+						</table>
+					</xsl:when>
+					<xsl:otherwise>
+						<p>Your query did not yield results.</p>
+					</xsl:otherwise>
+				</xsl:choose>
+
+			</xsl:when>
+			<xsl:when test="res:boolean">
+				<h1>Response</h1>
+				<p> The response to your query is <strong><xsl:value-of select="res:boolean"/>.</strong>
+				</p>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
+
 	<xsl:template match="res:result">
 		<tr>
 			<xsl:apply-templates select="res:binding"/>
 		</tr>
 	</xsl:template>
-	
+
 	<xsl:template match="res:binding">
 		<td>
 			<xsl:choose>
@@ -85,7 +107,7 @@
 								<xsl:value-of select="$uri"/>
 							</xsl:otherwise>
 						</xsl:choose>
-						
+
 					</xsl:variable>
 					<a href="{res:uri}">
 						<xsl:value-of select="$label"/>
@@ -99,9 +121,7 @@
 					<xsl:if test="res:literal/@datatype">
 						<xsl:variable name="uri" select="res:literal/@datatype"/>
 						<i> (<a href="{$uri}">
-							<xsl:value-of
-								select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
-							/></a>)</i>
+								<xsl:value-of select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"/></a>)</i>
 					</xsl:if>
 				</xsl:otherwise>
 			</xsl:choose>
