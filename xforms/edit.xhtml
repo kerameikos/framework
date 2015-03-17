@@ -34,6 +34,7 @@
 			<xforms:instance id="control-instance">
 				<controls xmlns="">
 					<id></id>
+					<uri></uri>
 					<new_id>true</new_id>
 					<save-trigger>false</save-trigger>
 					<delete-trigger></delete-trigger>
@@ -249,7 +250,7 @@ PREFIX owl:	<http://www.w3.org/2002/07/owl#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX ecrm:	<http://erlangen-crm.org/current/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX nm:	<http://nomisma.org/id/>
+PREFIX nm:	<http://kerameikos.org/id/>
 PREFIX xsd:	<http://www.w3.org/2001/XMLSchema#>
 PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 					<query id="uncertainty">SELECT ?uri ?label WHERE {?uri a un:Uncertainty ; skos:prefLabel ?label . FILTER(langMatches(lang(?label), "en"))} ORDER BY ?label</query>
@@ -274,7 +275,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				<!-- load id if parameter is passed -->
 				<xforms:action if="string(xxforms:get-request-parameter('id'))">
 					<xforms:setvalue ref="instance('control-instance')/id" value="xxforms:get-request-parameter('id')"></xforms:setvalue>
-					<xforms:setvalue ref="instance('control-instance')/new_id" value="false()"></xforms:setvalue>
+					<xforms:setvalue ref="instance('control-instance')/new_id" value="false()" if="string(xxforms:get-request-parameter('id'))"></xforms:setvalue>
 					<xforms:setvalue ref="instance('load-config')/url" value="concat('file://', instance('config')/data_path, '/id/', xxforms:get-request-parameter('id'), '.rdf')"></xforms:setvalue>
 					<xforms:insert nodeset="instance('doc')" origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/load-id.xpl', 'file', instance('load-config'), 'data')"></xforms:insert>
 
@@ -359,22 +360,19 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 			<xforms:bind nodeset="instance('control-instance')">
 				<xforms:bind nodeset="id" required="true()" type="xs:anyURI" readonly="../new_id != true()"></xforms:bind>
 				<xforms:bind nodeset="new_id" type="xs:boolean"></xforms:bind>
-				<xforms:bind nodeset="delete-success" type="xs:boolean"></xforms:bind>
-				<xforms:bind id="save-trigger" nodeset="save-trigger" type="xs:boolean" readonly=". != true()"></xforms:bind>
+				<xforms:bind nodeset="delete-success" type="xs:boolean"></xforms:bind>				
 				<xforms:bind nodeset="geo">
 					<xforms:bind nodeset="type" constraint="string-length(.) &gt; 0"></xforms:bind>
 					<xforms:bind nodeset="hasFeature" type="xs:boolean"></xforms:bind>
-				</xforms:bind>
+				</xforms:bind>	
+				<xforms:bind id="save-trigger" nodeset="save-trigger" type="xs:boolean" readonly=". != true()"></xforms:bind>
 			</xforms:bind>
-
-			<!-- bind the delete trigger only to those ids which exist on disk (either loaded or recently saved) -->
-			<!--<xforms:bind id="delete-trigger" nodeset="instance('control-instance')/delete-trigger" relevant="string(instance('control-instance')/id)"></xforms:bind>-->
 
 			<!-- **************** DYNAMIC VALIDATION CONTROLS ********************** -->
 			<xforms:action ev:event="xxforms-invalid" ev:observer="doc">
 				<xforms:setvalue ref="instance('control-instance')/save-trigger" value="false()"></xforms:setvalue>
 			</xforms:action>
-
+			
 			<xforms:action ev:event="xxforms-valid" ev:observer="doc">
 				<xforms:setvalue ref="instance('control-instance')/save-trigger" value="true()"></xforms:setvalue>
 			</xforms:action>
@@ -628,24 +626,33 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 					<div class="section">
 						<h1>Edit ID</h1>
 						<div>
-							<xforms:input ref="instance('control-instance')/id">
+							<xforms:input ref="instance('control-instance')/id" incremental="true">
 								<xforms:label>id</xforms:label>
 								<xforms:alert>Required</xforms:alert>
-								<!-- set id -->
-								<xforms:action ev:event="xforms-value-changed">
-									<xforms:setvalue ref="instance('doc')/*[1]/@rdf:about" value="concat('http://kerameikos.org/id/', instance('control-instance')/id)"></xforms:setvalue>
-									<xforms:setvalue ref="instance('doc')/*[1]/geo:location/@rdf:resource" value="concat('http://kerameikos.org/id/', instance('control-instance')/id, '#this')"
-										if="instance('doc')/geo:SpatialThing"></xforms:setvalue>
-									<xforms:setvalue ref="instance('doc')/geo:SpatialThing/@rdf:about" value="concat('http://kerameikos.org/id/', instance('control-instance')/id, '#this')"
-										if="instance('doc')/geo:SpatialThing"></xforms:setvalue>
-								</xforms:action>
 							</xforms:input>
-							<xforms:group ref=".[string-length(instance('control-instance')/id) &gt; 0]">
+							<!-- display trigger to set the @rdf:about of the concept for new ids in order to proceed with class selection -->
+							<xforms:group ref=".[string-length(instance('control-instance')/id) &gt; 0 and instance('control-instance')/new_id = true()]">
+								<xforms:trigger>
+									<xforms:label>Proceed</xforms:label>
+									<xforms:action ev:event="DOMActivate">
+										<xforms:setvalue ref="instance('control-instance')/uri" value="concat('http://kerameikos.org/id/', instance('control-instance')/id)"></xforms:setvalue>
+									</xforms:action>
+								</xforms:trigger>
+							</xforms:group>
+							<!-- display a clickable link to the concept if it is not a new id -->
+							<xforms:group ref=".[string-length(instance('control-instance')/id) &gt; 0 and instance('control-instance')/new_id = false()]">
 								<a href="http://kerameikos.org/id/{instance('control-instance')/id}"> (<xforms:output ref="concat('http://kerameikos.org/id/', instance('control-instance')/id)"
 									></xforms:output>)</a>
 							</xforms:group>
 						</div>
-						<xforms:group ref=".[not(instance('doc')/child::node())]">
+						<xforms:group ref="instance('doc')/*[1]/dcterms:isReplacedBy">
+							<div>
+								<xforms:output ref="@rdf:resource">
+									<xforms:label>Replaced By</xforms:label>
+								</xforms:output>
+							</div>
+						</xforms:group>
+						<xforms:group ref=".[not(instance('doc')/child::node()) and string-length(instance('control-instance')/uri) != 0]">
 							<h3>Select Class</h3>
 							<div>
 								<xforms:select1 ref="instance('control-instance')/type">
@@ -662,7 +669,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 									<xforms:action ev:event="xforms-value-changed">
 										<xforms:var name="type" select="."></xforms:var>
 										<!-- create resource description -->
-										<xforms:insert context="instance('doc')" origin="xforms:element($type, xforms:attribute('rdf:about', ''))"></xforms:insert>
+										<xforms:insert context="instance('doc')" origin="xforms:element($type, xforms:attribute('rdf:about', instance('control-instance')/uri))"></xforms:insert>
 										<!-- insert skos:prefLabel and skos:definition with @xml:lang='en'-->
 										<xforms:insert context="instance('doc')/*[1]" origin="xforms:element('skos:prefLabel', xforms:attribute('xml:lang', 'en'))"></xforms:insert>
 										<xforms:insert context="instance('doc')/*[1]" nodeset="./child::node()[last()]" origin="xforms:element('skos:definition', xforms:attribute('xml:lang', 'en'))"></xforms:insert>
@@ -688,6 +695,8 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 													origin="xforms:element('item', (xforms:attribute('uri', $uri), data($label)))"></xforms:insert>
 											</xforms:action>
 										</xforms:action>
+										<!-- set new_id to false() to disable id editing -->
+										<xforms:setvalue ref="instance('control-instance')/new_id">false</xforms:setvalue>
 									</xforms:action>
 								</xforms:select1>
 							</div>
