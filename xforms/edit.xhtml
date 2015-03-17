@@ -481,8 +481,6 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							<xforms:trigger bind="save-trigger">
 								<xforms:label><span class="glyphicon glyphicon-floppy-disk"></span>Save</xforms:label>
 								<xforms:action ev:event="DOMActivate">
-									<!-- set id -->
-									<xforms:setvalue ref="instance('doc')/*[1]/@rdf:about" value="concat('http://kerameikos.org/id/', instance('control-instance')/id)"></xforms:setvalue>
 									<!-- save file back to disk -->
 									<xforms:setvalue ref="instance('save-config')/url" value="concat('file://', instance('config')/data_path, '/id/', instance('control-instance')/id, '.rdf')"></xforms:setvalue>
 									<xforms:insert nodeset="instance('dump')"
@@ -670,12 +668,14 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 										<xforms:var name="type" select="."></xforms:var>
 										<!-- create resource description -->
 										<xforms:insert context="instance('doc')" origin="xforms:element($type, xforms:attribute('rdf:about', instance('control-instance')/uri))"></xforms:insert>
-										<!-- insert skos:prefLabel and skos:definition with @xml:lang='en'-->
-										<xforms:insert context="instance('doc')/*[1]" origin="xforms:element('skos:prefLabel', xforms:attribute('xml:lang', 'en'))"></xforms:insert>
-										<xforms:insert context="instance('doc')/*[1]" nodeset="./child::node()[last()]" origin="xforms:element('skos:definition', xforms:attribute('xml:lang', 'en'))"></xforms:insert>
 										<!-- insert rdf:type as skos:Concept -->
 										<xforms:insert context="instance('doc')/*[1]"
 											origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/2004/02/skos/core#Concept'))"></xforms:insert>
+										<!-- insert skos:prefLabel and skos:definition with @xml:lang='en'-->
+										<xforms:insert context="instance('doc')/*[1]" origin="xforms:element('skos:prefLabel', xforms:attribute('xml:lang', 'en'))"></xforms:insert>
+										<xforms:insert context="instance('doc')/*[1]" nodeset="./child::node()[last()]" origin="xforms:element('skos:definition', xforms:attribute('xml:lang', 'en'))"></xforms:insert>
+										<!-- insert skos:inScheme -->
+										<xforms:insert context="instance('doc')/*[1]" nodeset="./child::node()[last()]" origin="xforms:element('skos:inScheme', xforms:attribute('rdf:resource', 'http://kerameikos.org/id/'))"></xforms:insert>										
 										<!-- insert related foaf:webpage for an institution -->
 										<xforms:action if="$type='ecrm:E40_Legal_Body'">
 											<xforms:insert context="instance('doc')/*[1]" nodeset="./child::node()[last()]"
