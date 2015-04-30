@@ -1077,7 +1077,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</xforms:group>
 						</xforms:group>
 						<!-- import AAT URIs from Getty -->
-						<xforms:group ref=".[contains($type, 'kon:') or $type='ecrm:E4_Period' or $type='ecrm:E57_Material']">
+						<xforms:group ref=".[contains($type, 'kon:') or $type='ecrm:E4_Period' or $type='ecrm:E57_Material' or $type='foaf:Person']">
 							<kerameikos:getty></kerameikos:getty>
 						</xforms:group>
 						<!-- extract coordinates from Pleiades if there is a Pleiades URI in skos:exactMatch, but no geo:lat and geo:long -->
