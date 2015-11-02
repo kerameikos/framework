@@ -39,6 +39,7 @@
 			<namespace prefix="geo" uri="http://www.w3.org/2003/01/geo/wgs84_pos#"/>
 			<namespace prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
 			<namespace prefix="kon" uri="http://kerameikos.org/ontology#"/>
+			<namespace prefix="org" uri="http://www.w3.org/ns/org#"/>
 			<namespace prefix="osgeo" uri="http://data.ordnancesurvey.co.uk/ontology/geometry/"/>
 			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
 			<namespace prefix="un" uri="http://www.owl-ontologies.com/Ontology1181490123.owl#"/>
@@ -112,12 +113,11 @@
 						<dt>Type</dt>
 						<dd>
 							<xsl:for-each select="arr[@name='type']/str">
-								<xsl:variable name="uri" select="."/>
-
-								<a href="{.}">
-									<xsl:value-of
-										select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
-									/>
+								<xsl:variable name="name" select="."/>
+								
+								<a
+									href="{concat($namespaces//namespace[@prefix=substring-before($name, ':')]/@uri, substring-after($name, ':'))}">
+									<xsl:value-of select="$name"/>
 								</a>
 								<xsl:if test="not(position()=last())">
 									<xsl:text>, </xsl:text>
@@ -137,16 +137,13 @@
 				<label for="search_filter">Type</label>
 				<select id="search_filter" class="form-control">
 					<option value="">Select...</option>
-					<xsl:for-each select="descendant::lst[@name='type']/int">
-						<xsl:variable name="uri" select="@name"/>
-						<xsl:variable name="value" select="concat('type:&#x022;', $uri, '&#x022;')"/>
+					<xsl:for-each select="descendant::lst[@name='type']/int[not(@name='skos:Concept')]">					
+						<xsl:variable name="value" select="concat('type:&#x022;', @name, '&#x022;')"/>
 						<option value="{$value}">
 							<xsl:if test="contains($q, $value)">
 								<xsl:attribute name="selected">selected</xsl:attribute>
 							</xsl:if>
-							<xsl:value-of
-								select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
-							/>
+							<xsl:value-of select="@name"/>
 						</option>
 					</xsl:for-each>
 				</select>
