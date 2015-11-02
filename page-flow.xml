@@ -20,7 +20,7 @@
 	<page path="/kerameikos/admin/edit/" view="xforms/edit.xhtml"/>
 	<page path="/kerameikos/admin/invite/" view="xforms/invite.xhtml"/>
 	<page path="/kerameikos/admin/manage/" view="xforms/manage.xhtml"/>
-	<page path="/kerameikos/admin/" view="xforms/admin.xhtml"/>
+	<page path="/kerameikos/admin/" view="xforms/admin.xhtml" id="admin"/>
 	
 	<!-- authentication -->
 	<page path="/kerameikos/signup" view="xforms/signup.xhtml"/>
@@ -28,9 +28,17 @@
 	<page path="/kerameikos/login-failed" view="xforms/login-failed.html"/>
 	<page path="/kerameikos/admin/logout">
 		<action action="xpl/xforms/logout.xpl">
-			<result page="index"/>
+			<result page="admin"/>
 		</action>
 	</page>
+	
+	<!-- ****************
+	* DATA DUMP GENERATION*
+	***************** -->
+	
+	<!-- pass the repository request parameter to the pipeline to load the RDF/XML and execute the transformation and serialization (into a file) of RDF/XML, TTL, or JSON-LD 
+	The XForms Submissions are GET, but have no output (seralization='none'). The process is much more efficient handled in the XPL workflow than through XForms controls in the web interface -->
+	<page path="/kerameikos/admin/generateXML" model="xpl/controllers/generate-rdfxml.xpl"/>
 	
 	
 	<!-- ****************
