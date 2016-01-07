@@ -2,8 +2,8 @@
 <config>
 	<title>Kerameikos.org</title>
 	<url>http://localhost:8080/orbeon/kerameikos/</url>
-	<solr_published>http://localhost:8080/solr/kerameikos/</solr_published>
-	<solr_fuseki>http://localhost:8080/solr/kerameikos-fuseki/</solr_fuseki>
+	<solr_published>http://localhost:8080/solr4.10/kerameikos/</solr_published>
+	<solr_fuseki>http://localhost:8080/solr4.10/kerameikos-fuseki/</solr_fuseki>
 	<data_path>/usr/local/projects/kerameikos-data</data_path>
 	<ontology_path>/usr/local/projects/ontology/</ontology_path>
 	<sparql>

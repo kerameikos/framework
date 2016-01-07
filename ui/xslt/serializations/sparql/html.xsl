@@ -17,6 +17,7 @@
 			<namespace prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
 			<namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
 			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
+			<namespace prefix="spatial" uri="http://jena.apache.org/spatial#"/>
 			<namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
 			<namespace prefix="un" uri="http://www.owl-ontologies.com/Ontology1181490123.owl#"/>
 		</namespaces>
@@ -128,6 +129,9 @@
 					<a href="{res:uri}">
 						<xsl:value-of select="$label"/>
 					</a>
+				</xsl:when>
+				<xsl:when test="res:bnode">
+					<xsl:text>_:</xsl:text>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="res:literal"/>
