@@ -281,7 +281,8 @@ PREFIX owl:	<http://www.w3.org/2002/07/owl#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX ecrm:	<http://erlangen-crm.org/current/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX nm:	<http://kerameikos.org/id/>
+PREFIX kid:	<http://kerameikos.org/id/>
+PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX xsd:	<http://www.w3.org/2001/XMLSchema#>
 PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 					<query id="uncertainty">SELECT ?uri ?label WHERE {?uri a un:Uncertainty ;
@@ -541,7 +542,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 		</xforms:model>
 		<!-- XBL components -->
 		<xi:include href="xbl/bm/bm.xbl" xi:omit-xml-base="true"></xi:include>
-		<xi:include href="xbl/dbpedia/dbpedia.xbl" xi:omit-xml-base="true"></xi:include>
+		<xi:include href="xbl/wikidata/wikidata.xbl" xi:omit-xml-base="true"></xi:include>
 		<xi:include href="xbl/getty/getty.xbl" xi:omit-xml-base="true"></xi:include>
 		<xi:include href="xbl/pleiades/pleiades.xbl" xi:omit-xml-base="true"></xi:include>
 		<xi:include href="xbl/viaf/viaf.xbl" xi:omit-xml-base="true"></xi:include>
@@ -1288,7 +1289,6 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 								</div>
 							</div>
 						</xforms:group>
-						
 						<!-- org:Membership -->
 						<xforms:repeat nodeset="org:Membership">
 							<xforms:var name="uri" select="@rdf:about"></xforms:var>
@@ -1296,22 +1296,25 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							<div class="subsection row">
 								<div class="col-md-12">
 									<h3>Membership <small>
-										<xforms:output value="concat('(', $uri, ')')"></xforms:output>
-										<xforms:trigger appearance="minimal">
-											<xforms:action ev:event="DOMActivate">
-												<xforms:delete nodeset="instance('doc')/*[1]/org:hasMembership[@rdf:resource=$uri]"></xforms:delete>
+											<xforms:output value="concat('(', $uri, ')')"></xforms:output>
+											<xforms:trigger appearance="minimal">
+												<xforms:action ev:event="DOMActivate">
+												<xforms:delete
+												nodeset="instance('doc')/*[1]/org:hasMembership[@rdf:resource=$uri]"></xforms:delete>
 												<xforms:delete nodeset="."></xforms:delete>
-											</xforms:action>
-											<xforms:label>
+												</xforms:action>
+												<xforms:label>
 												<span class="glyphicon glyphicon-remove"></span>
-											</xforms:label>
-										</xforms:trigger>
-									</small>
+												</xforms:label>
+											</xforms:trigger>
+										</small>
 									</h3>
-									<xforms:group ref=".[count(ancestor::rdf:RDF/org:Membership[@rdf:about=$uri]) != 1]">
+									<xforms:group
+										ref=".[count(ancestor::rdf:RDF/org:Membership[@rdf:about=$uri]) != 1]">
 										<div class="bg-danger alert-box">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
-											<strong>Alert:</strong> There cannot be multiple memberships with identical URIs.</div>
+											<strong>Alert:</strong> There cannot be multiple
+											memberships with identical URIs.</div>
 									</xforms:group>
 									<div class="trigger_container">
 										<!--<xforms:group ref=".[count(nmo:hasStartDate) = 0]">
@@ -1331,11 +1334,17 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 										<xforms:group ref=".[count(org:organization) = 0]">
 											<xforms:trigger appearance="minimal">
 												<xforms:label>
-													<span class="glyphicon glyphicon-plus"></span>Workshop</xforms:label>
+												<span class="glyphicon glyphicon-plus"
+												></span>Workshop</xforms:label>
 												<xforms:action ev:event="DOMActivate">
-													<xforms:setvalue ref="instance('control-instance')/membership-position" value="$position"></xforms:setvalue>
-													<xforms:setvalue ref="instance('control-instance')/atom-type">&#x022;foaf:Organization&#x022;</xforms:setvalue>
-													<xxforms:show dialog="organization-dialog"></xxforms:show>
+												<xforms:setvalue
+												ref="instance('control-instance')/membership-position"
+												value="$position"></xforms:setvalue>
+												<xforms:setvalue
+												ref="instance('control-instance')/atom-type"
+												>&#x022;foaf:Organization&#x022;</xforms:setvalue>
+												<xxforms:show dialog="organization-dialog"
+												></xxforms:show>
 												</xforms:action>
 											</xforms:trigger>
 										</xforms:group>
@@ -1347,21 +1356,26 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 												<xforms:label>Role</xforms:label>
 												<xforms:alert>Required</xforms:alert>
 												<xforms:item>
-													<xforms:label>Select...</xforms:label>
-													<xforms:value></xforms:value>
+												<xforms:label>Select...</xforms:label>
+												<xforms:value></xforms:value>
 												</xforms:item>
-												<xforms:itemset nodeset="instance('role-list')//item">
-													<xforms:label ref="."></xforms:label>
-													<xforms:value ref="@uri"></xforms:value>
+												<xforms:itemset
+												nodeset="instance('role-list')//item">
+												<xforms:label ref="."></xforms:label>
+												<xforms:value ref="@uri"></xforms:value>
 												</xforms:itemset>
 												<!-- when the value of the drop down is changed, update the URI of this object and the org:hasMembership in the parent concept -->
 												<xforms:action ev:event="xforms-value-changed">
-													<xforms:var name="role" select="."></xforms:var>
-													<xforms:var name="count" select="count(instance('doc')//org:role[@rdf:resource = $role])"></xforms:var>
-													<xforms:setvalue ref="ancestor::org:Membership/@rdf:about"
-														value="concat(ancestor::rdf:RDF/*[1]/@rdf:about, '#', substring-after($role, 'id/'), if ($count &gt; 1) then $count else '')"></xforms:setvalue>
-													<xforms:setvalue ref="ancestor::rdf:RDF/*[1]/org:hasMembership[position()=$position]/@rdf:resource"
-														value="concat(ancestor::rdf:RDF/*[1]/@rdf:about, '#', substring-after($role, 'id/'), if ($count &gt; 1) then $count else '')"></xforms:setvalue>
+												<xforms:var name="role" select="."></xforms:var>
+												<xforms:var name="count"
+												select="count(instance('doc')//org:role[@rdf:resource = $role])"></xforms:var>
+												<xforms:setvalue
+												ref="ancestor::org:Membership/@rdf:about"
+												value="concat(ancestor::rdf:RDF/*[1]/@rdf:about, '#', substring-after($role, 'id/'), if ($count &gt; 1) then $count else '')"></xforms:setvalue>
+												<xforms:setvalue
+												ref="ancestor::rdf:RDF/*[1]/org:hasMembership[position()=$position]/@rdf:resource"
+												value="concat(ancestor::rdf:RDF/*[1]/@rdf:about, '#', substring-after($role, 'id/'), if ($count &gt; 1) then $count else '')"
+												></xforms:setvalue>
 												</xforms:action>
 											</xforms:select1>
 										</div>
@@ -1407,7 +1421,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											<xforms:trigger appearance="minimal">
 												<xforms:delete ev:event="DOMActivate" context="."></xforms:delete>
 												<xforms:label>
-													<span class="glyphicon glyphicon-remove"></span>
+												<span class="glyphicon glyphicon-remove"></span>
 												</xforms:label>
 											</xforms:trigger>
 										</div>
@@ -1416,17 +1430,15 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</div>
 						</xforms:repeat>
 					</xforms:group>
-					</xforms:group>
 					<!--<fr:xforms-inspector></fr:xforms-inspector>-->
 				</div>
 				<div class="col-md-2">
 					<xforms:group ref="instance('doc')/*[1]">
 						<xforms:var name="type" select="name()"></xforms:var>
 						<h3>Import</h3>
-						<!-- import skos:prefLabels from dbpedia for those languages that are not already in the RDF -->
-						<xforms:group
-							ref=".[skos:exactMatch[contains(@rdf:resource, 'dbpedia.org/resource')]]">
-							<kerameikos:dbpedia></kerameikos:dbpedia>
+						<!-- import skos:prefLabels from wikidata for those languages that are not already in the RDF -->
+						<xforms:group ref=".[not(skos:*[contains(@rdf:resource, 'wikidata')])]">
+							<kerameikos:wikidata></kerameikos:wikidata>
 						</xforms:group>
 						<xforms:group
 							ref=".[contains($type, 'kon:') or contains($type, 'foaf:') or $type='ecrm:E4_Period' or $type='ecrm:E57_Material']">
