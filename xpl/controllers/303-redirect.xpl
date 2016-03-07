@@ -21,15 +21,17 @@
 				<xsl:output indent="yes"/>
 				<xsl:template match="/">
 					<xsl:variable name="path" select="substring-after(doc('input:request')/request/request-url, 'id/')"/>
-					<html xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-						<head>
-							<title>303 See Other</title>
-						</head>
-						<body>
-							<h1>See Other</h1>
-							<p>The answer to your request is located <a href="{/config/url}id/{$path}.html">here</a>.</p>
-						</body>
-					</html>
+					<xml xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xs:string" xmlns:xs="http://www.w3.org/2001/XMLSchema" content-type="text/html">
+<![CDATA[<html>
+	<head>
+		<title>303 See Other</title>
+	</head>
+	<body>
+		<h1>See Other</h1>
+		<p>The answer to your request is located <a href="]]><xsl:value-of select="concat(/config/url, 'id/', $path, '.html')"/><![CDATA[">here</a>.</p>
+	</body>
+</html>]]>
+					</xml>
 				</xsl:template>
 			</xsl:stylesheet>
 		</p:input>
@@ -47,7 +49,7 @@
 					<xsl:variable name="path" select="substring-after(doc('input:request')/request/request-url, 'id/')"/>
 					<config>
 						<status-code>303</status-code>
-						<content-type>text/plain</content-type>
+						<content-type>text/html</content-type>
 						<header>
 							<name>Location</name>
 							<value>
