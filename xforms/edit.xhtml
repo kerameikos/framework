@@ -5,7 +5,7 @@
 	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xi="http://www.w3.org/2001/XInclude"
 	xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:dcterms="http://purl.org/dc/terms/"
 	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:kid="http://kerameikos.org/id/"
 	xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:atom="http://www.w3.org/2005/Atom" xmlns:org="http://www.w3.org/ns/org#"
@@ -33,7 +33,7 @@
 				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/"
 					xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#"
-					xmlns:ecrm="http://erlangen-crm.org/current/"
+					xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 					xmlns:dcterms="http://purl.org/dc/terms/"
 					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
@@ -118,15 +118,15 @@
 				<classes xmlns="">
 					<class>
 						<label>Collection</label>
-						<type>ecrm:E78_Collection</type>
+						<type>crm:E78_Collection</type>
 					</class>
 					<class>
 						<label>Institution</label>
-						<type>ecrm:E40_Legal_Body</type>
+						<type>crm:E40_Legal_Body</type>
 					</class>
 					<class>
 						<label>Material</label>
-						<type>ecrm:E57_Material</type>
+						<type>crm:E57_Material</type>
 					</class>
 					<class>
 						<label>Organization (Workshop)</label>
@@ -134,7 +134,7 @@
 					</class>
 					<class>
 						<label>Period</label>
-						<type>ecrm:E4_Period</type>
+						<type>crm:E4_Period</type>
 					</class>
 					<class>
 						<label>Person</label>
@@ -279,7 +279,7 @@ PREFIX dcterms:	<http://purl.org/dc/terms/>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 PREFIX owl:	<http://www.w3.org/2002/07/owl#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
-PREFIX ecrm:	<http://erlangen-crm.org/current/>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX org:	<http://www.w3.org/ns/org#>
@@ -291,7 +291,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 					<query id="role">SELECT ?uri ?label WHERE {?uri a org:Role ; skos:prefLabel
 						?label . FILTER(langMatches(lang(?label), "en"))} ORDER BY ?label</query>
 					<query id="institution">SELECT ?uri ?label WHERE { ?uri rdf:type
-						ecrm:E40_Legal_Body . ?uri skos:prefLabel ?label . FILTER (lang(?label) =
+						crm:E40_Legal_Body . ?uri skos:prefLabel ?label . FILTER (lang(?label) =
 						"en")} ORDER BY ASC(?label)</query>
 				</templates>
 			</xforms:instance>
@@ -510,7 +510,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				</xforms:action>
 
 				<!-- insert P50_has_current_keeper for a collection, query SPARQL for available legal bodies -->
-				<xforms:action if="instance('doc')/*[1]/name()='ecrm:E78_Collection'">
+				<xforms:action if="instance('doc')/*[1]/name()='crm:E78_Collection'">
 					<xforms:setvalue ref="instance('sparqlQuery')"
 						value="concat(instance('sparql-templates')/prefix, ' ', instance('sparql-templates')/query[@id='institution'])"></xforms:setvalue>
 					<xforms:send submission="submit-sparqlQuery"></xforms:send>
@@ -732,7 +732,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											<xforms:insert
 												context="instance('doc')/geo:SpatialThing"
 												nodeset="./child::node()[last()]"
-												origin="xforms:element('rdf:type', (xforms:attribute('rdf:resource', 'http://erlangen-crm.org/current/E53_Place'), ''))"
+												origin="xforms:element('rdf:type', (xforms:attribute('rdf:resource', 'http://www.cidoc-crm.org/cidoc-crm/E53_Place'), ''))"
 											></xforms:insert>
 										</xforms:action>
 									</xforms:trigger>
@@ -741,7 +741,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							<li>
 								<h4>Miscellaneous</h4>
 							</li>
-							<xforms:group ref=".[$type='ecrm:E40_Legal_Body']">
+							<xforms:group ref=".[$type='crm:E40_Legal_Body']">
 								<xforms:group ref=".[count(foaf:thumbnail) = 0]">
 									<li>
 										<xforms:trigger appearance="minimal">
@@ -856,17 +856,17 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											nodeset="./child::node()[last()]"
 											origin="xforms:element('skos:inScheme', xforms:attribute('rdf:resource', 'http://kerameikos.org/id/'))"></xforms:insert>
 										<!-- insert related foaf:webpage for an institution -->
-										<xforms:action if="$type='ecrm:E40_Legal_Body'">
+										<xforms:action if="$type='crm:E40_Legal_Body'">
 											<xforms:insert context="instance('doc')/*[1]"
 												nodeset="./child::node()[last()]"
 												origin="xforms:element('foaf:homepage', xforms:attribute('rdf:resource', ''))"
 											></xforms:insert>
 										</xforms:action>
 										<!-- insert P50_has_current_keeper for a collection, query SPARQL for available legal bodies -->
-										<xforms:action if="$type='ecrm:E78_Collection'">
+										<xforms:action if="$type='crm:E78_Collection'">
 											<xforms:insert context="instance('doc')/*[1]"
 												nodeset="./child::node()[last()]"
-												origin="xforms:element('ecrm:P50_has_current_keeper', (xforms:attribute('rdf:resource', ''),''))"></xforms:insert>
+												origin="xforms:element('crm:P50_has_current_keeper', (xforms:attribute('rdf:resource', ''),''))"></xforms:insert>
 											<xforms:setvalue ref="instance('sparqlQuery')"
 												value="concat(instance('sparql-templates')/prefix, ' ', instance('sparql-templates')/query[@id='institution'])"></xforms:setvalue>
 											<xforms:send submission="submit-sparqlQuery"></xforms:send>
@@ -1114,7 +1114,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</div>
 							<div class="section">
 								<h4>Miscellaneous Fields</h4>
-								<xforms:group ref="ecrm:P50_has_current_keeper">
+								<xforms:group ref="crm:P50_has_current_keeper">
 									<div>
 										<xforms:select1 ref="@rdf:resource">
 											<xforms:label>Institution</xforms:label>
@@ -1441,7 +1441,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							<kerameikos:wikidata></kerameikos:wikidata>
 						</xforms:group>
 						<xforms:group
-							ref=".[contains($type, 'kon:') or contains($type, 'foaf:') or $type='ecrm:E4_Period' or $type='ecrm:E57_Material']">
+							ref=".[contains($type, 'kon:') or contains($type, 'foaf:') or $type='crm:E4_Period' or $type='crm:E57_Material']">
 							<xforms:group
 								ref=".[not(skos:exactMatch[contains(@rdf:resource, 'britishmuseum.org')])]">
 								<kerameikos:bm></kerameikos:bm>
@@ -1449,7 +1449,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 						</xforms:group>
 						<!-- import AAT URIs from Getty -->
 						<xforms:group
-							ref=".[contains($type, 'kon:') or $type='ecrm:E4_Period' or $type='ecrm:E57_Material' or $type='foaf:Person']">
+							ref=".[contains($type, 'kon:') or $type='crm:E4_Period' or $type='crm:E57_Material' or $type='foaf:Person']">
 							<kerameikos:getty></kerameikos:getty>
 						</xforms:group>
 						<!-- extract coordinates from Pleiades if there is a Pleiades URI in skos:exactMatch, but no geo:lat and geo:long -->
@@ -1461,7 +1461,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 						</xforms:group>
 						<!-- query VIAF to add associated URIs -->
 						<xforms:group
-							ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type='ecrm:E40_Legal_Body']">
+							ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type='crm:E40_Legal_Body']">
 							<kerameikos:viaf></kerameikos:viaf>
 						</xforms:group>
 					</xforms:group>

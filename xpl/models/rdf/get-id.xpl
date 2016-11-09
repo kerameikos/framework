@@ -19,7 +19,7 @@
 		<p:input name="data" href="../../../config.xml"/>
 		<p:input name="config">
 			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-				<xsl:output indent="yes"/>
+				
 				<xsl:template match="/">
 					<xsl:variable name="request-url" select="doc('input:request')/request/request-url"/>
 					<xsl:variable name="pieces" select="tokenize($request-url, '/')"/>

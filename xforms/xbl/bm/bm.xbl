@@ -82,8 +82,8 @@
 
 						<xforms:instance id="bm-facets">
 							<facets xmlns="">
-								<facet type="ecrm:E57_Material">http://collection.britishmuseum.org/id/thesauri/material</facet>
-								<facet type="ecrm:E4_Period">http://collection.britishmuseum.org/id/thesauri/matcult</facet>
+								<facet type="crm:E57_Material">http://collection.britishmuseum.org/id/thesauri/material</facet>
+								<facet type="crm:E4_Period">http://collection.britishmuseum.org/id/thesauri/matcult</facet>
 								<facet type="foaf:Person">http://collection.britishmuseum.org/id/person-institution</facet>
 								<facet type="foaf:Organization">http://collection.britishmuseum.org/id/person-institution</facet>
 								<facet type="kon:ProductionPlace">http://collection.britishmuseum.org/id/place</facet>

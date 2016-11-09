@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:ecrm="http://erlangen-crm.org/current/"
+	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#"
 	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:kerameikos="http://kerameikos.org/" xmlns:res="http://www.w3.org/2005/sparql-results#"
 	exclude-result-prefixes="#all" version="2.0">
@@ -9,15 +9,15 @@
 		<classes>
 			<!--<class>
 				<label>Collection</label>
-				<type>ecrm:E78_Collection</type>
+				<type>crm:E78_Collection</type>
 			</class>-->
 			<class>
 				<label>Institution</label>
-				<type>ecrm:E40_Legal_Body</type>
+				<type>crm:E40_Legal_Body</type>
 			</class>
 			<class>
 				<label>Material</label>
-				<type>ecrm:E57_Material</type>
+				<type>crm:E57_Material</type>
 			</class>
 			<class>
 				<label>Organization</label>
@@ -25,7 +25,7 @@
 			</class>
 			<class>
 				<label>Period</label>
-				<type>ecrm:E4_Period</type>
+				<type>crm:E4_Period</type>
 			</class>
 			<class>
 				<label>Person</label>
@@ -60,7 +60,7 @@ PREFIX dcterms:	<http://purl.org/dc/terms/>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 PREFIX owl:	<http://www.w3.org/2002/07/owl#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
-PREFIX ecrm:	<http://erlangen-crm.org/current/>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX kon:	<http://kerameikos.org/ontology#>]]>
@@ -68,7 +68,7 @@ PREFIX kon:	<http://kerameikos.org/ontology#>]]>
 		<xsl:variable name="metadata">
 			<![CDATA[?object dcterms:title ?title ;
 dcterms:identifier ?id .
-{?object ecrm:P50_has_current_keeper ?kuri .
+{?object crm:P50_has_current_keeper ?kuri .
 ?kuri skos:prefLabel ?keeper .
 FILTER ( lang(?keeper) = "en" )} 
 OPTIONAL {?object foaf:thumbnail ?thumb} .
@@ -77,43 +77,43 @@ OPTIONAL {?object foaf:depiction ?ref}}]]>
 
 		<xsl:variable name="select">
 			<xsl:choose>
-				<xsl:when test="$type='ecrm:E4_Period'">
+				<xsl:when test="$type='crm:E4_Period'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object ecrm:P108i_was_produced_by ?prod .
-?prod  ecrm:P10_falls_within kid:RDFID}
+{?object crm:P108i_was_produced_by ?prod .
+?prod  crm:P10_falls_within kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P10_falls_within ?prod .
-?prod ecrm:P7_took_place_at ?matches}
+?object crm:P10_falls_within ?prod .
+?prod crm:P7_took_place_at ?matches}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P10_falls_within ?matches]]>
+?object crm:P10_falls_within ?matches]]>
 				</xsl:when>
-				<xsl:when test="$type='ecrm:E57_Material'">
+				<xsl:when test="$type='crm:E57_Material'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object ecrm:P45_consists_of kid:RDFID }
+{?object crm:P45_consists_of kid:RDFID }
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P45_consists_of ?matches}
+?object crm:P45_consists_of ?matches}
 UNION {?types skos:broader kid:RDFID .
-?object ecrm:P45_consists_of ?types}
+?object crm:P45_consists_of ?types}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P45_consists_of ?matches}]]>
+?object crm:P45_consists_of ?matches}]]>
 				</xsl:when>
 				<xsl:when test="$type='kon:ProductionPlace'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at kid:RDFID}
+{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P7_took_place_at kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at ?matches}
-UNION {?types ecrm:P88i_forms_part_of kid:RDFID .
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P7_took_place_at ?matches}
+UNION {?types crm:P88i_forms_part_of kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at ?matches}]]>
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P7_took_place_at ?matches}]]>
 				</xsl:when>
-				<xsl:when test="$type='ecrm:E40_Legal_Body'">
+				<xsl:when test="$type='crm:E40_Legal_Body'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-?object ecrm:P50_has_current_keeper kid:RDFID .]]>
+?object crm:P50_has_current_keeper kid:RDFID .]]>
 				</xsl:when>
 				<xsl:when test="$type='kon:Shape'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
@@ -128,14 +128,14 @@ UNION {?types skos:broader kid:RDFID .
 				</xsl:when>
 				<xsl:when test="$type='kon:Technique'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object ecrm:P32_used_general_technique kid:RDFID }
+{?object crm:P32_used_general_technique kid:RDFID }
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P32_used_general_technique ?matches}
+?object crm:P32_used_general_technique ?matches}
 UNION {?types skos:broader kid:RDFID .
-?object ecrm:P32_used_general_technique ?types}
+?object crm:P32_used_general_technique ?types}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P32_used_general_technique ?matches}]]>
+?object crm:P32_used_general_technique ?matches}]]>
 				</xsl:when>
 				<!--<xsl:when test="$type='kon:Ware'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
@@ -150,19 +150,19 @@ UNION {?types skos:broader kid:RDFID .
 				</xsl:when>-->
 				<xsl:when test="$type='foaf:Person'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by kid:RDFID}
+{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by ?matches}]]>
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by ?matches}]]>
 				</xsl:when>
 				<xsl:when test="$type='foaf:Organization'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by kid:RDFID}
+{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by ?matches}]]>
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by ?matches}]]>
 				</xsl:when>
 			</xsl:choose>
 		</xsl:variable>
@@ -238,7 +238,7 @@ PREFIX dcterms:	<http://purl.org/dc/terms/>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 PREFIX owl:	<http://www.w3.org/2002/07/owl#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
-PREFIX ecrm:	<http://erlangen-crm.org/current/>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX kon:	<http://kerameikos.org/ontology#>]]>
@@ -253,25 +253,25 @@ ORDER BY ?label]]>
 		</xsl:variable>
 		<xsl:variable name="category-select">
 			<xsl:choose>
-				<xsl:when test="$category='ecrm:E4_Period'">
-					<![CDATA[?object ecrm:P108i_was_produced_by ?prod .
-?prod  ecrm:P10_falls_within ?target]]>
+				<xsl:when test="$category='crm:E4_Period'">
+					<![CDATA[?object crm:P108i_was_produced_by ?prod .
+?prod  crm:P10_falls_within ?target]]>
 				</xsl:when>
-				<xsl:when test="$category='ecrm:E57_Material'">
-					<![CDATA[?object ecrm:P45_consists_of ?target]]>
+				<xsl:when test="$category='crm:E57_Material'">
+					<![CDATA[?object crm:P45_consists_of ?target]]>
 				</xsl:when>
 				<xsl:when test="$category='kon:ProductionPlace'">
-					<![CDATA[?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at ?target]]>
+					<![CDATA[?object crm:P108i_was_produced_by ?prod .
+?prod crm:P7_took_place_at ?target]]>
 				</xsl:when>
-				<xsl:when test="$category='ecrm:E40_Legal_Body'">
-					<![CDATA[?object ecrm:P50_has_current_keeper ?target]]>
+				<xsl:when test="$category='crm:E40_Legal_Body'">
+					<![CDATA[?object crm:P50_has_current_keeper ?target]]>
 				</xsl:when>
 				<xsl:when test="$category='kon:Shape'">
 					<![CDATA[?object kon:hasShape ?target ]]>
 				</xsl:when>
 				<xsl:when test="$category='kon:Technique'">
-					<![CDATA[?object ecrm:P32_used_general_technique ?target]]>
+					<![CDATA[?object crm:P32_used_general_technique ?target]]>
 				</xsl:when>
 				<!--<xsl:when test="$category='kon:Ware'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
@@ -285,43 +285,43 @@ ORDER BY ?label]]>
 					?object kon:hasShape ?matches}]]>
 					</xsl:when>-->
 				<xsl:when test="$category='foaf:Person'">
-					<![CDATA[?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by ?target]]>
+					<![CDATA[?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by ?target]]>
 				</xsl:when>
 				<xsl:when test="$category='foaf:Organization'">
-					<![CDATA[?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by ?target]]>
+					<![CDATA[?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by ?target]]>
 				</xsl:when>
 			</xsl:choose>
 		</xsl:variable>
 
 		<xsl:variable name="select">
 			<xsl:choose>
-				<xsl:when test="$type='ecrm:E4_Period'">
+				<xsl:when test="$type='crm:E4_Period'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
-{?object ecrm:P108i_was_produced_by ?prod .
-?prod  ecrm:P10_falls_within kid:RDFID}
+{?object crm:P108i_was_produced_by ?prod .
+?prod  crm:P10_falls_within kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P10_falls_within ?prod .
-?prod ecrm:P7_took_place_at ?matches}]]>
+?object crm:P10_falls_within ?prod .
+?prod crm:P7_took_place_at ?matches}]]>
 				</xsl:when>
-				<xsl:when test="$type='ecrm:E57_Material'">
+				<xsl:when test="$type='crm:E57_Material'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
-{?object ecrm:P45_consists_of kid:RDFID }
+{?object crm:P45_consists_of kid:RDFID }
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P45_consists_of ?matches}]]>
+?object crm:P45_consists_of ?matches}]]>
 				</xsl:when>
 				<xsl:when test="$type='kon:ProductionPlace'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
-{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at kid:RDFID}
+{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P7_took_place_at kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at ?matches}]]>
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P7_took_place_at ?matches}]]>
 				</xsl:when>
-				<xsl:when test="$type='ecrm:E40_Legal_Body'">
+				<xsl:when test="$type='crm:E40_Legal_Body'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
-?object ecrm:P50_has_current_keeper kid:RDFID]]>
+?object crm:P50_has_current_keeper kid:RDFID]]>
 				</xsl:when>
 				<xsl:when test="$type='kon:Shape'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
@@ -331,9 +331,9 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 				</xsl:when>
 				<xsl:when test="$type='kon:Technique'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
-{?object ecrm:P32_used_general_technique kid:RDFID }
+{?object crm:P32_used_general_technique kid:RDFID }
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P32_used_general_technique ?matches}]]>
+?object crm:P32_used_general_technique ?matches}]]>
 				</xsl:when>
 				<!--<xsl:when test="$type='kon:Ware'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
@@ -348,19 +348,19 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 					</xsl:when>-->
 				<xsl:when test="$type='foaf:Person'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
-{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by kid:RDFID}
+{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by ?matches}]]>
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by ?matches}]]>
 				</xsl:when>
 				<xsl:when test="$type='foaf:Organization'">
 					<![CDATA[SELECT ?label (COUNT(?label) as ?count) WHERE {
-{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by kid:RDFID}
+{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by ?matches}]]>
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by ?matches}]]>
 				</xsl:when>
 			</xsl:choose>
 		</xsl:variable>

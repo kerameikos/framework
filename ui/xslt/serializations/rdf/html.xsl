@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
+	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
 	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
 	xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
@@ -17,6 +17,7 @@
 	<xsl:variable name="html-uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 	<xsl:variable name="type" select="/content/rdf:RDF/*[1]/name()"/>
 	<xsl:variable name="title" select="/content/rdf:RDF/*[1]/skos:prefLabel[@xml:lang='en']"/>
+	<xsl:variable name="hasGeo" as="xs:boolean">true</xsl:variable>
 
 	<!-- definition of namespaces for turning in solr type field URIs into abbreviations -->
 	<xsl:variable name="namespaces" as="item()*">
@@ -39,7 +40,7 @@
 	<xsl:template match="/">
 		<html lang="en" prefix="{$prefix}">
 			<head>
-				<title id="{$id}">Kerameikos.org: <xsl:value-of select="//@rdf:about"/></title>
+				<title id="{$id}">Kerameikos.org: <xsl:value-of select="$id"/></title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
@@ -49,20 +50,17 @@
 				<script type="text/javascript" src="{$display_path}ui/javascript/jquery.fancybox.pack.js"/>
 				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
-				<!-- mapping js -->
-				<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"/>
-				<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.2&amp;sensor=false"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/timeline-2.3.0.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/mxn.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/timemap_full.pack.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/param.js"/>
-				<!-- timeline css -->
-				<link type="text/css" href="{$display_path}ui/css/timeline-2.3.0.css" rel="stylesheet"/>
-				<!-- highcharts -->
-				<script type="text/javascript" src="{$display_path}ui/javascript/highcharts.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/modules/data.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/modules/exporting.js"/>
+				
+				<!-- mapping -->
+				<xsl:if test="$hasGeo = true()">
+					<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
+					<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet.ajax.min.js"/>
+					<!--<script type="text/javascript" src="{$display_path}ui/javascript/heatmap.min.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-heatmap.js"/>-->
+					<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
+				</xsl:if>
+				
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 			</head>
 			<body>
@@ -76,30 +74,25 @@
 	<xsl:template name="body">
 		<div class="container-fluid content">
 			<div class="row">
-				<div class="col-md-9">
+				<div class="col-md-12">
 					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
 
 					<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
-						<div id="timemap">
-							<div id="mapcontainer">
-								<div id="map"/>
-							</div>
-							<div id="timelinecontainer">
-								<div id="timeline"/>
-							</div>
+						<div id="mapcontainer" class="map-normal">
+							<div id="info"/>
 						</div>
 						<xsl:call-template name="associatedObjects">
 							<xsl:with-param name="id" select="$id"/>
 							<xsl:with-param name="type" select="$type"/>
 						</xsl:call-template>
-						<xsl:call-template name="quant"/>
+						<!--<xsl:call-template name="quant"/>-->
 					</xsl:if>
 				</div>
 				<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
-					<div class="col-md-3">
+					<div class="col-md-12">
 						<div>
 							<h3>Data Export</h3>
-							<ul>
+							<ul class="list-inline">
 								<li>
 									<a href="{$id}.rdf">RDF/XML</a>
 								</li>
@@ -128,6 +121,15 @@
 						</xsl:if>
 					</div>
 				</xsl:if>
+			</div>
+			
+			<div class="hidden">
+				<span id="mapboxKey">
+					<xsl:value-of select="/content/config/mapboxKey"/>
+				</span>
+				<span id="type">
+					<xsl:value-of select="$type"/>
+				</span>
 			</div>
 		</div>
 	</xsl:template>

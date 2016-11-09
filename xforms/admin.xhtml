@@ -2,7 +2,7 @@
 	xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:fr="http://orbeon.org/oxf/xml/form-runner"
 	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:foaf="http://xmlns.com/foaf/0.1/"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:ecrm="http://erlangen-crm.org/current/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:atom="http://www.w3.org/2005/Atom">
 	<head>
@@ -30,11 +30,11 @@
 					<original_id></original_id>
 					<save-trigger></save-trigger>
 					<status></status>
-					<!-- pagination -->					
+					<!-- pagination -->
 					<numFound>0</numFound>
 					<page>1</page>
 					<offset>0</offset>
-					<limit>100</limit>					
+					<limit>100</limit>
 				</controls>
 			</xforms:instance>
 
@@ -84,7 +84,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 DELETE {?s ?p ?o} WHERE {
  {?place rdf:type skos:Concept ; geo:location ?s . ?s ?p ?o }
  UNION {?person rdf:type skos:Concept ; org:hasMembership ?s . ?s ?p ?o }
- UNION {?s rdf:type skos:Concept FILTER regex(str(?s), "kerameikos", "i") . ?s ?p ?o}}]]>
+ UNION {?s rdf:type skos:Concept FILTER strStarts(str(?s), "http://kerameikos.org/id/") . ?s ?p ?o}}]]>
 					</query>
 				</queries>
 			</xforms:instance>
@@ -148,7 +148,7 @@ SELECT * WHERE {
 			<xforms:instance id="solr-response">
 				<response></response>
 			</xforms:instance>
-			
+
 			<!-- ************* BINDINGS **********************-->
 			<xforms:binding nodeset="instance('control-instance')">
 				<xforms:bind nodeset="numFound" type="xs:integer"/>
@@ -243,10 +243,12 @@ SELECT * WHERE {
 				<xforms:setvalue ref="instance('sparqlQuery')" value="instance('sparqlQueries')/query[@id='count-concepts']"/>
 				<xforms:send submission="submit-sparqlQuery"/>
 				<xforms:action ev:event="xforms-submit-done">
-					<xforms:setvalue ref="instance('control-instance')/numFound" value="instance('sparqlResponse')/descendant::res:binding[@name='count']/res:literal"/>
-					
+					<xforms:setvalue ref="instance('control-instance')/numFound"
+						value="instance('sparqlResponse')/descendant::res:binding[@name='count']/res:literal"/>
+
 					<!-- then get first page from SPARQL -->
-					<xforms:setvalue ref="instance('sparqlQuery')" value="replace(instance('sparqlQueries')/query[@id='query-all'], '%OFFSET%', instance('control-instance')/offset)"/>
+					<xforms:setvalue ref="instance('sparqlQuery')"
+						value="replace(instance('sparqlQueries')/query[@id='query-all'], '%OFFSET%', instance('control-instance')/offset)"/>
 					<xforms:send submission="submit-sparqlQuery"/>
 				</xforms:action>
 			</xforms:action>
@@ -318,7 +320,8 @@ SELECT * WHERE {
 											</xforms:label>
 											<xforms:action ev:event="DOMActivate">
 												<xforms:setvalue ref="instance('control-instance')/page">1</xforms:setvalue>
-												<xforms:setvalue ref="instance('sparqlQuery')" value="replace(instance('sparqlQueries')/query[@id='query-all'], '%OFFSET%', instance('control-instance')/offset)"/>
+												<xforms:setvalue ref="instance('sparqlQuery')"
+													value="replace(instance('sparqlQueries')/query[@id='query-all'], '%OFFSET%', instance('control-instance')/offset)"/>
 												<xforms:send submission="submit-sparqlQuery"/>
 											</xforms:action>
 										</xforms:trigger>
@@ -328,7 +331,8 @@ SELECT * WHERE {
 											</xforms:label>
 											<xforms:action ev:event="DOMActivate">
 												<xforms:setvalue ref="instance('control-instance')/page" value="$previous"/>
-												<xforms:setvalue ref="instance('sparqlQuery')" value="replace(instance('sparqlQueries')/query[@id='query-all'], '%OFFSET%', instance('control-instance')/offset)"/>
+												<xforms:setvalue ref="instance('sparqlQuery')"
+													value="replace(instance('sparqlQueries')/query[@id='query-all'], '%OFFSET%', instance('control-instance')/offset)"/>
 												<xforms:send submission="submit-sparqlQuery"/>
 											</xforms:action>
 										</xforms:trigger>
@@ -355,7 +359,8 @@ SELECT * WHERE {
 											</xforms:label>
 											<xforms:action ev:event="DOMActivate">
 												<xforms:setvalue ref="instance('control-instance')/page" value="$next"/>
-												<xforms:setvalue ref="instance('sparqlQuery')" value="replace(instance('sparqlQueries')/query[@id='query-all'], '%OFFSET%', instance('control-instance')/offset)"/>
+												<xforms:setvalue ref="instance('sparqlQuery')"
+													value="replace(instance('sparqlQueries')/query[@id='query-all'], '%OFFSET%', instance('control-instance')/offset)"/>
 												<xforms:send submission="submit-sparqlQuery"/>
 											</xforms:action>
 										</xforms:trigger>
@@ -365,7 +370,8 @@ SELECT * WHERE {
 											</xforms:label>
 											<xforms:action ev:event="DOMActivate">
 												<xforms:setvalue ref="instance('control-instance')/page" value="$total"/>
-												<xforms:setvalue ref="instance('sparqlQuery')" value="replace(instance('sparqlQueries')/query[@id='query-all'], '%OFFSET%', instance('control-instance')/offset)"/>
+												<xforms:setvalue ref="instance('sparqlQuery')"
+													value="replace(instance('sparqlQueries')/query[@id='query-all'], '%OFFSET%', instance('control-instance')/offset)"/>
 												<xforms:send submission="submit-sparqlQuery"/>
 											</xforms:action>
 										</xforms:trigger>
@@ -401,7 +407,7 @@ SELECT * WHERE {
 																<xforms:action ev:event="DOMActivate">
 																	<xforms:load show="replace" resource="edit/?id={$id}"/>
 																</xforms:action>
-															</xforms:trigger>															
+															</xforms:trigger>
 														</h4>
 														<xforms:output ref="res:binding[@name='type']/res:uri">
 															<xforms:label>Class</xforms:label>
@@ -448,7 +454,7 @@ SELECT * WHERE {
 							</xforms:group>
 						</xforms:group>
 					</xforms:group>
-										<fr:xforms-inspector/>
+					<!--<fr:xforms-inspector/>-->
 				</div>
 				<div class="col-md-3">
 					<h2>Actions</h2>
@@ -579,7 +585,7 @@ SELECT * WHERE {
 						value="concat('file://', instance('config')/data_path, '/id/',  instance('control-instance')/id, '.rdf')"/>
 					<xforms:insert nodeset="instance('dump')"
 						origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/delete-id.xpl', 'configuration', instance('delete-config'), 'data')"/>
-						<xforms:setvalue ref="instance('control-instance')/status">ID successfully deleted from system.</xforms:setvalue>
+					<xforms:setvalue ref="instance('control-instance')/status">ID successfully deleted from system.</xforms:setvalue>
 					<!-- reset the search -->
 					<xforms:setvalue ref="instance('control-instance')/page">1</xforms:setvalue>
 					<xforms:send submission="query-solr"/>

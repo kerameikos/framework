@@ -65,7 +65,7 @@ PREFIX dcterms:	<http://purl.org/dc/terms/>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 PREFIX owl:	<http://www.w3.org/2002/07/owl#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
-PREFIX ecrm:	<http://erlangen-crm.org/current/>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX kon:	<http://kerameikos.org/ontology#>
@@ -85,40 +85,40 @@ FILTER ( lang(?definition) = "en" )}]]>
 
 		<xsl:variable name="select">
 			<xsl:choose>
-				<xsl:when test="$type='ecrm:E4_Period'">
+				<xsl:when test="$type='crm:E4_Period'">
 					<![CDATA[
-{?object ecrm:P108i_was_produced_by ?prod .
-?prod  ecrm:P10_falls_within kid:RDFID}
+{?object crm:P108i_was_produced_by ?prod .
+?prod  crm:P10_falls_within kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P10_falls_within ?prod .
-?prod ecrm:P7_took_place_at ?matches}
+?object crm:P10_falls_within ?prod .
+?prod crm:P7_took_place_at ?matches}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P10_falls_within ?matches .
-?object ecrm:P108i_was_produced_by ?prod
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P10_falls_within ?matches .
+?object crm:P108i_was_produced_by ?prod
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
-				<xsl:when test="$type='ecrm:E57_Material'">
-					<![CDATA[{?object ecrm:P45_consists_of kid:RDFID }
+				<xsl:when test="$type='crm:E57_Material'">
+					<![CDATA[{?object crm:P45_consists_of kid:RDFID }
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P45_consists_of ?matches}
+?object crm:P45_consists_of ?matches}
 UNION {?types skos:broader kid:RDFID .
-?object ecrm:P45_consists_of ?types}
+?object crm:P45_consists_of ?types}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P45_consists_of ?matches}
-?object ecrm:P108i_was_produced_by ?prod
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P45_consists_of ?matches}
+?object crm:P108i_was_produced_by ?prod
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
-				<xsl:when test="$type='ecrm:E40_Legal_Body'">
-					<![CDATA[?object ecrm:P50_has_current_keeper kid:RDFID .
-?object ecrm:P108i_was_produced_by ?prod
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+				<xsl:when test="$type='crm:E40_Legal_Body'">
+					<![CDATA[?object crm:P50_has_current_keeper kid:RDFID .
+?object crm:P108i_was_produced_by ?prod
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 				<xsl:when test="$type='kon:Shape'">
@@ -130,23 +130,23 @@ UNION {?types skos:broader kid:RDFID .
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
 ?object kon:hasShape ?matches}
-?object ecrm:P108i_was_produced_by ?prod
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P108i_was_produced_by ?prod
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 				<xsl:when test="$type='kon:Technique'">
-					<![CDATA[{?object ecrm:P32_used_general_technique kid:RDFID }
+					<![CDATA[{?object crm:P32_used_general_technique kid:RDFID }
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P32_used_general_technique ?matches}
+?object crm:P32_used_general_technique ?matches}
 UNION {?types skos:broader kid:RDFID .
-?object ecrm:P32_used_general_technique ?types}
+?object crm:P32_used_general_technique ?types}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P32_used_general_technique ?matches}
-?object ecrm:P108i_was_produced_by ?prod
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P32_used_general_technique ?matches}
+?object crm:P108i_was_produced_by ?prod
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 				<!--<xsl:when test="$type='kon:Ware'">
@@ -158,31 +158,31 @@ UNION {?prod ecrm:P7_took_place_at ?relPlace .
 					UNION {?types skos:broader kid:RDFID .
 					?types skos:exactMatch ?matches .
 					?object kon:hasShape ?matches}
-					?object ecrm:P108i_was_produced_by ?prod
-					{?prod ecrm:P7_took_place_at ?place }
-					UNION {?prod ecrm:P7_took_place_at ?relPlace .
+					?object crm:P108i_was_produced_by ?prod
+					{?prod crm:P7_took_place_at ?place }
+					UNION {?prod crm:P7_took_place_at ?relPlace .
 					?place skos:exactMatch ?relPlace }]]>
 					</xsl:when>-->
 				<xsl:when test="$type='foaf:Person'">
-					<![CDATA[{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by kid:RDFID}
+					<![CDATA[{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by ?matches}
-?object ecrm:P108i_was_produced_by ?prod
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by ?matches}
+?object crm:P108i_was_produced_by ?prod
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 				<xsl:when test="$type='foaf:Organization'">
-					<![CDATA[{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by kid:RDFID}
+					<![CDATA[{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by ?matches}
-?object ecrm:P108i_was_produced_by ?prod
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by ?matches}
+?object crm:P108i_was_produced_by ?prod
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 			</xsl:choose>
@@ -204,7 +204,7 @@ PREFIX dcterms:	<http://purl.org/dc/terms/>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 PREFIX owl:	<http://www.w3.org/2002/07/owl#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
-PREFIX ecrm:	<http://erlangen-crm.org/current/>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX kon:	<http://kerameikos.org/ontology#>
@@ -215,7 +215,7 @@ SELECT DISTINCT ?object ?place ?label ?title ?fromDate ?toDate ?thumb ?id ?keepe
 			<xsl:choose>
 				<xsl:when test="$type='kon:ProductionPlace'"><![CDATA[?object dcterms:title ?title .
 ?object dcterms:identifier ?id
-{?object ecrm:P50_has_current_keeper ?kuri .
+{?object crm:P50_has_current_keeper ?kuri .
 ?kuri skos:prefLabel ?keeper .
 FILTER ( lang(?keeper) = "en" )}
 OPTIONAL {?object foaf:thumbnail ?thumb}}]]>
@@ -229,7 +229,7 @@ OPTIONAL {?object foaf:thumbnail ?thumb}}]]>
 FILTER ( lang(?label) = "en" )
 ?object dcterms:title ?title .
 ?object dcterms:identifier ?id
-{?object ecrm:P50_has_current_keeper ?kuri .
+{?object crm:P50_has_current_keeper ?kuri .
 ?kuri skos:prefLabel ?keeper .
 FILTER ( lang(?keeper) = "en" )}
 OPTIONAL {?object foaf:thumbnail ?thumb}}]]>
@@ -239,61 +239,61 @@ OPTIONAL {?object foaf:thumbnail ?thumb}}]]>
 
 		<xsl:variable name="select">
 			<xsl:choose>
-				<xsl:when test="$type='ecrm:E4_Period'">
+				<xsl:when test="$type='crm:E4_Period'">
 					<![CDATA[
-{?object ecrm:P108i_was_produced_by ?prod .
-?prod  ecrm:P10_falls_within kid:RDFID}
+{?object crm:P108i_was_produced_by ?prod .
+?prod  crm:P10_falls_within kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P10_falls_within ?prod .
-?prod ecrm:P7_took_place_at ?matches}
+?object crm:P10_falls_within ?prod .
+?prod crm:P7_took_place_at ?matches}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P10_falls_within ?matches .
-?object ecrm:P108i_was_produced_by ?prod
-OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P10_falls_within ?matches .
+?object crm:P108i_was_produced_by ?prod
+OPTIONAL {?prod crm:P4_has_time-span ?dates .
+?dates crm:P82a_begin_of_the_begin ?fromDate ; crm:P82b_end_of_the_end ?toDate }
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
-				<xsl:when test="$type='ecrm:E57_Material'">
-					<![CDATA[{?object ecrm:P45_consists_of kid:RDFID }
+				<xsl:when test="$type='crm:E57_Material'">
+					<![CDATA[{?object crm:P45_consists_of kid:RDFID }
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P45_consists_of ?matches}
+?object crm:P45_consists_of ?matches}
 UNION {?types skos:broader kid:RDFID .
-?object ecrm:P45_consists_of ?types}
+?object crm:P45_consists_of ?types}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P45_consists_of ?matches}
-?object ecrm:P108i_was_produced_by ?prod
-OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P45_consists_of ?matches}
+?object crm:P108i_was_produced_by ?prod
+OPTIONAL {?prod crm:P4_has_time-span ?dates .
+?dates crm:P82a_begin_of_the_begin ?fromDate ; crm:P82b_end_of_the_end ?toDate }
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 				<xsl:when test="$type='kon:ProductionPlace'">
-					<![CDATA[{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at kid:RDFID}
+					<![CDATA[{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P7_took_place_at kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at ?matches .
-OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }}
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P7_took_place_at ?matches .
+OPTIONAL {?prod crm:P4_has_time-span ?dates .
+?dates crm:P82a_begin_of_the_begin ?fromDate ; crm:P82b_end_of_the_end ?toDate }}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P7_took_place_at ?matches .
-OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }}]]>
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P7_took_place_at ?matches .
+OPTIONAL {?prod crm:P4_has_time-span ?dates .
+?dates crm:P82a_begin_of_the_begin ?fromDate ; crm:P82b_end_of_the_end ?toDate }}]]>
 				</xsl:when>
-				<xsl:when test="$type='ecrm:E40_Legal_Body'">
-					<![CDATA[?object ecrm:P50_has_current_keeper kid:RDFID .
-?object ecrm:P108i_was_produced_by ?prod
-OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+				<xsl:when test="$type='crm:E40_Legal_Body'">
+					<![CDATA[?object crm:P50_has_current_keeper kid:RDFID .
+?object crm:P108i_was_produced_by ?prod
+OPTIONAL {?prod crm:P4_has_time-span ?dates .
+?dates crm:P82a_begin_of_the_begin ?fromDate ; crm:P82b_end_of_the_end ?toDate }
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 				<xsl:when test="$type='kon:Shape'">
@@ -305,27 +305,27 @@ UNION {?types skos:broader kid:RDFID .
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
 ?object kon:hasShape ?matches}
-?object ecrm:P108i_was_produced_by ?prod
-OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P108i_was_produced_by ?prod
+OPTIONAL {?prod crm:P4_has_time-span ?dates .
+?dates crm:P82a_begin_of_the_begin ?fromDate ; crm:P82b_end_of_the_end ?toDate }
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 				<xsl:when test="$type='kon:Technique'">
-					<![CDATA[{?object ecrm:P32_used_general_technique kid:RDFID }
+					<![CDATA[{?object crm:P32_used_general_technique kid:RDFID }
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P32_used_general_technique ?matches}
+?object crm:P32_used_general_technique ?matches}
 UNION {?types skos:broader kid:RDFID .
-?object ecrm:P32_used_general_technique ?types}
+?object crm:P32_used_general_technique ?types}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object ecrm:P32_used_general_technique ?matches}
-?object ecrm:P108i_was_produced_by ?prod
-OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P32_used_general_technique ?matches}
+?object crm:P108i_was_produced_by ?prod
+OPTIONAL {?prod crm:P4_has_time-span ?dates .
+?dates crm:P82a_begin_of_the_begin ?fromDate ; crm:P82b_end_of_the_end ?toDate }
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 				<!--<xsl:when test="$type='kon:Ware'">
@@ -337,35 +337,35 @@ UNION {?prod ecrm:P7_took_place_at ?relPlace .
 					UNION {?types skos:broader kid:RDFID .
 					?types skos:exactMatch ?matches .
 					?object kon:hasShape ?matches}
-					?object ecrm:P108i_was_produced_by ?prod
-					{?prod ecrm:P7_took_place_at ?place }
-					UNION {?prod ecrm:P7_took_place_at ?relPlace .
+					?object crm:P108i_was_produced_by ?prod
+					{?prod crm:P7_took_place_at ?place }
+					UNION {?prod crm:P7_took_place_at ?relPlace .
 					?place skos:exactMatch ?relPlace }]]>
 					</xsl:when>-->
 				<xsl:when test="$type='foaf:Person'">
-					<![CDATA[{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by kid:RDFID}
+					<![CDATA[{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by ?matches}
-?object ecrm:P108i_was_produced_by ?prod
-OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by ?matches}
+?object crm:P108i_was_produced_by ?prod
+OPTIONAL {?prod crm:P4_has_time-span ?dates .
+?dates crm:P82a_begin_of_the_begin ?fromDate ; crm:P82b_end_of_the_end ?toDate }
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 				<xsl:when test="$type='foaf:Organization'">
-					<![CDATA[{?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by kid:RDFID}
+					<![CDATA[{?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
-?object ecrm:P108i_was_produced_by ?prod .
-?prod ecrm:P14_carried_out_by ?matches}
-?object ecrm:P108i_was_produced_by ?prod
-OPTIONAL {?prod ecrm:P4_has_time-span ?dates .
-?dates ecrm:P82a_begin_of_the_begin ?fromDate ; ecrm:P82b_end_of_the_end ?toDate }
-{?prod ecrm:P7_took_place_at ?place }
-UNION {?prod ecrm:P7_took_place_at ?relPlace .
+?object crm:P108i_was_produced_by ?prod .
+?prod crm:P14_carried_out_by ?matches}
+?object crm:P108i_was_produced_by ?prod
+OPTIONAL {?prod crm:P4_has_time-span ?dates .
+?dates crm:P82a_begin_of_the_begin ?fromDate ; crm:P82b_end_of_the_end ?toDate }
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
 			</xsl:choose>
