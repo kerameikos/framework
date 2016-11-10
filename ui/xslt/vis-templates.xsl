@@ -181,8 +181,7 @@
 				</properties>
 			</xsl:variable>
 
-			<p>Select a category below to generate a graph showing the quantitative distribution for the following queries. The distribution is based on coin
-				type data aggregated into Nomisma.</p>
+			<p>Select a category below to generate a graph showing the quantitative distribution for the following queries. The distribution is based vases aggregated into Kerameikos.org.</p>
 			<select name="dist" class="form-control" id="categorySelect">
 				<option value="">Select...</option>
 				<xsl:choose>
