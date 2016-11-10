@@ -1,37 +1,55 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
-	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
-	xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
+	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/"
+	exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:include href="../../functions.xsl"/>
-	<xsl:include href="html-templates.xsl"/>
+	<xsl:include href="../../vis-templates.xsl"/>
 
-	<!-- URL parameters for generating charts -->
-	<xsl:param name="category" select="doc('input:request')/request/parameters/parameter[name='category']/value"/>
+	<!-- URL parameters -->
+	<xsl:param name="filter" select="doc('input:request')/request/parameters/parameter[name = 'filter']/value"/>
+	<xsl:param name="dist" select="doc('input:request')/request/parameters/parameter[name = 'dist']/value"/>
+	<xsl:param name="compare" select="doc('input:request')/request/parameters/parameter[name = 'compare']/value"/>
+	<xsl:param name="numericType" select="doc('input:request')/request/parameters/parameter[name = 'type']/value"/>
 
 	<!-- config and global variables -->
 	<xsl:variable name="display_path">../</xsl:variable>
 	<xsl:variable name="id" select="substring-after(/content/rdf:RDF/*[1]/@rdf:about, 'id/')"/>
 	<xsl:variable name="html-uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
+	<xsl:variable name="mode">record</xsl:variable>
+	<xsl:variable name="base-query" select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
 	<xsl:variable name="type" select="/content/rdf:RDF/*[1]/name()"/>
-	<xsl:variable name="title" select="/content/rdf:RDF/*[1]/skos:prefLabel[@xml:lang='en']"/>
-	<xsl:variable name="hasGeo" as="xs:boolean">true</xsl:variable>
+	<xsl:variable name="title" select="/content/rdf:RDF/*[1]/skos:prefLabel[@xml:lang = 'en']"/>
 
 	<!-- definition of namespaces for turning in solr type field URIs into abbreviations -->
 	<xsl:variable name="namespaces" as="item()*">
 		<namespaces>
-			<xsl:for-each select="//rdf:RDF/namespace::*[not(name()='xml')]">
+			<xsl:for-each select="//rdf:RDF/namespace::*[not(name() = 'xml')]">
 				<namespace prefix="{name()}" uri="{.}"/>
 			</xsl:for-each>
 		</namespaces>
 	</xsl:variable>
 
+	<!-- variables to determine whether the map should show when or whether the quantitative analysis functions should be included -->
+	<xsl:variable name="hasGeo" as="xs:boolean" select="
+			if (/content/res:sparql[1]/res:boolean = 'true') then
+				true()
+			else
+				false()"/>
+
+	<xsl:variable name="hasObjects" as="xs:boolean" select="
+			if (/content/res:sparql[2]/res:boolean = 'true') then
+				true()
+			else
+				false()"/>
+
 	<xsl:variable name="prefix">
 		<xsl:for-each select="$namespaces/namespace">
 			<xsl:value-of select="concat(@prefix, ':', @uri)"/>
-			<xsl:if test="not(position()=last())">
+			<xsl:if test="not(position() = last())">
 				<xsl:text> </xsl:text>
 			</xsl:if>
 		</xsl:for-each>
@@ -50,7 +68,7 @@
 				<script type="text/javascript" src="{$display_path}ui/javascript/jquery.fancybox.pack.js"/>
 				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
-				
+
 				<!-- mapping -->
 				<xsl:if test="$hasGeo = true()">
 					<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
@@ -60,7 +78,13 @@
 					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-heatmap.js"/>-->
 					<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
 				</xsl:if>
-				
+				<!-- distribution visualization -->
+				<xsl:if test="$hasObjects = true()">
+					<script type="text/javascript" src="https://d3plus.org/js/d3.js"/>
+					<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
+				</xsl:if>
+
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 			</head>
 			<body>
@@ -78,14 +102,28 @@
 					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
 
 					<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
-						<div id="mapcontainer" class="map-normal">
-							<div id="info"/>
-						</div>
-						<xsl:call-template name="associatedObjects">
-							<xsl:with-param name="id" select="$id"/>
-							<xsl:with-param name="type" select="$type"/>
-						</xsl:call-template>
-						<!--<xsl:call-template name="quant"/>-->
+						<xsl:if test="$hasGeo = true()">
+							<div id="mapcontainer" class="map-normal">
+								<div id="info"/>
+							</div>
+						</xsl:if>
+						<xsl:if test="$hasObjects = true()">
+							<div class="row">
+								<div class="col-md-12 page-section">
+									<h2>Objects of this Typology</h2>
+									<div id="listObjects"/>
+								</div>
+							</div>
+							
+							<div class="row">
+								<div class="col-md-12 page-section">
+									<h2>Quantitative Analysis</h2>
+									<xsl:call-template name="distribution-form">
+										<xsl:with-param name="mode" select="$mode"/>
+									</xsl:call-template>
+								</div>
+							</div>
+						</xsl:if>
 					</xsl:if>
 				</div>
 				<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
@@ -122,7 +160,7 @@
 					</div>
 				</xsl:if>
 			</div>
-			
+
 			<div class="hidden">
 				<span id="mapboxKey">
 					<xsl:value-of select="/content/config/mapboxKey"/>
@@ -130,6 +168,26 @@
 				<span id="type">
 					<xsl:value-of select="$type"/>
 				</span>
+				<span id="page">
+					<xsl:value-of select="$mode"/>
+				</span>
+				<span id="base-query">
+					<xsl:value-of select="$base-query"/>
+				</span>
+				
+				<xsl:call-template name="field-template">
+					<xsl:with-param name="template" as="xs:boolean">true</xsl:with-param>
+				</xsl:call-template>
+				
+				<xsl:call-template name="compare-container-template">
+					<xsl:with-param name="template" as="xs:boolean">true</xsl:with-param>
+				</xsl:call-template>
+				
+				<xsl:call-template name="date-template">
+					<xsl:with-param name="template" as="xs:boolean">true</xsl:with-param>
+				</xsl:call-template>
+				
+				<xsl:call-template name="ajax-loader-template"/>
 			</div>
 		</div>
 	</xsl:template>
@@ -175,7 +233,7 @@
 				<xsl:apply-templates select="skos:definition" mode="list-item">
 					<xsl:sort select="@xml:lang"/>
 				</xsl:apply-templates>
-				<xsl:apply-templates select="*[not(name()='skos:prefLabel') and not(name()='skos:definition')]" mode="list-item">
+				<xsl:apply-templates select="*[not(name() = 'skos:prefLabel') and not(name() = 'skos:definition')]" mode="list-item">
 					<xsl:sort select="name()"/>
 					<xsl:sort select="@rdf:resource"/>
 				</xsl:apply-templates>
@@ -192,7 +250,7 @@
 				<xsl:value-of select="concat(' (', @xml:lang, ')')"/>
 			</span>
 		</xsl:if>
-		<xsl:if test="not(position()=last())">
+		<xsl:if test="not(position() = last())">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
 	</xsl:template>
@@ -208,7 +266,7 @@
 			<xsl:choose>
 				<xsl:when test="string(.)">
 					<xsl:choose>
-						<xsl:when test="name()= 'osgeo:asGeoJSON' and string-length(.) &gt; 100">
+						<xsl:when test="name() = 'osgeo:asGeoJSON' and string-length(.) &gt; 100">
 							<div id="geoJSON-fragment">
 								<xsl:value-of select="substring(., 1, 100)"/>
 								<xsl:text>...</xsl:text>
@@ -237,7 +295,7 @@
 					<span>
 						<a href="{@rdf:resource}" rel="{name()}" title="{@rdf:resource}">
 							<xsl:choose>
-								<xsl:when test="name()='rdf:type'">
+								<xsl:when test="name() = 'rdf:type'">
 									<xsl:variable name="uri" select="@rdf:resource"/>
 									<xsl:value-of
 										select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
@@ -262,7 +320,7 @@
 		</xsl:variable>
 		<div>
 			<h3>Abstract (dbpedia)</h3>
-			<xsl:value-of select="$dbpedia-rdf//dbpedia-owl:abstract[@xml:lang='en']"/>
+			<xsl:value-of select="$dbpedia-rdf//dbpedia-owl:abstract[@xml:lang = 'en']"/>
 		</div>
 	</xsl:template>
 
@@ -270,7 +328,8 @@
 		<xsl:param name="uri"/>
 
 		<xsl:variable name="lgpn-tei" as="element()*">
-			<xsl:copy-of select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
+			<xsl:copy-of
+				select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
 		</xsl:variable>
 
 		<xsl:if test="$lgpn-tei/descendant::tei:birth">
@@ -284,11 +343,11 @@
 
 	<xsl:template match="tei:birth" mode="lgpn">
 		<b>Birth: </b>
-		<xsl:for-each select="@when|@notBefore|@notAfter|@from|@to">
+		<xsl:for-each select="@when | @notBefore | @notAfter | @from | @to">
 			<xsl:value-of select="name()"/>
 			<xsl:text>: </xsl:text>
 			<xsl:value-of select="kerameikos:normalizeYear(.)"/>
-			<xsl:if test="not(position()=last())">
+			<xsl:if test="not(position() = last())">
 				<xsl:text>, </xsl:text>
 			</xsl:if>
 		</xsl:for-each>
@@ -309,19 +368,4 @@
 		</xsl:choose>
 		<xsl:text>)</xsl:text>
 	</xsl:template>
-
-	<xsl:function name="kerameikos:normalize_date">
-		<xsl:param name="date"/>
-
-		<xsl:choose>
-			<xsl:when test="number($date) &lt; 0">
-				<xsl:value-of select="abs(number($date)) + 1"/>
-				<xsl:text> B.C.</xsl:text>
-			</xsl:when>
-			<xsl:otherwise>
-				<xsl:text>A.D. </xsl:text>
-				<xsl:value-of select="number($date)"/>
-			</xsl:otherwise>
-		</xsl:choose>
-	</xsl:function>
 </xsl:stylesheet>

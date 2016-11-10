@@ -107,7 +107,11 @@ PREFIX osgeo:	<http://data.ordnancesurvey.co.uk/ontology/geometry/>
 SELECT DISTINCT ?place ?label ?definition ?lat ?long ?poly WHERE {]]>
 						</xsl:variable>
 						<xsl:variable name="metadata">
-							<![CDATA[?place geo:location ?loc .
+							<![CDATA[?object crm:P108i_was_produced_by ?prod
+{?prod crm:P7_took_place_at ?place }
+UNION {?prod crm:P7_took_place_at ?relPlace .
+?place skos:exactMatch ?relPlace }
+?place geo:location ?loc .
 {?loc geo:lat ?lat .
 ?loc geo:long ?long }
 UNION {?loc osgeo:asGeoJSON ?poly }
@@ -128,11 +132,7 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 ?prod crm:P7_took_place_at ?matches}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object crm:P10_falls_within ?matches .
-?object crm:P108i_was_produced_by ?prod
-{?prod crm:P7_took_place_at ?place }
-UNION {?prod crm:P7_took_place_at ?relPlace .
-?place skos:exactMatch ?relPlace }]]>
+?object crm:P10_falls_within ?matches}]]>
 								</xsl:when>
 								<xsl:when test="$type='crm:E57_Material'">
 									<![CDATA[{?object crm:P45_consists_of kid:RDFID }
@@ -142,18 +142,10 @@ UNION {?types skos:broader kid:RDFID .
 ?object crm:P45_consists_of ?types}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object crm:P45_consists_of ?matches}
-?object crm:P108i_was_produced_by ?prod
-{?prod crm:P7_took_place_at ?place }
-UNION {?prod crm:P7_took_place_at ?relPlace .
-?place skos:exactMatch ?relPlace }]]>
+?object crm:P45_consists_of ?matches}]]>
 								</xsl:when>
 								<xsl:when test="$type='crm:E40_Legal_Body'">
-									<![CDATA[?object crm:P50_has_current_keeper kid:RDFID .
-?object crm:P108i_was_produced_by ?prod
-{?prod crm:P7_took_place_at ?place }
-UNION {?prod crm:P7_took_place_at ?relPlace .
-?place skos:exactMatch ?relPlace }]]>
+									<![CDATA[?object crm:P50_has_current_keeper kid:RDFID .]]>
 								</xsl:when>
 								<xsl:when test="$type='kon:Shape'">
 									<![CDATA[{?object kon:hasShape kid:RDFID }
@@ -163,11 +155,7 @@ UNION {?types skos:broader kid:RDFID .
 ?object kon:hasShape ?types}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object kon:hasShape ?matches}
-?object crm:P108i_was_produced_by ?prod
-{?prod crm:P7_took_place_at ?place }
-UNION {?prod crm:P7_took_place_at ?relPlace .
-?place skos:exactMatch ?relPlace }]]>
+?object kon:hasShape ?matches}]]>
 								</xsl:when>
 								<xsl:when test="$type='kon:Technique'">
 									<![CDATA[{?object crm:P32_used_general_technique kid:RDFID }
@@ -177,11 +165,7 @@ UNION {?types skos:broader kid:RDFID .
 ?object crm:P32_used_general_technique ?types}
 UNION {?types skos:broader kid:RDFID .
 ?types skos:exactMatch ?matches .
-?object crm:P32_used_general_technique ?matches}
-?object crm:P108i_was_produced_by ?prod
-{?prod crm:P7_took_place_at ?place }
-UNION {?prod crm:P7_took_place_at ?relPlace .
-?place skos:exactMatch ?relPlace }]]>
+?object crm:P32_used_general_technique ?matches}]]>
 								</xsl:when>
 								<!--<xsl:when test="$type='kon:Ware'">
 					<![CDATA[					{?object kon:hasShape kid:RDFID }
@@ -191,33 +175,21 @@ UNION {?prod crm:P7_took_place_at ?relPlace .
 					?object kon:hasShape ?types}
 					UNION {?types skos:broader kid:RDFID .
 					?types skos:exactMatch ?matches .
-					?object kon:hasShape ?matches}
-					?object crm:P108i_was_produced_by ?prod
-					{?prod crm:P7_took_place_at ?place }
-					UNION {?prod crm:P7_took_place_at ?relPlace .
-					?place skos:exactMatch ?relPlace }]]>
+					?object kon:hasShape ?matches}]]>
 					</xsl:when>-->
 								<xsl:when test="$type='foaf:Person'">
 									<![CDATA[{?object crm:P108i_was_produced_by ?prod .
 ?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
 ?object crm:P108i_was_produced_by ?prod .
-?prod crm:P14_carried_out_by ?matches}
-?object crm:P108i_was_produced_by ?prod
-{?prod crm:P7_took_place_at ?place }
-UNION {?prod crm:P7_took_place_at ?relPlace .
-?place skos:exactMatch ?relPlace }]]>
+?prod crm:P14_carried_out_by ?matches}]]>
 								</xsl:when>
 								<xsl:when test="$type='foaf:Organization'">
 									<![CDATA[{?object crm:P108i_was_produced_by ?prod .
 ?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
 ?object crm:P108i_was_produced_by ?prod .
-?prod crm:P14_carried_out_by ?matches}
-?object crm:P108i_was_produced_by ?prod
-{?prod crm:P7_took_place_at ?place }
-UNION {?prod crm:P7_took_place_at ?relPlace .
-?place skos:exactMatch ?relPlace }]]>
+?prod crm:P14_carried_out_by ?matches}]]>
 								</xsl:when>
 							</xsl:choose>
 						</xsl:variable>

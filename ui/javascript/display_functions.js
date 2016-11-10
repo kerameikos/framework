@@ -11,17 +11,17 @@ $(document).ready(function () {
         }
     });
     
-    //if there is a div with a id=listTypes, then initiate ajax call
-    /*if ($('#listTypes').length > 0) {
+    //if there is a div with a id=listObjects, then initiate ajax call
+    if ($('#listObjects').length > 0) {
         var path = '../';
         var id = $('title').attr('id');
         var type = $('#type').text();
         
-        $.get(path + 'ajax/listTypes', {
+        $.get(path + 'ajax/listObjects', {
             id: id, type: type
         },
         function (data) {
-            $('#listTypes').html(data);
+            $('#listObjects').html(data);
         });
-    }*/
+    }
 });

@@ -72,8 +72,13 @@
 	
 	<!-- **** APIs **** -->
 	<page path="/kerameikos/api/get" model="xpl/models/rdf/get-id.xpl" view="xpl/views/apis/get.xpl"/>
+	<page path="/kerameikos/apis/getCount" model="xpl/models/sparql/getCount.xpl" view="xpl/views/serializations/sparql/getCount.xpl"/>
+	<page path="/kerameikos/apis/getLabel" model="xpl/models/sparql/getLabel.xpl" view="xpl/views/serializations/sparql/getLabel.xpl"/>
 	<page path="/kerameikos/api/getRdf" model="xpl/models/rdf/aggregate-ids.xpl" view="xpl/views/apis/getRdf.xpl"/>
 	<page path="/kerameikos/apis/getProductionPlaces" model="xpl/models/sparql/getProductionPlaces.xpl" view="xpl/views/serializations/sparql/geojson.xpl"/>
+	
+	<!-- **** AJAX **** -->
+	<page path="/kerameikos/ajax/listObjects" model="xpl/models/sparql/listObjects.xpl" view="xpl/views/serializations/sparql/listObjects.xpl"/>
 	
 	<!-- **** DATA DUMPS **** -->	
 	<page path="/kerameikos/pelagios.void.rdf" view="dump/pelagios.void.rdf"/>

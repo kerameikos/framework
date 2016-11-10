@@ -18,4 +18,12 @@
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:function>
+	
+	<xsl:function name="kerameikos:getLabel">
+		<xsl:param name="uri"/>
+		
+		<xsl:variable name="service" select="concat('http://localhost:8080/orbeon/kerameikos/apis/getLabel?uri=', $uri)"/>
+		
+		<xsl:value-of select="document($service)/response"/>
+	</xsl:function>
 </xsl:stylesheet>
