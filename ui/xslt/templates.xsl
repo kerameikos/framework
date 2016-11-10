@@ -61,8 +61,11 @@
 	<xsl:template name="footer">
 		<div class="container-fluid" id="footer">
 			<div class="row">
-				<div class="col-md-12"> Kerameikos.org data are made available under the <a href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database
-						License</a>. See <a href="datasets">datasets</a> for image rights, respective to individual insitution.
+				<div class="col-md-6 text-left"> Kerameikos.org data are made available under the <a href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database
+						License</a>. See <a href="datasets">datasets</a> for image rights, respective to individual insitution. 
+				</div>
+				<div class="col-md-6 text-right">
+					<a href="http://www.getty.edu/art/collection/objects/11743/">Banner image</a> made available courtesy of the J. Paul Getty Museum.
 				</div>
 			</div>
 		</div>
