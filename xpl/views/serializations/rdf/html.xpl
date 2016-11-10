@@ -33,7 +33,7 @@
 						<class>foaf:Person</class>
 						<class>kon:ProductionPlace</class>
 						<class>kon:Shape</class>
-						<class>kon:Style</class>
+						<!--<class>kon:Style</class>-->
 						<class>kon:Technique</class>
 						<class>kon:Ware</class>
 					</classes>
@@ -48,7 +48,7 @@
 						<class>foaf:Person</class>
 						<class>kon:ProductionPlace</class>
 						<class>kon:Shape</class>
-						<class>kon:Style</class>
+						<!--<class>kon:Style</class>-->
 						<class>kon:Technique</class>
 						<class>kon:Ware</class>
 					</classes>

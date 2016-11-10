@@ -100,70 +100,52 @@
 										<triple s="?object" p="crm:P50_has_current_keeper" o="{$object}"/>
 									</xsl:when>
 									<xsl:when test="$property = 'material'">
-										<union>
-											<group>
-												<triple s="?object" p="crm:P45_consists_of" o="{$object}"/>
-											</group>
-											<group>
-												<triple s="{$object}" p="skos:exactMatch" o="?matches"/>
-												<triple s="?object" p="crm:P45_consists_of" o="?matches"/>
-											</group>
-										</union>
+										<xsl:variable name="id" select="position()"/>
+
+										<select id="{$id}">
+											<triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
+										</select>
+										<triple s="?object" p="crm:P45_consists_of" o="?{$id}"/>
 									</xsl:when>
 									<xsl:when test="$property = 'period'">
-										<union>
-											<group>
-												<triple s="?prod" p="crm:P10_falls_within" o="{$object}"/>
-											</group>
-											<group>
-												<triple s="{$object}" p="skos:exactMatch" o="?matches"/>
-												<triple s="?prod" p="crm:P10_falls_within" o="?matches"/>
-											</group>
-										</union>
+										<xsl:variable name="id" select="position()"/>
+
+										<select id="{$id}">
+											<triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
+										</select>
+										<triple s="?prod" p="crm:P10_falls_within" o="?{$id}"/>
 									</xsl:when>
 									<xsl:when test="$property = 'person' or $property='workshop'">
-										<union>
-											<group>
-												<triple s="?prod" p="crm:P14_carried_out_by" o="{$object}"/>
-											</group>
-											<group>
-												<triple s="{$object}" p="skos:exactMatch" o="?matches"/>
-												<triple s="?prod" p="crm:P14_carried_out_by" o="?matches"/>
-											</group>
-										</union>
+										<xsl:variable name="id" select="position()"/>
+
+										<select id="{$id}">
+											<triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
+										</select>
+										<triple s="?prod" p="crm:P14_carried_out_by" o="?{$id}"/>
 									</xsl:when>
 									<xsl:when test="$property = 'productionPlace'">
-										<union>
-											<group>
-												<triple s="?prod" p="crm:P7_took_place_at" o="{$object}"/>
-											</group>
-											<group>
-												<triple s="{$object}" p="skos:exactMatch" o="?matches"/>
-												<triple s="?prod" p="crm:P7_took_place_at" o="?matches"/>
-											</group>
-										</union>
+										<xsl:variable name="id" select="position()"/>
+
+										<select id="{$id}">
+											<triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
+										</select>
+										<triple s="?prod" p="crm:P7_took_place_at" o="?{$id}"/>
 									</xsl:when>
 									<xsl:when test="$property = 'shape'">
-										<union>
-											<group>
-												<triple s="?object" p="kon:hasShape" o="{$object}"/>
-											</group>
-											<group>
-												<triple s="{$object}" p="skos:exactMatch" o="?matches"/>
-												<triple s="?object" p="kon:hasShape" o="?matches"/>
-											</group>
-										</union>
+										<xsl:variable name="id" select="position()"/>
+
+										<select id="{$id}">
+											<triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
+										</select>
+										<triple s="?object" p="kon:hasShape" o="?{$id}"/>
 									</xsl:when>
 									<xsl:when test="$property = 'technique'">
-										<union>
-											<group>
-												<triple s="?object" p="crm:P32_used_general_technique" o="{$object}"/>
-											</group>
-											<group>
-												<triple s="{$object}" p="skos:exactMatch" o="?matches"/>
-												<triple s="?object" p="crm:P32_used_general_technique" o="?matches"/>
-											</group>
-										</union>										
+										<xsl:variable name="id" select="position()"/>
+
+										<select id="{$id}">
+											<triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
+										</select>
+										<triple s="?object" p="crm:P32_used_general_technique" o="?{$id}"/>
 									</xsl:when>
 									<xsl:when test="$property = 'from'">
 										<xsl:if test="$object castable as xs:integer">
@@ -218,7 +200,7 @@
 									<triple s="?object" p="crm:P32_used_general_technique" o="?dist"/>
 								</xsl:when>
 							</xsl:choose>
-							
+
 							<xsl:if test="$dist='productionPlace' and $format='csv'">
 								<optional>
 									<triple s="?dist" p="geo:location" o="?loc"/>
@@ -243,10 +225,19 @@
 						<config>
 							<url>
 								<xsl:value-of select="$service"/>
+								<!--<xsl:copy-of select="$statements"/>-->
 							</url>
 							<content-type>application/xml</content-type>
 							<encoding>utf-8</encoding>
 						</config>
+					</xsl:template>
+
+					<xsl:template match="select">
+						<xsl:text>{ SELECT </xsl:text>
+						<xsl:value-of select="concat('?', @id)"/>
+						<xsl:text> WHERE { </xsl:text>
+						<xsl:apply-templates select="triple|group"/>
+						<xsl:text>}}&#x0A;</xsl:text>
 					</xsl:template>
 
 					<xsl:template match="triple">
@@ -280,6 +271,7 @@
 				</xsl:stylesheet>
 			</p:input>
 			<p:output name="data" id="compare-url-generator-config"/>
+			<!--<p:output name="data" ref="sparql-results"/>-->
 		</p:processor>
 
 		<!-- get the data from fuseki -->

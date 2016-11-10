@@ -23,47 +23,77 @@
 	</xsl:template>
 
 	<xsl:template name="body">
+		<div class="jumbotron visible-xs visible-sm">
+			<div class="container">
+				<div class="row text-center">					
+					<div class="col-md-12">
+						<h1>κεραμεικος</h1>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="container-fluid banner hidden-xs hidden-sm">			
+			<div class="row">
+				<div class="col-md-6 col-md-offset-6">
+					<div class="row banner-background text-right">						
+						<div class="col-md-12">
+							<h1>κεραμεικος</h1>
+						</div>
+					</div>					
+				</div>
+			</div>
+		</div>
 		<div class="container-fluid content">
 			<div class="row">
+<!--				<img src="http://numismatics.org:8080/orbeon/themes/ocre/images/banner.jpg" style="width:100%">-->
 				<div class="col-md-8">
 					<xsl:copy-of select="//index/*"/>
-				</div>
-				<div class="col-md-4">
 					<div>
 						<h3>Data Export</h3>
-						<div>
+						<div class="col-md-4">
 							<h4>Kerameikos Linked Data</h4>
 							<ul>
 								<li>
 									<a href="kerameikos.org.rdf">RDF/XML</a>
 								</li>
-								<li>
+								<!--	<li>
 									<a href="kerameikos.org.ttl">Turtle</a>
 								</li>
 								<li>
 									<a href="kerameikos.org.jsonld">JSON-LD</a>
-								</li>
-							</ul>
+								</li>-->
+							</ul>				
 						</div>
-						<div>
-							<h4>Pelagios</h4>
-							<ul>
-								<li>
-									<a href="pelagios.void.rdf">VoID</a>
-								</li>
-								<li>
-									<a href="pelagios.rdf">Pelagios RDF/XML</a>
-								</li>
-							</ul>
+						<div class="col-md-4">
+							<h4>Pelagios Annotations</h4>
+							<table class="table-dl">
+								<tr>
+									<td>
+										<a href="http://commons.pelagios.org/">
+											<img src="{$display_path}ui/images/pelagios.png"/>
+										</a>
+									</td>
+									<td>
+										<strong>VoID for Concepts: </strong>
+										<a href="pelagios.void.rdf">RDF/XML</a>
+										<br/>
+										<strong>VoID for Partner Objects: </strong>
+										<a href="pelagios-objects.void.rdf">RDF/XML</a>
+									</td>
+								</tr>
+							</table>
 						</div>
-					</div>
-					<div>
-						<h3>Atom Feed</h3>
-						<a href="feed/">
-							<img src="{$display_path}ui/images/atom-large.png"/>
-						</a>
-					</div>
-
+						<div class="col-md-4">
+							<h4>Atom Feed</h4>
+							<a href="feed/">
+								<img src="{$display_path}ui/images/atom-large.png"/>
+							</a>
+						</div>
+					</div>					
+				</div>
+				<div class="col-md-4">
+					<h3>Collaborators</h3>
+					<p>logos go here</p>
 				</div>
 			</div>
 		</div>

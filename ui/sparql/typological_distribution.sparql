@@ -8,10 +8,12 @@ PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX kon:	<http://kerameikos.org/ontology#>
 PREFIX xsd:	<http://www.w3.org/2001/XMLSchema#>
 
-SELECT ?dist ?match ?label ?lat ?long (count(?dist) as ?count)  WHERE {
+SELECT DISTINCT ?concept ?label ?lat ?long (count(?dist) as ?count)  WHERE {
  %STATEMENTS%
- {?dist skos:prefLabel ?label }
- UNION {?match skos:exactMatch ?dist .
-?match skos:prefLabel ?label }
- FILTER langMatches(lang(?label), "en")
-} GROUP BY ?dist ?match ?label ?lat ?long ORDER BY ?label
+ { 
+    SELECT ?dist ?label ?concept WHERE {
+      ?concept skos:exactMatch ?dist;
+               skos:prefLabel ?label FILTER langMatches(lang(?label), "en") 
+      }
+ }
+} GROUP BY ?concept ?label ?lat ?long ORDER BY ?label

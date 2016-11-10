@@ -149,14 +149,7 @@
 					<xsl:value-of select="res:binding[@name = 'label']/res:literal"/>
 				</xsl:element>
 				<xsl:element name="uri">
-					<xsl:choose>
-						<xsl:when test="res:binding[@name='match']">
-							<xsl:value-of select="res:binding[@name = 'match']/res:uri"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="res:binding[@name = 'dist']/res:uri"/>
-						</xsl:otherwise>
-					</xsl:choose>
+					<xsl:value-of select="res:binding[@name = 'concept']/res:uri"/>
 				</xsl:element>
 				<xsl:if test="$dist = 'nmo:hasMint'">
 					<xsl:element name="lat">
@@ -224,7 +217,7 @@
 				<xsl:otherwise>
 					<xsl:analyze-string select="." regex="(.*)\s(kid:.*)">
 						<xsl:matching-substring>
-							<xsl:value-of select="regex-group(1)"/>
+							<xsl:value-of select="normalize-space(regex-group(1))"/>
 							<xsl:text>: </xsl:text>
 							<xsl:value-of select="kerameikos:getLabel(regex-group(2))"/>
 						</xsl:matching-substring>

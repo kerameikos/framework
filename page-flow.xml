@@ -67,6 +67,8 @@
 	
 	<!-- **** PAGES **** -->
 	<page path="/kerameikos/apis" view="xpl/views/pages/apis.xpl"/>
+	<page path="/kerameikos/datasets" model="xpl/models/sparql/datasets.xpl" view="xpl/views/serializations/sparql/datasets.xpl"/>
+	<page path="/kerameikos/research/distribution" view="xpl/views/pages/vis.xpl"/>
 	<page path="/kerameikos/sparql" view="xpl/views/pages/sparql.xpl"/>
 	<page path="/kerameikos/" view="xpl/views/pages/index.xpl"/>
 	
@@ -79,6 +81,7 @@
 	
 	<!-- **** AJAX **** -->
 	<page path="/kerameikos/ajax/listObjects" model="xpl/models/sparql/listObjects.xpl" view="xpl/views/serializations/sparql/listObjects.xpl"/>
+	<page path="/kerameikos/ajax/getSparqlFacets" model="xpl/models/sparql/getSparqlFacets.xpl" view="xpl/views/serializations/sparql/getSparqlFacets.xpl"/>
 	
 	<!-- **** DATA DUMPS **** -->	
 	<page path="/kerameikos/pelagios.void.rdf" view="dump/pelagios.void.rdf"/>

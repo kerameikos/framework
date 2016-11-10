@@ -177,7 +177,7 @@
 					<prop value="productionPlace" class="kon:ProductionPlace">Production Place</prop>
 					<prop value="shape" class="kon:Shape">Shape</prop>
 					<prop value="technique" class="kon:Technique">Technique</prop>
-					<prop value="workshop" class="foaf:Organization">Workshop</prop>					
+					<prop value="workshop" class="foaf:Organization|foaf:Person">Workshop</prop>					
 				</properties>
 			</xsl:variable>
 
@@ -367,11 +367,11 @@
 				<prop value="to">Date, To</prop>-->
 				<prop value="material" class="crm:E57_Material">Material</prop>
 				<prop value="period" class="crm:E4_Period">Period</prop>
-				<prop value="person" class="foaf:Person|foaf:Organization">Person</prop>
+				<prop value="person" class="foaf:Person">Person</prop>
 				<prop value="productionPlace" class="kon:ProductionPlace">Production Place</prop>
 				<prop value="shape" class="kon:Shape">Shape</prop>
 				<prop value="technique" class="kon:Technique">Technique</prop>
-				<prop value="workshop" class="foaf:Organization">Workshop</prop>					
+				<prop value="workshop" class="foaf:Organization|foaf:Person">Workshop</prop>					
 			</properties>			
 		</xsl:variable>
 

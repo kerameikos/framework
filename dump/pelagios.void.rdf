@@ -4,9 +4,9 @@
 	xmlns:oac="http://www.openannotation.org/ns/" xmlns:owl="http://www.w3.org/2002/07/owl#">
 	<void:Dataset>
 		<dcterms:title>Kerameikos.org</dcterms:title>
-		<dcterms:description>Pleiades annotations for numismatic concepts defined by Kerameikos.org</dcterms:description>
+		<dcterms:description>Pleiades annotations for pottery concepts defined by Kerameikos.org</dcterms:description>
 		<dcterms:license rdf:resource="http://opendatacommons.org/licenses/odbl/1.0/"/>
 		<dcterms:subject rdf:resource="http://dbpedia.org/resource/Annotation"/>
 		<void:dataDump rdf:resource="http://kerameikos.org/pelagios.rdf"/>
-	</void:dataSet>
+	</void:Dataset>
 </rdf:RDF>

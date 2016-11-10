@@ -1,6 +1,6 @@
 /*******
 VISUALIZATION FUNCTIONS
-Modified: October 2016
+Modified: November 2016
 Function: These are the functions for generating charts and graphs with d3js
  *******/
 

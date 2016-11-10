@@ -1,24 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
 	<index>
-		<h1>Kerameikos.org</h1>
-		<p>Kerameikos.org is a collaborative project dedicated to defining the intellectual concepts of pottery following the tenets of linked open data and the formulation of an ontology for
-			representing and sharing ceramic data across disparate data systems. While the project is focused primarily on the definition of concepts within Greek black- and red-figure pottery,
-			Kerameikos.org is extensible toward the definition of concepts in other fields of pottery studies.</p>
-		<p>See the github account at <a href="https://github.com/kerameikos"
-				>https://github.com/kerameikos</a>, which contains repositories for the RDF data and the publication framework. This framework could be applied to other linked data thesauri.</p>
-		
-		<h2>Scientific Committee</h2>
+		<h2>Kerameikos.org</h2>
+		<p>Kerameikos.org is a collaborative project dedicated to defining the intellectual concepts of pottery following the tenets of linked open data and the
+			formulation of an ontology for representing and sharing ceramic data across disparate data systems. While the project is focused primarily on the
+			definition of concepts within Greek black- and red-figure pottery, Kerameikos.org is extensible toward the definition of concepts in other fields of
+			pottery studies.</p>
+		<p>See the github account at <a href="https://github.com/kerameikos">https://github.com/kerameikos</a>, which contains repositories for the RDF data and
+			the publication framework. This framework could be applied to other linked data thesauri.</p>
+
+		<h3>Scientific Committee</h3>
 		<p>The scientific committee includes both pottery and cultural heritage informatics experts.</p>
 		<ul>
 			<li>Vladimir Alexiev, Ontotext</li>
-			<li>Renee Gondek, George Washington University</li>
+			<li>Renee Gondek, University of Mary Washington</li>
 			<li>Ethan Gruber, American Numismatic Society</li>
 			<li>Thomas Mannack, Oxford University</li>
-			<li>Aybuke Ozturk, Université Lumière Lyon 2</li>
 			<li>Tyler Jo Smith, University of Virginia</li>
 			<li>Anne-Violaine Szabados, Lexicon Iconographicum Mythologiae Classicae (LIMC-France)</li>
-			<li>Karsten Tolle, DBIS, University of Frankfurt</li>
 		</ul>
+
+		<h3>Papers and Presentations</h3>
+		<ul>
+			<li><b>2015: </b>Gondek, Renee and Ethan Gruber. Roundtable on databases and pottery. Computer Applications in Archaeology, Siena, Italy.</li>
+			<li><b>2014: </b>Gruber, Ethan and Tyler Jo Smith. <a href="https://caa2014.sciencesconf.org/46119/document">Linked Open Greek Pottery</a>.
+				Presented at Computer Applications in Archaeology, Paris, France.</li>
+		</ul>
+
 	</index>
 </content>
