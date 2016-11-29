@@ -31,11 +31,12 @@
 							<xsl:when test="$content-type='text/turtle'">turtle</xsl:when>
 							<xsl:when test="$content-type='text/html'">html</xsl:when>
 							<xsl:when test="not(string($content-type)) or $content-type='*/*' or contains($content-type, 'text/html')">
-								<xsl:variable name="pieces" select="tokenize(/request/request-url, '/')"/>
+								<xsl:text>html</xsl:text>
+								<!--<xsl:variable name="pieces" select="tokenize(/request/request-url, '/')"/>
 								<xsl:choose>
 									<xsl:when test="string-length($pieces[last()]) &gt; 0">303</xsl:when>
 									<xsl:otherwise>html</xsl:otherwise>
-								</xsl:choose>
+								</xsl:choose>-->
 							</xsl:when>
 							<xsl:otherwise>error</xsl:otherwise>
 						</xsl:choose>

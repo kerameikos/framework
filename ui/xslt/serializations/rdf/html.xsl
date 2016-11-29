@@ -84,7 +84,8 @@
 					<script type="text/javascript" src="https://d3plus.org/js/d3.js"/>
 					<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>		
+					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>	
+					<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>
 				</xsl:if>
 
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
@@ -110,8 +111,8 @@
 							</div>
 						</xsl:if>
 						<xsl:if test="$hasObjects = true()">
-							<div id="iiif-window" style="width:800px:height:600px;display:none">
-								
+							<div id="iiif-window" style="width:600px;height:400px;display:none">
+								<div id="leaflet-container"/>
 							</div>
 							
 							<div class="row">

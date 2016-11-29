@@ -15,13 +15,13 @@
 	<xsl:template match="res:result">
 		<xsl:variable name="title"
 			select="concat(res:binding[@name = 'keeper']/res:literal, ': ', res:binding[@name = 'title']/res:literal, ' (', res:binding[@name = 'id']/res:literal, ')')"/>
-
+		
 		<xsl:choose>
 			<xsl:when test="string(res:binding[@name = 'ref']/res:uri)">
 				<div class="col-lg-2 col-md-3 col-sm-6 col-xs-12">
 					<xsl:choose>
 						<xsl:when test="res:binding[@name = 'manifest']">
-							<a href="{res:binding[@name='ref']/res:uri}" title="{$title}" class="iiif-image"
+							<a href="#iiif-window" title="{$title}" class="iiif-image"
 								id="{res:binding[@name='object']/res:uri}" manifest="{res:binding[@name = 'manifest']/res:uri}">
 								<img
 									src="{if (string(res:binding[@name='thumb']/res:uri)) then res:binding[@name='thumb']/res:uri else res:binding[@name='ref']/res:uri}"
