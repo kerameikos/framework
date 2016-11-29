@@ -53,13 +53,20 @@ DELETE {?s ?p ?o} WHERE { <DATASET> ?p ?o . ?s ?p ?o . FILTER (?s = <DATASET>)}]
 					<query id="delete-dump">
 						<![CDATA[PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX void:	<http://rdfs.org/ns/void#>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX svcs:	<http://rdfs.org/sioc/services#>
 DELETE {?s ?p ?o} WHERE { 
 { ?object void:inDataset <DATASET> ;
   crm:P108i_was_produced_by ?prod .
   ?prod crm:P4_has_time-span ?s . ?s ?p ?o }
 UNION { ?object void:inDataset <DATASET> ;
   crm:P108i_was_produced_by ?s . ?s ?p ?o }
+UNION { ?object void:inDataset <DATASET> ;
+  foaf:depiction ?resource . 
+  ?resource svcs:has_service ?s . ?s ?p ?o }
+UNION { ?object void:inDataset <DATASET> ;
+  foaf:depiction ?s . ?s ?p ?o }
 UNION { ?s void:inDataset <DATASET> . ?s ?p ?o}
 }]]>
 					</query>

@@ -42,74 +42,55 @@ PREFIX kon:	<http://kerameikos.org/ontology#>]]>
 				<xsl:variable name="metadata">
 					<![CDATA[?object dcterms:title ?title ;
 dcterms:identifier ?id .
-{?object crm:P50_has_current_keeper ?kuri .
-?kuri skos:prefLabel ?keeper .
-FILTER ( lang(?keeper) = "en" )} 
+OPTIONAL {?object crm:P50_has_current_keeper ?kuri .
+?kuri skos:prefLabel ?keeper FILTER ( lang(?keeper) = "en" )} 
 OPTIONAL {?object foaf:thumbnail ?thumb} .
-OPTIONAL {?object foaf:depiction ?ref}}]]>
+OPTIONAL {?object foaf:depiction ?ref
+	OPTIONAL {?ref dcterms:isReferencedBy ?manifest}}}]]>
 				</xsl:variable>
 				
 				<xsl:variable name="select">
 					<xsl:choose>
 						<xsl:when test="$type='crm:E4_Period'">
-							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object crm:P108i_was_produced_by ?prod .
-?prod  crm:P10_falls_within kid:RDFID}
-UNION {kid:RDFID skos:exactMatch ?matches .
-?object crm:P10_falls_within ?prod .
-?prod crm:P7_took_place_at ?matches}
-UNION {?types skos:broader kid:RDFID .
-?types skos:exactMatch ?matches .
-?object crm:P10_falls_within ?matches]]>
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+{SELECT ?m WHERE {
+  {kid:RDFID skos:exactMatch ?m}
+  UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
+?object crm:P108i_was_produced_by ?prod .
+?prod  crm:P10_falls_within ?m.]]>
 						</xsl:when>
 						<xsl:when test="$type='crm:E57_Material'">
-							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object crm:P45_consists_of kid:RDFID }
-UNION {kid:RDFID skos:exactMatch ?matches .
-?object crm:P45_consists_of ?matches}
-UNION {?types skos:broader kid:RDFID .
-?object crm:P45_consists_of ?types}
-UNION {?types skos:broader kid:RDFID .
-?types skos:exactMatch ?matches .
-?object crm:P45_consists_of ?matches}]]>
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+{SELECT ?m WHERE {
+  {kid:RDFID skos:exactMatch ?m}
+  UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
+?object crm:P45_consists_of ?m.]]>
 						</xsl:when>
 						<xsl:when test="$type='kon:ProductionPlace'">
-							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object crm:P108i_was_produced_by ?prod .
-?prod crm:P7_took_place_at kid:RDFID}
-UNION {kid:RDFID skos:exactMatch ?matches .
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+{SELECT ?m WHERE {
+  {kid:RDFID skos:exactMatch ?m}
+  UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
 ?object crm:P108i_was_produced_by ?prod .
-?prod crm:P7_took_place_at ?matches}
-UNION {?types crm:P88i_forms_part_of kid:RDFID .
-?types skos:exactMatch ?matches .
-?object crm:P108i_was_produced_by ?prod .
-?prod crm:P7_took_place_at ?matches}]]>
+?prod crm:P7_took_place_at ?m.]]>
 						</xsl:when>
 						<xsl:when test="$type='crm:E40_Legal_Body'">
-							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
 ?object crm:P50_has_current_keeper kid:RDFID .]]>
 						</xsl:when>
 						<xsl:when test="$type='kon:Shape'">
-							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object kon:hasShape kid:RDFID }
-UNION {kid:RDFID skos:exactMatch ?matches .
-?object kon:hasShape ?matches}
-UNION {?types skos:broader kid:RDFID .
-?object kon:hasShape ?types}
-UNION {?types skos:broader kid:RDFID .
-?types skos:exactMatch ?matches .
-?object kon:hasShape ?matches}]]>
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+{SELECT ?m WHERE {
+  {kid:RDFID skos:exactMatch ?m}
+  UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
+?object kon:hasShape ?m.]]>
 						</xsl:when>
 						<xsl:when test="$type='kon:Technique'">
-							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object crm:P32_used_general_technique kid:RDFID }
-UNION {kid:RDFID skos:exactMatch ?matches .
-?object crm:P32_used_general_technique ?matches}
-UNION {?types skos:broader kid:RDFID .
-?object crm:P32_used_general_technique ?types}
-UNION {?types skos:broader kid:RDFID .
-?types skos:exactMatch ?matches .
-?object crm:P32_used_general_technique ?matches}]]>
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+{SELECT ?m WHERE {
+  {kid:RDFID skos:exactMatch ?m}
+  UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
+?object crm:P32_used_general_technique ?m .]]>
 						</xsl:when>
 						<!--<xsl:when test="$type='kon:Ware'">
 					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
@@ -123,20 +104,16 @@ UNION {?types skos:broader kid:RDFID .
 ?object kon:hasShape ?matches}]]>
 				</xsl:when>-->
 						<xsl:when test="$type='foaf:Person'">
-							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object crm:P108i_was_produced_by ?prod .
-?prod crm:P14_carried_out_by kid:RDFID}
-UNION {kid:RDFID skos:exactMatch ?matches .
+							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+{SELECT ?m WHERE {kid:RDFID skos:exactMatch ?m}}
 ?object crm:P108i_was_produced_by ?prod .
-?prod crm:P14_carried_out_by ?matches}]]>
+?prod crm:P14_carried_out_by ?m .]]>
 						</xsl:when>
 						<xsl:when test="$type='foaf:Organization'">
-							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object crm:P108i_was_produced_by ?prod .
-?prod crm:P14_carried_out_by kid:RDFID}
-UNION {kid:RDFID skos:exactMatch ?matches .
+							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+{SELECT ?m WHERE {kid:RDFID skos:exactMatch ?m}}
 ?object crm:P108i_was_produced_by ?prod .
-?prod crm:P14_carried_out_by ?matches}]]>
+?prod crm:P14_carried_out_by ?m .]]>
 						</xsl:when>
 					</xsl:choose>
 				</xsl:variable>

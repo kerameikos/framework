@@ -12,7 +12,7 @@
 
     The full text of the license is available at http://www.gnu.org/copyleft/lesser.html
 -->
-<config xmlns="http://www.orbeon.com/oxf/controller" xmlns:oxf="http://www.orbeon.com/oxf/processors" matcher="oxf:perl5-matcher">
+<controller xmlns="http://www.orbeon.com/oxf/controller" xmlns:oxf="http://www.orbeon.com/oxf/processors" matcher="oxf:perl5-matcher">
 
 	<!-- ****************
 	* ADMIN INTERFACE *
@@ -44,6 +44,8 @@
 	<!-- ****************
 	* PUBLIC INTERFACE *
 	***************** -->
+
+	<page path="/kerameikos/test" model="config.xml" view="ui/xslt/test.xsl"/>
 
 	<!-- **** SERIALIZATIONS **** -->
 	<!-- RDF -->
@@ -97,4 +99,4 @@
 	<page path="/kerameikos/id/(.*)" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
 
 	<epilogue url="oxf:/config/epilogue.xpl"/>
-</config>
+</controller>

@@ -69,11 +69,12 @@
 				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
 
+				<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
+				<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet.ajax.min.js"/>
+
 				<!-- mapping -->
 				<xsl:if test="$hasGeo = true()">
-					<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
-					<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet.ajax.min.js"/>
 					<!--<script type="text/javascript" src="{$display_path}ui/javascript/heatmap.min.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-heatmap.js"/>-->
 					<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
@@ -83,6 +84,7 @@
 					<script type="text/javascript" src="https://d3plus.org/js/d3.js"/>
 					<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>		
 				</xsl:if>
 
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
@@ -108,6 +110,10 @@
 							</div>
 						</xsl:if>
 						<xsl:if test="$hasObjects = true()">
+							<div id="iiif-window" style="width:800px:height:600px;display:none">
+								
+							</div>
+							
 							<div class="row">
 								<div class="col-md-12 page-section">
 									<h2>Objects of this Typology</h2>
