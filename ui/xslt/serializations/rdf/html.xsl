@@ -110,7 +110,7 @@
 							</div>
 						</xsl:if>
 						<xsl:if test="$hasObjects = true()">
-							<div id="iiif-window" style="width:600px;height:400px;display:none">
+							<div id="iiif-window" style="width:800px;height:600px;display:none">
 								
 							</div>
 							
