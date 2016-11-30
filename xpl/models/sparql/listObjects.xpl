@@ -55,6 +55,8 @@ OPTIONAL {?object foaf:depiction ?ref
 							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
 {SELECT ?m WHERE {
   {kid:RDFID skos:exactMatch ?m}
+  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
+  UNION {?m skos:broader+ kid:RDFID}
   UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
 ?object crm:P108i_was_produced_by ?prod .
 ?prod  crm:P10_falls_within ?m.]]>
@@ -62,7 +64,9 @@ OPTIONAL {?object foaf:depiction ?ref
 						<xsl:when test="$type='crm:E57_Material'">
 							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
 {SELECT ?m WHERE {
-  {kid:RDFID skos:exactMatch ?m}
+   {kid:RDFID skos:exactMatch ?m}
+  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
+  UNION {?m skos:broader+ kid:RDFID}
   UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
 ?object crm:P45_consists_of ?m.]]>
 						</xsl:when>
@@ -70,6 +74,8 @@ OPTIONAL {?object foaf:depiction ?ref
 							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
 {SELECT ?m WHERE {
   {kid:RDFID skos:exactMatch ?m}
+  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
+  UNION {?m skos:broader+ kid:RDFID}
   UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
 ?object crm:P108i_was_produced_by ?prod .
 ?prod crm:P7_took_place_at ?m.]]>
@@ -82,6 +88,8 @@ OPTIONAL {?object foaf:depiction ?ref
 							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
 {SELECT ?m WHERE {
   {kid:RDFID skos:exactMatch ?m}
+  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
+  UNION {?m skos:broader+ kid:RDFID}
   UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
 ?object kon:hasShape ?m.]]>
 						</xsl:when>
@@ -89,6 +97,8 @@ OPTIONAL {?object foaf:depiction ?ref
 							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
 {SELECT ?m WHERE {
   {kid:RDFID skos:exactMatch ?m}
+  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
+  UNION {?m skos:broader+ kid:RDFID}
   UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
 ?object crm:P32_used_general_technique ?m .]]>
 						</xsl:when>
@@ -105,7 +115,9 @@ UNION {?types skos:broader kid:RDFID .
 				</xsl:when>-->
 						<xsl:when test="$type='foaf:Person'">
 							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
-{SELECT ?m WHERE {kid:RDFID skos:exactMatch ?m}}
+{SELECT ?m WHERE {
+  {kid:RDFID skos:exactMatch ?m} 
+  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}}}
 ?object crm:P108i_was_produced_by ?prod .
 ?prod crm:P14_carried_out_by ?m .]]>
 						</xsl:when>

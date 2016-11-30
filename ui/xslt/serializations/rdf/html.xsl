@@ -58,7 +58,7 @@
 	<xsl:template match="/">
 		<html lang="en" prefix="{$prefix}">
 			<head>
-				<title id="{$id}">Kerameikos.org: <xsl:value-of select="$id"/></title>
+				<title id="{$id}">Kerameikos.org: <xsl:value-of select="//skos:prefLabel[@xml:lang = 'en']"/></title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
@@ -67,7 +67,6 @@
 				<!-- fancybox -->
 				<script type="text/javascript" src="{$display_path}ui/javascript/jquery.fancybox.pack.js"/>
 				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
 
 				<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
 				<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"/>
@@ -85,9 +84,9 @@
 					<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>	
-					<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>
+						<!--<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>-->
 				</xsl:if>
-
+				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 			</head>
 			<body>
@@ -112,7 +111,7 @@
 						</xsl:if>
 						<xsl:if test="$hasObjects = true()">
 							<div id="iiif-window" style="width:600px;height:400px;display:none">
-								<div id="leaflet-container"/>
+								
 							</div>
 							
 							<div class="row">
@@ -181,7 +180,8 @@
 				<span id="base-query">
 					<xsl:value-of select="$base-query"/>
 				</span>
-				
+				<span id="manifest"/>
+				<div class="iiif-container-template" style="width:100%;height:100%"/>
 				<xsl:call-template name="field-template">
 					<xsl:with-param name="template" as="xs:boolean">true</xsl:with-param>
 				</xsl:call-template>

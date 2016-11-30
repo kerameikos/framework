@@ -4,6 +4,7 @@ function render_image(manifest) {
 		crs: L.CRS.Simple,
 		zoom: 0
 	});
+	
 	var iiifLayers = {
 	};
 	
