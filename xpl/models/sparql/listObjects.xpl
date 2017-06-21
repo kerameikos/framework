@@ -36,7 +36,8 @@ PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX kon:	<http://kerameikos.org/ontology#>]]>
+PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX edm:	<http://www.europeana.eu/schemas/edm/>]]>
 				</xsl:variable>
 				
 				<xsl:variable name="metadata">
@@ -46,13 +47,14 @@ OPTIONAL {?object crm:P50_has_current_keeper ?kuri .
 ?kuri skos:prefLabel ?keeper FILTER ( lang(?keeper) = "en" )} 
 OPTIONAL {?object foaf:thumbnail ?thumb} .
 OPTIONAL {?object foaf:depiction ?ref
-	OPTIONAL {?ref dcterms:isReferencedBy ?manifest}}}]]>
+	OPTIONAL {?ref dcterms:isReferencedBy ?manifest}}
+OPTIONAL {?object edm:isShownBy ?3dmodel}}]]>
 				</xsl:variable>
 				
 				<xsl:variable name="select">
 					<xsl:choose>
 						<xsl:when test="$type='crm:E4_Period'">
-							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel WHERE {
 {SELECT ?m WHERE {
   {kid:RDFID skos:exactMatch ?m}
   UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
@@ -62,7 +64,7 @@ OPTIONAL {?object foaf:depiction ?ref
 ?prod  crm:P10_falls_within ?m.]]>
 						</xsl:when>
 						<xsl:when test="$type='crm:E57_Material'">
-							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel WHERE {
 {SELECT ?m WHERE {
    {kid:RDFID skos:exactMatch ?m}
   UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
@@ -71,7 +73,7 @@ OPTIONAL {?object foaf:depiction ?ref
 ?object crm:P45_consists_of ?m.]]>
 						</xsl:when>
 						<xsl:when test="$type='kon:ProductionPlace'">
-							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel WHERE {
 {SELECT ?m WHERE {
   {kid:RDFID skos:exactMatch ?m}
   UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
@@ -81,11 +83,11 @@ OPTIONAL {?object foaf:depiction ?ref
 ?prod crm:P7_took_place_at ?m.]]>
 						</xsl:when>
 						<xsl:when test="$type='crm:E40_Legal_Body'">
-							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel WHERE {
 ?object crm:P50_has_current_keeper kid:RDFID .]]>
 						</xsl:when>
 						<xsl:when test="$type='kon:Shape'">
-							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel WHERE {
 {SELECT ?m WHERE {
   {kid:RDFID skos:exactMatch ?m}
   UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
@@ -94,7 +96,7 @@ OPTIONAL {?object foaf:depiction ?ref
 ?object kon:hasShape ?m.]]>
 						</xsl:when>
 						<xsl:when test="$type='kon:Technique'">
-							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+							<![CDATA[SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel WHERE {
 {SELECT ?m WHERE {
   {kid:RDFID skos:exactMatch ?m}
   UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
@@ -114,7 +116,7 @@ UNION {?types skos:broader kid:RDFID .
 ?object kon:hasShape ?matches}]]>
 				</xsl:when>-->
 						<xsl:when test="$type='foaf:Person'">
-							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel WHERE {
 {SELECT ?m WHERE {
   {kid:RDFID skos:exactMatch ?m} 
   UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}}}
@@ -122,7 +124,7 @@ UNION {?types skos:broader kid:RDFID .
 ?prod crm:P14_carried_out_by ?m .]]>
 						</xsl:when>
 						<xsl:when test="$type='foaf:Organization'">
-							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper ?manifest WHERE {
+							<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel WHERE {
 {SELECT ?m WHERE {kid:RDFID skos:exactMatch ?m}}
 ?object crm:P108i_was_produced_by ?prod .
 ?prod crm:P14_carried_out_by ?m .]]>

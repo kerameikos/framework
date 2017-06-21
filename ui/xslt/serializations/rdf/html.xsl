@@ -114,8 +114,8 @@
 				<script type="text/javascript" src="{$display_path}ui/javascript/jquery.fancybox.pack.js"/>
 				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>
 
-				<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.css"/>
-				<script src="http://cdn.leafletjs.com/leaflet/v0.7.7/leaflet.js"/>
+				<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.css"/>
+				<script src="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet.ajax.min.js"/>
 
 				<!-- mapping -->
