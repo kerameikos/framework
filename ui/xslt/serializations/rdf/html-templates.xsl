@@ -5,82 +5,123 @@
 	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:kerameikos="http://kerameikos.org/" xmlns:res="http://www.w3.org/2005/sparql-results#"
 	exclude-result-prefixes="#all" version="2.0">
 
-	<xsl:variable name="classes" as="node()*">
-		<classes>
-			<!--<class>
-				<label>Collection</label>
-				<type>crm:E78_Collection</type>
-			</class>-->
-			<class>
-				<label>Institution</label>
-				<type>crm:E40_Legal_Body</type>
-			</class>
-			<class>
-				<label>Material</label>
-				<type>crm:E57_Material</type>
-			</class>
-			<class>
-				<label>Organization</label>
-				<type>foaf:Organization</type>
-			</class>
-			<class>
-				<label>Period</label>
-				<type>crm:E4_Period</type>
-			</class>
-			<class>
-				<label>Person</label>
-				<type>foaf:Person</type>
-			</class>
-			<class>
-				<label>Place</label>
-				<type>kon:ProductionPlace</type>
-			</class>
-			<class>
-				<label>Shape</label>
-				<type>kon:Shape</type>
-			</class>
-			<class>
-				<label>Technique</label>
-				<type>kon:Technique</type>
-			</class>
-			<!--<class>
-				<label>Ware</label>
-				<type>kon:Ware</type>
-			</class>-->
-		</classes>
-	</xsl:variable>	
+	<xsl:template match="skos:prefLabel" mode="prefLabel">
+		<span property="{name()}" xml:lang="{@xml:lang}">
+			<xsl:value-of select="."/>
+		</span>
+		<xsl:if test="string(@xml:lang)">
+			<span class="lang">
+				<xsl:value-of select="concat(' (', @xml:lang, ')')"/>
+			</span>
+		</xsl:if>
+		<xsl:if test="not(position() = last())">
+			<xsl:text>, </xsl:text>
+		</xsl:if>
+	</xsl:template>
 
-	<xsl:template name="quant">
-		<div class="row">
-			<div class="col-md-12">
-				<a name="quant"/>
-				<h2>Quantitative Analysis</h2>
-
-				<xsl:if test="string($category)">
-					<xsl:call-template name="construct-table"/>
+	<xsl:template match="*" mode="type">
+		<div typeof="{name()}" about="{@rdf:about}">
+			<xsl:if test="contains(@rdf:resource, '#this')">
+				<a name="#this"/>
+			</xsl:if>
+			<xsl:element name="{if(position()=1) then 'h2' else 'h3'}">
+				<a href="{@rdf:about}">
+					<xsl:choose>
+						<xsl:when test="contains(@rdf:about, '#')">
+							<xsl:value-of select="concat('#', substring-after(@rdf:about, '#'))"/>
+						</xsl:when>
+						<xsl:when test="contains(@rdf:about, 'geonames.org')">
+							<xsl:value-of select="@rdf:about"/>
+						</xsl:when>
+						<xsl:otherwise>
+							<xsl:value-of select="substring-after(@rdf:about, 'id/')"/>
+						</xsl:otherwise>
+					</xsl:choose>
+				</a>
+				<small>
+					<xsl:text> (</xsl:text>
+					<a href="{concat(namespace-uri(.), local-name())}">
+						<xsl:value-of select="name()"/>
+					</a>
+					<xsl:text>)</xsl:text>
+				</small>
+			</xsl:element>
+			<dl class="dl-horizontal">
+				<xsl:if test="skos:prefLabel">
+					<dt>
+						<a href="{concat($namespaces//namespace[@prefix='skos']/@uri, 'prefLabel')}">skos:prefLabel</a>
+					</dt>
+					<dd>
+						<xsl:apply-templates select="skos:prefLabel" mode="prefLabel">
+							<xsl:sort select="@xml:lang"/>
+						</xsl:apply-templates>
+					</dd>
 				</xsl:if>
-
-				<form role="form" id="calculateForm" action="{$display_path}id/{$id}.html#quant" method="get">
-					<p>Select a category below to generate a graph showing the quantitative distribution for this typology.</p>
-					<div class="form-group">
-						<label for="categorySelect">Category</label>
-						<select name="category" class="form-control" id="categorySelect">
-							<option value="">Select...</option>
-							<xsl:for-each select="$classes//class[not(type=$type)]">
-								<option value="{type}">
-									<xsl:if test="$category = type">
-										<xsl:attribute name="selected">selected</xsl:attribute>
-									</xsl:if>
-									<xsl:value-of select="label"/>
-								</option>
-							</xsl:for-each>
-						</select>
-					</div>
-					<input type="submit" value="Generate" class="btn btn-default" id="visualize-submit"/>
-				</form>
-			</div>
+				<xsl:apply-templates select="skos:definition" mode="list-item">
+					<xsl:sort select="@xml:lang"/>
+				</xsl:apply-templates>
+				<xsl:apply-templates select="*[not(name() = 'skos:prefLabel') and not(name() = 'skos:definition')]" mode="list-item">
+					<xsl:sort select="name()"/>
+					<xsl:sort select="@rdf:resource"/>
+				</xsl:apply-templates>
+			</dl>
 		</div>
 	</xsl:template>
 	
-
+	<xsl:template match="*" mode="list-item">
+		<xsl:variable name="name" select="name()"/>
+		<dt>
+			<a href="{concat($namespaces//namespace[@prefix=substring-before($name, ':')]/@uri, substring-after($name, ':'))}">
+				<xsl:value-of select="name()"/>
+			</a>
+		</dt>
+		<dd>
+			<xsl:choose>
+				<xsl:when test="string(.)">
+					<xsl:choose>
+						<xsl:when test="name() = 'osgeo:asGeoJSON' and string-length(.) &gt; 100">
+							<div id="geoJSON-fragment">
+								<xsl:value-of select="substring(., 1, 100)"/>
+								<xsl:text>...</xsl:text>
+								<a href="#" class="toggle-geoJSON">[more]</a>
+							</div>
+							<div id="geoJSON-full" style="display:none">
+								<span property="{name()}" xml:lang="{@xml:lang}">
+									<xsl:value-of select="."/>
+								</span>
+								<a href="#" class="toggle-geoJSON">[less]</a>
+							</div>
+						</xsl:when>
+						<xsl:otherwise>
+							<span property="{name()}" xml:lang="{@xml:lang}">
+								<xsl:value-of select="."/>
+							</span>
+							<xsl:if test="string(@xml:lang)">
+								<span class="lang">
+									<xsl:value-of select="concat(' (', @xml:lang, ')')"/>
+								</span>
+							</xsl:if>
+						</xsl:otherwise>
+					</xsl:choose>
+				</xsl:when>
+				<xsl:when test="string(@rdf:resource)">
+					<span>
+						<a href="{@rdf:resource}" rel="{name()}" title="{@rdf:resource}">
+							<xsl:choose>
+								<xsl:when test="name() = 'rdf:type'">
+									<xsl:variable name="uri" select="@rdf:resource"/>
+									<xsl:value-of
+										select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
+									/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:value-of select="@rdf:resource"/>
+								</xsl:otherwise>
+							</xsl:choose>
+						</a>
+					</span>
+				</xsl:when>
+			</xsl:choose>
+		</dd>
+	</xsl:template>
 </xsl:stylesheet>
