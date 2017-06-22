@@ -28,7 +28,8 @@
 							<xsl:attribute name="manifest" select="res:binding[@name = 'manifest']/res:uri"/>
 							<span class="glyphicon glyphicon-zoom-in iiif-zoom-glyph" title="Click image(s) to zoom" style="display:none"/>
 							<xsl:if test="res:binding[@name = '3dmodel']">
-								<span href="#model-window" object-url="{res:binding[@name='object']/res:uri}" content="{$title}" class="glyphicon glyphicon-modal-window model-button" title="Click to view 3D model" style="display:none"
+								<span href="#model-window" object-url="{res:binding[@name='object']/res:uri}" content="{$title}"
+									class="glyphicon glyphicon-modal-window model-button" title="Click to view 3D model"
 									model-url="{res:binding[@name='3dmodel']/res:uri}"> 3D Model</span>
 							</xsl:if>
 						</xsl:when>
@@ -37,7 +38,8 @@
 							<xsl:attribute name="href" select="res:binding[@name = 'ref']/res:uri"/>
 							<xsl:attribute name="rel">gallery</xsl:attribute>
 							<xsl:if test="res:binding[@name = '3dmodel']">
-								<span href="#model-window" object-url="{res:binding[@name='object']/res:uri}" content="{$title}" class="glyphicon glyphicon-modal-window model-button" title="Click to view 3D model" style="display:none"
+								<span href="#model-window" object-url="{res:binding[@name='object']/res:uri}" content="{$title}"
+									class="glyphicon glyphicon-modal-window model-button" title="Click to view 3D model"
 									model-url="{res:binding[@name='3dmodel']/res:uri}"> 3D Model</span>
 							</xsl:if>
 						</xsl:otherwise>
