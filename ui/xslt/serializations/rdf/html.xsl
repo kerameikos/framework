@@ -21,7 +21,8 @@
 	<xsl:variable name="id" select="substring-after(/content/rdf:RDF/*[1]/@rdf:about, 'id/')"/>
 	<xsl:variable name="html-uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 	<xsl:variable name="mode">record</xsl:variable>
-	<xsl:variable name="base-query" select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
+	<xsl:variable name="base-query"
+		select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
 	<xsl:variable name="type" select="/content/rdf:RDF/*[1]/name()"/>
 	<xsl:variable name="title" select="/content/rdf:RDF/*[1]/skos:prefLabel[@xml:lang = 'en']"/>
 
@@ -46,7 +47,7 @@
 				true()
 			else
 				false()"/>
-	
+
 	<xsl:variable name="classes" as="node()*">
 		<classes>
 			<!--<class>
@@ -108,8 +109,8 @@
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
-				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css"/>
-				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"/>
+				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
 				<!-- fancybox -->
 				<script type="text/javascript" src="{$display_path}ui/javascript/jquery.fancybox.pack.js"/>
 				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>
@@ -129,8 +130,8 @@
 					<script type="text/javascript" src="https://d3plus.org/js/d3.js"/>
 					<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>	
-						<!--<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>-->
+					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>
+					<!--<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>-->
 				</xsl:if>
 				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
@@ -157,14 +158,14 @@
 						</xsl:if>
 						<xsl:if test="$hasObjects = true()">
 							<div id="iiif-window" style="width:800px;height:600px;display:none"/>
-							
+
 							<div class="row">
 								<div class="col-md-12 page-section">
 									<h2>Objects of this Typology</h2>
 									<div id="listObjects"/>
 								</div>
 							</div>
-							
+
 							<div class="row">
 								<div class="col-md-12 page-section">
 									<h2>Quantitative Analysis</h2>
@@ -229,20 +230,24 @@
 				<xsl:call-template name="field-template">
 					<xsl:with-param name="template" as="xs:boolean">true</xsl:with-param>
 				</xsl:call-template>
-				
+
 				<xsl:call-template name="compare-container-template">
 					<xsl:with-param name="template" as="xs:boolean">true</xsl:with-param>
 				</xsl:call-template>
-				
+
 				<xsl:call-template name="date-template">
 					<xsl:with-param name="template" as="xs:boolean">true</xsl:with-param>
 				</xsl:call-template>
-				
+
 				<xsl:call-template name="ajax-loader-template"/>
+				
+				<div id="model-window" style="width:640px;height:480px;display:none"/>
+				<iframe id="model-iframe-template" width="640" height="480" frameborder="0" allowvr="true"
+					allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" onmousewheel=""></iframe>
 			</div>
 		</div>
 	</xsl:template>
-	
+
 	<!-- templates -->
 	<xsl:template name="dbpedia-abstract">
 		<xsl:param name="uri"/>

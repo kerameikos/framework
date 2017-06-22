@@ -18,7 +18,7 @@
 
 		<xsl:choose>
 			<xsl:when test="string(res:binding[@name = 'ref']/res:uri)">
-				<a title="{$title}"
+				<div title="{$title}"
 					style="background-image: url('{if (string(res:binding[@name='thumb']/res:uri)) then res:binding[@name='thumb']/res:uri else res:binding[@name='ref']/res:uri}')"
 					id="{res:binding[@name='object']/res:uri}">
 					<xsl:choose>
@@ -26,14 +26,23 @@
 							<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container iiif-image</xsl:attribute>
 							<xsl:attribute name="href">#iiif-window</xsl:attribute>
 							<xsl:attribute name="manifest" select="res:binding[@name = 'manifest']/res:uri"/>
+							<span class="glyphicon glyphicon-zoom-in iiif-zoom-glyph" title="Click image(s) to zoom" style="display:none"/>
+							<xsl:if test="res:binding[@name = '3dmodel']">
+								<span href="#model-window" object-url="{res:binding[@name='object']/res:uri}" content="{$title}" class="glyphicon glyphicon-modal-window model-button" title="Click to view 3D model" style="display:none"
+									model-url="{res:binding[@name='3dmodel']/res:uri}"> 3D Model</span>
+							</xsl:if>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container fancybox</xsl:attribute>
 							<xsl:attribute name="href" select="res:binding[@name = 'ref']/res:uri"/>
 							<xsl:attribute name="rel">gallery</xsl:attribute>
+							<xsl:if test="res:binding[@name = '3dmodel']">
+								<span href="#model-window" object-url="{res:binding[@name='object']/res:uri}" content="{$title}" class="glyphicon glyphicon-modal-window model-button" title="Click to view 3D model" style="display:none"
+									model-url="{res:binding[@name='3dmodel']/res:uri}"> 3D Model</span>
+							</xsl:if>
 						</xsl:otherwise>
 					</xsl:choose>
-				</a>
+				</div>
 			</xsl:when>
 			<xsl:when test="string(res:binding[@name = 'thumb']/res:uri)">
 				<a href="{res:binding[@name='thumb']/res:uri}" title="{$title}" class="col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container fancybox"

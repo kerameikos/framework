@@ -291,20 +291,49 @@ a:hover{
     width: 100%;
     height: 100%;
 }
+.obj-container{
+    z-index: 1;
+    cursor:pointer;
+    color: #c94f2a;
+}
 @media (min-width : 992px){
     .obj-container{
         height: 200px;
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
+        position: relative;
+    }
+    .iiif-zoom-glyph{
+        position: absolute;
+        right: 0;
+        top: 180px;
+    }
+    .model-button{
+        position: absolute;
+        right: 20px;
+        top: 180px;
+        z-index: 1000;
     }
 }
-@media (max-width: 991px) {
- .obj-container{
+@media (max-width : 991px){
+    .obj-container{
         height: 400px;
         background-size: cover;
         background-position: center center;
         background-repeat: no-repeat;
+        position: relative;
+    }
+    .iiif-zoom-glyph{
+        position: absolute;
+        right: 0;
+        top: 380px;
+    }
+    .model-button{
+        position: absolute;
+        right: 20px;
+        top: 380px;
+        z-index: 1000;
     }
 }
 .model-window,
