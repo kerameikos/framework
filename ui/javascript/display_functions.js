@@ -2,10 +2,10 @@ $(document).ready(function () {
     
     //display the magnifying glass glyph when hovering the mouse of divs that contain it (for IIIF)
     $("#listObjects").on('mouseenter', '.obj-container', function () {
-        $(this).children('.iiif-image').fadeIn();
+        $(this).children('.iiif-zoom-glyph').fadeIn();
     });
     $("#listObjects").on('mouseleave', '.obj-container', function () {
-        $(this).children('.iiif-image').fadeOut();
+        $(this).children('.iiif-zoom-glyph').fadeOut();
     });
     
     $('.model-button').fancybox({
