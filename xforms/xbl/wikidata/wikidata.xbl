@@ -1,5 +1,5 @@
 <xbl:xbl xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:ev="http://www.w3.org/2001/xml-events"
-	xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:xxbl="http://orbeon.org/oxf/xml/xbl"
+	xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:xbl="http://www.w3.org/ns/xbl" xmlns:xxbl="http://orbeon.org/oxf/xml/xbl" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:owl="http://www.w3.org/2002/07/owl#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:kerameikos="https://github.com/kerameikos/">
 	<xbl:binding id="kerameikos-wikidata" element="kerameikos|wikidata">
@@ -10,7 +10,7 @@
 					<xforms:var name="binding" as="node()?">
 						<xxforms:sequence select="." xxbl:scope="outer"/>
 					</xforms:var>
-					
+
 					<xforms:group ref="$binding">
 						<xforms:trigger appearance="minimal">
 							<xforms:label><span class="glyphicon glyphicon-search"/>Wikidata</xforms:label>
@@ -25,15 +25,15 @@
 									<xforms:label>URL</xforms:label>
 								</xforms:input>
 								<xforms:trigger bind="import-trigger">
-									<xforms:label><span class="glyphicon glyphicon-import"/>Import</xforms:label>									
+									<xforms:label><span class="glyphicon glyphicon-import"/>Import</xforms:label>
 									<xforms:action ev:event="DOMActivate">
 										<!-- set the wiki title and lang -->
-										<xforms:var name="title" select="tokenize(instance('control-instance')/wiki-url, '/')[last()]"></xforms:var>
+										<xforms:var name="title" select="tokenize(instance('control-instance')/wiki-url, '/')[last()]"/>
 										<xforms:action if="string($title)">
-											<xforms:setvalue ref="instance('control-instance')/wiki-title" value="$title"></xforms:setvalue>
+											<xforms:setvalue ref="instance('control-instance')/wiki-title" value="$title"/>
 											<xforms:setvalue ref="instance('control-instance')/wiki-lang">en</xforms:setvalue>
-											<xforms:send submission="get-wikidata"></xforms:send>
-											
+											<xforms:send submission="get-wikidata"/>
+
 											<!-- process wikidata XML model after submission is done -->
 											<xforms:action ev:event="xforms-submit-done">
 												<xforms:action if="count(instance('wikidata')//entity) = 0">
@@ -44,41 +44,45 @@
 													<!-- process wikidata XML if the entity has an @id -->
 													<xforms:action if="string(instance('wikidata')//entity/@id)">
 														<!-- create mapping based on the type: skos:closeMatch for mints, skos:exactMatch for all else -->
-														<xforms:var name="mapping" select="if ($binding/name() = 'nmo:Mint' or $binding/name()='nmo:Region') then 'skos:closeMatch' else 'skos:exactMatch'"></xforms:var>
-														
+														<xforms:var name="mapping"
+															select="if ($binding/name() = 'nmo:Mint' or $binding/name()='nmo:Region') then 'skos:closeMatch' else 'skos:exactMatch'"/>
+
 														<!-- insert the wikidata, dpbedia URI -->
-														<xforms:var name="wikidata-uri" select="concat('https://www.wikidata.org/entity/', instance('wikidata')//entity/@id)"></xforms:var>														
-														<xforms:insert context="$binding" nodeset="./child::node()[last()]" if="not($binding/*[name()=$mapping][@rdf:resource=$wikidata-uri])"
-															origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $wikidata-uri), ''))"></xforms:insert>
-														
-														<xforms:var name="dbpedia-uri" select="concat('http://dbpedia.org/resource/', instance('control-instance')/wiki-title)"></xforms:var>
-														<xforms:insert context="$binding" nodeset="./child::node()[last()]" if="instance('control-instance')/wiki-lang = 'en' and not($binding/*[name()=$mapping][@rdf:resource=$dbpedia-uri])"
-															origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $dbpedia-uri), ''))"></xforms:insert>
-														
+														<xforms:var name="wikidata-uri" select="concat('https://www.wikidata.org/entity/', instance('wikidata')//entity/@id)"/>
+														<xforms:insert context="$binding" nodeset="./child::node()[last()]"
+															if="not($binding/*[name()=$mapping][@rdf:resource=$wikidata-uri])"
+															origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $wikidata-uri), ''))"/>
+
+														<xforms:var name="dbpedia-uri" select="concat('http://dbpedia.org/resource/', instance('control-instance')/wiki-title)"/>
+														<xforms:insert context="$binding" nodeset="./child::node()[last()]"
+															if="instance('control-instance')/wiki-lang = 'en' and not($binding/*[name()=$mapping][@rdf:resource=$dbpedia-uri])"
+															origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $dbpedia-uri), ''))"/>
+
 														<!-- import new labels, but only ones that follow the two-digit ISO standard -->
 														<xforms:action xxforms:iterate="instance('wikidata')//entity/labels/label[string-length(@language) = 2]">
-															<xforms:var name="lang" select="data(context()/@language)"></xforms:var>
-															<xforms:var name="label" select="data(context()/@value)"></xforms:var>
+															<xforms:var name="lang" select="data(context()/@language)"/>
+															<xforms:var name="label" select="data(context()/@value)"/>
 															<xforms:insert context="$binding" nodeset="./child::node()[last()]" if="not($binding/skos:prefLabel[@xml:lang=$lang])"
-																origin="xforms:element('skos:prefLabel', (xforms:attribute('xml:lang', $lang), $label))"></xforms:insert>
+																origin="xforms:element('skos:prefLabel', (xforms:attribute('xml:lang', $lang), $label))"/>
 														</xforms:action>
-														
+
 														<!-- iterate through claims with matching properties to link to external vocabulary systems -->
 														<xforms:action
 															xxforms:iterate="instance('wikidata')//entity/claims/property[@id='P214' or @id='P227' or @id='P213' or @id='P268' or @id='P269' or @id='P646' or @id='P245' or @id='P1566' or @id='P1900']">
-															<xforms:var name="property" select="data(context()/@id)"></xforms:var>
-															<xforms:var name="id" select="replace(data(context()/descendant::mainsnak[1]/datavalue/@value), ' ', '')"></xforms:var>
-															<xforms:var name="uri" select="concat(instance('wikidata-properties')/property[@id=$property], $id)"></xforms:var>
-															
-															<xforms:insert context="$binding" nodeset="./child::node()[last()]" if="not($binding/*[name()=$mapping][@rdf:resource=$uri])"
-																origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $uri), ''))"></xforms:insert>
+															<xforms:var name="property" select="data(context()/@id)"/>
+															<xforms:var name="id" select="replace(data(context()/descendant::mainsnak[1]/datavalue/@value), ' ', '')"/>
+															<xforms:var name="uri" select="concat(instance('wikidata-properties')/property[@id=$property], $id)"/>
+
+															<xforms:insert context="$binding" nodeset="./child::node()[last()]"
+																if="not($binding/*[name()=$mapping][@rdf:resource=$uri])"
+																origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $uri), ''))"/>
 														</xforms:action>
 													</xforms:action>
 													<!-- clear wiki stuff from control-instance -->
-													<xforms:setvalue ref="instance('control-instance')/wiki-title"></xforms:setvalue>
-													<xforms:setvalue ref="instance('control-instance')/wiki-lang"></xforms:setvalue>
+													<xforms:setvalue ref="instance('control-instance')/wiki-title"/>
+													<xforms:setvalue ref="instance('control-instance')/wiki-lang"/>
 												</xforms:action>
-												
+
 												<!-- close dialog -->
 												<xxforms:hide dialog="import-wikidata-dialog"/>
 											</xforms:action>
@@ -87,11 +91,12 @@
 								</xforms:trigger>
 							</div>
 							<xforms:group ref=".[instance('control-instance')/import-trigger = false() and string-length(instance('control-instance')/wiki-url) &gt; 0]">
-								<div class="alert alert-warning" role="alert" style="margin-top:10px"><b><span class="glyphicon glyphicon-exclamation-sign"></span>Warning:</b> Wikipedia URL is not valid.</div>
+								<div class="alert alert-warning" role="alert" style="margin-top:10px"><b><span class="glyphicon glyphicon-exclamation-sign"/>Warning:</b> Wikipedia
+									URL is not valid.</div>
 							</xforms:group>
 						</xxforms:dialog>
 					</xforms:group>
-					
+
 					<!-- ***************** MODEL ***************-->
 					<xforms:model id="wikidata-model">
 						<!-- *** INSTANCES *** -->
@@ -103,12 +108,12 @@
 								<import-trigger>false</import-trigger>
 							</controls>
 						</xforms:instance>
-						
+
 						<!-- Wikidata XML -->
 						<xforms:instance id="wikidata">
-							<api xmlns=""></api>
+							<api xmlns=""/>
 						</xforms:instance>
-						
+
 						<xforms:instance id="wikidata-properties">
 							<properties xmlns="">
 								<property id="P213">http://isni.org/</property>
@@ -122,11 +127,12 @@
 								<property id="P1900">http://www.eagle-network.eu/voc/</property>
 							</properties>
 						</xforms:instance>
-						
+
 						<!-- *** BINDINGS *** -->
 						<xforms:bind nodeset="instance('control-instance')">
-							<xforms:bind nodeset="import-trigger" id="import-trigger" type="xs:boolean" calculate="matches(../wiki-url, 'https?://[a-z]{2,3}\.wikipedia\.org/wiki/[A-Z].*') and not(contains(../wiki-url, '#'))" readonly=". = false()"></xforms:bind>
-						</xforms:bind>						
+							<xforms:bind nodeset="import-trigger" id="import-trigger" type="xs:boolean"
+								calculate="matches(../wiki-url, 'https?://[a-z]{2,3}\.wikipedia\.org/wiki/[A-Z].*') and not(contains(../wiki-url, '#'))" readonly=". = false()"/>
+						</xforms:bind>
 
 						<!-- *** SUBMISSIONS *** -->
 						<xforms:submission id="get-wikidata" serialization="none" method="get"

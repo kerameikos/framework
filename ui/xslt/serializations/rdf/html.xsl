@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
-	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-	xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/"
-	exclude-result-prefixes="#all" version="2.0">
+	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
+	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
+	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:include href="../../functions.xsl"/>
 	<xsl:include href="../../vis-templates.xsl"/>
@@ -21,8 +20,7 @@
 	<xsl:variable name="id" select="substring-after(/content/rdf:RDF/*[1]/@rdf:about, 'id/')"/>
 	<xsl:variable name="html-uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 	<xsl:variable name="mode">record</xsl:variable>
-	<xsl:variable name="base-query"
-		select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
+	<xsl:variable name="base-query" select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
 	<xsl:variable name="type" select="/content/rdf:RDF/*[1]/name()"/>
 	<xsl:variable name="title" select="/content/rdf:RDF/*[1]/skos:prefLabel[@xml:lang = 'en']"/>
 
@@ -110,7 +108,7 @@
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
-				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
+				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/{$display_path}ui/javascript/bootstrap.min.js"/>
 				<!-- fancybox -->
 				<script type="text/javascript" src="{$display_path}ui/javascript/jquery.fancybox.pack.js"/>
 				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>
@@ -127,11 +125,29 @@
 				</xsl:if>
 				<!-- distribution visualization -->
 				<xsl:if test="$hasObjects = true()">
-					<script type="text/javascript" src="https://d3plus.org/js/d3.js"/>
-					<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
+					<script type="text/javascript" src="https://d3plus.org/{$display_path}ui/javascript/d3.js"/>
+					<script type="text/javascript" src="https://d3plus.org/{$display_path}ui/javascript/d3plus.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>
 					<!--<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>-->
+
+					<!-- 3D hop -->
+					<!--STYLESHEET-->
+					<link type="text/css" rel="stylesheet" href="{$display_path}ui/css/3dhop.css"/>
+					<!--SPIDERGL-->
+					<script type="text/javascript" src="{$display_path}ui/javascript/spidergl.js"/>
+					<!--PRESENTER-->
+					<script type="text/javascript" src="{$display_path}ui/javascript/presenter.js"/>
+					<!--3D MODELS LOADING AND RENDERING-->
+					<script type="text/javascript" src="{$display_path}ui/javascript/nexus.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/ply.js"/>
+					<!--TRACKBALLS-->
+					<script type="text/javascript" src="{$display_path}ui/javascript/trackball_sphere.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/trackball_turntable.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/trackball_turntable_pan.js"/>
+					<script type="text/javascript" src="{$display_path}ui/javascript/trackball_pantilt.js"/>
+					<!--UTILITY-->
+					<script type="text/javascript" src="{$display_path}ui/javascript/init.js"/>
 				</xsl:if>
 				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
@@ -240,10 +256,29 @@
 				</xsl:call-template>
 
 				<xsl:call-template name="ajax-loader-template"/>
+
+				<div id="sketchfab-window" style="width:640px;height:480px;display:none"/>
+				<iframe id="model-iframe-template" width="640" height="480" frameborder="0" allowvr="true" allowfullscreen="true" mozallowfullscreen="true"
+					webkitallowfullscreen="true" onmousewheel=""/>
 				
-				<div id="model-window" style="width:640px;height:480px;display:none"/>
-				<iframe id="model-iframe-template" width="640" height="480" frameborder="0" allowvr="true"
-					allowfullscreen="true" mozallowfullscreen="true" webkitallowfullscreen="true" onmousewheel=""></iframe>
+				<div id="3dhop-window" style="display:none;width:650px;height:490px;">
+					<div id="3dhop-template" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
+						<div id="toolbar">
+							<img id="home" title="Home" src="{$display_path}ui/images/skins/dark/home.png"/>
+							<br/>
+							<img id="zoomin" title="Zoom In" src="{$display_path}ui/images/skins/dark/zoomin.png"/>
+							<br/>
+							<img id="zoomout" title="Zoom Out" src="{$display_path}ui/images/skins/dark/zoomout.png"/>
+							<br/>
+							<img id="light_on" title="Disable Light Control" src="{$display_path}ui/images/skins/dark/light_on.png" style="position:absolute; visibility:hidden;"/>
+							<img id="light" title="Enable Light Control" src="{$display_path}ui/images/skins/dark/light.png"/>
+							<br/>
+							<img id="full_on" title="Exit Full Screen" src="{$display_path}ui/images/skins/dark/full_on.png" style="position:absolute; visibility:hidden;"/>
+							<img id="full" title="Full Screen" src="{$display_path}ui/images/skins/dark/full.png"/>
+						</div>
+						<canvas id="draw-canvas" style="background-image: url({$display_path}ui/images/skins/backgrounds/dark.jpg)"/>
+					</div>
+				</div>
 			</div>
 		</div>
 	</xsl:template>
@@ -265,8 +300,7 @@
 		<xsl:param name="uri"/>
 
 		<xsl:variable name="lgpn-tei" as="element()*">
-			<xsl:copy-of
-				select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
+			<xsl:copy-of select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
 		</xsl:variable>
 
 		<xsl:if test="$lgpn-tei/descendant::tei:birth">

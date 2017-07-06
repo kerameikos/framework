@@ -14,8 +14,17 @@ $(document).ready(function () {
             this.title = '<a href="' + this.element.attr('object-url') + '">' + this.element.attr('content') + '</a>';
             //if the URL is sketchfab, then remove existing iframe and reload iframe
             if (url.indexOf('sketchfab') > 0) {
-                $('#model-window').children('iframe').remove();
-                $("#model-iframe-template").clone().removeAttr('id').attr('src', url + '/embed').appendTo("#model-window");
+                $('#sketchfab-window').children('iframe').remove();
+                $("#model-iframe-template").clone().removeAttr('id').attr('src', url + '/embed').appendTo("#sketchfab-window");
+            } else if (url.indexOf('.ply') > 0) {                
+                //set up 3dhop
+                init3dhop();
+                
+                setup3dhop(url);
+                
+                resizeCanvas(640, 480);
+                
+                moveToolbar(20, 20);
             }
         },
         helpers: {
@@ -47,7 +56,7 @@ $(document).ready(function () {
     $('#listObjects').on('click', '.fancybox', function () {
         var href = $(this).attr('href');
         var title = '<a href="' + $(this).attr('id') + '">' + $(this).attr('title') + '</a>';
-    
+        
         $.fancybox({
             type: 'image',
             href: href,
@@ -106,3 +115,44 @@ $(document).ready(function () {
         });
     }
 });
+
+var presenter = null;
+
+function setup3dhop(url) {
+    presenter = new Presenter("draw-canvas");
+    
+    presenter.setScene({
+        meshes: {
+            "Vase": {
+                url: url
+            }
+        },
+        modelInstances: {
+            "Model1": {
+                mesh: "Vase"
+            }
+        },
+        trackball: {
+            type: TurnTableTrackball,
+            trackOptions: {
+                startPhi: 0.0,
+                startTheta: 0.0,
+                startDistance: 2.5,
+                minMaxPhi:[-180, 180],
+                minMaxTheta:[-180, 180],
+                minMaxDist:[0.5, 3.0]
+            }
+        }
+    });
+}
+
+function actionsToolbar(action) {
+    if (action == 'home')
+    presenter.resetTrackball(); else if (action == 'zoomin')
+    presenter.zoomIn(); else if (action == 'zoomout')
+    presenter.zoomOut(); else if (action == 'light' || action == 'light_on') {
+        presenter.enableLightTrackball(! presenter.isLightTrackballEnabled());
+        lightSwitch();
+    } else if (action == 'full' || action == 'full_on')
+    fullscreenSwitch();
+}
