@@ -22,12 +22,238 @@
 
 		<h3>Papers and Presentations</h3>
 		<ul>
-			<li><b>2016: </b>Gruber, Ethan and Tyler Jo Smith. "Kerameikos.org: The Semantic Web Meets Greek Pottery", <a href="http://dh.virginia.edu/">DH@UVa</a>, Scholar’s Lab UVa, 14 October
-				2016</li>
+			<li><b>2016: </b>Gruber, Ethan and Tyler Jo Smith. "Kerameikos.org: The Semantic Web Meets Greek Pottery", <a href="http://dh.virginia.edu/"
+					>DH@UVa</a>, Scholar’s Lab UVa, 14 October 2016</li>
 			<li><b>2015: </b>Gondek, Renee and Ethan Gruber. Roundtable on databases and pottery. Computer Applications in Archaeology, Siena, Italy.</li>
 			<li><b>2014: </b>Gruber, Ethan and Tyler Jo Smith. <a href="https://caa2014.sciencesconf.org/46119/document">Linked Open Greek Pottery</a>.
 				Presented at Computer Applications in Archaeology, Paris, France.</li>
 		</ul>
-
 	</index>
+	<apis>
+		<h1>Kerameikos Documentation</h1>
+		<p>This page contains documentation for using web services provided by Kerameikos and how to access machine readable serializations through REST and
+			content negotiation.</p>
+		<ul>
+			<li>
+				<a href="#apis">APIs</a>
+			</li>
+			<li>
+				<a href="#reconciliation">OpenRefine Reconciliation Service</a>
+			</li>
+			<li>
+				<a href="#access">Accessing Data</a>
+			</li>
+		</ul>
+		<div id="apis">
+			<h2>APIs</h2>
+			<table class="table">
+				<thead>
+					<tr>
+						<th style="width:50%">API</th>
+						<th>XML</th>
+						<th>JSON</th>
+						<th>Turtle</th>
+					</tr>
+				</thead>
+				<tbody>
+					<!--<tr>
+					<td>
+						<a href="#getLabel">getLabel</a>
+					</td>
+					<td>
+						<a href="api/getLabel?uri=http://kerameikos.org/id/ar&amp;lang=fr">XML</a>
+					</td>
+					<td>
+						<a href="api/getLabel?uri=http://kerameikos.org/id/ar&amp;lang=fr&amp;format=json">JSON</a>
+					</td>
+					<td/>
+				</tr>-->
+					<tr>
+						<td>
+							<a href="#getRdf">getRdf</a>
+						</td>
+						<td>
+							<a href="api/getRdf?identifiers=attica|black_figure|exekias">RDF/XML</a>
+						</td>
+						<td>
+							<a href="api/getRdf?identifiers=attica|black_figure|exekias&amp;format=json">JSON-LD</a>
+						</td>
+						<td>
+							<a href="api/getRdf?identifiers=attica|black_figure|exekias&amp;format=ttl">RDF/TTL</a>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<!--<div class="highlight">
+			<a name="getLabel"/>
+			<h2>Get Label</h2>
+			<p>Get the label of a Kerameikos ID given its URI and language code.<br/>
+				<b>Webservice Type</b> : REST<br/>
+				<b>Url</b> : kerameikos.org/getLabel?<br/>
+				<b>Parameters</b> : uri (of Kerameikos ID), lang (two-letter ISO language code), format ('json' or 'xml', default 'xml')<br/>
+				<b>Result</b> : returns the label in given language, or English as default.<br/>
+				<b>Examples</b>: <a href="api/getLabel?uri=http://kerameikos.org/id/ar&amp;lang=fr">api/getLabel?uri=http://kerameikos.org/id/ar&amp;lang=fr</a>
+			</p>
+		</div>-->
+			<div class="highlight">
+				<a name="getRdf"/>
+				<h3>Get RDF</h3>
+				<p>Aggregate RDF or JSON-LD for Kerameikos ids.<br/>
+					<b>Webservice Type</b> : REST<br/>
+					<b>Url</b> : kerameikos.org/getRdf?<br/>
+					<b>Parameters</b> : identifiers (Kerameikos ids divided by a pipe '|'), format ('xml', 'ttl', 'json', default 'xml')<br/>
+					<b>Result</b> : RDF/XML, RDF/TTL, JSON-LD.<br/>
+					<b>Examples</b>: <a href="api/getRdf?identifiers=attica|black_figure|exekias">api/getRdf?identifiers=attica|black_figure|exekias</a>
+				</p>
+			</div>
+		</div>
+		<div id="reconciliation">
+			<h2>OpenRefine Reconciliation Service</h2>
+			<p>
+				<strong>Service URI:</strong>
+				<a href="http://kerameikos.org/apis/reconcile">http://kerameikos.org/apis/reconcile</a>
+			</p>
+			<p>Kerameikos supports the following reconciliation services for OpenRefine:</p>
+			<ul>
+				<li>Main Reconciliation Service</li>
+				<li>Preview API</li>
+				<li>Entity Suggestion API (for autosuggest on matching terms)</li>
+			</ul>
+			<p>All API responses are in JSON. Please see the <a href="https://github.com/OpenRefine/OpenRefine/wiki/Reconciliation-Service-Api">API
+					documentation</a> and <a href="https://github.com/OpenRefine/OpenRefine/wiki/Reconciliation">usage documentation</a> for more details. The
+				blog post, <i><a href="http://numishare.blogspot.com/2017/10/nomisma-launches-openrefine.html">Nomisma launches OpenRefine reconciliation
+						service</a></i>, contains further information about this particular implementation in Nomisma.</p>
+			<hr/>
+		</div>
+		<div id="access">
+			<h2>Data Access</h2>
+			<div>
+				<h3>Individual Records</h3>
+				<p>Numishare supports delivery of individual records in a variety of models and serializations through both REST and content negotiation.
+					Content negotiation (with the accept header) requests should be sent to the URI space http://kerameikos.org/id/. Requesting an unsupported
+					content type will result in an HTTP 406: Not Acceptable error.</p>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Model</th>
+							<th>REST</th>
+							<th>Content Type</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>HTML</td>
+							<td>http://kerameikos.org/id/{$id}</td>
+							<td>
+								<code>text/html</code>
+							</td>
+						</tr>
+						<tr>
+							<td>NUDS/XML</td>
+							<td> http://kerameikos.org/id/{$id}.xml </td>
+							<td>
+								<code>application/xml</code>
+							</td>
+						</tr>
+						<tr>
+							<td>KML</td>
+							<td> http://kerameikos.org/id/{$id}.kml </td>
+							<td>
+								<code>application/vnd.google-earth.kml+xml</code>
+							</td>
+						</tr>
+						<tr>
+							<td>RDF/XML</td>
+							<td> http://kerameikos.org/id/{$id}.rdf </td>
+							<td>
+								<code>application/rdf+xml</code>
+							</td>
+						</tr>
+						<tr>
+							<td>Turtle</td>
+							<td> http://kerameikos.org/id/{$id}.ttl </td>
+							<td>
+								<code>text/turtle</code>
+							</td>
+						</tr>
+						<tr>
+							<td>JSON-LD</td>
+							<td> http://kerameikos.org/id/{$id}.jsonld </td>
+							<td>
+								<code>application/ld+json</code>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+				<hr/>
+			</div>
+			<div>
+				<h3>Search Results</h3>
+				<p>Search results (the browse page) are returned in HTML5, but Numishare supports Atom and RSS via REST, as well as Atom and raw Solr XML via
+					content negotiation of the browse page URL, <a href="http://kerameikos.org/results">http://kerameikos.org/results</a>. The REST-based Atom feed sorts by the Lucene syntax 'timestamp desc' by
+					default, but the sort parameter may be provided manually to alter the default field and order.</p>
+				<table class="table">
+					<thead>
+						<tr>
+							<th>Model</th>
+							<th>REST</th>
+							<th>Content Type</th>
+
+						</tr>
+					</thead>
+					<tbody>
+						<tr>
+							<td>HTML</td>
+							<td>
+								<a href="http://kerameikos.org/results">http://kerameikos.org/results</a>
+							</td>
+							<td>
+								<code>text/html</code>
+							</td>
+						</tr>
+						<tr>
+							<td>Atom</td>
+							<td>
+								<a href="http://kerameikos.org/feed">http://kerameikos.org/feed</a>
+							</td>
+							<td>
+								<code>application/atom+xml</code>
+							</td>
+						</tr>
+						<tr>
+							<td>Solr/XML</td>
+							<td>N/A</td>
+							<td>
+								<code>application/xml</code>
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+			<div>
+				<h3>Kerameikos Concept RDF Dump</h3>
+				<p>Data dumps conforming the Kerameikos Metadata Application Profile (primarily SKOS with classes from CIDOC-CRM and the Kerameikos ontology)
+					are available as RDF/XML.</p>
+				<ul>
+					<li>
+						<a href="kerameikos.rdf">Dump RDF</a>
+					</li>
+				</ul>
+			</div>
+			<div>
+				<h3>Pelagios RDF Dump: Kerameikos Geographic Concepts as Gazetteer Places</h3>
+				<p>Data dumps conforming to the <a href="http://commons.pelagios.org/">Pelagios 3</a> model are linked on the index page. At present, these
+					files are only available in RDF/XML.</p>
+				<ul>
+					<li>
+						<a href="pelagios.void.rdf">VoID RDF</a>
+					</li>
+					<li>
+						<a href="pelagios.rdf">Dump RDF</a>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</apis>
 </content>
