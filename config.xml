@@ -7,9 +7,9 @@
 	<data_path>/usr/local/projects/kerameikos-data</data_path>
 	<ontology_path>/usr/local/projects/ontology/</ontology_path>
 	<sparql>
-		<query>http://localhost:3030/kerameikos/query</query>
-		<update>http://localhost:3030/kerameikos/update</update>
-		<store>http://localhost:3030/kerameikos/data</store>
+		<query>http://localhost:8080/fuseki/kerameikos/query</query>
+		<update>http://localhost:8080/fuseki/kerameikos/update</update>
+		<store>http://localhost:8080/fuseki/kerameikos/data</store>
 	</sparql>
 	<admin_email_from>admin@kerameikos.org</admin_email_from>
 	<admin_email_to/>

@@ -20,6 +20,7 @@
 	<page path="/kerameikos/admin/edit/" view="xforms/edit.xhtml"/>
 	<page path="/kerameikos/admin/invite/" view="xforms/invite.xhtml"/>
 	<page path="/kerameikos/admin/manage/" view="xforms/manage.xhtml"/>
+	<page path="/kerameikos/admin/import/" view="xforms/import.xhtml"/>
 	<page path="/kerameikos/admin/" view="xforms/admin.xhtml" id="admin"/>
 	
 	<!-- authentication -->
