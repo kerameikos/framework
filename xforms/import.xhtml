@@ -6,7 +6,7 @@
 	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:kid="http://kerameikos.org/id/"
 	xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:edm="http://www.europeana.eu/schemas/edm/"
 	xmlns:atom="http://www.w3.org/2005/Atom" xmlns:org="http://www.w3.org/ns/org#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
-	xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:kerameikos="https://github.com/kerameikos/">
+	xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:kerameikos="https://github.com/kerameikos/" xmlns:prov="http://www.w3.org/ns/prov#">
 	<head>
 		<title>Kerameikos: Import Concepts from Google Spreadsheets</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css" />
@@ -18,14 +18,31 @@
 		<link rel="stylesheet" href="/apps/kerameikos/xforms/css/style.css" />
 
 		<xforms:model>
+			<!-- RDF templates -->
 			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
 				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
-					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
+					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:prov="http://www.w3.org/ns/prov#"
 					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
 					xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#" xmlns:edm="http://www.europeana.eu/schemas/edm/"
 					xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#"/>
 			</xforms:instance>
+
+			<xforms:instance id="activity-template" xxforms:exclude-result-prefixes="#all">
+				<prov:Activity>
+					<prov:atTime rdf:dataType="http://www.w3.org/2001/XMLSchema#dateTime"/>
+					<prov:wasAttributedTo rdf:resource=""/>
+					<dcterms:type>spreadsheet</dcterms:type>
+				</prov:Activity>
+			</xforms:instance>
+
+			<xforms:instance id="spreadsheet-template" xxforms:exclude-result-prefixes="#all">
+				<prov:Entity rdf:about="">
+					<dcterms:format>application/vnd.google-apps.spreadsheet</dcterms:format>
+					<dcterms:description xml:lang="en"/>
+				</prov:Entity>
+			</xforms:instance>
+
 
 			<xforms:instance id="config" xxforms:exclude-result-prefixes="#all">
 				<xi:include href="../config.xml"/>
@@ -1219,7 +1236,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</table>
 						</xforms:case>
 					</xforms:switch>
-					<fr:xforms-inspector></fr:xforms-inspector>
+					<fr:xforms-inspector/>
 				</div>
 			</div>
 		</div>

@@ -1,9 +1,9 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema"
 	xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:fr="http://orbeon.org/oxf/xml/form-runner"
 	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:foaf="http://xmlns.com/foaf/0.1/"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:prov="http://www.w3.org/ns/prov#"
+	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
+	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:kid="http://kerameikos.org/id/"
+	xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:prov="http://www.w3.org/ns/prov#"
 	xmlns:atom="http://www.w3.org/2005/Atom" xmlns:org="http://www.w3.org/ns/org#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
 	xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:kerameikos="https://github.com/kerameikos/">
 	<head>
@@ -17,12 +17,12 @@
 		<link rel="stylesheet" href="/apps/kerameikos/xforms/css/style.css" />
 
 		<!-- mapping -->
-		<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"></script>
+		<!--<script type="text/javascript" src="http://www.openlayers.org/api/OpenLayers.js"></script>
 		<script type="text/javascript" src="http://maps.google.com/maps/api/js?v=3.9&amp;sensor=false"></script>
-		<script type="text/javascript" src="/apps/kerameikos/xforms/javascript/georeference.js"></script>
+		<script type="text/javascript" src="/apps/kerameikos/xforms/javascript/georeference.js"></script>-->
 
 		<xforms:model>
-			<xforms:instance id="doc" xxforms:exclude-result-prefixes="#all">
+			<xforms:instance id="doc" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
 				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:prov="http://www.w3.org/ns/prov#"
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
@@ -216,7 +216,37 @@
 				<un:hasUncertainty rdf:resource=""/>
 			</xforms:instance>
 
-			<!-- sparql update -->
+			<!-- provenance -->
+			<xforms:instance id="changeNote-template" xxforms:exclude-result-prefixes="#all">
+				<skos:changeNote rdf:resource=""/>
+			</xforms:instance>
+
+			<xforms:instance id="provenance-template" xxforms:exclude-result-prefixes="#all">
+				<dcterms:ProvenanceStatement rdf:about="">
+					<foaf:topic rdf:resource=""/>
+				</dcterms:ProvenanceStatement>
+			</xforms:instance>
+
+			<xforms:instance id="activity-template" xxforms:exclude-result-prefixes="#all">
+				<prov:Activity>
+					<prov:atTime rdf:dataType="http://www.w3.org/2001/XMLSchema#dateTime"/>
+					<prov:wasAttributedTo rdf:resource=""/>
+					<dcterms:type/>
+				</prov:Activity>
+			</xforms:instance>
+
+			<xforms:instance id="spreadsheet-template" xxforms:exclude-result-prefixes="#all">
+				<prov:Entity rdf:about="">
+					<dcterms:format>application/vnd.google-apps.spreadsheet</dcterms:format>
+					<dcterms:description xml:lang="en"/>
+				</prov:Entity>
+			</xforms:instance>
+
+			<xforms:instance id="description-template" xxforms:exclude-result-prefixes="#all">
+				<dcterms:description xml:lang="en"/>
+			</xforms:instance>
+
+			<!-- ***** SPARQL Update ***** -->
 			<xforms:instance id="sparqlUpdate-template">
 				<query>
 					<![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -772,6 +802,18 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 													origin="xforms:element('item', (xforms:attribute('uri', $uri), data($label)))"/>
 											</xforms:action>
 										</xforms:action>
+
+										<!-- *** Provenance *** -->
+										<xforms:insert context="instance('doc')/*[1]" nodeset="./child::node()[last()]" origin="instance('changeNote-template')"/>
+										<xforms:setvalue ref="instance('doc')/*[1]/skos:changeNote/@rdf:resource" value="concat(instance('control-instance')/uri, '#provenance')"/>
+										
+										<xforms:insert context="instance('doc')" nodeset="./child::node()[last()]" origin="instance('provenance-template')"/>
+										<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/@rdf:about" value="concat(instance('control-instance')/uri, '#provenance')"/>
+										<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/foaf:topic/@rdf:resource" value="instance('control-instance')/uri"/>
+										
+										<!-- Create Activity -->
+										
+
 										<!-- set new_id to false() to disable id editing -->
 										<xforms:setvalue ref="instance('control-instance')/new_id">false</xforms:setvalue>
 									</xforms:action>
@@ -1293,7 +1335,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</div>
 						</xforms:repeat>
 					</xforms:group>
-					<!--<fr:xforms-inspector></fr:xforms-inspector>-->
+					<fr:xforms-inspector/>
 				</div>
 				<div class="col-md-2">
 					<xforms:group ref="instance('doc')/*[1]">

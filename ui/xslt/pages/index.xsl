@@ -92,6 +92,8 @@
 					</div>					
 				</div>
 				<div class="col-md-4">
+					<h3>Support</h3>
+					
 					<h3>Collaborators</h3>
 					<p>logos go here</p>
 				</div>

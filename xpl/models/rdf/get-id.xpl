@@ -45,10 +45,7 @@
 											</xsl:when>
 											<xsl:when test="contains($pieces[last()], '.jsonld')">
 												<xsl:value-of select="substring-before($pieces[last()], '.jsonld')"/>
-											</xsl:when>
-											<xsl:when test="contains($pieces[last()], '.html')">
-												<xsl:value-of select="substring-before($pieces[last()], '.html')"/>
-											</xsl:when>
+											</xsl:when>											
 											<xsl:otherwise>
 												<xsl:value-of select="$pieces[last()]"/>
 											</xsl:otherwise>
