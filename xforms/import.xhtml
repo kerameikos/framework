@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:fr="http://orbeon.org/oxf/xml/form-runner"
-	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:foaf="http://xmlns.com/foaf/0.1/"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
-	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:kid="http://kerameikos.org/id/"
-	xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:edm="http://www.europeana.eu/schemas/edm/"
-	xmlns:atom="http://www.w3.org/2005/Atom" xmlns:org="http://www.w3.org/ns/org#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
-	xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:kerameikos="https://github.com/kerameikos/" xmlns:prov="http://www.w3.org/ns/prov#">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:fr="http://orbeon.org/oxf/xml/form-runner" xmlns:res="http://www.w3.org/2005/sparql-results#"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:dcterms="http://purl.org/dc/terms/"
+	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#"
+	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:atom="http://www.w3.org/2005/Atom"
+	xmlns:org="http://www.w3.org/ns/org#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#"
+	xmlns:kerameikos="https://github.com/kerameikos/" xmlns:prov="http://www.w3.org/ns/prov#" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
+	xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#">
 	<head>
 		<title>Kerameikos: Import Concepts from Google Spreadsheets</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css" />
@@ -20,18 +21,19 @@
 		<xforms:model>
 			<!-- RDF templates -->
 			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
-				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
-					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:prov="http://www.w3.org/ns/prov#"
-					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
-					xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#" xmlns:edm="http://www.europeana.eu/schemas/edm/"
-					xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#"/>
+				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#"
+					xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
+					xmlns:prov="http://www.w3.org/ns/prov#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+					xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
+					xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
+					xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
+					xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#"></rdf:RDF>
 			</xforms:instance>
 
 			<xforms:instance id="activity-template" xxforms:exclude-result-prefixes="#all">
 				<prov:Activity>
-					<prov:atTime rdf:dataType="http://www.w3.org/2001/XMLSchema#dateTime"/>
-					<prov:wasAttributedTo rdf:resource=""/>
+					<prov:atTime rdf:dataType="http://www.w3.org/2001/XMLSchema#dateTime"></prov:atTime>
+					<prov:wasAttributedTo rdf:resource=""></prov:wasAttributedTo>
 					<dcterms:type>spreadsheet</dcterms:type>
 				</prov:Activity>
 			</xforms:instance>
@@ -39,13 +41,13 @@
 			<xforms:instance id="spreadsheet-template" xxforms:exclude-result-prefixes="#all">
 				<prov:Entity rdf:about="">
 					<dcterms:format>application/vnd.google-apps.spreadsheet</dcterms:format>
-					<dcterms:description xml:lang="en"/>
+					<dcterms:description xml:lang="en"></dcterms:description>
 				</prov:Entity>
 			</xforms:instance>
 
 
 			<xforms:instance id="config" xxforms:exclude-result-prefixes="#all">
-				<xi:include href="../config.xml"/>
+				<xi:include href="../config.xml"></xi:include>
 			</xforms:instance>
 
 			<xforms:instance id="control-instance" xxforms:exclude-result-prefixes="#all">
@@ -146,6 +148,7 @@
 					<property label="Preferred Label">skos:prefLabel</property>
 					<property label="Definition">skos:definition</property>
 					<property label="Alternative Label">skos:altLabel</property>
+					<property label="Plural Label">ontolex:lexicalForm</property>
 					<!--<property label="Birth" constraint="foaf:Person">bio:birth</property>
 					<property label="Death" constraint="foaf:Person">bio:death</property>-->
 					<property label="Broader Concept" exclude="foaf:Person">skos:broader</property>
@@ -164,7 +167,7 @@
 			</xforms:instance>
 
 			<xforms:instance id="languages">
-				<xi:include href="instances/languages.xml"/>
+				<xi:include href="instances/languages.xml"></xi:include>
 			</xforms:instance>
 
 			<xforms:instance id="mappings" xxforms:exclude-result-prefixes="#all">
@@ -213,7 +216,7 @@
 
 			<!-- preloaded instances -->
 			<xforms:instance id="sparqlResponse">
-				<sparql xmlns="http://www.w3.org/2005/sparql-results#"/>
+				<sparql xmlns="http://www.w3.org/2005/sparql-results#"></sparql>
 			</xforms:instance>
 
 			<!-- sparql update -->
@@ -260,11 +263,11 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 
 			<!-- ************* BINDINGS **********************-->
 			<xforms:bind nodeset="instance('control-instance')">
-				<xforms:bind nodeset="type" required="true()"/>
-				<xforms:bind nodeset="load-trigger" id="load-trigger" type="xs:boolean" readonly=". != true()" calculate="string-length(../type) != 0"/>
-				<xforms:bind nodeset="validate-trigger" id="validate-trigger" type="xs:boolean" readonly=". != true()"/>
-				<xforms:bind nodeset="import-trigger" id="import-trigger" type="xs:boolean" relevant=". = true()"/>
-				<xforms:bind nodeset="parse-wikipedia" type="xs:boolean"/>
+				<xforms:bind nodeset="type" required="true()"></xforms:bind>
+				<xforms:bind nodeset="load-trigger" id="load-trigger" type="xs:boolean" readonly=". != true()" calculate="string-length(../type) != 0"></xforms:bind>
+				<xforms:bind nodeset="validate-trigger" id="validate-trigger" type="xs:boolean" readonly=". != true()"></xforms:bind>
+				<xforms:bind nodeset="import-trigger" id="import-trigger" type="xs:boolean" relevant=". = true()"></xforms:bind>
+				<xforms:bind nodeset="parse-wikipedia" type="xs:boolean"></xforms:bind>
 			</xforms:bind>
 
 			<xforms:bind nodeset="instance('mappings')"
@@ -273,37 +276,42 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				<xforms:bind nodeset="mapping[@to='skos:prefLabel']">
 					<xforms:bind nodeset="@lang" required="true()"
 						constraint="string-length(.) &gt; 0 and count(//mapping[@to='skos:prefLabel']/@lang) = count(distinct-values(//mapping[@to='skos:prefLabel']/@lang))"
-					/>
+					></xforms:bind>
 				</xforms:bind>
 				<xforms:bind nodeset="mapping[@to='skos:definition']">
 					<xforms:bind nodeset="@lang" required="true()"
 						constraint="string-length(.) &gt; 0 and count(//mapping[@to='skos:definition']/@lang) = count(distinct-values(//mapping[@to='skos:definition']/@lang))"
-					/>
+					></xforms:bind>
 				</xforms:bind>
 				<xforms:bind nodeset="mapping[@to='skos:scopeNote']">
 					<xforms:bind nodeset="@lang" required="true()"
 						constraint="string-length(.) &gt; 0 and count(//mapping[@to='skos:scopeNote']/@lang) = count(distinct-values(//mapping[@to='skos:scopeNote']/@lang))"
-					/>
+					></xforms:bind>
 				</xforms:bind>
 				<xforms:bind nodeset="mapping[@to='skos:altLabel']">
-					<xforms:bind nodeset="@lang" required="true()" constraint="string-length(.) &gt; 0"/>
+					<xforms:bind nodeset="@lang" required="true()" constraint="string-length(.) &gt; 0"></xforms:bind>
+				</xforms:bind>
+				<xforms:bind nodeset="mapping[@to='ontolex:lexicalForm']">
+					<xforms:bind nodeset="@lang" required="true()"
+						constraint="string-length(.) &gt; 0 and count(//mapping[@to='ontolex:lexicalForm']/@lang) = count(distinct-values(//mapping[@to='ontolex:lexicalForm']/@lang))"
+						></xforms:bind>
 				</xforms:bind>
 				<!-- role validation for person/organization -->
-				<xforms:bind nodeset="role-invalid" required="true()" constraint=". = 'false'"/>
-				<xforms:bind nodeset="coordinates-invalid" required="true()" constraint=". = 'false'"/>
+				<xforms:bind nodeset="role-invalid" required="true()" constraint=". = 'false'"></xforms:bind>
+				<xforms:bind nodeset="coordinates-invalid" required="true()" constraint=". = 'false'"></xforms:bind>
 			</xforms:bind>
 
 			<xforms:bind nodeset="instance('kerameikos-ids')">
-				<xforms:bind nodeset="id" type="xs:boolean"/>
+				<xforms:bind nodeset="id" type="xs:boolean"></xforms:bind>
 			</xforms:bind>
 
 			<!-- **************** DYNAMIC VALIDATION CONTROLS ********************** -->
 			<xforms:action ev:event="xxforms-invalid" ev:observer="mappings">
-				<xforms:setvalue ref="instance('control-instance')/validate-trigger" value="false()"/>
+				<xforms:setvalue ref="instance('control-instance')/validate-trigger" value="false()"></xforms:setvalue>
 			</xforms:action>
 
 			<xforms:action ev:event="xxforms-valid" ev:observer="mappings">
-				<xforms:setvalue ref="instance('control-instance')/validate-trigger" value="true()"/>
+				<xforms:setvalue ref="instance('control-instance')/validate-trigger" value="true()"></xforms:setvalue>
 			</xforms:action>
 
 			<!-- **************** CUSTOM DATATYPES ********************** -->
@@ -312,7 +320,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				<xs:simpleType name="custom.httpURL">
 					<xs:restriction base="xs:anyURI">
 						<!-- accepts only http:// or https:// URIs. -->
-						<xs:pattern value="https?://.+"/>
+						<xs:pattern value="https?://.+"></xs:pattern>
 					</xs:restriction>
 				</xs:simpleType>
 			</xs:schema>
@@ -320,14 +328,12 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 			<!-- ************* SUBMISSIONS **********************-->
 			<!-- ************* GOOGLE DRIVE **********************-->
 			<xforms:submission id="query-spreadsheet-feed" serialization="none" method="get"
-				action="https://spreadsheets.google.com/feeds/worksheets/{instance('control-instance')/spreadsheet_key}/public/full" instance="spreadsheet-feed"
-				replace="instance">
+				action="https://spreadsheets.google.com/feeds/worksheets/{instance('control-instance')/spreadsheet_key}/public/full" instance="spreadsheet-feed" replace="instance">
 				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to receive Atom from Google Drive for the key provided.</xforms:message>
 				<!-- if a feed is successfully received, set the id for the workshop -->
 				<xforms:action ev:event="xforms-submit-done">
-					<xforms:setvalue ref="instance('control-instance')/worksheet_id"
-						value="tokenize(instance('spreadsheet-feed')//atom:entry[1]/atom:id, '/')[last()]"/>
-					<xforms:send submission="load-worksheet"/>
+					<xforms:setvalue ref="instance('control-instance')/worksheet_id" value="tokenize(instance('spreadsheet-feed')//atom:entry[1]/atom:id, '/')[last()]"></xforms:setvalue>
+					<xforms:send submission="load-worksheet"></xforms:send>
 				</xforms:action>
 			</xforms:submission>
 
@@ -339,27 +345,25 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				<xforms:action ev:event="xforms-submit-done">
 					<!-- if there is at least one entry, set the mapping instance and toggle the mapping interface -->
 					<xforms:action if="count(instance('feed')//atom:entry) &gt; 0">
-						<xforms:action
-							xxforms:iterate="instance('feed')//atom:entry[1]/*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended']">
-							<xforms:var name="heading" select="name()"/>
+						<xforms:action xxforms:iterate="instance('feed')//atom:entry[1]/*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended']">
+							<xforms:var name="heading" select="name()"></xforms:var>
 							<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]"
-								origin="xforms:element('mapping', (xforms:attribute('from', $heading), xforms:attribute('to', '')))"/>
+								origin="xforms:element('mapping', (xforms:attribute('from', $heading), xforms:attribute('to', '')))"></xforms:insert>
 						</xforms:action>
 						<!-- insert an element to test whether the role has been assigned for foaf:Person or foaf:Organization when dates are used or whether the role exists if org:organization is used -->
 						<xforms:action if="instance('control-instance')/type='foaf:Person' or instance('control-instance')/type='foaf:Organization'">
-							<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]" origin="xforms:element('role-invalid', 'false')"/>
+							<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]" origin="xforms:element('role-invalid', 'false')"></xforms:insert>
 						</xforms:action>
 						<!-- insert an element to test whether the coordinates are valid -->
 						<xforms:action if="instance('control-instance')/type='kon:ProductionPlace'">
-							<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]"
-								origin="xforms:element('coordinates-invalid', 'false')"/>
+							<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]" origin="xforms:element('coordinates-invalid', 'false')"></xforms:insert>
 						</xforms:action>
 
-						<xforms:toggle case="mapping-interface"/>
+						<xforms:toggle case="mapping-interface"></xforms:toggle>
 					</xforms:action>
 					<!-- if there are no entries in the Atom feed, set the error interface -->
 					<xforms:action if="count(instance('feed')//atom:entry) = 0">
-						<xforms:toggle case="mapping-error-interface"/>
+						<xforms:toggle case="mapping-error-interface"></xforms:toggle>
 					</xforms:action>
 				</xforms:action>
 			</xforms:submission>
@@ -374,41 +378,39 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 					<xforms:action if="starts-with(instance('wikidata')//entity/@id, 'Q')">
 						<xforms:var name="mapping">skos:exactMatch</xforms:var>
 						<!-- insert the wikidata URI -->
-						<xforms:var name="wikidata-uri" select="concat('https://www.wikidata.org/entity/', instance('wikidata')//entity/@id)"/>
+						<xforms:var name="wikidata-uri" select="concat('https://www.wikidata.org/entity/', instance('wikidata')//entity/@id)"></xforms:var>
 						<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 							if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource=$wikidata-uri])"
-							origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $wikidata-uri), ''))"/>
+							origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $wikidata-uri), ''))"></xforms:insert>
 
 						<!-- import new labels, but only ones that follow the two-digit ISO standard -->
 						<xforms:action xxforms:iterate="instance('wikidata')//entity/labels/label[string-length(@language) = 2]">
-							<xforms:var name="lang" select="data(context()/@language)"/>
-							<xforms:var name="label" select="data(context()/@value)"/>
-							<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
-								if="not(instance('rdf')/*[1]/skos:prefLabel[@xml:lang=$lang])"
-								origin="xforms:element('skos:prefLabel', (xforms:attribute('xml:lang', $lang), $label))"/>
+							<xforms:var name="lang" select="data(context()/@language)"></xforms:var>
+							<xforms:var name="label" select="data(context()/@value)"></xforms:var>
+							<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]" if="not(instance('rdf')/*[1]/skos:prefLabel[@xml:lang=$lang])"
+								origin="xforms:element('skos:prefLabel', (xforms:attribute('xml:lang', $lang), $label))"></xforms:insert>
 						</xforms:action>
 
 						<!-- iterate through claims with matching properties to link to external vocabulary systems -->
 						<xforms:action
 							xxforms:iterate="instance('wikidata')//entity/claims/property[@id='P214' or @id='P227' or @id='P213' or @id='P268' or @id='P269' or @id='P646' or @id='P245' or @id='P1566' or @id='P1900']">
-							<xforms:var name="property" select="data(context()/@id)"/>
-							<xforms:var name="id" select="replace(data(context()/descendant::mainsnak[1]/datavalue/@value), ' ', '')"/>
-							<xforms:var name="uri" select="concat(instance('wikidata-properties')/property[@id=$property], $id)"/>
+							<xforms:var name="property" select="data(context()/@id)"></xforms:var>
+							<xforms:var name="id" select="replace(data(context()/descendant::mainsnak[1]/datavalue/@value), ' ', '')"></xforms:var>
+							<xforms:var name="uri" select="concat(instance('wikidata-properties')/property[@id=$property], $id)"></xforms:var>
 
-							<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
-								if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource=$uri])"
-								origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $uri), ''))"/>
+							<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]" if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource=$uri])"
+								origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $uri), ''))"></xforms:insert>
 						</xforms:action>
 					</xforms:action>
 					<!-- clear wiki stuff from control-instance -->
-					<xforms:setvalue ref="instance('control-instance')/wiki-title"/>
-					<xforms:setvalue ref="instance('control-instance')/wiki-lang"/>
+					<xforms:setvalue ref="instance('control-instance')/wiki-title"></xforms:setvalue>
+					<xforms:setvalue ref="instance('control-instance')/wiki-lang"></xforms:setvalue>
 				</xforms:action>
 			</xforms:submission>
 
 			<!-- ************* SPARQL **********************-->
-			<xforms:submission id="delete-graph" action="{instance('config')/sparql/update}" ref="instance('sparqlUpdate')" serialization="text/plain"
-				replace="none" method="post" mediatype="application/sparql-update">
+			<xforms:submission id="delete-graph" action="{instance('config')/sparql/update}" ref="instance('sparqlUpdate')" serialization="text/plain" replace="none" method="post"
+				mediatype="application/sparql-update">
 				<xforms:message ev:event="xforms-submit-error" level="modal">SPARQL update failed.</xforms:message>
 			</xforms:submission>
 
@@ -417,41 +419,36 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				<xforms:message ev:event="xforms-submit-error" level="modal">SPARQL query failed.</xforms:message>
 			</xforms:submission>
 
-			<xforms:submission id="post-rdf" action="{instance('config')/sparql/store}?default" ref="instance('rdf')" replace="none" method="post"
-				mediatype="application/rdf+xml">
+			<xforms:submission id="post-rdf" action="{instance('config')/sparql/store}?default" ref="instance('rdf')" replace="none" method="post" mediatype="application/rdf+xml">
 				<xforms:message ev:event="xforms-submit-error" level="modal">Post to endpoint failed.</xforms:message>
 			</xforms:submission>
 
 			<!-- ************************* SOLR SUBMISSIONS ************************** -->
 			<!-- post instance to Solr -->
-			<xforms:submission id="post-solr-doc" action="{instance('config')/solr_published}update" ref="instance('addIndex')" instance="addIndex"
-				replace="instance" method="post">
-				<xforms:message ev:event="xforms-submit-error" level="modal">Data Failed to POST to Solr. Index may be offline or URL is
-					incorrect.</xforms:message>
+			<xforms:submission id="post-solr-doc" action="{instance('config')/solr_published}update" ref="instance('addIndex')" instance="addIndex" replace="instance" method="post">
+				<xforms:message ev:event="xforms-submit-error" level="modal">Data Failed to POST to Solr. Index may be offline or URL is incorrect.</xforms:message>
 				<xforms:action ev:event="xforms-submit-done">
-					<xforms:send submission="submit-commit"/>
+					<xforms:send submission="submit-commit"></xforms:send>
 				</xforms:action>
 			</xforms:submission>
 
 			<!-- send commit -->
-			<xforms:submission id="submit-commit" action="{instance('config')/solr_published}update" ref="instance('sendCommit')" instance="sendCommit"
-				replace="none" method="post">
+			<xforms:submission id="submit-commit" action="{instance('config')/solr_published}update" ref="instance('sendCommit')" instance="sendCommit" replace="none" method="post">
 				<xforms:message level="modal" ev:event="xforms-submit-error">Failed to commit to Solr index.</xforms:message>
 			</xforms:submission>
 
 			<!-- ************************* LOAD RDF/XML ************************** -->
-			<xforms:submission id="load-rdf" serialization="none" method="get" action="/kerameikos/id/{instance('control-instance')/id}.rdf" replace="instance"
-				instance="rdf">
+			<xforms:submission id="load-rdf" serialization="none" method="get" action="/kerameikos/id/{instance('control-instance')/id}.rdf" replace="instance" instance="rdf">
 				<!-- ************ RDF PROCESSING TO CREATE A NEW ID ************** -->
 				<xforms:action ev:event="xforms-submit-error">
-					<xforms:var name="uri" select="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>
-					<xforms:insert context="instance('rdf')" origin="xforms:element(instance('control-instance')/type, xforms:attribute('rdf:about', $uri))"/>
+					<xforms:var name="uri" select="concat('http://kerameikos.org/id/', instance('control-instance')/id)"></xforms:var>
+					<xforms:insert context="instance('rdf')" origin="xforms:element(instance('control-instance')/type, xforms:attribute('rdf:about', $uri))"></xforms:insert>
 					<!-- insert rdf:type as skos:Concept -->
 					<xforms:insert context="instance('rdf')/*[last()]"
-						origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/2004/02/skos/core#Concept'))"/>
+						origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/2004/02/skos/core#Concept'))"></xforms:insert>
 					<!-- insert skos:inScheme -->
-					<xforms:insert context="instance('rdf')/*[last()]"
-						origin="xforms:element('skos:inScheme', xforms:attribute('rdf:resource', 'http://kerameikos.org/id/'))"/>
+					<xforms:insert context="instance('rdf')/*[last()]" origin="xforms:element('skos:inScheme', xforms:attribute('rdf:resource', 'http://kerameikos.org/id/'))"
+					></xforms:insert>
 				</xforms:action>
 
 				<!-- ************ RDF PROCESSING TO ADD SUPPLEMENTAL INFORMATION ************** -->
@@ -485,7 +482,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 						<div class="bg-info alert-box">
 							<span class="glyphicon glyphicon-info-sign"></span>
 							<strong>Status:</strong>
-							<xforms:output ref="instance('control-instance')/status"/>
+							<xforms:output ref="instance('control-instance')/status"></xforms:output>
 						</div>
 					</xforms:group>
 					<h1>Import/Update Kerameikos IDs</h1>
@@ -499,11 +496,11 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 										<xforms:alert>Required</xforms:alert>
 										<xforms:item>
 											<xforms:label>Select...</xforms:label>
-											<xforms:value/>
+											<xforms:value></xforms:value>
 										</xforms:item>
 										<xforms:itemset nodeset="instance('classes')/class">
-											<xforms:label ref="label"/>
-											<xforms:value ref="type"/>
+											<xforms:label ref="label"></xforms:label>
+											<xforms:value ref="type"></xforms:value>
 										</xforms:itemset>
 									</xforms:select1>
 								</div>
@@ -513,7 +510,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 									</xforms:input>
 									<xforms:trigger bind="load-trigger">
 										<xforms:label>Load Spreadsheet</xforms:label>
-										<xforms:send submission="query-spreadsheet-feed" ev:event="DOMActivate"/>
+										<xforms:send submission="query-spreadsheet-feed" ev:event="DOMActivate"></xforms:send>
 									</xforms:trigger>
 								</div>
 							</xforms:group>
@@ -521,8 +518,8 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 						<xforms:case id="mapping-interface">
 							<div>
 								<h3>Mapping</h3>
-								<p>Associate the headings with allowable properties, where applicable. Note that the Kerameikos ID, Preferred Label (English),
-									and Definition (English) are required.</p>
+								<p>Associate the headings with allowable properties, where applicable. Note that the Kerameikos ID, Preferred Label (English), and Definition
+									(English) are required.</p>
 								<xforms:group ref="instance('mappings')">
 									<xforms:group ref=".[count(mapping[@to='id']) != 1]">
 										<div class="bg-danger alert-box">
@@ -540,23 +537,25 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Preferred English Definition is required.</div>
 									</xforms:group>
-									<xforms:group
-										ref=".[count(mapping[@to='skos:prefLabel']/@lang) != count(distinct-values(mapping[@to='skos:prefLabel']/@lang))]">
+									<xforms:group ref=".[count(mapping[@to='skos:prefLabel']/@lang) != count(distinct-values(mapping[@to='skos:prefLabel']/@lang))]">
 										<div class="bg-danger alert-box">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Preferred label languages must be unique.</div>
 									</xforms:group>
-									<xforms:group
-										ref=".[count(mapping[@to='skos:definition']/@lang) != count(distinct-values(mapping[@to='skos:definition']/@lang))]">
+									<xforms:group ref=".[count(mapping[@to='skos:definition']/@lang) != count(distinct-values(mapping[@to='skos:definition']/@lang))]">
 										<div class="bg-danger alert-box">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Definition languages must be unique.</div>
 									</xforms:group>
-									<xforms:group
-										ref=".[count(mapping[@to='skos:scopeNote']/@lang) != count(distinct-values(mapping[@to='skos:scopeNote']/@lang))]">
+									<xforms:group ref=".[count(mapping[@to='skos:scopeNote']/@lang) != count(distinct-values(mapping[@to='skos:scopeNote']/@lang))]">
 										<div class="bg-danger alert-box">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Scope Note languages must be unique.</div>
+									</xforms:group>
+									<xforms:group ref=".[count(mapping[@to='ontolex:lexicalForm']/@lang) != count(distinct-values(mapping[@to='ontolex:lexicalForm']/@lang))]">
+										<div class="bg-danger alert-box">
+											<span class="glyphicon glyphicon-exclamation-sign"></span>
+											<strong>Alert:</strong> Plural labels by language must be unique.</div>
 									</xforms:group>
 									<!-- coordinate warnings -->
 									<xforms:group
@@ -619,31 +618,31 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 
 											<tr>
 												<td>
-													<xforms:output ref="substring-after(@from, ':')"/>
+													<xforms:output ref="substring-after(@from, ':')"></xforms:output>
 												</td>
 												<td>
 													<xforms:select1 ref="@to">
 														<xforms:alert>Mapping Error</xforms:alert>
 														<xforms:item>
 															<xforms:label>Select...</xforms:label>
-															<xforms:value/>
+															<xforms:value></xforms:value>
 														</xforms:item>
 														<xforms:itemset
 															nodeset="instance('properties')/property[(not(@constraint) or contains(@constraint, instance('control-instance')/type)) and not(contains(@exclude, instance('control-instance')/type))]">
-															<xforms:label ref="@label"/>
-															<xforms:value ref="."/>
+															<xforms:label ref="@label"></xforms:label>
+															<xforms:value ref="."></xforms:value>
 														</xforms:itemset>
 														<xforms:action ev:event="xforms-value-changed">
-															<xforms:var name="property" select="."/>
+															<xforms:var name="property" select="."></xforms:var>
 															<!-- if it is a literal-based property, insert the @lang attribute -->
 															<xforms:action
-																if="$property = 'skos:prefLabel' or $property = 'skos:altLabel' or $property = 'skos:definition' or $property = 'skos:scopeNote'">
-																<xforms:insert context="parent::node()" origin="xforms:attribute('lang', '')"/>
+																if="$property = 'skos:prefLabel' or $property = 'skos:altLabel' or $property = 'skos:definition' or $property = 'skos:scopeNote' or $property = 'ontolex:lexicalForm'">
+																<xforms:insert context="parent::node()" origin="xforms:attribute('lang', '')"></xforms:insert>
 															</xforms:action>
 															<!-- if it is not a literal, then delete @lang -->
 															<xforms:action
 																if="$property != 'skos:prefLabel' and $property != 'skos:altLabel' and $property != 'skos:definition' and $property != 'skos:scopeNote'">
-																<xforms:delete context="parent::node()" nodeset="@lang"/>
+																<xforms:delete context="parent::node()" nodeset="@lang"></xforms:delete>
 															</xforms:action>
 															<!-- special actions for Person and Organization and validation of org:role -->
 															<xforms:action
@@ -678,11 +677,11 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 															<xforms:alert>Mapping Error</xforms:alert>
 															<xforms:item>
 																<xforms:label>Select...</xforms:label>
-																<xforms:value/>
+																<xforms:value></xforms:value>
 															</xforms:item>
 															<xforms:itemset nodeset="instance('languages')/language">
-																<xforms:label ref="."/>
-																<xforms:value ref="@value"/>
+																<xforms:label ref="."></xforms:label>
+																<xforms:value ref="@value"></xforms:value>
 															</xforms:itemset>
 														</xforms:select1>
 													</xforms:group>
@@ -694,118 +693,113 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 										<xforms:label>Validate Spreadsheet</xforms:label>
 										<xforms:action ev:event="DOMActivate">
 											<!-- first delete entries, in the event of changing the mapping -->
-											<xforms:delete nodeset="instance('validation-model')/record"/>
+											<xforms:delete nodeset="instance('validation-model')/record"></xforms:delete>
 											<!-- then iterate through all Atom entries -->
 											<xforms:action xxforms:iterate="instance('feed')//atom:entry">
 												<!-- create record in the validation model -->
-												<xforms:var name="title" select="atom:title"/>
-												<xforms:var name="position" select="position()"/>
+												<xforms:var name="title" select="atom:title"></xforms:var>
+												<xforms:var name="position" select="position()"></xforms:var>
 												<xforms:insert context="instance('validation-model')" nodeset="./child::node()[last()]"
-													origin="xforms:element('record', (xforms:attribute('title', $title), ''))"/>
+													origin="xforms:element('record', (xforms:attribute('title', $title), ''))"></xforms:insert>
 												<!-- ensure that kerameikos ids are unique -->
 												<xforms:insert
 													if="count(instance('feed')//atom:entry/*[name()=instance('mappings')/mapping[@to='id']/@from]) != count(distinct-values(instance('feed')//atom:entry/*[name()=instance('mappings')/mapping[@to='id']/@from]))"
 													context="instance('validation-model')" nodeset="./child::node()[last()]"
-													origin="xforms:element('error', 'Duplicate Kerameikos IDs.')"/>
+													origin="xforms:element('error', 'Duplicate Kerameikos IDs.')"></xforms:insert>
 												<!-- iterate through all gsx elements -->
 												<xforms:action xxforms:iterate="*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended']">
-													<xforms:var name="from" select="name()"/>
-													<xforms:var name="value" select="normalize-space(context())"/>
+													<xforms:var name="from" select="name()"></xforms:var>
+													<xforms:var name="value" select="normalize-space(context())"></xforms:var>
 													<!-- only process those fields which have been mapped in the user interface -->
 													<xforms:action if="string(instance('mappings')/mapping[@from=$from]/@to)">
-														<xforms:var name="mapping" select="instance('mappings')/mapping[@from=$from]/@to"/>
+														<xforms:var name="mapping" select="instance('mappings')/mapping[@from=$from]/@to"></xforms:var>
 														<!-- id -->
 														<xforms:action if="$mapping = 'id'">
 															<!-- only allow certain characters as the Kerameikos ID -->
-															<xforms:var name="isValid"
-																select="matches($value, &quot;^([a-zA-Z0-9\-\._\(\)\[\]&#x0027;]*)?$&quot;)"/>
-															<xforms:insert if="not(string($value)) or $isValid = false()"
-																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', 'Invalid or blank ID')"/>
+															<xforms:var name="isValid" select="matches($value, &quot;^([a-zA-Z0-9\-\._\(\)\[\]&#x0027;]*)?$&quot;)"></xforms:var>
+															<xforms:insert if="not(string($value)) or $isValid = false()" context="instance('validation-model')/record[last()]"
+																nodeset="./child::node()[last()]" origin="xforms:element('error', 'Invalid or blank ID')"></xforms:insert>
 														</xforms:action>
 														<!-- check for the existence of an English prefLabel or definition -->
 														<xforms:action if="$mapping = 'skos:prefLabel'">
-															<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"/>
-															<xforms:insert if="$lang = 'en' and not(string($value))"
-																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', 'English preferred label must contain a value.')"/>
+															<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"></xforms:var>
+															<xforms:insert if="$lang = 'en' and not(string($value))" context="instance('validation-model')/record[last()]"
+																nodeset="./child::node()[last()]" origin="xforms:element('error', 'English preferred label must contain a value.')"
+															></xforms:insert>
 														</xforms:action>
 														<xforms:action if="$mapping = 'skos:definition'">
-															<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"/>
-															<xforms:insert if="$lang = 'en' and not(string($value))"
-																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', 'English definition must contain a value.')"/>
+															<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"></xforms:var>
+															<xforms:insert if="$lang = 'en' and not(string($value))" context="instance('validation-model')/record[last()]"
+																nodeset="./child::node()[last()]" origin="xforms:element('error', 'English definition must contain a value.')"
+															></xforms:insert>
 														</xforms:action>
 														<!-- validate coordinates -->
 														<xforms:action if="$mapping = 'geo:lat'">
 															<xforms:insert if="string-length($value) &gt; 0 and not($value castable as xs:decimal)"
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', concat('Latitude is invalid: ', $value))"/>
-															<xforms:insert
-																if="string-length($value) &gt; 0 and (number($value) &gt; 180 or number($value) &lt; -180)"
+																origin="xforms:element('error', concat('Latitude is invalid: ', $value))"></xforms:insert>
+															<xforms:insert if="string-length($value) &gt; 0 and (number($value) &gt; 180 or number($value) &lt; -180)"
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																origin="xforms:element('error', concat('Latitude is beyond the -180 to 180 extent: ', $value))"> </xforms:insert>
 															<!-- if lat is valid, but there is no long -->
 															<xforms:insert
 																if="$value castable as xs:decimal and string-length(normalize-space(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='geo:long']/@from])) = 0"
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', 'No longitude for corresponding latitude.')"/>
+																origin="xforms:element('error', 'No longitude for corresponding latitude.')"></xforms:insert>
 														</xforms:action>
 														<xforms:action if="$mapping = 'geo:long'">
 															<xforms:insert if="string-length($value) &gt; 0 and not($value castable as xs:decimal)"
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', concat('Longitude is invalid: ', $value))"/>
-															<xforms:insert
-																if="string-length($value) &gt; 0 and (number($value) &gt; 180 or number($value) &lt; -180)"
+																origin="xforms:element('error', concat('Longitude is invalid: ', $value))"></xforms:insert>
+															<xforms:insert if="string-length($value) &gt; 0 and (number($value) &gt; 180 or number($value) &lt; -180)"
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', concat('Longitude is beyond the -180 to 180 extent: ', $value))"/>
+																origin="xforms:element('error', concat('Longitude is beyond the -180 to 180 extent: ', $value))"></xforms:insert>
 															<!-- if long is valid, but there is no lat -->
 															<xforms:insert
 																if="$value castable as xs:decimal and string-length(normalize-space(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='geo:lat']/@from])) = 0"
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', 'No latitude for corresponding longitude.')"/>
+																origin="xforms:element('error', 'No latitude for corresponding longitude.')"></xforms:insert>
 														</xforms:action>
 														<!-- validate start and end dates -->
 														<xforms:action if="$mapping = 'edm:begin' and string-length($value) &gt; 0">
-															<xforms:insert if="not($value castable as xs:integer)"
-																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', concat('Start Date is not a number: ', $value))"/>
+															<xforms:insert if="not($value castable as xs:integer)" context="instance('validation-model')/record[last()]"
+																nodeset="./child::node()[last()]" origin="xforms:element('error', concat('Start Date is not a number: ', $value))"></xforms:insert>
 															<!-- if the start date and end date are both numbers, ensure that the start date is before the end date -->
 															<xforms:action if="instance('mappings')/mapping[@to='edm:end'] and $value castable as xs:integer">
 																<xforms:var name="endDate"
-																	select="normalize-space(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='edm:end']/@from])"/>
+																	select="normalize-space(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='edm:end']/@from])"></xforms:var>
 																<xforms:action if="string-length($endDate) &gt; 0 and $endDate castable as xs:integer">
-																	<xforms:insert if="number($value) &gt; number($endDate)"
-																		context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																		origin="xforms:element('error', 'Start date post-dates end date.')"/>
+																	<xforms:insert if="number($value) &gt; number($endDate)" context="instance('validation-model')/record[last()]"
+																		nodeset="./child::node()[last()]" origin="xforms:element('error', 'Start date post-dates end date.')"
+																	></xforms:insert>
 																</xforms:action>
 															</xforms:action>
 														</xforms:action>
 														<xforms:action if="$mapping = 'edm:end' and string-length($value) &gt; 0">
-															<xforms:insert if="not($value castable as xs:integer)"
-																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', concat('End Date is not a number: ', $value))"/>
+															<xforms:insert if="not($value castable as xs:integer)" context="instance('validation-model')/record[last()]"
+																nodeset="./child::node()[last()]" origin="xforms:element('error', concat('End Date is not a number: ', $value))"
+															></xforms:insert>
 														</xforms:action>
 														<!-- validate birth and death dates -->
 														<xforms:action if="$mapping = 'bio:birth' and string-length($value) &gt; 0">
 															<xforms:insert
 																if="not($value castable as xs:date) and not($value castable as xs:gYear) and not($value castable as xs:gYearMonth)"
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', concat('Birth Date is not a number: ', $value))"/>
+																origin="xforms:element('error', concat('Birth Date is not a number: ', $value))"></xforms:insert>
 															<!-- if the start date and end date are both numbers, ensure that the start date is before the end date -->
 															<xforms:action
 																if="instance('mappings')/mapping[@to='bio:birth'] and ($value castable as xs:date or $value castable as xs:gYear or $value castable as xs:gYearMonth)">
 																<xforms:var name="deathDate"
-																	select="normalize-space(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='bio:death']/@from])"/>
+																	select="normalize-space(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='bio:death']/@from])"></xforms:var>
 																<xforms:action
 																	if="string-length($deathDate) &gt; 0 and ($deathDate castable as xs:date or $deathDate castable as xs:gYear or $deathDate castable as xs:gYearMonth)">
 																	<xforms:var name="normal-start"
-																		select="if ($value castable as xs:date) then xs:date($value) else if ($value castable as xs:gYearMonth) then xs:date(concat($value, '-01')) else xs:date(concat($value, '-01-01'))"/>
+																		select="if ($value castable as xs:date) then xs:date($value) else if ($value castable as xs:gYearMonth) then xs:date(concat($value, '-01')) else xs:date(concat($value, '-01-01'))"></xforms:var>
 																	<xforms:var name="normal-end"
-																		select="if ($deathDate castable as xs:date) then xs:date($deathDate) else if ($deathDate castable as xs:gYearMonth) then xs:date(concat($deathDate, '-01')) else xs:date(concat($deathDate, '-01-01'))"/>
-																	<xforms:insert if="$normal-start &gt; $normal-end"
-																		context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																		origin="xforms:element('error', 'Birth date postdates death date.')"/>
+																		select="if ($deathDate castable as xs:date) then xs:date($deathDate) else if ($deathDate castable as xs:gYearMonth) then xs:date(concat($deathDate, '-01')) else xs:date(concat($deathDate, '-01-01'))"></xforms:var>
+																	<xforms:insert if="$normal-start &gt; $normal-end" context="instance('validation-model')/record[last()]"
+																		nodeset="./child::node()[last()]" origin="xforms:element('error', 'Birth date postdates death date.')"
+																	></xforms:insert>
 																</xforms:action>
 															</xforms:action>
 														</xforms:action>
@@ -813,30 +807,28 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 															<xforms:insert
 																if="not($value castable as xs:date) and not($value castable as xs:gYear) and not($value castable as xs:gYearMonth)"
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																origin="xforms:element('error', concat('Death Date is not a number: ', $value))"/>
+																origin="xforms:element('error', concat('Death Date is not a number: ', $value))"></xforms:insert>
 															<!-- if the start date and end date are both numbers, ensure that the start date is before the end date -->
 															<xforms:action
 																if="instance('mappings')/mapping[@to='bio:birth'] and ($value castable as xs:date or $value castable as xs:gYear or $value castable as xs:gYearMonth)">
 																<xforms:var name="birthDate"
-																	select="normalize-space(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='bio:birth']/@from])"/>
+																	select="normalize-space(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='bio:birth']/@from])"></xforms:var>
 																<xforms:action
 																	if="string-length($birthDate) &gt; 0 and ($birthDate castable as xs:date or $birthDate castable as xs:gYear or $birthDate castable as xs:gYearMonth)">
 																	<xforms:var name="normal-start"
-																		select="if ($birthDate castable as xs:date) then xs:date($birthDate) else if ($birthDate castable as xs:gYearMonth) then xs:date(concat($birthDate, '-01')) else xs:date(concat($birthDate, '-01-01'))"/>
+																		select="if ($birthDate castable as xs:date) then xs:date($birthDate) else if ($birthDate castable as xs:gYearMonth) then xs:date(concat($birthDate, '-01')) else xs:date(concat($birthDate, '-01-01'))"></xforms:var>
 																	<xforms:var name="normal-end"
-																		select="if ($value castable as xs:date) then xs:date($value) else if ($value castable as xs:gYearMonth) then xs:date(concat($value, '-01')) else xs:date(concat($value, '-01-01'))"/>
-																	<xforms:insert if="$normal-start &gt; $normal-end"
-																		context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																		origin="xforms:element('error', 'Death date predates birth date.')"/>
+																		select="if ($value castable as xs:date) then xs:date($value) else if ($value castable as xs:gYearMonth) then xs:date(concat($value, '-01')) else xs:date(concat($value, '-01-01'))"></xforms:var>
+																	<xforms:insert if="$normal-start &gt; $normal-end" context="instance('validation-model')/record[last()]"
+																		nodeset="./child::node()[last()]" origin="xforms:element('error', 'Death date predates birth date.')"
+																	></xforms:insert>
 																</xforms:action>
 															</xforms:action>
 														</xforms:action>
 														<!-- URI validation -->
-														<xforms:action
-															if="$mapping='skos:exactMatch' or $mapping='skos:closeMatch' or $mapping='dcterms:source'">
-															<xforms:var name="isValid" select="matches($value, 'https?://.+')"/>
-															<xforms:insert
-																if="string-length($value) &gt; 0 and (not($value castable as xs:anyURI) or $isValid = false())"
+														<xforms:action if="$mapping='skos:exactMatch' or $mapping='skos:closeMatch' or $mapping='dcterms:source'">
+															<xforms:var name="isValid" select="matches($value, 'https?://.+')"></xforms:var>
+															<xforms:insert if="string-length($value) &gt; 0 and (not($value castable as xs:anyURI) or $isValid = false())"
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																origin="xforms:element('error', concat('URI is invalid: ', $value))"> </xforms:insert>
 															<xforms:insert if="contains($value, 'wikipedia.org') and contains($value, '#')"
@@ -850,7 +842,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 																<xforms:insert if="not(contains($value, 'http://kerameikos.org/id/'))"
 																	context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																	origin="xforms:element('error', concat($mapping, ' does not link to a Kerameikos URI: ', $value))"
-																/>
+																></xforms:insert>
 															</xforms:action>
 														</xforms:action>
 														<xforms:action if="$mapping='skos:broader' or $mapping='org:role' or $mapping='org:organization'">
@@ -858,32 +850,29 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 																<!-- these are properties that must be linked internally to other Kerameikos IDs -->
 																<xforms:insert if="not(contains($value, 'http://kerameikos.org/id/'))"
 																	context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																	origin="xforms:element('error', concat($mapping, ' does not link to a Kerameikos URI: ', $value))"/>
+																	origin="xforms:element('error', concat($mapping, ' does not link to a Kerameikos URI: ', $value))"></xforms:insert>
 																<xforms:action if="contains($value, 'http://kerameikos.org/id/')">
 																	<!-- if the URI space is nm:, then test whether the URI has already been validated via SPARQL. If not, then submit a SPARQL query -->
-																	<xforms:action
-																		if="instance('kerameikos-ids')/id[@uri=$value and @mapping=$mapping] = false()"
+																	<xforms:action if="instance('kerameikos-ids')/id[@uri=$value and @mapping=$mapping] = false()"
 																		context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
-																		origin="xforms:element('error', concat($mapping, ' links to a non-existent Kerameikos URI or the URI is a different class: ', $value))"/>
+																		origin="xforms:element('error', concat($mapping, ' links to a non-existent Kerameikos URI or the URI is a different class: ', $value))"></xforms:action>
 																	<xforms:action if="not(instance('kerameikos-ids')/id[@uri=$value and @mapping=$mapping])">
 																		<!--if the $mapping is an org:organization and class is a foaf:Person, then the target entity must be an organization (foaf:Organization);
 																	if the $mapping is an org:role, the class must be either a foaf:Person or foaf:Organization, and the target must be a foaf:Organization;
 																	otherwise, it will be assumed the mapping is skos:broader and the target class is the same as the source class. -->
 																		<xforms:var name="class"
-																			select="if ((instance('control-instance')/type = 'foaf:Person' or instance('control-instance')/type = 'foaf:Organization') and $mapping='org:role') then 'org:Role' else if ((instance('control-instance')/type = 'foaf:Person' or instance('control-instance')/type = 'foaf:Organization') and $mapping='org:organization') then 'foaf:Organization' else instance('control-instance')/type"/>
+																			select="if ((instance('control-instance')/type = 'foaf:Person' or instance('control-instance')/type = 'foaf:Organization') and $mapping='org:role') then 'org:Role' else if ((instance('control-instance')/type = 'foaf:Person' or instance('control-instance')/type = 'foaf:Organization') and $mapping='org:organization') then 'foaf:Organization' else instance('control-instance')/type"></xforms:var>
 																		<xforms:setvalue ref="instance('sparqlQuery')"
-																			value="concat(instance('sparql-templates')/prefix, ' ', replace(replace(instance('sparql-templates')/query[@id='ask'], 'URI', $value), 'CLASS', $class))"/>
-																		<xforms:send submission="submit-sparqlQuery"/>
+																			value="concat(instance('sparql-templates')/prefix, ' ', replace(replace(instance('sparql-templates')/query[@id='ask'], 'URI', $value), 'CLASS', $class))"></xforms:setvalue>
+																		<xforms:send submission="submit-sparqlQuery"></xforms:send>
 																		<!-- if the SPARQL query concludes successfully, then create an entry in kerameikos-ids and display an error if the ASK if false -->
 																		<xforms:action ev:event="xforms-submit-done">
-																			<xforms:insert context="instance('kerameikos-ids')"
-																				nodeset="./child::node()[last()]"
-																				origin="xforms:element('id', (xforms:attribute('uri', $value), xforms:attribute('mapping', $mapping), data(instance('sparqlResponse')/descendant::res:boolean)))"/>
+																			<xforms:insert context="instance('kerameikos-ids')" nodeset="./child::node()[last()]"
+																				origin="xforms:element('id', (xforms:attribute('uri', $value), xforms:attribute('mapping', $mapping), data(instance('sparqlResponse')/descendant::res:boolean)))"></xforms:insert>
 																			<xforms:insert if="instance('sparqlResponse')/descendant::res:boolean = 'false'"
-																				context="instance('validation-model')/record[last()]"
-																				nodeset="./child::node()[last()]"
+																				context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																				origin="xforms:element('error', concat($mapping, ' links to a non-existent Kerameikos URI or the URI is a different class: ', $value))"
-																			/>
+																			></xforms:insert>
 																		</xforms:action>
 																	</xforms:action>
 																</xforms:action>
@@ -893,9 +882,8 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 												</xforms:action>
 											</xforms:action>
 											<!-- after validation, change the import-trigger button value, if necessary, and switch the case -->
-											<xforms:setvalue ref="instance('control-instance')/import-trigger" value="true()"
-												if="count(instance('validation-model')//error) = 0"/>
-											<xforms:toggle case="validation-interface"/>
+											<xforms:setvalue ref="instance('control-instance')/import-trigger" value="true()" if="count(instance('validation-model')//error) = 0"></xforms:setvalue>
+											<xforms:toggle case="validation-interface"></xforms:toggle>
 										</xforms:action>
 									</xforms:trigger>
 								</xforms:group>
@@ -911,7 +899,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 								<xforms:group ref=".[count(descendant::error) = 0]">
 									<div class="bg-success alert-box">
 										<span class="glyphicon glyphicon-ok"></span>
-										<strong>Success: </strong><xforms:output value="count(record)"/> records successfully validated.</div>
+										<strong>Success: </strong><xforms:output value="count(record)"></xforms:output> records successfully validated.</div>
 								</xforms:group>
 								<xforms:group ref=".[count(descendant::error) &gt; 0]">
 									<div class="bg-danger alert-box">
@@ -923,13 +911,13 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 									<div class="bg-danger alert-box">
 										<span class="glyphicon glyphicon-exclamation-sign"></span>
 										<strong>Alert:</strong>
-										<xforms:output ref="error"/>
+										<xforms:output ref="error"></xforms:output>
 									</div>
 								</xforms:group>
 								<!-- if there are errors or warnings, then display the table -->
 								<xforms:group ref=".[count(record[warning]) &gt; 0  or count(record[error]) &gt; 0]">
-									<p><b><xforms:output value="count(record[error])"/></b> of <b><xforms:output value="count(record)"/></b> total records
-										contain errors. <b><xforms:output value="count(record[warning])"/></b> contain warnings. See below.</p>
+									<p><b><xforms:output value="count(record[error])"></xforms:output></b> of <b><xforms:output value="count(record)"></xforms:output></b> total
+										records contain errors. <b><xforms:output value="count(record[warning])"></xforms:output></b> contain warnings. See below.</p>
 									<table class="table">
 										<thead>
 											<th width="25%">ID</th>
@@ -938,7 +926,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 										<tbody>
 											<xforms:repeat nodeset="record[warning or error]">
 												<tr>
-													<td><xforms:output ref="@title"/></td>
+													<td><xforms:output ref="@title"></xforms:output></td>
 													<td>
 														<xforms:repeat nodeset="error">
 															<div>
@@ -972,39 +960,47 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											<!-- set position for progress dialog -->
 											<!--<xforms:setvalue ref="instance('control-instance')/position" value="context()/position()"></xforms:setvalue>-->
 											<xforms:var name="id"
-												select="normalize-space(data(context()/*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended'][name()=instance('mappings')/mapping[@to='id']/@from]))"/>
-											<xforms:var name="uri" select="concat('http://kerameikos.org/id/', $id)"/>
-											<xforms:var name="position" select="position()"/>
+												select="normalize-space(data(context()/*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended'][name()=instance('mappings')/mapping[@to='id']/@from]))"></xforms:var>
+											<xforms:var name="uri" select="concat('http://kerameikos.org/id/', $id)"></xforms:var>
+											<xforms:var name="position" select="position()"></xforms:var>
 											<!-- set the id in the control-instance and then attempt to load the RDF/XML from disc. If it fails to load, this means the ID does not exist, and a new one will be created. If the ID does exist and the RDF is loaded, then add supplementary information. -->
-											<xforms:setvalue ref="instance('control-instance')/id" value="$id"/>
+											<xforms:setvalue ref="instance('control-instance')/id" value="$id"></xforms:setvalue>
 											<!-- clear data from RDF instance before loading-->
-											<xforms:delete nodeset="instance('rdf')/*"/>
-											<xforms:send submission="load-rdf"/>
-
+											<xforms:delete nodeset="instance('rdf')/*"></xforms:delete>
+											<xforms:send submission="load-rdf"></xforms:send>
 											<!-- *** BEGIN ATOM TO RDF IMPORT *** -->
 											<xforms:action
 												xxforms:iterate="instance('feed')//atom:entry[position()=$position]/*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended']">
-												<xforms:var name="from" select="name()"/>
-												<xforms:var name="value" select="normalize-space(data(context()))"/>
+												<xforms:var name="from" select="name()"></xforms:var>
+												<xforms:var name="value" select="normalize-space(data(context()))"></xforms:var>
 												<!-- only process those fields which have been mapped in the user interface -->
 												<xforms:action if="string(instance('mappings')/mapping[@from=$from]/@to) and string-length($value) &gt; 0">
-													<xforms:var name="mapping" select="instance('mappings')/mapping[@from=$from]/@to"/>
+													<xforms:var name="mapping" select="instance('mappings')/mapping[@from=$from]/@to"></xforms:var>
 													<!-- handle labels, definitions, scopenNote -->
 													<xforms:action
 														if="$mapping = 'skos:prefLabel' or $mapping='skos:definition' or $mapping='skos:altLabel' or $mapping='skos:scopeNote'">
-														<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"/>
+														<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"></xforms:var>
 														<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 															origin="xforms:element($mapping, (xforms:attribute('xml:lang', $lang), $value))"
-															if="not(instance('rdf')/*[1]/*[name()=$mapping][@xml:lang=$lang])"/>
+															if="not(instance('rdf')/*[1]/*[name()=$mapping][@xml:lang=$lang])"></xforms:insert>
 													</xforms:action>
+													
+													<!-- create the plural lexical form data object as a blank node -->
+													<xforms:action if="$mapping = 'ontolex:lexicalForm'">
+														<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"></xforms:var>
+														
+														<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
+															origin="xforms:element($mapping, (xforms:attribute('xml:lang', $lang), $value))"
+															if="not(instance('rdf')/*[1]/*[name()=$mapping][@xml:lang=$lang])"></xforms:insert>
+													</xforms:action>
+													
 													<!-- create URIs for the following simple mappings that go into the skos:Concept object -->
 													<xforms:action
 														if="$mapping = 'skos:exactMatch' or $mapping='skos:closeMatch' or $mapping='foaf:homepage' or $mapping='dcterms:isPartOf' or $mapping='dcterms:source' or $mapping='org:memberOf' or $mapping='skos:broader' or $mapping='prov:alternateOf'">
 														<!-- clear wiki control instance values -->
-														<xforms:setvalue ref="instance('control-instance')/wiki-id"/>
-														<xforms:setvalue ref="instance('control-instance')/wiki-title"/>
-														<xforms:setvalue ref="instance('control-instance')/wiki-lang"/>
-
+														<xforms:setvalue ref="instance('control-instance')/wiki-id"></xforms:setvalue>
+														<xforms:setvalue ref="instance('control-instance')/wiki-title"></xforms:setvalue>
+														<xforms:setvalue ref="instance('control-instance')/wiki-lang"></xforms:setvalue>
 														<!-- handle the parsing of dbpedia/wikipedia articles in wikidata, if activated -->
 														<xforms:action
 															if="(contains($value, 'dbpedia.org') or contains($value, 'wikipedia.org')) and ($mapping='skos:exactMatch' or $mapping='skos:closeMatch')">
@@ -1012,14 +1008,14 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 															<xforms:action if="contains($value, 'dbpedia.org')">
 																<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																	origin="xforms:element($property, (xforms:attribute('rdf:resource', $value), ''))"
-																	if="not(instance('rdf')/*[1]/*[name()=$property][@rdf:resource = $value])"/>
+																	if="not(instance('rdf')/*[1]/*[name()=$property][@rdf:resource = $value])"></xforms:insert>
 																<!-- Harvest data from wikidata if applicable -->
 																<xforms:action if="instance('control-instance')/parse-wikipedia = true()">
-																	<xforms:var name="title" select="tokenize($value, '/')[last()]"/>
+																	<xforms:var name="title" select="tokenize($value, '/')[last()]"></xforms:var>
 																	<xforms:action if="string($title)">
-																		<xforms:setvalue ref="instance('control-instance')/wiki-title" value="$title"/>
+																		<xforms:setvalue ref="instance('control-instance')/wiki-title" value="$title"></xforms:setvalue>
 																		<xforms:setvalue ref="instance('control-instance')/wiki-lang">en</xforms:setvalue>
-																		<xforms:send submission="get-wikidata"/>
+																		<xforms:send submission="get-wikidata"></xforms:send>
 																	</xforms:action>
 																</xforms:action>
 															</xforms:action>
@@ -1027,91 +1023,84 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 															<xforms:action if="contains($value, 'wikipedia.org') and contains($value, '#')">
 																<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																	origin="xforms:element('rdfs:seeAlso', (xforms:attribute('rdf:resource', $value), ''))"
-																	if="not(instance('rdf')/*[1]/rdfs:seeAlso[@rdf:resource = $value])"/>
+																	if="not(instance('rdf')/*[1]/rdfs:seeAlso[@rdf:resource = $value])"></xforms:insert>
 															</xforms:action>
 															<!-- parse wikipedia URIs -->
 															<xforms:action if="contains($value, 'wikipedia.org') and not(contains($value, '#'))">
 																<!-- get the title and lang-->
-																<xforms:var name="title" select="tokenize($value, '/')[last()]"/>
+																<xforms:var name="title" select="tokenize($value, '/')[last()]"></xforms:var>
 																<xforms:var name="lang"
-																	select="if(contains($value, 'wikipedia.org')) then substring-before(tokenize($value, '/')[3], '.') else 'en'"/>
+																	select="if(contains($value, 'wikipedia.org')) then substring-before(tokenize($value, '/')[3], '.') else 'en'"></xforms:var>
 																<!-- if the wikipedia article language is 'en' insert the dbpedia link -->
 																<xforms:action if="substring-before(tokenize($value, '/')[3], '.') = 'en'">
-																	<xforms:var name="dbpedia-uri" select="concat('http://dbpedia.org/resource/', $title)"/>
+																	<xforms:var name="dbpedia-uri" select="concat('http://dbpedia.org/resource/', $title)"></xforms:var>
 																	<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																		origin="xforms:element($property, (xforms:attribute('rdf:resource', $dbpedia-uri), ''))"
-																		if="not(instance('rdf')/*[1]/*[name()=$property][@rdf:resource = $dbpedia-uri])"/>
+																		if="not(instance('rdf')/*[1]/*[name()=$property][@rdf:resource = $dbpedia-uri])"></xforms:insert>
 																</xforms:action>
 																<!-- Harvest data from wikidata if applicable -->
 																<xforms:action if="instance('control-instance')/parse-wikipedia = true()">
 																	<xforms:action if="string($title) and string($lang)">
-																		<xforms:setvalue ref="instance('control-instance')/wiki-title" value="$title"/>
-																		<xforms:setvalue ref="instance('control-instance')/wiki-lang" value="$lang"/>
-																		<xforms:send submission="get-wikidata"/>
+																		<xforms:setvalue ref="instance('control-instance')/wiki-title" value="$title"></xforms:setvalue>
+																		<xforms:setvalue ref="instance('control-instance')/wiki-lang" value="$lang"></xforms:setvalue>
+																		<xforms:send submission="get-wikidata"></xforms:send>
 																	</xforms:action>
 																</xforms:action>
 															</xforms:action>
 														</xforms:action>
-
 														<!-- parse wikidata matches specifically -->
-														<xforms:action
-															if="contains($value, 'wikidata.org') and ($mapping='skos:exactMatch' or $mapping='skos:closeMatch')">
+														<xforms:action if="contains($value, 'wikidata.org') and ($mapping='skos:exactMatch' or $mapping='skos:closeMatch')">
 															<xforms:var name="property">skos:exactMatch</xforms:var>
-
 															<!-- parse wikidata entity ID -->
-															<xforms:var name="wiki-id" select="tokenize($value, '/')[last()]"/>
-
+															<xforms:var name="wiki-id" select="tokenize($value, '/')[last()]"></xforms:var>
 															<!-- Harvest data from wikidata if applicable -->
 															<xforms:action if="instance('control-instance')/parse-wikipedia = true()">
 																<xforms:action if="string($wiki-id)">
-																	<xforms:setvalue ref="instance('control-instance')/wiki-id" value="$wiki-id"/>
-																	<xforms:send submission="get-wikidata"/>
+																	<xforms:setvalue ref="instance('control-instance')/wiki-id" value="$wiki-id"></xforms:setvalue>
+																	<xforms:send submission="get-wikidata"></xforms:send>
 																</xforms:action>
 															</xforms:action>
 														</xforms:action>
-
 														<!-- otherwise write the URI as its mapping -->
 														<xforms:action
 															if="not(contains($value, 'dbpedia.org')) and not(contains($value, 'wikipedia.org')) and not(contains($value, 'wikidata.org'))">
 															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $value), ''))"
-																if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource = $value])"/>
+																if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource = $value])"></xforms:insert>
 															<!-- if the type is kon:ProductionPlace and the $mapping is skos:broader, then insert dcterms:isPartOf within the geo:SpatialThing, if applicable -->
-															<xforms:action
-																if="(instance('control-instance')/type='kon:ProductionPlace') and $mapping='skos:broader'">
-																<xforms:var name="locationUri" select="concat($uri, '#this')"/>
+															<xforms:action if="(instance('control-instance')/type='kon:ProductionPlace') and $mapping='skos:broader'">
+																<xforms:var name="locationUri" select="concat($uri, '#this')"></xforms:var>
 																<!-- if there is a valid latitude number and no geo:SpatialThing (the geo:lat and geo:long have not yet been processed), insert geo:SpatialThing -->
 																<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
 																	origin="xforms:element('geo:SpatialThing', (xforms:attribute('rdf:about', $locationUri), ''))"
-																	if="number(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='geo:lat']/@from]) and not(instance('rdf')/geo:SpatialThing)"/>
+																	if="number(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='geo:lat']/@from]) and not(instance('rdf')/geo:SpatialThing)"></xforms:insert>
 																<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																	origin="xforms:element('geo:location', (xforms:attribute('rdf:resource', $locationUri), ''))"
-																	if="number(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='geo:lat']/@from]) and not(instance('rdf')/geo:SpatialThing)"/>
+																	if="number(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='geo:lat']/@from]) and not(instance('rdf')/geo:SpatialThing)"></xforms:insert>
 																<xforms:insert context="instance('rdf')/geo:SpatialThing" nodeset="./child::node()[last()]"
 																	origin="xforms:element('dcterms:isPartOf', (xforms:attribute('rdf:resource', concat($value, '#this')), ''))"
-																	if="not(instance('rdf')/geo:SpatialThing/*[name()='dcterms:isPartOf'])"/>
+																	if="not(instance('rdf')/geo:SpatialThing/*[name()='dcterms:isPartOf'])"></xforms:insert>
 															</xforms:action>
 														</xforms:action>
 													</xforms:action>
 													<!-- create geo:location and geo:SpatialThing if there a geo:lat -->
 													<xforms:action if="$mapping = 'geo:lat' or $mapping='geo:long'">
-														<xforms:var name="locationUri" select="concat($uri, '#this')"/>
+														<xforms:var name="locationUri" select="concat($uri, '#this')"></xforms:var>
 														<!-- insert geo:location if it doesn't exist -->
 														<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 															origin="xforms:element('geo:location', (xforms:attribute('rdf:resource', $locationUri), ''))"
-															if="not(instance('rdf')/*[1]/geo:location)"/>
-
+															if="not(instance('rdf')/*[1]/geo:location)"></xforms:insert>
 														<!-- if there is no existing SpatialThing, then create one -->
 														<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
 															origin="xforms:element('geo:SpatialThing', (xforms:attribute('rdf:about', $locationUri), ''))"
-															if="not(instance('rdf')/geo:SpatialThing)"/>
+															if="not(instance('rdf')/geo:SpatialThing)"></xforms:insert>
 														<!-- insert coordinates if they don't exist -->
 														<xforms:insert context="instance('rdf')/geo:SpatialThing" nodeset="./child::node()[last()]"
 															origin="xforms:element($mapping, (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#decimal'), $value))"
-															if="not(instance('rdf')/geo:SpatialThing/*[name()=$mapping])"/>
+															if="not(instance('rdf')/geo:SpatialThing/*[name()=$mapping])"></xforms:insert>
 														<xforms:insert context="instance('rdf')/geo:SpatialThing" nodeset="./child::node()[last()]"
 															origin="xforms:element($mapping, (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#decimal'), $value))"
-															if="not(instance('rdf')/geo:SpatialThing/*[name()=$mapping])"/>
+															if="not(instance('rdf')/geo:SpatialThing/*[name()=$mapping])"></xforms:insert>
 													</xforms:action>
 													<!-- create bio:birth or bio:death property and associated bio:Birth and bio:Death object -->
 													<!--<xforms:action if="$mapping = 'bio:birth' or $mapping='bio:death'">
@@ -1133,48 +1122,46 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 													<!-- validate start and end dates -->
 													<xforms:action if="$mapping = 'edm:begin' or $mapping='edm:end'">
 														<xforms:var name="membershipUri"
-															select="concat($uri, '#', substring-after(data(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='org:role']/@from]), 'id/'))"/>
+															select="concat($uri, '#', substring-after(data(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='org:role']/@from]), 'id/'))"></xforms:var>
 														<!-- if the type is a Person or Organization, insert the date into the org:Membership -->
 														<xforms:action
 															if="instance('control-instance')/type = 'foaf:Person' or instance('control-instance')/type = 'foaf:Organization'">
 															<xforms:action if="not(instance('rdf')/org:Membership[@rdf:about=$membershipUri])">
 																<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
-																	origin="xforms:element('org:Membership', (xforms:attribute('rdf:about', $membershipUri), ''))"/>
+																	origin="xforms:element('org:Membership', (xforms:attribute('rdf:about', $membershipUri), ''))"></xforms:insert>
 																<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																	origin="xforms:element('org:hasMembership', (xforms:attribute('rdf:resource', $membershipUri), ''))"
-																/>
+																></xforms:insert>
 															</xforms:action>
 															<!-- insert the date -->
-															<xforms:insert context="instance('rdf')/org:Membership[@rdf:about=$membershipUri]"
-																nodeset="./child::node()[last()]"
+															<xforms:insert context="instance('rdf')/org:Membership[@rdf:about=$membershipUri]" nodeset="./child::node()[last()]"
 																origin="xforms:element($mapping, (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#gYear'), format-number(number($value), '0000')))"
-																if="not(instance('rdf')/org:Membership[@rdf:about=$membershipUri]/*[name()=$mapping])"/>
+																if="not(instance('rdf')/org:Membership[@rdf:about=$membershipUri]/*[name()=$mapping])"></xforms:insert>
 														</xforms:action>
 														<!-- if the type is not a Person or Organization, insert into the skos:Concept object -->
 														<xforms:action
 															if="not(instance('control-instance')/type = 'foaf:Person') and not(instance('control-instance')/type = 'foaf:Organization')">
 															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																origin="xforms:element($mapping, (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#gYear'), format-number(number($value), '0000')))"
-																if="not(instance('rdf')/*[1]/*[name()=$mapping])"/>
+																if="not(instance('rdf')/*[1]/*[name()=$mapping])"></xforms:insert>
 														</xforms:action>
 													</xforms:action>
 													<!-- write org ontology properties into the org:Membership -->
 													<xforms:action if="$mapping='org:role' or $mapping='org:organization'">
 														<xforms:var name="membershipUri"
-															select="concat($uri, '#', substring-after(data(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='org:role']/@from]), 'id/'))"/>
+															select="concat($uri, '#', substring-after(data(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='org:role']/@from]), 'id/'))"></xforms:var>
 														<!-- create the org:Membership, if necessary -->
 														<xforms:action if="not(instance('rdf')/org:Membership[@rdf:about=$membershipUri])">
 															<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
-																origin="xforms:element('org:Membership', (xforms:attribute('rdf:about', $membershipUri), ''))"/>
+																origin="xforms:element('org:Membership', (xforms:attribute('rdf:about', $membershipUri), ''))"></xforms:insert>
 															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																origin="xforms:element('org:hasMembership', (xforms:attribute('rdf:resource', $membershipUri), ''))"
-															/>
+															></xforms:insert>
 														</xforms:action>
 														<!-- insert the role or organization -->
-														<xforms:insert context="instance('rdf')/org:Membership[@rdf:about=$membershipUri]"
-															nodeset="./child::node()[last()]"
+														<xforms:insert context="instance('rdf')/org:Membership[@rdf:about=$membershipUri]" nodeset="./child::node()[last()]"
 															origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $value), ''))"
-															if="not(instance('rdf')/org:Membership[@rdf:about=$membershipUri]/*[name()=$mapping])"/>
+															if="not(instance('rdf')/org:Membership[@rdf:about=$membershipUri]/*[name()=$mapping])"></xforms:insert>
 													</xforms:action>
 												</xforms:action>
 											</xforms:action>
@@ -1185,12 +1172,12 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											<xforms:insert nodeset="instance('dump')"
 												origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('rdf'), instance('save-config')), 'data')"/>-->
 											<!-- delete graphs from triplestore, then repost updates -->
-											<xforms:setvalue ref="instance('sparqlUpdate')" value="replace(instance('sparqlUpdate-template'), 'URI', $uri)"/>
+											<xforms:setvalue ref="instance('sparqlUpdate')" value="replace(instance('sparqlUpdate-template'), 'URI', $uri)"></xforms:setvalue>
 											<!--<xforms:send submission="delete-graph"/>
 											<xforms:send submission="post-rdf"/>-->
 											<!-- post to Solr -->
 											<xforms:insert nodeset="instance('addIndex')"
-												origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
+												origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"></xforms:insert>
 											<!--<xforms:send submission="post-solr-doc"/>-->
 											<!-- hide dailog after the process has completed -->
 											<!--<xforms:action if="position()=instance('control-instance')/count">
@@ -1198,7 +1185,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 												<xforms:toggle case="process-complete"></xforms:toggle>
 											</xforms:action>-->
 										</xforms:action>
-										<xforms:toggle case="process-complete"/>
+										<xforms:toggle case="process-complete"></xforms:toggle>
 									</xforms:action>
 								</xforms:trigger>
 							</xforms:group>
@@ -1215,20 +1202,20 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 								<tbody>
 									<xforms:repeat nodeset="instance('feed')//atom:entry">
 										<xforms:var name="id"
-											select="*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended'][name()=instance('mappings')/mapping[@to='id']/@from]"/>
+											select="*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended'][name()=instance('mappings')/mapping[@to='id']/@from]"></xforms:var>
 										<tr>
 											<td>
 												<xforms:trigger appearance="minimal">
-													<xforms:label value="concat(instance('config')/url, 'id/', $id)"/>
+													<xforms:label value="concat(instance('config')/url, 'id/', $id)"></xforms:label>
 													<xforms:action ev:event="DOMActivate">
-														<xforms:load show="replace" resource="{concat(instance('config')/url, 'id/', $id)}"/>
+														<xforms:load show="replace" resource="{concat(instance('config')/url, 'id/', $id)}"></xforms:load>
 													</xforms:action>
 												</xforms:trigger>
 											</td>
 											<td>
 												<xforms:output
 													ref="*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended'][name()=instance('mappings')/mapping[@to='skos:prefLabel' and @lang='en']/@from]"
-												/>
+												></xforms:output>
 											</td>
 										</tr>
 									</xforms:repeat>
@@ -1236,7 +1223,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</table>
 						</xforms:case>
 					</xforms:switch>
-					<fr:xforms-inspector/>
+					<fr:xforms-inspector></fr:xforms-inspector>
 				</div>
 			</div>
 		</div>
