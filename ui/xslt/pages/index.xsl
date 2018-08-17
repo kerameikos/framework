@@ -25,27 +25,27 @@
 	<xsl:template name="body">
 		<div class="jumbotron visible-xs visible-sm">
 			<div class="container">
-				<div class="row text-center">					
+				<div class="row text-center">
 					<div class="col-md-12">
 						<h1>κεραμεικος</h1>
 					</div>
 				</div>
 			</div>
 		</div>
-		<div class="container-fluid banner hidden-xs hidden-sm">			
+		<div class="container-fluid banner hidden-xs hidden-sm">
 			<div class="row">
 				<div class="col-md-6 col-md-offset-6">
-					<div class="row banner-background text-right">						
+					<div class="row banner-background text-right">
 						<div class="col-md-12">
 							<h1>κεραμεικος</h1>
 						</div>
-					</div>					
+					</div>
 				</div>
 			</div>
 		</div>
 		<div class="container-fluid content">
 			<div class="row">
-<!--				<img src="http://numismatics.org:8080/orbeon/themes/ocre/images/banner.jpg" style="width:100%">-->
+				<!--				<img src="http://numismatics.org:8080/orbeon/themes/ocre/images/banner.jpg" style="width:100%">-->
 				<div class="col-md-8">
 					<xsl:copy-of select="//index/*"/>
 					<div>
@@ -62,7 +62,7 @@
 								<li>
 									<a href="kerameikos.org.jsonld">JSON-LD</a>
 								</li>-->
-							</ul>				
+							</ul>
 						</div>
 						<div class="col-md-4">
 							<h4>Pelagios Annotations</h4>
@@ -85,17 +85,27 @@
 						</div>
 						<div class="col-md-4">
 							<h4>Atom Feed</h4>
-							<a href="feed/">
-								<img src="{$display_path}ui/images/atom-large.png"/>
+							<a href="feed/" title="Atom Feed">
+								<img src="{$display_path}ui/images/atom-large.png" alt="Atom Logo"/>
 							</a>
 						</div>
-					</div>					
+					</div>
 				</div>
 				<div class="col-md-4">
-					<h3>Support</h3>
-					
-					<h3>Collaborators</h3>
-					<p>logos go here</p>
+					<div>
+						<h3>Support</h3>
+						<p>
+							<img src="{$display_path}ui/images/neh_logo_horizontal_2c_c_outl_0.png" style="width:300px" alt="NEH Logo"/>
+						</p>
+						<p>In August 2018, the <a href="https://www.neh.gov/">National Endowment for the Humanities</a> awarded Kerameikos $85,382 as part of
+							the Digital Humanities Advancement program. An 18-month long Level II project, this will fund the creation of all necessary Archaic
+							and Classical Greek pottery concepts the building of various aggregation or data harvesting tools.</p>
+					</div>
+					<!--<div>						
+						<h3>Collaborators</h3>
+						<img src="{$display_path}ui/images/rev_uva_logo_color.png" alt="UVA Logo"/>
+					</div>-->
+
 				</div>
 			</div>
 		</div>
