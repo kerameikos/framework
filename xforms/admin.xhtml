@@ -65,26 +65,37 @@
 				<queries xmlns="">
 					<query id="delete-id">
 						<![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kon:	<http://kerameikos.org/ontology#>
 PREFIX org:	<http://www.w3.org/ns/org#>
+PREFIX prov:	<http://www.w3.org/ns/prov#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 DELETE {?s ?p ?o} WHERE { 
 {<URI> geo:location ?s . ?s ?p ?o }
 UNION {<URI> org:hasMembership ?s . ?s ?p ?o}
+UNION {?prov foaf:topic <URI> .
+	?prov ?hasActivity ?s .
+	?s a prov:Activity . ?s ?p ?o}
+UNION {<URI> skos:changeNote ?s . ?s ?p ?o}
 UNION {<URI> ?p ?o . ?s ?p ?o . FILTER (?s = <URI>) }
 }]]>
 					</query>
 					<query id="delete-all-ids">
 						<![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kon:	<http://kerameikos.org/ontology#>
 PREFIX org:	<http://www.w3.org/ns/org#>
+PREFIX prov:	<http://www.w3.org/ns/prov#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 DELETE {?s ?p ?o} WHERE {
- {?place rdf:type skos:Concept ; geo:location ?s . ?s ?p ?o }
- UNION {?person rdf:type skos:Concept ; org:hasMembership ?s . ?s ?p ?o }
- UNION {?s rdf:type skos:Concept FILTER strStarts(str(?s), "http://kerameikos.org/id/") . ?s ?p ?o}}]]>
+{?place rdf:type skos:Concept ; geo:location ?s . ?s ?p ?o }
+UNION {?person rdf:type skos:Concept ; org:hasMembership ?s . ?s ?p ?o }
+UNION {?s rdf:type prov:Activity . ?s ?p ?o}
+UNION {?s rdf:type dcterms:ProvenanceStatement . ?s ?p ?o}
+UNION {?s rdf:type skos:Concept FILTER strStarts(str(?s), "http://kerameikos.org/id/") . ?s ?p ?o}}]]>
 					</query>
 				</queries>
 			</xforms:instance>
@@ -224,16 +235,16 @@ SELECT * WHERE {
 			</xforms:submission>
 
 			<!-- ************************* LOAD RDF/XML ************************** -->
-			<xforms:submission id="load-rdfxml" serialization="none" method="get" action="/kerameikos/kerameikos.org.rdf" replace="instance" instance="rdf">
+			<xforms:submission id="load-all-rdf" serialization="none" method="get" action="/kerameikos/kerameikos.org.rdf" replace="instance" instance="rdf">
 				<xforms:action ev:event="xforms-submit-error">
-					<xforms:message level="modal">Unable to load RDF/XML from oxf:/apps/kerameikos/dump/kerameikos.org.rdf</xforms:message>
+					<xforms:message level="modal">Unable to load RDF/XML from /kerameikos/kerameikos.org.rdf</xforms:message>
 				</xforms:action>
 			</xforms:submission>
 
 			<xforms:submission id="load-rdf" serialization="none" method="get" action="/kerameikos/id/{instance('control-instance')/id}.rdf" replace="instance"
 				instance="rdf">
 				<xforms:action ev:event="xforms-submit-error">
-					<xforms:message level="modal">Unable to load RDF/XML from oxf:/apps/kerameikos/id/{$id}.rdf</xforms:message>
+					<xforms:message level="modal">Unable to load RDF/XML from /kerameikos/id/{$id}.rdf</xforms:message>
 				</xforms:action>
 			</xforms:submission>
 
@@ -482,14 +493,14 @@ SELECT * WHERE {
 									</xforms:action>
 								</xforms:trigger>
 							</li>
-							<li>
+							<!--<li>
 								<xforms:trigger appearance="minimal">
 									<xforms:label>Generate RDF/XML</xforms:label>
 									<xforms:action ev:event="DOMActivate">
 										<xforms:dispatch target="generate-rdf-dump-dialog" name="fr-show"/>
 									</xforms:action>
 								</xforms:trigger>
-							</li>
+							</li>-->
 						</ul>
 					</div>
 					<div>
@@ -534,7 +545,7 @@ SELECT * WHERE {
 					<xforms:send submission="delete-graph"/>
 					<!-- then get the current RDF/XML and post it -->
 					<xforms:action ev:event="xforms-submit-done">
-						<xforms:send submission="load-rdfxml"/>
+						<xforms:send submission="load-all-rdf"/>
 						<xforms:send submission="post-new" ev:event="xforms-submit-done"/>
 					</xforms:action>
 				</xforms:action>
@@ -549,7 +560,7 @@ SELECT * WHERE {
 			<fr:positive-choice>
 				<fr:label>Yes</fr:label>
 				<xforms:action ev:event="DOMActivate">
-					<xforms:send submission="load-rdfxml"/>
+					<xforms:send submission="load-all-rdf"/>
 					<xforms:action ev:event="xforms-submit-done">
 						<!-- transform into main solr model and post into solr/nomisma -->
 						<xforms:setvalue ref="instance('control-instance')/solr-core" value="instance('config')/solr_published"/>

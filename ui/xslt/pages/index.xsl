@@ -45,7 +45,6 @@
 		</div>
 		<div class="container-fluid content">
 			<div class="row">
-				<!--				<img src="http://numismatics.org:8080/orbeon/themes/ocre/images/banner.jpg" style="width:100%">-->
 				<div class="col-md-8">
 					<xsl:copy-of select="//index/*"/>
 					<div>
@@ -56,12 +55,12 @@
 								<li>
 									<a href="kerameikos.org.rdf">RDF/XML</a>
 								</li>
-								<!--	<li>
+									<li>
 									<a href="kerameikos.org.ttl">Turtle</a>
 								</li>
 								<li>
 									<a href="kerameikos.org.jsonld">JSON-LD</a>
-								</li>-->
+								</li>
 							</ul>
 						</div>
 						<div class="col-md-4">
@@ -76,9 +75,9 @@
 									<td>
 										<strong>VoID for Concepts: </strong>
 										<a href="pelagios.void.rdf">RDF/XML</a>
-										<br/>
+										<!--<br/>
 										<strong>VoID for Partner Objects: </strong>
-										<a href="pelagios-objects.void.rdf">RDF/XML</a>
+										<a href="pelagios-objects.void.rdf">RDF/XML</a>-->
 									</td>
 								</tr>
 							</table>

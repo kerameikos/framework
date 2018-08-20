@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-	Copyright (C) 2010 Ethan Gruber
-	EADitor: http://code.google.com/p/eaditor/
-	Apache License 2.0: http://code.google.com/p/eaditor/
-	
+<!-- Author: Ethan Gruber
+	Date: August 2018
+	Function: Serialize aggregated RDF/XML
 -->
 <p:config xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors">
 
@@ -17,6 +15,13 @@
 			</config>
 		</p:input>
 		<p:output name="data" id="request"/>
+	</p:processor>
+	
+	<!-- get the RDF/XML -->
+	<p:processor name="oxf:pipeline">
+		<p:input name="config-xml" href="../../config.xml"/>
+		<p:input name="config" href="../models/rdf/aggregate-all.xpl"/>
+		<p:output name="data" id="rdfxml"/>
 	</p:processor>
 	
 	<!-- get mode -->
@@ -43,59 +48,25 @@
 	<!-- serialize it -->
 	<p:choose href="#parser-config">
 		<p:when test="mode='ttl'">
-			<p:processor name="oxf:url-generator">
-				<p:input name="config">
-					<config>
-						<url>oxf:/apps/kerameikos/dump/kerameikos.org.ttl</url>						
-						<mode>text</mode>
-						<content-type>text/turtle</content-type>
-						<encoding>utf-8</encoding>
-					</config>
-				</p:input>
-				<p:output name="data" id="model"/>
-			</p:processor>
-			
-			<p:processor name="oxf:text-converter">
-				<p:input name="data" href="#model"/>
-				<p:input name="config">
-					<config>
-						<content-type>text/turtle</content-type>
-						<encoding>utf-8</encoding>
-					</config>
-				</p:input>
+			<p:processor name="oxf:pipeline">
+				<p:input name="data" href="#rdfxml"/>
+				<p:input name="config" href="../views/serializations/rdf/ttl.xpl"/>								
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>
 		<p:when test="mode='jsonld'">
-			<p:processor name="oxf:url-generator">
-				<p:input name="config">
-					<config>
-						<url>oxf:/apps/kerameikos/dump/kerameikos.org.jsonld</url>						
-						<mode>text</mode>
-						<content-type>application/ld+json</content-type>
-						<encoding>utf-8</encoding>
-					</config>
-				</p:input>
-				<p:output name="data" id="model"/>
-			</p:processor>
-			
-			<p:processor name="oxf:text-converter">
-				<p:input name="data" href="#model"/>
-				<p:input name="config">
-					<config>
-						<content-type>application/ld+json</content-type>
-						<encoding>utf-8</encoding>
-					</config>
-				</p:input>
+			<p:processor name="oxf:pipeline">
+				<p:input name="data" href="#rdfxml"/>
+				<p:input name="config" href="../views/serializations/rdf/json-ld.xpl"/>								
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>
 		<p:when test="mode='rdf'">
 			<p:processor name="oxf:xml-converter">
-				<p:input name="data" href="../../dump/kerameikos.org.rdf"/>
+				<p:input name="data" href="#rdfxml"/>
 				<p:input name="config">
 					<config>
-						<content-type>application/xml</content-type>
+						<content-type>application/rdf+xml</content-type>
 						<encoding>utf-8</encoding>
 						<version>1.0</version>
 						<indent>true</indent>

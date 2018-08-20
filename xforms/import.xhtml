@@ -223,13 +223,19 @@
 			<xforms:instance id="sparqlUpdate-template">
 				<query>
 					<![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kon:	<http://kerameikos.org/ontology#>
 PREFIX org:	<http://www.w3.org/ns/org#>
+PREFIX prov:	<http://www.w3.org/ns/prov#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 DELETE {?s ?p ?o} WHERE { 
 {<URI> geo:location ?s . ?s ?p ?o }
 UNION {<URI> org:hasMembership ?s . ?s ?p ?o}
+UNION {?prov foaf:topic <URI> .
+	?prov ?hasActivity ?s .
+	?s a prov:Activity . ?s ?p ?o}
+UNION {<URI> skos:changeNote ?s . ?s ?p ?o}
 UNION {<URI> ?p ?o . ?s ?p ?o . FILTER (?s = <URI>) }
 }]]>
 				</query>

@@ -17,7 +17,7 @@
 
 	<!-- config and global variables -->
 	<xsl:variable name="display_path">../</xsl:variable>
-	<xsl:variable name="id" select="substring-after(/content/rdf:RDF/*[1]/@rdf:about, 'id/')"/>
+	<xsl:variable name="id" select="tokenize(/content/rdf:RDF/*[1]/@rdf:about, '/')[last()]"/>
 	<xsl:variable name="html-uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 	<xsl:variable name="mode">record</xsl:variable>
 	<xsl:variable name="base-query" select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>

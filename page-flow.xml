@@ -50,11 +50,11 @@
 
 	<!-- **** SERIALIZATIONS **** -->
 	<!-- RDF -->
-	<page path="/kerameikos/id/(.*)\.rdf" view="xpl/models/rdf/get-id.xpl"/>	
-	<page path="/kerameikos/id/(.*)\.kml" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/kml.xpl"/>
-	<page path="/kerameikos/id/(.*)\.ttl" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/ttl.xpl"/>
-	<page path="/kerameikos/id/(.*)\.jsonld" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/json-ld.xpl"/>
-	<page path="/kerameikos/id/(.*)" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
+	<page path="/kerameikos/(id|editor)/(.*)\.rdf" view="xpl/models/rdf/get-id.xpl"/>	
+	<page path="/kerameikos/(id|editor)/(.*)\.kml" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/kml.xpl"/>
+	<page path="/kerameikos/(id|editor)/(.*)\.ttl" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/ttl.xpl"/>
+	<page path="/kerameikos/(id|editor)/(.*)\.jsonld" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/json-ld.xpl"/>
+	<page path="/kerameikos/(id|editor)/(.*)" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
 	
 	<!-- ONTOLOGY -->
 	<page path="/kerameikos/ontology" model="xpl/models/ontology/get-ontology.xpl" view="xpl/views/pages/ontology.xpl"/>
@@ -99,7 +99,7 @@
 	<page path="/kerameikos/kerameikos.org.ttl" view="xpl/controllers/serialize-dump.xpl"/>
 
 	<!-- **** CONCEPT SCHEMES **** -->
-	<page path="/kerameikos/(.*)/" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
+	<page path="/kerameikos/(id|editor)/" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
 	
 
 	<epilogue url="oxf:/config/epilogue.xpl"/>
