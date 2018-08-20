@@ -14,7 +14,8 @@
 			<namespace prefix="kid" uri="http://kerameikos.org/id/"/>
 			<namespace prefix="kon" uri="http://kerameikos.org/ontology#"/>
 			<namespace prefix="org" uri="http://www.w3.org/ns/org#"/>
-			<namespace prefix="osgeo" uri="http://data.ordnancesurvey.co.uk/ontology/geometry/"/>
+			<namespace prefix="osgeo" uri="http://data.ordnancesurvey.co.uk/ontology/geometry/"/>			
+			<namespace prefix="prov" uri="http://www.w3.org/ns/prov#"/>
 			<namespace prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
 			<namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
 			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>

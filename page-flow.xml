@@ -81,6 +81,7 @@
 	<page path="/kerameikos/apis/getLabel" model="xpl/models/sparql/getLabel.xpl" view="xpl/views/serializations/sparql/getLabel.xpl"/>
 	<page path="/kerameikos/api/getRdf" model="xpl/models/rdf/aggregate-ids.xpl" view="xpl/views/apis/getRdf.xpl"/>
 	<page path="/kerameikos/apis/getProductionPlaces" model="xpl/models/sparql/getProductionPlaces.xpl" view="xpl/views/serializations/sparql/geojson.xpl"/>
+	
 	<!-- OpenRefine reconciliation services -->	
 	<page path="/kerameikos/apis/reconcile/preview" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/reconcile-preview-html.xpl"/>
 	<service path="/kerameikos/apis/reconcile/suggest/entity" model="xpl/models/solr/reconcile-suggest.xpl" view="xpl/views/serializations/solr/reconcile-json.xpl" public-methods="GET HEAD POST" />

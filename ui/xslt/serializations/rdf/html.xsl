@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
+	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
 	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
-	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
+	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/" xmlns:prov="http://www.w3.org/ns/prov#"
+	exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:include href="../../functions.xsl"/>
 	<xsl:include href="../../vis-templates.xsl"/>
@@ -20,7 +21,8 @@
 	<xsl:variable name="id" select="tokenize(/content/rdf:RDF/*[1]/@rdf:about, '/')[last()]"/>
 	<xsl:variable name="html-uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 	<xsl:variable name="mode">record</xsl:variable>
-	<xsl:variable name="base-query" select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
+	<xsl:variable name="base-query"
+		select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
 	<xsl:variable name="type" select="/content/rdf:RDF/*[1]/name()"/>
 	<xsl:variable name="title" select="/content/rdf:RDF/*[1]/skos:prefLabel[@xml:lang = 'en']"/>
 
@@ -164,8 +166,17 @@
 		<div class="container-fluid content">
 			<div class="row">
 				<div class="col-md-12">
-					<xsl:apply-templates select="/content/rdf:RDF/*" mode="type"/>
+					<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type"/>
 
+					<!-- ProvenanceStatement is hidden by default -->
+					<h3>
+						<a href="#provenance">Data Provenance</a>
+					</h3>
+					<div class="hidden">
+						<xsl:apply-templates select="/content/rdf:RDF/*[name() = 'dcterms:ProvenanceStatement']" mode="type"/>
+					</div>
+
+					<!--<hr/>-->
 					<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
 						<xsl:if test="$hasGeo = true()">
 							<div id="mapcontainer" class="map-normal">
@@ -214,16 +225,6 @@
 								</xsl:if>
 							</ul>
 						</div>
-						<!--<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]">
-							<xsl:call-template name="dbpedia-abstract">
-							<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'dbpedia.org')]/@rdf:resource"/>
-							</xsl:call-template>
-							</xsl:if>-->
-						<xsl:if test="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
-							<xsl:call-template name="lgpn-bio">
-								<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
-							</xsl:call-template>
-						</xsl:if>
 					</div>
 				</xsl:if>
 			</div>
@@ -260,7 +261,7 @@
 				<div id="sketchfab-window" style="width:640px;height:480px;display:none"/>
 				<iframe id="model-iframe-template" width="640" height="480" frameborder="0" allowvr="true" allowfullscreen="true" mozallowfullscreen="true"
 					webkitallowfullscreen="true" onmousewheel=""/>
-				
+
 				<div id="3dhop-window" style="display:none;width:650px;height:490px;">
 					<div id="3dhop-template" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
 						<div id="toolbar">
@@ -270,10 +271,12 @@
 							<br/>
 							<img id="zoomout" title="Zoom Out" src="{$display_path}ui/images/skins/dark/zoomout.png"/>
 							<br/>
-							<img id="light_on" title="Disable Light Control" src="{$display_path}ui/images/skins/dark/light_on.png" style="position:absolute; visibility:hidden;"/>
+							<img id="light_on" title="Disable Light Control" src="{$display_path}ui/images/skins/dark/light_on.png"
+								style="position:absolute; visibility:hidden;"/>
 							<img id="light" title="Enable Light Control" src="{$display_path}ui/images/skins/dark/light.png"/>
 							<br/>
-							<img id="full_on" title="Exit Full Screen" src="{$display_path}ui/images/skins/dark/full_on.png" style="position:absolute; visibility:hidden;"/>
+							<img id="full_on" title="Exit Full Screen" src="{$display_path}ui/images/skins/dark/full_on.png"
+								style="position:absolute; visibility:hidden;"/>
 							<img id="full" title="Full Screen" src="{$display_path}ui/images/skins/dark/full.png"/>
 						</div>
 						<canvas id="draw-canvas" style="background-image: url({$display_path}ui/images/skins/backgrounds/dark.jpg)"/>
@@ -300,7 +303,8 @@
 		<xsl:param name="uri"/>
 
 		<xsl:variable name="lgpn-tei" as="element()*">
-			<xsl:copy-of select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
+			<xsl:copy-of
+				select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
 		</xsl:variable>
 
 		<xsl:if test="$lgpn-tei/descendant::tei:birth">
