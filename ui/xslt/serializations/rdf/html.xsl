@@ -166,15 +166,15 @@
 		<div class="container-fluid content">
 			<div class="row">
 				<div class="col-md-12">
-					
+
 					<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type">
-						<xsl:with-param name="hasObjects" select="$hasObjects"/>
+						<xsl:with-param name="hasObjects" select="$hasObjects" as="xs:boolean"/>
 					</xsl:apply-templates>
 
 					<!-- ProvenanceStatement is hidden by default -->
 					<xsl:if test="/content/rdf:RDF/dcterms:ProvenanceStatement">
 						<h3>
-							<a href="#provenance" rel="skos:changeNote">Data Provenance</a>
+							<xsl:text>Data Provenance</xsl:text>
 							<small>
 								<a href="#" class="toggle-button" id="toggle-provenance" title="Click to hide or show the analysis form">
 									<span class="glyphicon glyphicon-triangle-right"/>
@@ -183,11 +183,11 @@
 						</h3>
 						<div style="display:none" id="provenance">
 							<xsl:apply-templates select="/content/rdf:RDF/*[name() = 'dcterms:ProvenanceStatement']" mode="type">
-								<xsl:with-param name="hasObjects" select="$hasObjects"/>
+								<xsl:with-param name="hasObjects" select="false()" as="xs:boolean"/>
 							</xsl:apply-templates>
 						</div>
-					</xsl:if>					
-					
+					</xsl:if>
+
 					<hr/>
 					<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
 						<xsl:if test="$hasGeo = true()">
@@ -195,7 +195,7 @@
 								<div id="mapcontainer" class="map-normal">
 									<div id="info"/>
 								</div>
-							</div>							
+							</div>
 						</xsl:if>
 						<xsl:if test="$hasObjects = true()">
 							<div id="iiif-window" style="width:800px;height:600px;display:none"/>

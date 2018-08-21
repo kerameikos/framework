@@ -5,7 +5,8 @@
 	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:kid="http://kerameikos.org/id/"
 	xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:prov="http://www.w3.org/ns/prov#"
 	xmlns:atom="http://www.w3.org/2005/Atom" xmlns:org="http://www.w3.org/ns/org#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
-	xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:kerameikos="https://github.com/kerameikos/">
+	xmlns:kerameikos="https://github.com/kerameikos/" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
+	xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#">
 	<head>
 		<title>Kerameikos: LOD Editor</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css" />
@@ -28,7 +29,8 @@
 					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
 					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
 					xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
-					xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns=""/>
+					xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
+					xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#" xmlns=""/>
 			</xforms:instance>
 
 			<xforms:instance id="config" xxforms:exclude-result-prefixes="#all">
@@ -40,7 +42,7 @@
 					<id></id>
 					<uri></uri>
 					<new_id>true</new_id>
-					<username/>
+					<username></username>
 					<save-trigger>false</save-trigger>
 					<delete-trigger></delete-trigger>
 					<delete-success></delete-success>
@@ -214,7 +216,7 @@
 			</xforms:instance>
 
 			<xforms:instance id="hasUncertainty-template" xxforms:exclude-result-prefixes="#all">
-				<un:hasUncertainty rdf:resource=""/>
+				<un:hasUncertainty rdf:resource=""></un:hasUncertainty>
 			</xforms:instance>
 
 			<!-- provenance -->
@@ -461,7 +463,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 			<xforms:action ev:event="xforms-model-construct-done">
 				<!-- set username -->
 				<xforms:setvalue ref="instance('control-instance')/username" value="xxforms:get-remote-user()"/>
-				
+
 				<!-- load id if parameter is passed -->
 				<xforms:action if="string(xxforms:get-request-parameter('id'))">
 					<xforms:setvalue ref="instance('control-instance')/id" value="xxforms:get-request-parameter('id')"/>
@@ -475,14 +477,14 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 					<xforms:setvalue ref="instance('control-instance')/geo/lat" value="instance('doc')/geo:SpatialThing/geo:lat"/>
 					<xforms:setvalue ref="instance('control-instance')/geo/long" value="instance('doc')/geo:SpatialThing/geo:long"/>
 					<xforms:setvalue ref="instance('control-instance')/geo/geoJSON" value="instance('doc')/geo:SpatialThing/osgeo:asGeoJSON"/>
-					
+
 					<!-- Insert Modify Activity -->
 					<!--<xforms:insert context="instance('doc')/dcterms:ProvenanceStatement" nodeset="./child::node()[last()]" origin="xforms:element('prov:activity')"/>
 					<xforms:insert context="instance('doc')/dcterms:ProvenanceStatement/prov:activity[last()]" origin="instance('activity-template')"/>
 					<xforms:insert context="instance('doc')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity" origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/ns/prov#Modify'))"/>
 					<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/dcterms:type">manual</xforms:setvalue>	
 					<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:wasAssociatedWith/@rdf:resource" value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
-					<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:atTime" value="current-dateTime()"/>		-->			
+					<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:atTime" value="current-dateTime()"/>		-->
 				</xforms:action>
 
 				<!-- load uncertainty ids -->
@@ -800,13 +802,20 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 												value="instance('control-instance')/uri"/>
 
 											<!-- Create Activity -->
-											<xforms:insert context="instance('doc')/dcterms:ProvenanceStatement" nodeset="./child::node()[last()]" origin="xforms:element('prov:wasGeneratedBy')"/>
-											<xforms:insert context="instance('doc')/dcterms:ProvenanceStatement/prov:wasGeneratedBy" origin="instance('activity-template')"/>
-											<xforms:insert context="instance('doc')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity" origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/ns/prov#Create'))"/>
-											<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/dcterms:type">manual</xforms:setvalue>	
-											<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:wasAssociatedWith/@rdf:resource" value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
-											<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:atTime" value="current-dateTime()"/>
-												
+											<xforms:insert context="instance('doc')/dcterms:ProvenanceStatement" nodeset="./child::node()[last()]"
+												origin="xforms:element('prov:wasGeneratedBy')"/>
+											<xforms:insert context="instance('doc')/dcterms:ProvenanceStatement/prov:wasGeneratedBy"
+												origin="instance('activity-template')"/>
+											<xforms:insert context="instance('doc')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity"
+												origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/ns/prov#Create'))"/>
+											<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/dcterms:type"
+												>manual</xforms:setvalue>
+											<xforms:setvalue
+												ref="instance('doc')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
+												value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
+											<xforms:setvalue ref="instance('doc')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:atTime"
+												value="current-dateTime()"/>
+
 											<!-- set new_id to false() to disable id editing -->
 											<xforms:setvalue ref="instance('control-instance')/new_id" value="false()"/>
 

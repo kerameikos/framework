@@ -21,18 +21,18 @@
 	</xsl:template>
 
 	<xsl:template match="*" mode="type">
-		<xsl:param name="hasObjects" as="xs:boolean"/>
-		
+		<xsl:param name="hasObjects"/>
 		<div>
 			<xsl:if test="@rdf:about">
-				<xsl:attribute name="about" select="@rdf:about"/>	
+				<xsl:attribute name="about" select="@rdf:about"/>
 				<xsl:attribute name="typeof" select="name()"/>
 				<xsl:if test="contains(@rdf:about, '#this')">
 					<xsl:attribute name="id">#this</xsl:attribute>
 				</xsl:if>
 			</xsl:if>
-			
-			<xsl:element name="{if(position()=1) then 'h2' else 'h3'}">
+
+			<xsl:element
+				name="{if (name() = 'dcterms:ProvenanceStatement') then 'h3' else if (not(parent::rdf:RDF)) then 'h3' else if(position()=1) then 'h2' else 'h3'}">
 				<xsl:if test="@rdf:about">
 					<a href="{@rdf:about}">
 						<xsl:choose>
@@ -47,7 +47,7 @@
 							</xsl:otherwise>
 						</xsl:choose>
 					</a>
-				</xsl:if>				
+				</xsl:if>
 				<small>
 					<xsl:text> (</xsl:text>
 					<a href="{concat(namespace-uri(.), local-name())}">
@@ -56,16 +56,16 @@
 					<xsl:text>)</xsl:text>
 				</small>
 			</xsl:element>
-			
+
 			<!-- param passed in from record page -->
-			<xsl:if test="$hasObjects = true()">
+			<xsl:if test="$hasObjects = true() and position() = 1">
 				<div class="subsection">
 					<a href="#listObjects">Objects of this Typology</a>
 					<xsl:text> | </xsl:text>
 					<a href="#quant">Quantitative Analysis</a>
-				</div>						
+				</div>
 			</xsl:if>
-			
+
 			<dl class="dl-horizontal">
 				<xsl:if test="skos:prefLabel">
 					<dt>
@@ -84,7 +84,7 @@
 					<xsl:sort select="name()"/>
 					<xsl:sort select="@rdf:resource"/>
 				</xsl:apply-templates>
-			</dl>			
+			</dl>
 		</div>
 	</xsl:template>
 
@@ -98,7 +98,7 @@
 		<dd>
 			<xsl:choose>
 				<xsl:when test="child::*">
-					<!-- handle nested blank nodes (applies to provenance) -->					
+					<!-- handle nested blank nodes (applies to provenance) -->
 					<xsl:apply-templates select="child::*" mode="type"/>
 				</xsl:when>
 				<xsl:otherwise>
@@ -148,7 +148,7 @@
 							</span>
 						</xsl:when>
 					</xsl:choose>
-				</xsl:otherwise>				
+				</xsl:otherwise>
 			</xsl:choose>
 		</dd>
 	</xsl:template>
