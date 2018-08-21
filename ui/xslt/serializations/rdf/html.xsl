@@ -109,8 +109,8 @@
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
-				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
-				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/{$display_path}ui/javascript/bootstrap.min.js"/>
+				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"/>
 				<!-- fancybox -->
 				<script type="text/javascript" src="{$display_path}ui/javascript/jquery.fancybox.pack.js"/>
 				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>
@@ -127,8 +127,8 @@
 				</xsl:if>
 				<!-- distribution visualization -->
 				<xsl:if test="$hasObjects = true()">
-					<script type="text/javascript" src="https://d3plus.org/{$display_path}ui/javascript/d3.js"/>
-					<script type="text/javascript" src="https://d3plus.org/{$display_path}ui/javascript/d3plus.js"/>
+					<script type="text/javascript" src="https://d3plus.org/js/d3.js"/>
+					<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>
 					<!--<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>-->
