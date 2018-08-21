@@ -166,36 +166,65 @@
 		<div class="container-fluid content">
 			<div class="row">
 				<div class="col-md-12">
-					<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type"/>
+					
+					<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type">
+						<xsl:with-param name="hasObjects" select="$hasObjects"/>
+					</xsl:apply-templates>
 
 					<!-- ProvenanceStatement is hidden by default -->
-					<h3>
-						<a href="#provenance">Data Provenance</a>
-					</h3>
-					<div class="hidden">
-						<xsl:apply-templates select="/content/rdf:RDF/*[name() = 'dcterms:ProvenanceStatement']" mode="type"/>
-					</div>
-
-					<!--<hr/>-->
+					<xsl:if test="/content/rdf:RDF/dcterms:ProvenanceStatement">
+						<h3>
+							<a href="#provenance" rel="skos:changeNote">Data Provenance</a>
+							<small>
+								<a href="#" class="toggle-button" id="toggle-provenance" title="Click to hide or show the analysis form">
+									<span class="glyphicon glyphicon-triangle-right"/>
+								</a>
+							</small>
+						</h3>
+						<div style="display:none" id="provenance">
+							<xsl:apply-templates select="/content/rdf:RDF/*[name() = 'dcterms:ProvenanceStatement']" mode="type">
+								<xsl:with-param name="hasObjects" select="$hasObjects"/>
+							</xsl:apply-templates>
+						</div>
+					</xsl:if>					
+					
+					<hr/>
 					<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
 						<xsl:if test="$hasGeo = true()">
-							<div id="mapcontainer" class="map-normal">
-								<div id="info"/>
-							</div>
+							<div class="col-md-12 page-section">
+								<div id="mapcontainer" class="map-normal">
+									<div id="info"/>
+								</div>
+							</div>							
 						</xsl:if>
 						<xsl:if test="$hasObjects = true()">
 							<div id="iiif-window" style="width:800px;height:600px;display:none"/>
 
 							<div class="row">
 								<div class="col-md-12 page-section">
-									<h2>Objects of this Typology</h2>
+									<h2>
+										<xsl:text>Objects of this Typology</xsl:text>
+										<small>
+											<a href="#" class="toggle-button" id="toggle-listObjects" title="Click to hide or show the analysis form">
+												<span class="glyphicon glyphicon-triangle-bottom"/>
+											</a>
+										</small>
+									</h2>
+
 									<div id="listObjects"/>
 								</div>
 							</div>
 
 							<div class="row">
 								<div class="col-md-12 page-section">
-									<h2>Quantitative Analysis</h2>
+									<h2>
+										<xsl:text>Quantitative Analysis</xsl:text>
+										<small>
+											<a href="#" class="toggle-button" id="toggle-quant" title="Click to hide or show the analysis form">
+												<span class="glyphicon glyphicon-triangle-bottom"/>
+											</a>
+										</small>
+									</h2>
 									<xsl:call-template name="distribution-form">
 										<xsl:with-param name="mode" select="$mode"/>
 									</xsl:call-template>

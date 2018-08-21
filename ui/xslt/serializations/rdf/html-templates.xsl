@@ -21,6 +21,8 @@
 	</xsl:template>
 
 	<xsl:template match="*" mode="type">
+		<xsl:param name="hasObjects" as="xs:boolean"/>
+		
 		<div>
 			<xsl:if test="@rdf:about">
 				<xsl:attribute name="about" select="@rdf:about"/>	
@@ -54,6 +56,16 @@
 					<xsl:text>)</xsl:text>
 				</small>
 			</xsl:element>
+			
+			<!-- param passed in from record page -->
+			<xsl:if test="$hasObjects = true()">
+				<div class="subsection">
+					<a href="#listObjects">Objects of this Typology</a>
+					<xsl:text> | </xsl:text>
+					<a href="#quant">Quantitative Analysis</a>
+				</div>						
+			</xsl:if>
+			
 			<dl class="dl-horizontal">
 				<xsl:if test="skos:prefLabel">
 					<dt>

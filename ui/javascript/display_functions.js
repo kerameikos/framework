@@ -8,6 +8,23 @@ $(document).ready(function () {
         $(this).children('.iiif-zoom-glyph').fadeOut();
     });
     
+    //show/hide sections
+    $('.toggle-button').click(function () {
+        var div = $(this).attr('id').split('-')[1];
+        $('#' + div).toggle();
+        
+        //replace minus with plus and vice versa
+        var span = $(this).children('span');
+        if (span.attr('class').indexOf('right') > 0) {
+            span.removeClass('glyphicon-triangle-right');
+            span.addClass('glyphicon-triangle-bottom');
+        } else {
+            span.removeClass('glyphicon-triangle-bottom');
+            span.addClass('glyphicon-triangle-right');
+        }
+        return false;
+    });
+    
     $('.model-button').fancybox({
         beforeShow: function () {
             var url = this.element.attr('model-url');
@@ -16,7 +33,7 @@ $(document).ready(function () {
             if (url.indexOf('sketchfab') > 0) {
                 $('#sketchfab-window').children('iframe').remove();
                 $("#model-iframe-template").clone().removeAttr('id').attr('src', url + '/embed').appendTo("#sketchfab-window");
-            } else if (url.indexOf('.ply') > 0) {                
+            } else if (url.indexOf('.ply') > 0) {
                 //set up 3dhop
                 init3dhop();
                 

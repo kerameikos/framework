@@ -11,7 +11,6 @@
 		<div>
 			<xsl:if test="$mode = 'record'">
 				<xsl:attribute name="id">quant</xsl:attribute>
-				<hr/>
 			</xsl:if>
 
 			<!-- display chart div when applicable, with additional filtering options -->

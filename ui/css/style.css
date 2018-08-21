@@ -70,6 +70,12 @@ a:hover{
 .banner-background h3{
     margin-top: 0;
 }
+.page-section {
+    margin-bottom:40px;
+}
+.subsection {
+    margin-bottom:20px;
+}
 /*
   ***************************************
   NAVBAR

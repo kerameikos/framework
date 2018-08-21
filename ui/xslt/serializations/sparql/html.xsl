@@ -72,7 +72,9 @@
 						<xsl:for-each select="*">
 							<tr>
 								<td>
-									<xsl:apply-templates select="." mode="type"/>
+									<xsl:apply-templates select="." mode="type">
+										<xsl:with-param name="hasObjects" select="false()"/>
+									</xsl:apply-templates>
 								</td>
 							</tr>
 						</xsl:for-each>
