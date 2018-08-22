@@ -74,8 +74,11 @@
 	width:50%;
 	margin:20px auto;
 }
+.section {
+    margin-bottom:25px;
+}
 .subsection {
-	margin-bottom:20px;
+	margin-bottom:10px;
 }
 .control-list {
 	list-style-type:none;

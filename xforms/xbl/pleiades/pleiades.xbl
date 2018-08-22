@@ -78,7 +78,7 @@
 								</xforms:output>
 								<xforms:trigger appearance="minimal">
 									<xforms:label>
-										<img src="/ceramics/xforms/images/external.png"/>
+										<span class="glyphicon glyphicon-new-window"/>
 									</xforms:label>
 									<xforms:load ev:event="DOMActivate" show="new" ref="instance('control-instance')/uri"/>
 								</xforms:trigger>
