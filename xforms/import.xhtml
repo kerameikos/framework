@@ -70,7 +70,7 @@
 
 			<xforms:instance id="activity-template" xxforms:exclude-result-prefixes="#all">
 				<prov:Activity>
-					<prov:atTime rdf:dataType="http://www.w3.org/2001/XMLSchema#dateTime"/>
+					<prov:atTime rdf:datatype="http://www.w3.org/2001/XMLSchema#dateTime"/>
 					<prov:wasAssociatedWith rdf:resource=""/>
 					<prov:used rdf:resource=""/>
 					<dcterms:type>spreadsheet</dcterms:type>
@@ -571,16 +571,14 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				</xforms:action>
 
 				<!-- ************ RDF PROCESSING TO ADD SUPPLEMENTAL INFORMATION ************** -->
-				<xforms:action ev:event="xforms-submit-done">
-					<xforms:var name="uri" select="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>
-					
+				<xforms:action ev:event="xforms-submit-done">					
 					<!-- *** PROVENANCE *** -->
-					<!-- evaluate whether there is already a prov:Activity that prov:uses the spreadsheet URI -->					
-					<xforms:action if="instance('rdf')//prov:Activity[prov:used/@rdf:resource = $uri]">
+					<!-- evaluate whether there is already a prov:Activity that prov:used the spreadsheet URI -->					
+					<xforms:action if="instance('rdf')//prov:Activity[prov:used/@rdf:resource = instance('control-instance')/spreadsheet_uri]">
 						<!-- if this ID has already been created/updated by this spreadsheet, then update the timestamp -->						
-						<xforms:setvalue ref="instance('rdf')//prov:Activity[prov:used/@rdf:resource = $uri]/prov:atTime" value="current-dateTime()"/>
+						<xforms:setvalue ref="instance('rdf')//prov:Activity[prov:used/@rdf:resource = instance('control-instance')/spreadsheet_uri]/prov:atTime" value="current-dateTime()"/>
 					</xforms:action>
-					<xforms:action if="not(instance('rdf')//prov:Activity[prov:used/@rdf:resource = $uri])">
+					<xforms:action if="not(instance('rdf')//prov:Activity[prov:used/@rdf:resource = instance('control-instance')/spreadsheet_uri])">
 						<!-- insert new Activity for Modify -->
 						<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement" nodeset="./child::node()[last()]"
 							origin="xforms:element('prov:activity')"/>
@@ -604,7 +602,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				<xforms:setvalue ref="instance('control-instance')/username" value="xxforms:get-remote-user()"/>
 
 				<!-- load the spreadsheet RDF -->
-				<xforms:setvalue ref="instance('load-config')/url" value="concat('file://', instance('config')/data_path, '/spreadsheets.rdf')"/>
+				<xforms:setvalue ref="instance('load-config')/url" value="concat('file://', instance('config')/data_path, '/spreadsheets/spreadsheets.rdf')"/>
 				<xforms:insert nodeset="instance('spreadsheet-rdf')"
 					origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/load-id.xpl', 'file', instance('load-config'), 'data')"/>
 
@@ -1423,37 +1421,39 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 											
 											<!-- *** BEGIN CRUD OPERATIONS *** -->
 											<!-- save file back to disk -->
-											<!--<xforms:setvalue ref="instance('save-config')/url"
+											<xforms:setvalue ref="instance('save-config')/url"
 												value="concat('file://', instance('config')/data_path, '/id/',  instance('control-instance')/id, '.rdf')"/>
 											<xforms:insert nodeset="instance('dump')"
-												origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('rdf'), instance('save-config')), 'data')"/>-->
+												origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('rdf'), instance('save-config')), 'data')"/>
+											
 											<!-- delete graphs from triplestore, then repost updates -->
 											<xforms:setvalue ref="instance('sparqlUpdate')"
 												value="replace(instance('sparqlUpdate-templates')/query[@id='delete-concept'], 'URI', $uri)"/>
-											<!--<xforms:send submission="delete-graph"/>
-											<xforms:send submission="post-rdf"/>-->
+											<xforms:send submission="delete-graph"/>
+											<xforms:send submission="post-rdf"/>
+											
 											<!-- post to Solr -->
 											<xforms:insert nodeset="instance('addIndex')"
 												origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
-											<!--<xforms:send submission="post-solr-doc"/>-->
+											<xforms:send submission="post-solr-doc"/>
 										</xforms:action>
 
 										<!-- *** after each row in the spreadsheet has been processed, create/update the spreadsheet RDF *** -->
-										<!--<xforms:delete nodeset="instance('rdf')/*"/>
-										<xforms:insert context="instance('rdf')" origin="instance('spreadsheet-rdf')/prov:Entity[@rdf:about = instance('control-instance')/spreadsheet_uri]"/>-->
+										<xforms:delete nodeset="instance('rdf')/*"/>
+										<xforms:insert context="instance('rdf')" origin="instance('spreadsheet-rdf')/prov:Entity[@rdf:about = instance('control-instance')/spreadsheet_uri]"/>
 
 										<!-- update SPARQL endpoint -->
 										<xforms:setvalue ref="instance('sparqlUpdate')"
 											value="replace(instance('sparqlUpdate-templates')/query[@id='delete-spreadsheet'], 'URI', instance('control-instance')/spreadsheet_uri)"/>
-										<!--<xforms:send submission="delete-graph"/>
-										<xforms:send submission="post-rdf"/>-->
+										<xforms:send submission="delete-graph"/>
+										<xforms:send submission="post-rdf"/>
 
 										<!-- save the spreadsheet RDF to disk -->
 										<xforms:setvalue ref="instance('save-config')/url"
-											value="concat('file://', instance('config')/data_path, '/spreadsheets.rdf')"/>
-										<!--<xforms:insert nodeset="instance('dump')"
-											origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('spreadsheet-rdf'), instance('save-config')), 'data')"/>-->
-
+											value="concat('file://', instance('config')/data_path, '/spreadsheets/spreadsheets.rdf')"/>
+										<xforms:insert nodeset="instance('dump')"
+											origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('spreadsheet-rdf'), instance('save-config')), 'data')"/>
+										
 										<xforms:toggle case="process-complete"/>
 									</xforms:action>
 								</xforms:trigger>
