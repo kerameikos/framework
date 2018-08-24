@@ -270,10 +270,9 @@ SELECT * WHERE {
 		<xforms:var name="display_path">../</xforms:var>
 		<div class="container-fluid">
 			<div class="row">
-				<div class="col-md-9">
-					<h1>Kerameikos Admin</h1>
+				<div class="col-md-12">
 					<xforms:group ref=".[string-length(instance('control-instance')/status) &gt; 0]">
-						<div class="bg-info alert">
+						<div class="alert-success alert alert-box">
 							<p>
 								<span class="glyphicon glyphicon-info-sign"></span>
 								<strong>Status:</strong>
@@ -281,6 +280,11 @@ SELECT * WHERE {
 							</p>
 						</div>
 					</xforms:group>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-9">
+					<h1>Kerameikos Admin</h1>					
 					<p><a href="edit/"><span class="glyphicon glyphicon-file"></span> Create New Concept</a></p>
 					<xforms:group ref="instance('sparqlResponse')">
 						<xforms:var name="numFound" select="instance('control-instance')/numFound"/>
@@ -292,27 +296,7 @@ SELECT * WHERE {
 							<xforms:var name="previous" select="if ($page &gt;= 1) then $page - 1 else 1"/>
 							<xforms:var name="current" select="$page"/>
 							<xforms:var name="total" select="ceiling($numFound div $limit)"/>
-							<!--<div class="row">
-								<div class="col-md-12">
-									<xforms:input ref="instance('control-instance')/solr-query"/>
-									<xforms:trigger>
-										<xforms:label>Search</xforms:label>
-										<xforms:action ev:event="DOMActivate">
-											<xforms:setvalue ref="instance('control-instance')/page">1</xforms:setvalue>
-											<xforms:send submission="query-solr"/>
-										</xforms:action>
-									</xforms:trigger>
-									<xforms:group ref=".[instance('control-instance')/solr-query != '*:*']">
-										<xforms:trigger>
-											<xforms:label>Clear</xforms:label>
-											<xforms:action ev:event="DOMActivate">												
-												<xforms:setvalue ref="instance('control-instance')/page">1</xforms:setvalue>
-												<xforms:send submission="query-solr"/>
-											</xforms:action>
-										</xforms:trigger>
-									</xforms:group>
-								</div>
-							</div>-->
+							
 							<!-- pagination -->
 							<div class="paging_div row">
 								<div class="col-md-6"> Displaying records <b>

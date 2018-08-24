@@ -19,6 +19,34 @@
 		<link rel="stylesheet" href="/apps/kerameikos/xforms/css/style.css" />
 
 		<xforms:model>
+			<!-- configurations and form controls -->
+			<xforms:instance id="control-instance" xxforms:exclude-result-prefixes="#all">
+				<controls xmlns="">
+					<status></status>
+					<username></username>
+					<spreadsheet_key>1EKl5l-HgShXQAy6ts341e_Hyz5ZjH7koNmmvjlerdyc</spreadsheet_key>
+					<spreadsheet_uri></spreadsheet_uri>
+					<worksheet_id></worksheet_id>
+					<id></id>
+					<type>kon:Shape</type>
+					<mappings-valid>false</mappings-valid>
+					<metadata-valid>false</metadata-valid>
+					<load-trigger>false</load-trigger>
+					<validate-trigger>false</validate-trigger>
+					<import-trigger>false</import-trigger>
+					<parse-wikipedia>true</parse-wikipedia>
+					<wiki-id></wiki-id>
+					<wiki-title></wiki-title>
+					<wiki-lang></wiki-lang>
+					<position></position>
+					<count></count>
+				</controls>
+			</xforms:instance>
+
+			<xforms:instance id="config" xxforms:exclude-result-prefixes="#all">
+				<xi:include href="../config.xml"/>
+			</xforms:instance>
+
 			<!-- RDF templates -->
 			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
 				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
@@ -30,10 +58,21 @@
 					xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#"/>
 			</xforms:instance>
 
+			<xforms:instance id="changeNote-template" xxforms:exclude-result-prefixes="#all">
+				<skos:changeNote rdf:resource=""/>
+			</xforms:instance>
+
+			<xforms:instance id="provenance-template" xxforms:exclude-result-prefixes="#all">
+				<dcterms:ProvenanceStatement rdf:about="">
+					<foaf:topic rdf:resource=""/>
+				</dcterms:ProvenanceStatement>
+			</xforms:instance>
+
 			<xforms:instance id="activity-template" xxforms:exclude-result-prefixes="#all">
 				<prov:Activity>
 					<prov:atTime rdf:dataType="http://www.w3.org/2001/XMLSchema#dateTime"/>
-					<prov:wasAttributedTo rdf:resource=""/>
+					<prov:wasAssociatedWith rdf:resource=""/>
+					<prov:used rdf:resource=""/>
 					<dcterms:type>spreadsheet</dcterms:type>
 				</prov:Activity>
 			</xforms:instance>
@@ -42,31 +81,21 @@
 				<prov:Entity rdf:about="">
 					<dcterms:format>application/vnd.google-apps.spreadsheet</dcterms:format>
 					<dcterms:description xml:lang="en"/>
+					<dcterms:creator rdf:resource=""/>
 				</prov:Entity>
 			</xforms:instance>
 
-
-			<xforms:instance id="config" xxforms:exclude-result-prefixes="#all">
-				<xi:include href="../config.xml"/>
+			<xforms:instance id="spreadsheet-rdf" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
+				<rdf:RDF/>
 			</xforms:instance>
 
-			<xforms:instance id="control-instance" xxforms:exclude-result-prefixes="#all">
-				<controls xmlns="">
-					<status></status>
-					<spreadsheet_key></spreadsheet_key>
-					<worksheet_id></worksheet_id>
-					<id></id>
-					<type></type>
-					<load-trigger>false</load-trigger>
-					<validate-trigger>false</validate-trigger>
-					<import-trigger>false</import-trigger>
-					<parse-wikipedia>true</parse-wikipedia>
-					<wiki-id></wiki-id>
-					<wiki-title></wiki-title>
-					<wiki-lang></wiki-lang>
-					<position></position>
-					<count></count>
-				</controls>
+			<!-- XPL configuration for loading the spreadsheet RDF -->
+			<xforms:instance id="load-config">
+				<config xmlns="">
+					<url></url>
+					<content-type>application/xml</content-type>
+					<mode>xml</mode>
+				</config>
 			</xforms:instance>
 
 			<!-- XPL configurations for saving RDF/XML to the filesystem -->
@@ -220,9 +249,13 @@
 			</xforms:instance>
 
 			<!-- sparql update -->
-			<xforms:instance id="sparqlUpdate-template">
-				<query>
-					<![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+			<xforms:instance id="sparqlUpdate-templates">
+				<templates xmlns="">
+					<query id="delete-spreadsheet"><![CDATA[DELETE {?s ?p ?o} WHERE { 
+<URI> ?p ?o . ?s ?p ?o . FILTER (?s = <URI>)
+}]]></query>
+					<query id="delete-concept">
+						<![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kon:	<http://kerameikos.org/ontology#>
@@ -237,8 +270,9 @@ UNION {?prov foaf:topic <URI> .
 	?s a prov:Activity . ?s ?p ?o}
 UNION {<URI> skos:changeNote ?s . ?s ?p ?o}
 UNION {<URI> ?p ?o . ?s ?p ?o . FILTER (?s = <URI>) }
-}]]>
-				</query>
+}]]></query>
+				</templates>
+
 			</xforms:instance>
 
 			<!-- sparql query templates -->
@@ -248,9 +282,11 @@ UNION {<URI> ?p ?o . ?s ?p ?o . FILTER (?s = <URI>) }
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX kon:	<http://kerameikos.org/ontology#>
 PREFIX org:	<http://www.w3.org/ns/org#>
-PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
+PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 					<query id="ask">ASK {&lt;URI&gt; rdf:type CLASS}</query>
 					<query id="ask-person">ASK {&lt;URI&gt; rdf:type ?type . FILTER (?type = foaf:Organization)} </query>
+					<query id="editor">SELECT ?uri ?label WHERE {?uri a foaf:Person ; skos:inScheme &lt;http://kerameikos.org/editor/&gt; ; skos:prefLabel
+						?label . FILTER(langMatches(lang(?label), "en"))} ORDER BY ?label</query>
 				</templates>
 			</xforms:instance>
 
@@ -266,12 +302,20 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				<commit></commit>
 			</xforms:instance>
 
+			<!-- editor list -->
+			<xforms:instance id="editor-list" xxforms:exclude-result-prefixes="#all">
+				<list xmlns=""></list>
+			</xforms:instance>
+
 
 			<!-- ************* BINDINGS **********************-->
 			<xforms:bind nodeset="instance('control-instance')">
 				<xforms:bind nodeset="type" required="true()"/>
 				<xforms:bind nodeset="load-trigger" id="load-trigger" type="xs:boolean" readonly=". != true()" calculate="string-length(../type) != 0"/>
-				<xforms:bind nodeset="validate-trigger" id="validate-trigger" type="xs:boolean" readonly=". != true()"/>
+				<xforms:bind nodeset="mappings-valid" type="xs:boolean"/>
+				<xforms:bind nodeset="metadata-valid" type="xs:boolean"/>
+				<xforms:bind nodeset="validate-trigger" id="validate-trigger" type="xs:boolean"
+					readonly="../mappings-valid = false() or ../metadata-valid = false()"/>
 				<xforms:bind nodeset="import-trigger" id="import-trigger" type="xs:boolean" relevant=". = true()"/>
 				<xforms:bind nodeset="parse-wikipedia" type="xs:boolean"/>
 			</xforms:bind>
@@ -307,17 +351,44 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				<xforms:bind nodeset="coordinates-invalid" required="true()" constraint=". = 'false'"/>
 			</xforms:bind>
 
+			<!-- bindings for the RDF of spreadsheet metadata: creator and contributor URIs must be unique -->
+			<xforms:bind nodeset="instance('spreadsheet-rdf')">
+				<xforms:bind nodeset="prov:Entity"
+					constraint="count(dcterms:contributor/@rdf:resource) = count(distinct-values(dcterms:contributor/@rdf:resource))">
+					<xforms:bind nodeset="dcterms:description" required="true()">
+						<xforms:bind nodeset="@xml:lang" required="true()"/>
+					</xforms:bind>
+					<xforms:bind nodeset="dcterms:creator">
+						<xforms:bind nodeset="@rdf:resource" required="true()" constraint="not(. = ../dcterms:contributor/@rdf:resource)"/>
+					</xforms:bind>
+					<xforms:bind nodeset="dcterms:contributor">
+						<xforms:bind nodeset="@rdf:resource" required="true()"/>
+					</xforms:bind>
+				</xforms:bind>
+			</xforms:bind>
+
 			<xforms:bind nodeset="instance('kerameikos-ids')">
 				<xforms:bind nodeset="id" type="xs:boolean"/>
 			</xforms:bind>
 
 			<!-- **************** DYNAMIC VALIDATION CONTROLS ********************** -->
+
+			<!-- ensure that the mappings are valid before continuing with validation -->
 			<xforms:action ev:event="xxforms-invalid" ev:observer="mappings">
-				<xforms:setvalue ref="instance('control-instance')/validate-trigger" value="false()"/>
+				<xforms:setvalue ref="instance('control-instance')/mappings-valid" value="false()"/>
 			</xforms:action>
 
 			<xforms:action ev:event="xxforms-valid" ev:observer="mappings">
-				<xforms:setvalue ref="instance('control-instance')/validate-trigger" value="true()"/>
+				<xforms:setvalue ref="instance('control-instance')/mappings-valid" value="true()"/>
+			</xforms:action>
+
+			<!-- ensure that the spreadsheet metadata are valid before continuing with validation -->
+			<xforms:action ev:event="xxforms-invalid" ev:observer="spreadsheet-rdf">
+				<xforms:setvalue ref="instance('control-instance')/metadata-valid" value="false()"/>
+			</xforms:action>
+
+			<xforms:action ev:event="xxforms-valid" ev:observer="spreadsheet-rdf">
+				<xforms:setvalue ref="instance('control-instance')/metadata-valid" value="true()"/>
 			</xforms:action>
 
 			<!-- **************** CUSTOM DATATYPES ********************** -->
@@ -339,6 +410,8 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to receive Atom from Google Drive for the key provided.</xforms:message>
 				<!-- if a feed is successfully received, set the id for the workshop -->
 				<xforms:action ev:event="xforms-submit-done">
+					<xforms:setvalue ref="instance('control-instance')/spreadsheet_uri"
+						value="concat('https://docs.google.com/spreadsheets/d/', instance('control-instance')/spreadsheet_key, '/pubhtml')"/>
 					<xforms:setvalue ref="instance('control-instance')/worksheet_id"
 						value="tokenize(instance('spreadsheet-feed')//atom:entry[1]/atom:id, '/')[last()]"/>
 					<xforms:send submission="load-worksheet"/>
@@ -367,6 +440,13 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 						<xforms:action if="instance('control-instance')/type='kon:ProductionPlace'">
 							<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]"
 								origin="xforms:element('coordinates-invalid', 'false')"/>
+						</xforms:action>
+
+						<!-- read whether or not the spreadsheet already exists in the system -->
+						<xforms:action if="not(instance('spreadsheet-rdf')/prov:Entity[@rdf:about = instance('control-instance')/spreadsheet_uri])">
+							<!-- if there is no matching URI for the spreadsheet (prov:Entity), then insert the spreadsheet template into the spreadsheet RDF -->
+							<xforms:insert context="instance('spreadsheet-rdf')" nodeset="./child::node()[last()]" origin="instance('spreadsheet-template')"/>
+							<xforms:setvalue ref="instance('spreadsheet-rdf')/prov:Entity/@rdf:about" value="instance('control-instance')/spreadsheet_uri"/>
 						</xforms:action>
 
 						<xforms:toggle case="mapping-interface"/>
@@ -466,19 +546,79 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 					<!-- insert skos:inScheme -->
 					<xforms:insert context="instance('rdf')/*[last()]"
 						origin="xforms:element('skos:inScheme', xforms:attribute('rdf:resource', 'http://kerameikos.org/id/'))"/>
+
+					<!-- *** Provenance *** -->
+					<xforms:insert context="instance('rdf')/*[last()]" nodeset="./child::node()[last()]" origin="instance('changeNote-template')"/>
+					<xforms:setvalue ref="instance('rdf')/*[last()]/skos:changeNote/@rdf:resource" value="concat($uri, '#provenance')"/>
+
+					<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]" origin="instance('provenance-template')"/>
+					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/@rdf:about" value="concat($uri, '#provenance')"/>
+					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/foaf:topic/@rdf:resource" value="$uri"/>
+
+					<!-- Create Activity -->
+					<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement" nodeset="./child::node()[last()]"
+						origin="xforms:element('prov:wasGeneratedBy')"/>
+					<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy" origin="instance('activity-template')"/>
+					<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity"
+						origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/ns/prov#Create'))"/>
+					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/dcterms:type"
+						>spreadsheet</xforms:setvalue>
+					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
+						value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
+					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:atTime" value="current-dateTime()"/>
+					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:used/@rdf:resource"
+						value="instance('control-instance')/spreadsheet_uri"/>
 				</xforms:action>
 
 				<!-- ************ RDF PROCESSING TO ADD SUPPLEMENTAL INFORMATION ************** -->
 				<xforms:action ev:event="xforms-submit-done">
-					<!-- instantiation of empty callback so as to proceed with a single action under the xforms:send in the trigger -->
+					<xforms:var name="uri" select="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>
+					
+					<!-- *** PROVENANCE *** -->
+					<!-- evaluate whether there is already a prov:Activity that prov:uses the spreadsheet URI -->					
+					<xforms:action if="instance('rdf')//prov:Activity[prov:used/@rdf:resource = $uri]">
+						<!-- if this ID has already been created/updated by this spreadsheet, then update the timestamp -->						
+						<xforms:setvalue ref="instance('rdf')//prov:Activity[prov:used/@rdf:resource = $uri]/prov:atTime" value="current-dateTime()"/>
+					</xforms:action>
+					<xforms:action if="not(instance('rdf')//prov:Activity[prov:used/@rdf:resource = $uri])">
+						<!-- insert new Activity for Modify -->
+						<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement" nodeset="./child::node()[last()]"
+							origin="xforms:element('prov:activity')"/>
+						<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]" origin="instance('activity-template')"/>
+						<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity"
+							origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/ns/prov#Modify'))"/>
+						<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/dcterms:type"
+							>spreadsheet</xforms:setvalue>
+						<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
+							value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
+						<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:atTime" value="current-dateTime()"/>
+						<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:used/@rdf:resource"
+							value="instance('control-instance')/spreadsheet_uri"/>
+					</xforms:action>
 				</xforms:action>
 			</xforms:submission>
 
-
 			<!-- ********** XFORMS-MODEL-CONSTRUCT-DONE ********** -->
-			<!--<xforms:action ev:event="xforms-model-construct-done">
-				
-			</xforms:action>-->
+			<xforms:action ev:event="xforms-model-construct-done">
+				<!-- set username -->
+				<xforms:setvalue ref="instance('control-instance')/username" value="xxforms:get-remote-user()"/>
+
+				<!-- load the spreadsheet RDF -->
+				<xforms:setvalue ref="instance('load-config')/url" value="concat('file://', instance('config')/data_path, '/spreadsheets.rdf')"/>
+				<xforms:insert nodeset="instance('spreadsheet-rdf')"
+					origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/load-id.xpl', 'file', instance('load-config'), 'data')"/>
+
+				<!-- execute a SPARQL query to get the list of editors -->
+				<xforms:setvalue ref="instance('sparqlQuery')"
+					value="concat(instance('sparql-templates')/prefix, ' ', instance('sparql-templates')/query[@id='editor'])"/>
+				<xforms:send submission="submit-sparqlQuery"/>
+				<xforms:action xxforms:iterate="instance('sparqlResponse')//res:result" ev:event="xforms-submit-done">
+					<xforms:var name="uri" select="data(res:binding[@name='uri']/res:uri)"/>
+					<xforms:var name="label" select="(res:binding[@name='label']/res:literal)"/>
+					<xforms:insert context="instance('editor-list')" nodeset="./child::node()[last()]"
+						origin="xforms:element('item', (xforms:attribute('uri', $uri), $label))"/>
+				</xforms:action>
+			</xforms:action>
 		</xforms:model>
 	</head>
 
@@ -495,13 +635,15 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 			<div class="row">
 				<div class="col-md-12">
 					<p><a href="../"><span class="glyphicon glyphicon-arrow-left"></span>Return to Admin</a></p>
+
 					<xforms:group ref=".[string-length(instance('control-instance')/status) &gt; 0]">
-						<div class="bg-info alert-box">
+						<div class="alert-success alert-box alert">
 							<span class="glyphicon glyphicon-info-sign"></span>
 							<strong>Status:</strong>
 							<xforms:output ref="instance('control-instance')/status"/>
 						</div>
 					</xforms:group>
+
 					<h1>Import/Update Kerameikos IDs</h1>
 					<xforms:switch>
 						<xforms:case id="default">
@@ -533,98 +675,174 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</xforms:group>
 						</xforms:case>
 						<xforms:case id="mapping-interface">
+							<xforms:group ref="instance('spreadsheet-rdf')/prov:Entity[@rdf:about  =instance('control-instance')/spreadsheet_uri]">
+								<div class="section">
+									<h3>Spreadsheet Metadata</h3>
+									<div class="trigger_container">
+										<xforms:trigger appearance="minimal">
+											<xforms:label>
+												<span class="glyphicon glyphicon-plus"></span>Contributor</xforms:label>
+											<xforms:insert ev:event="DOMActivate" context="." nodeset="./child::node()[last()]"
+												origin="xforms:element('dcterms:contributor', (xforms:attribute('rdf:resource'), ''))"/>
+										</xforms:trigger>
+									</div>
+
+									<xforms:group ref=".[dcterms:creator/@rdf:resource = dcterms:contributor/@rdf:resource]">
+										<div class="alert-danger alert-box alert">
+											<span class="glyphicon glyphicon-exclamation-sign"></span>
+											<strong>Alert:</strong> The same person cannot be a creator and contributor simultaneously.</div>
+									</xforms:group>
+
+									<xforms:group
+										ref=".[count(dcterms:contributor/@rdf:resource) &gt; count(distinct-values(dcterms:contributor/@rdf:resource))]">
+										<div class="alert-danger alert-box alert">
+											<span class="glyphicon glyphicon-exclamation-sign"></span>
+											<strong>Alert:</strong> The same contributor is selected more than once.</div>
+									</xforms:group>
+
+									<xforms:group ref="dcterms:description">
+										<div>
+											<xforms:textarea ref=".">
+												<xforms:label>Description</xforms:label>
+												<xforms:alert>Required</xforms:alert>
+											</xforms:textarea>
+											<xforms:select1 ref="@xml:lang">
+												<xforms:item>
+													<xforms:label>Select...</xforms:label>
+													<xforms:value/>
+												</xforms:item>
+												<xforms:itemset nodeset="instance('languages')/language">
+													<xforms:label ref="."/>
+													<xforms:value ref="@value"/>
+												</xforms:itemset>
+												<xforms:alert>Required</xforms:alert>
+											</xforms:select1>
+										</div>
+									</xforms:group>
+									<div>
+										<xforms:select1 ref="dcterms:creator/@rdf:resource">
+											<xforms:label>Primary Creator</xforms:label>
+											<xforms:alert>Required</xforms:alert>
+											<xforms:item>
+												<xforms:label>Select...</xforms:label>
+												<xforms:value/>
+											</xforms:item>
+											<xforms:itemset nodeset="instance('editor-list')/item">
+												<xforms:label ref="."/>
+												<xforms:value ref="@uri"/>
+											</xforms:itemset>
+										</xforms:select1>
+									</div>
+									<xforms:repeat nodeset="dcterms:contributor">
+										<div>
+											<xforms:select1 ref="@rdf:resource">
+												<xforms:label>Contributor</xforms:label>
+												<xforms:alert>Required</xforms:alert>
+												<xforms:item>
+													<xforms:label>Select...</xforms:label>
+													<xforms:value/>
+												</xforms:item>
+												<xforms:itemset nodeset="instance('editor-list')/item">
+													<xforms:label ref="."/>
+													<xforms:value ref="@uri"/>
+												</xforms:itemset>
+											</xforms:select1>
+										</div>
+									</xforms:repeat>
+								</div>
+							</xforms:group>
 							<div>
 								<h3>Mapping</h3>
 								<p>Associate the headings with allowable properties, where applicable. Note that the Kerameikos ID, Preferred Label (English),
 									and Definition (English) are required.</p>
 								<xforms:group ref="instance('mappings')">
 									<xforms:group ref=".[count(mapping[@to='id']) != 1]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong>There must be one Kerameikos ID.</div>
 									</xforms:group>
 									<!-- language warnings -->
 									<xforms:group ref=".[count(mapping[@to='skos:prefLabel'][@lang='en']) = 0]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Preferred English Label is required.</div>
 									</xforms:group>
 									<xforms:group ref=".[count(mapping[@to='skos:definition'][@lang='en']) = 0]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Preferred English Definition is required.</div>
 									</xforms:group>
 									<xforms:group
 										ref=".[count(mapping[@to='skos:prefLabel']/@lang) != count(distinct-values(mapping[@to='skos:prefLabel']/@lang))]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Preferred label languages must be unique.</div>
 									</xforms:group>
 									<xforms:group
 										ref=".[count(mapping[@to='skos:definition']/@lang) != count(distinct-values(mapping[@to='skos:definition']/@lang))]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Definition languages must be unique.</div>
 									</xforms:group>
 									<xforms:group
 										ref=".[count(mapping[@to='skos:scopeNote']/@lang) != count(distinct-values(mapping[@to='skos:scopeNote']/@lang))]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Scope Note languages must be unique.</div>
 									</xforms:group>
 									<xforms:group
 										ref=".[count(mapping[@to='ontolex:lexicalForm']/@lang) != count(distinct-values(mapping[@to='ontolex:lexicalForm']/@lang))]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Plural labels by language must be unique.</div>
 									</xforms:group>
 									<!-- coordinate warnings -->
 									<xforms:group
 										ref=".[count(mapping[@to='geo:lat']) &gt; 1 and count(mapping[@to='geo:long']) &gt; 1 or count(mapping[@to='geo:lat']) != count(mapping[@to='geo:long'])]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> There must be both a latitude and longitude, with a maximum of 1 mapping each.</div>
 									</xforms:group>
 									<!-- dates -->
 									<xforms:group ref=".[count(mapping[@to='edm:begin']) &gt; 1]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> There can not be more than one start date.</div>
 									</xforms:group>
 									<xforms:group ref=".[count(mapping[@to='edm:end']) &gt; 1]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> There can not be more than one end date.</div>
 									</xforms:group>
 									<xforms:group
 										ref=".[(instance('control-instance')/type='foaf:Person' or instance('control-instance')/type='foaf:Organization') and (count(mapping[@to='edm:begin']) &gt; 0 or count(mapping[@to='edm:end']) &gt; 0) and count(mapping[@to='org:role']) = 0]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> A person or organization must have a role if there is a start or end date.</div>
 									</xforms:group>
 									<!-- role, organization -->
 									<xforms:group ref=".[count(mapping[@to='org:role']) &gt; 1]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> There can not be more than one role.</div>
 									</xforms:group>
 									<xforms:group ref=".[count(mapping[@to='org:organization']) &gt; 1]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> There can not be more than one organization.</div>
 									</xforms:group>
 									<xforms:group ref=".[count(mapping[@to='bio:birth']) &gt; 1]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> There can not be more than one birth date.</div>
 									</xforms:group>
 									<xforms:group ref=".[count(mapping[@to='bio:death']) &gt; 1]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> There can not be more than one death date.</div>
 									</xforms:group>
 									<xforms:group ref=".[count(mapping[@to='org:organization']) = 1 and count(mapping[@to='org:role']) = 0]">
-										<div class="bg-danger alert-box">
+										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> A role is required for an organization.</div>
 									</xforms:group>
@@ -929,18 +1147,18 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							<xforms:group ref="instance('validation-model')">
 								<h3>Validation</h3>
 								<xforms:group ref=".[count(descendant::error) = 0]">
-									<div class="bg-success alert-box">
+									<div class="alert-success alert-box alert">
 										<span class="glyphicon glyphicon-ok"></span>
 										<strong>Success: </strong><xforms:output value="count(record)"/> records successfully validated.</div>
 								</xforms:group>
 								<xforms:group ref=".[count(descendant::error) &gt; 0]">
-									<div class="bg-danger alert-box">
+									<div class="alert-danger alert-box alert">
 										<span class="glyphicon glyphicon-exclamation-sign"></span>
 										<strong>Alert:</strong> The spreadsheet is invalid. Please fix errors and import again.</div>
 								</xforms:group>
 								<!-- if the error is on the top level -->
 								<xforms:group ref=".[error]">
-									<div class="bg-danger alert-box">
+									<div class="alert-danger alert-box alert">
 										<span class="glyphicon glyphicon-exclamation-sign"></span>
 										<strong>Alert:</strong>
 										<xforms:output ref="error"/>
@@ -1000,6 +1218,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											<!-- clear data from RDF instance before loading-->
 											<xforms:delete nodeset="instance('rdf')/*"/>
 											<xforms:send submission="load-rdf"/>
+											
 											<!-- *** BEGIN ATOM TO RDF IMPORT *** -->
 											<xforms:action
 												xxforms:iterate="instance('feed')//atom:entry[position()=$position]/*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended']">
@@ -1200,27 +1419,41 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 															if="not(instance('rdf')/org:Membership[@rdf:about=$membershipUri]/*[name()=$mapping])"/>
 													</xforms:action>
 												</xforms:action>
-											</xforms:action>
+											</xforms:action>											
+											
 											<!-- *** BEGIN CRUD OPERATIONS *** -->
 											<!-- save file back to disk -->
 											<!--<xforms:setvalue ref="instance('save-config')/url"
-												value="concat('file://', instance('config')/id_path, '/',  instance('control-instance')/id, '.rdf')"/>
+												value="concat('file://', instance('config')/data_path, '/id/',  instance('control-instance')/id, '.rdf')"/>
 											<xforms:insert nodeset="instance('dump')"
 												origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('rdf'), instance('save-config')), 'data')"/>-->
 											<!-- delete graphs from triplestore, then repost updates -->
-											<xforms:setvalue ref="instance('sparqlUpdate')" value="replace(instance('sparqlUpdate-template'), 'URI', $uri)"/>
+											<xforms:setvalue ref="instance('sparqlUpdate')"
+												value="replace(instance('sparqlUpdate-templates')/query[@id='delete-concept'], 'URI', $uri)"/>
 											<!--<xforms:send submission="delete-graph"/>
 											<xforms:send submission="post-rdf"/>-->
 											<!-- post to Solr -->
 											<xforms:insert nodeset="instance('addIndex')"
 												origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
 											<!--<xforms:send submission="post-solr-doc"/>-->
-											<!-- hide dailog after the process has completed -->
-											<!--<xforms:action if="position()=instance('control-instance')/count">
-												<xxforms:hide dialog="progress-dialog"></xxforms:hide>
-												<xforms:toggle case="process-complete"></xforms:toggle>
-											</xforms:action>-->
 										</xforms:action>
+
+										<!-- *** after each row in the spreadsheet has been processed, create/update the spreadsheet RDF *** -->
+										<!--<xforms:delete nodeset="instance('rdf')/*"/>
+										<xforms:insert context="instance('rdf')" origin="instance('spreadsheet-rdf')/prov:Entity[@rdf:about = instance('control-instance')/spreadsheet_uri]"/>-->
+
+										<!-- update SPARQL endpoint -->
+										<xforms:setvalue ref="instance('sparqlUpdate')"
+											value="replace(instance('sparqlUpdate-templates')/query[@id='delete-spreadsheet'], 'URI', instance('control-instance')/spreadsheet_uri)"/>
+										<!--<xforms:send submission="delete-graph"/>
+										<xforms:send submission="post-rdf"/>-->
+
+										<!-- save the spreadsheet RDF to disk -->
+										<xforms:setvalue ref="instance('save-config')/url"
+											value="concat('file://', instance('config')/data_path, '/spreadsheets.rdf')"/>
+										<!--<xforms:insert nodeset="instance('dump')"
+											origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('spreadsheet-rdf'), instance('save-config')), 'data')"/>-->
+
 										<xforms:toggle case="process-complete"/>
 									</xforms:action>
 								</xforms:trigger>

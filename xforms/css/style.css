@@ -9,7 +9,7 @@
 .orbeon .xforms-label {
 	font-weight: bold;
 	display: inline-block;
-	min-width: 9em
+	min-width: 9em ;
 }
 .orbeon .xforms-select1-appearance-full .xforms-label {
 	vertical-align: top
@@ -17,6 +17,10 @@
 .orbeon .xforms-input input[type=text], .orbeon .xforms-textarea textarea, .orbeon .xforms-select1 select {
 	width: 20em;
 	margin-bottom: 2px;
+	vertical-align:top;
+}
+.orbeon .xforms-textarea .xforms-label {    
+	vertical-align:top
 }
 .orbeon .checkbox input {
 	width: 5em;
@@ -49,9 +53,6 @@
 }
 .xforms-repeat-selected-item-1, .xforms-repeat-selected-item-2, .xforms-repeat-selected-item-3, .xforms-repeat-selected-item-4 {
 	background:inherit;
-}
-.xforms-repeat-selected-item-2 {
-	background:none;
 }
 .xxforms-dialog-body>a, .xxforms-dialog-body>span {
 	width:100px;

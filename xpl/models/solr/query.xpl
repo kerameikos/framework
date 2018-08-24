@@ -33,7 +33,7 @@
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:if test="contains(doc('input:request')/request/request-uri, '/feed/')">
-								<xsl:text>timestamp desc</xsl:text>
+								<xsl:text>modified_timestamp desc</xsl:text>
 							</xsl:if>
 						</xsl:otherwise>
 					</xsl:choose>

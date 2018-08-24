@@ -26,9 +26,9 @@
 			<xforms:instance id="doc" xxforms:exclude-result-prefixes="#default xhtml xforms xs ev xxforms fr res xi kerameikos atom">
 				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:prov="http://www.w3.org/ns/prov#"
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
-					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
-					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
-					xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
+					xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+					xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+					xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
 					xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
 					xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#" xmlns=""/>
 			</xforms:instance>
@@ -232,13 +232,6 @@
 					<prov:wasAssociatedWith rdf:resource=""/>
 					<dcterms:type/>
 				</prov:Activity>
-			</xforms:instance>
-
-			<xforms:instance id="spreadsheet-template" xxforms:exclude-result-prefixes="#all">
-				<prov:Entity rdf:about="">
-					<dcterms:format>application/vnd.google-apps.spreadsheet</dcterms:format>
-					<dcterms:description xml:lang="en"/>
-				</prov:Entity>
 			</xforms:instance>
 
 			<xforms:instance id="description-template" xxforms:exclude-result-prefixes="#all">
@@ -1404,7 +1397,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 															<xforms:group ref=".[dcterms:type = 'spreadsheet']">
 																<xforms:trigger appearance="minimal">
 																	<xforms:label>
-																		<span class="glyphicon glyphicon-new-window"/>
+																		<span class="glyphicon glyphicon-new-window"></span>
 																	</xforms:label>
 																	<xforms:load ev:event="DOMActivate" show="new" ref="prov:used/@rdf:resource"/>
 																</xforms:trigger>
@@ -1427,7 +1420,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 																		</xforms:itemset>
 																		<xforms:alert>Required</xforms:alert>
 																	</xforms:select1>
-																</xforms:group>																
+																</xforms:group>
 															</xforms:group>
 															<xforms:group ref=".[not(position() = last())]">
 																<xforms:output ref="dcterms:description"/>
