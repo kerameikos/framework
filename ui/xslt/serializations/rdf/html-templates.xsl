@@ -4,9 +4,9 @@
 	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
 	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 	xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:kerameikos="http://kerameikos.org/" xmlns:res="http://www.w3.org/2005/sparql-results#"
-	xmlns:prov="http://www.w3.org/ns/prov#" exclude-result-prefixes="#all" version="2.0">
+	xmlns:prov="http://www.w3.org/ns/prov#" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" exclude-result-prefixes="#all" version="2.0">
 
-	<xsl:template match="skos:prefLabel" mode="prefLabel">
+	<xsl:template match="skos:prefLabel|ontolex:writtenRep" mode="prefLabel">
 		<span property="{name()}" xml:lang="{@xml:lang}">
 			<xsl:value-of select="."/>
 		</span>
@@ -73,6 +73,16 @@
 					</dt>
 					<dd>
 						<xsl:apply-templates select="skos:prefLabel" mode="prefLabel">
+							<xsl:sort select="@xml:lang"/>
+						</xsl:apply-templates>
+					</dd>
+				</xsl:if>
+				<xsl:if test="ontolex:otherForm">
+					<dt>
+						<a href="{concat($namespaces//namespace[@prefix='lexinfo']/@uri, 'plural')}">lexinfo:plural</a>
+					</dt>
+					<dd>
+						<xsl:apply-templates select="ontolex:otherForm/ontolex:Form/ontolex:writtenRep" mode="prefLabel">
 							<xsl:sort select="@xml:lang"/>
 						</xsl:apply-templates>
 					</dd>
@@ -152,4 +162,7 @@
 			</xsl:choose>
 		</dd>
 	</xsl:template>
+	
+	<!-- hide the ontolex:otherFrom from the HTML output: plural displayed after prefLabel -->
+	<xsl:template match="ontolex:otherForm" mode="list-item"/>
 </xsl:stylesheet>

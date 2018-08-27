@@ -6,7 +6,8 @@
 	xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:prov="http://www.w3.org/ns/prov#"
 	xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:org="http://www.w3.org/ns/org#"
 	xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:kerameikos="https://github.com/kerameikos/"
-	xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#">
+	xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#"
+	xmlns:edm="http://www.europeana.eu/schemas/edm/">
 	<head>
 		<title>Kerameikos: LOD Editor</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css" />
@@ -245,12 +246,14 @@
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX ontolex:	<http://www.w3.org/ns/lemon/ontolex#>
 PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX prov:	<http://www.w3.org/ns/prov#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 DELETE {?s ?p ?o} WHERE { 
 {<URI> geo:location ?s . ?s ?p ?o }
 UNION {<URI> org:hasMembership ?s . ?s ?p ?o}
+UNION {<URI> ontolex:otherForm ?s . ?s ?p ?o}
 UNION {?prov foaf:topic <URI> .
 	?prov ?hasActivity ?s .
 	?s a prov:Activity . ?s ?p ?o}

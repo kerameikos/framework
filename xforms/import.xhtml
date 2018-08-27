@@ -24,11 +24,11 @@
 				<controls xmlns="">
 					<status></status>
 					<username></username>
-					<spreadsheet_key>1EKl5l-HgShXQAy6ts341e_Hyz5ZjH7koNmmvjlerdyc</spreadsheet_key>
+					<spreadsheet_key></spreadsheet_key>
 					<spreadsheet_uri></spreadsheet_uri>
 					<worksheet_id></worksheet_id>
 					<id></id>
-					<type>kon:Shape</type>
+					<type></type>
 					<mappings-valid>false</mappings-valid>
 					<metadata-valid>false</metadata-valid>
 					<load-trigger>false</load-trigger>
@@ -49,13 +49,13 @@
 
 			<!-- RDF templates -->
 			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
-				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:prov="http://www.w3.org/ns/prov#"
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
-					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:prov="http://www.w3.org/ns/prov#"
-					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
-					xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#" xmlns:edm="http://www.europeana.eu/schemas/edm/"
-					xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
-					xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#"/>
+					xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+					xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
+					xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
+					xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
+					xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#" xmlns=""/>
 			</xforms:instance>
 
 			<xforms:instance id="changeNote-template" xxforms:exclude-result-prefixes="#all">
@@ -84,7 +84,17 @@
 					<dcterms:creator rdf:resource=""/>
 				</prov:Entity>
 			</xforms:instance>
-
+			
+			<xforms:instance id="plural-template" xxforms:exclude-result-prefixes="#all">
+				<ontolex:otherForm>
+					<ontolex:Form>
+						<ontolex:writtenRep xml:lang=""/>
+						<lexinfo:number rdf:resource="http://www.lexinfo.net/ontology/2.0/lexinfo#plural"/>
+					</ontolex:Form>
+				</ontolex:otherForm>
+			</xforms:instance>
+			
+			<!-- instance for spreadsheet RDF as a static file -->
 			<xforms:instance id="spreadsheet-rdf" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
 				<rdf:RDF/>
 			</xforms:instance>
@@ -177,7 +187,7 @@
 					<property label="Preferred Label">skos:prefLabel</property>
 					<property label="Definition">skos:definition</property>
 					<property label="Alternative Label">skos:altLabel</property>
-					<property label="Plural Label">ontolex:lexicalForm</property>
+					<property label="Plural Label" constraint="kon:Shape">ontolex:otherForm</property>
 					<!--<property label="Birth" constraint="foaf:Person">bio:birth</property>
 					<property label="Death" constraint="foaf:Person">bio:death</property>-->
 					<property label="Broader Concept" exclude="foaf:Person">skos:broader</property>
@@ -233,8 +243,11 @@
 					<property id="P245">http://vocab.getty.edu/ulan/</property>
 					<property id="P268">http://catalogue.bnf.fr/ark:/12148/cb</property>
 					<property id="P269">http://www.idref.fr/</property>
-					<property id="P646">https://www.freebase.com</property>
+					<!--<property id="P646">https://www.freebase.com</property>-->
+					<property id="P1014">http://vocab.getty.edu/aat/</property>
 					<property id="P1566">http://www.geonames.org/</property>
+					<property id="P1667">http://vocab.getty.edu/tgn/</property>
+					<property id="P1900">http://www.eagle-network.eu/voc/</property>
 				</properties>
 			</xforms:instance>
 
@@ -259,12 +272,14 @@
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX ontolex:	<http://www.w3.org/ns/lemon/ontolex#>
 PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX prov:	<http://www.w3.org/ns/prov#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 DELETE {?s ?p ?o} WHERE { 
 {<URI> geo:location ?s . ?s ?p ?o }
 UNION {<URI> org:hasMembership ?s . ?s ?p ?o}
+UNION {<URI> ontolex:otherForm ?s . ?s ?p ?o}
 UNION {?prov foaf:topic <URI> .
 	?prov ?hasActivity ?s .
 	?s a prov:Activity . ?s ?p ?o}
@@ -341,9 +356,9 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				<xforms:bind nodeset="mapping[@to='skos:altLabel']">
 					<xforms:bind nodeset="@lang" required="true()" constraint="string-length(.) &gt; 0"/>
 				</xforms:bind>
-				<xforms:bind nodeset="mapping[@to='ontolex:lexicalForm']">
+				<xforms:bind nodeset="mapping[@to='ontolex:otherForm']">
 					<xforms:bind nodeset="@lang" required="true()"
-						constraint="string-length(.) &gt; 0 and count(//mapping[@to='ontolex:lexicalForm']/@lang) = count(distinct-values(//mapping[@to='ontolex:lexicalForm']/@lang))"
+						constraint="string-length(.) &gt; 0 and count(//mapping[@to='ontolex:otherForm']/@lang) = count(distinct-values(//mapping[@to='ontolex:otherForm']/@lang))"
 					/>
 				</xforms:bind>
 				<!-- role validation for person/organization -->
@@ -484,7 +499,8 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 
 						<!-- iterate through claims with matching properties to link to external vocabulary systems -->
 						<xforms:action
-							xxforms:iterate="instance('wikidata')//entity/claims/property[@id='P214' or @id='P227' or @id='P213' or @id='P268' or @id='P269' or @id='P646' or @id='P245' or @id='P1566' or @id='P1900']">
+							xxforms:iterate="instance('wikidata')//entity/claims/property[@id='P214' or @id='P227' or @id='P213' or @id='P268' or @id='P269'
+							or @id='P245' or @id='P1014' or @id='P1566' or @id='P1667' or @id='P1900']">
 							<xforms:var name="property" select="data(context()/@id)"/>
 							<xforms:var name="id" select="replace(data(context()/descendant::mainsnak[1]/datavalue/@value), ' ', '')"/>
 							<xforms:var name="uri" select="concat(instance('wikidata-properties')/property[@id=$property], $id)"/>
@@ -789,7 +805,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 											<strong>Alert:</strong> Scope Note languages must be unique.</div>
 									</xforms:group>
 									<xforms:group
-										ref=".[count(mapping[@to='ontolex:lexicalForm']/@lang) != count(distinct-values(mapping[@to='ontolex:lexicalForm']/@lang))]">
+										ref=".[count(mapping[@to='ontolex:otherForm']/@lang) != count(distinct-values(mapping[@to='ontolex:otherForm']/@lang))]">
 										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Plural labels by language must be unique.</div>
@@ -873,12 +889,12 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 															<xforms:var name="property" select="."/>
 															<!-- if it is a literal-based property, insert the @lang attribute -->
 															<xforms:action
-																if="$property = 'skos:prefLabel' or $property = 'skos:altLabel' or $property = 'skos:definition' or $property = 'skos:scopeNote' or $property = 'ontolex:lexicalForm'">
+																if="$property = 'skos:prefLabel' or $property = 'skos:altLabel' or $property = 'skos:definition' or $property = 'skos:scopeNote' or $property = 'ontolex:otherForm'">
 																<xforms:insert context="parent::node()" origin="xforms:attribute('lang', '')"/>
 															</xforms:action>
 															<!-- if it is not a literal, then delete @lang -->
 															<xforms:action
-																if="$property != 'skos:prefLabel' and $property != 'skos:altLabel' and $property != 'skos:definition' and $property != 'skos:scopeNote'">
+																if="$property != 'skos:prefLabel' and $property != 'skos:altLabel' and $property != 'skos:definition' and $property != 'skos:scopeNote' and $property != 'ontolex:otherForm'">
 																<xforms:delete context="parent::node()" nodeset="@lang"/>
 															</xforms:action>
 															<!-- special actions for Person and Organization and validation of org:role -->
@@ -1235,12 +1251,15 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 													</xforms:action>
 
 													<!-- create the plural lexical form data object as a blank node -->
-													<xforms:action if="$mapping = 'ontolex:lexicalForm'">
+													<xforms:action if="$mapping = 'ontolex:otherForm'">
 														<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"/>
 
-														<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
-															origin="xforms:element($mapping, (xforms:attribute('xml:lang', $lang), $value))"
-															if="not(instance('rdf')/*[1]/*[name()=$mapping][@xml:lang=$lang])"/>
+														<!-- insert template and set values -->
+														<xforms:action if="not(instance('rdf')/*[1]/ontolex:otherForm/ontolex:Form/ontolex:writtenRep[@xml:lang=$lang])">
+															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]" origin="instance('plural-template')"/>
+															<xforms:setvalue ref="instance('rdf')/*[1]/ontolex:otherForm[last()]/ontolex:Form/ontolex:writtenRep" value="$value"/>
+															<xforms:setvalue ref="instance('rdf')/*[1]/ontolex:otherForm[last()]/ontolex:Form/ontolex:writtenRep/@xml:lang" value="$lang"/>
+														</xforms:action>
 													</xforms:action>
 
 													<!-- create URIs for the following simple mappings that go into the skos:Concept object -->
@@ -1492,7 +1511,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 							</table>
 						</xforms:case>
 					</xforms:switch>
-					<fr:xforms-inspector/>
+					<!--<fr:xforms-inspector/>-->
 				</div>
 			</div>
 		</div>
