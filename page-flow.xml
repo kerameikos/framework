@@ -34,15 +34,6 @@
 	</page>
 	
 	<!-- ****************
-	* DATA DUMP GENERATION*
-	***************** -->
-	
-	<!-- pass the repository request parameter to the pipeline to load the RDF/XML and execute the transformation and serialization (into a file) of RDF/XML, TTL, or JSON-LD 
-	The XForms Submissions are GET, but have no output (seralization='none'). The process is much more efficient handled in the XPL workflow than through XForms controls in the web interface -->
-	<page path="/kerameikos/admin/generateXML" model="xpl/controllers/generate-rdfxml.xpl"/>
-	
-	
-	<!-- ****************
 	* PUBLIC INTERFACE *
 	***************** -->
 
@@ -50,7 +41,7 @@
 
 	<!-- **** SERIALIZATIONS **** -->
 	<!-- RDF -->
-	<page path="/kerameikos/(id|editor)/(.*)\.rdf" view="xpl/models/rdf/get-id.xpl"/>	
+	<page path="/kerameikos/(id|editor)/(.*)\.rdf" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/serialize-rdfxml.xpl"/>	
 	<page path="/kerameikos/(id|editor)/(.*)\.kml" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/kml.xpl"/>
 	<page path="/kerameikos/(id|editor)/(.*)\.ttl" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/ttl.xpl"/>
 	<page path="/kerameikos/(id|editor)/(.*)\.jsonld" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/json-ld.xpl"/>
@@ -59,7 +50,7 @@
 	
 	<!-- ONTOLOGY -->
 	<page path="/kerameikos/ontology" model="xpl/models/ontology/get-ontology.xpl" view="xpl/views/pages/ontology.xpl"/>
-	<page path="/kerameikos/ontology.rdf" view="xpl/models/ontology/get-ontology.xpl"/>
+	<page path="/kerameikos/ontology.rdf" model="xpl/models/ontology/get-ontology.xpl" view="xpl/controllers/serialize-rdfxml.xpl"/>
 	<page path="/kerameikos/ontology.ttl" model="xpl/models/ontology/get-ontology.xpl" view="xpl/views/serializations/rdf/ttl.xpl"/>
 	
 	<!-- Solr -->
@@ -101,8 +92,7 @@
 	<page path="/kerameikos/kerameikos.org.ttl" view="xpl/controllers/serialize-dump.xpl"/>
 
 	<!-- **** CONCEPT SCHEMES **** -->
-	<page path="/kerameikos/(id|editor)/" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
-	
+	<page path="/kerameikos/(id|editor)/" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>	
 
 	<epilogue url="oxf:/config/epilogue.xpl"/>
 </controller>
