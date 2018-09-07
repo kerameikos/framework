@@ -22,6 +22,8 @@
 
 	<xsl:template match="*" mode="type">
 		<xsl:param name="hasObjects"/>
+		<xsl:param name="mode"/>
+		
 		<div>
 			<xsl:if test="@rdf:about">
 				<xsl:attribute name="about" select="@rdf:about"/>
@@ -31,23 +33,37 @@
 				</xsl:if>
 			</xsl:if>
 
-			<xsl:element
-				name="{if (name() = 'dcterms:ProvenanceStatement') then 'h3' else if (not(parent::rdf:RDF)) then 'h3' else if(position()=1) then 'h2' else 'h3'}">
-				<xsl:if test="@rdf:about">
-					<a href="{@rdf:about}">
-						<xsl:choose>
-							<xsl:when test="contains(@rdf:about, '#')">
-								<xsl:value-of select="concat('#', substring-after(@rdf:about, '#'))"/>
-							</xsl:when>
-							<xsl:when test="contains(@rdf:about, 'geonames.org')">
-								<xsl:value-of select="@rdf:about"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:value-of select="substring-after(@rdf:about, 'id/')"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</a>
-				</xsl:if>
+			<xsl:element name="{if (name()='prov:Activity') then 'h4' else if (name() = 'dcterms:ProvenanceStatement') then 'h3' else if (not(parent::rdf:RDF)) then 'h3' else if(position()=1) then 'h2' else 'h3'}">
+				<!-- display a label based on the URI if there is an @rdf:about, otherwise formulate a blank node label -->
+				<xsl:choose>
+					<xsl:when test="@rdf:about">
+						<a href="{@rdf:about}">
+							<!-- display the full URI if the template is called from the SPARQL HTML results page -->
+							<xsl:choose>
+								<xsl:when test="$mode = 'sparql'">
+									<xsl:value-of select="@rdf:about"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:choose>
+										<xsl:when test="contains(@rdf:about, '#')">
+											<xsl:value-of select="concat('#', substring-after(@rdf:about, '#'))"/>
+										</xsl:when>
+										<xsl:when test="contains(@rdf:about, 'geonames.org')">
+											<xsl:value-of select="@rdf:about"/>
+										</xsl:when>
+										<xsl:otherwise>
+											<xsl:value-of select="substring-after(@rdf:about, 'id/')"/>
+										</xsl:otherwise>
+									</xsl:choose>
+								</xsl:otherwise>
+							</xsl:choose>
+						</a>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:text>[_:]</xsl:text>
+					</xsl:otherwise>
+				</xsl:choose>
+				
 				<small>
 					<xsl:text> (</xsl:text>
 					<a href="{concat(namespace-uri(.), local-name())}">
@@ -67,33 +83,59 @@
 			</xsl:if>
 
 			<dl class="dl-horizontal">
-				<xsl:if test="skos:prefLabel">
-					<dt>
-						<a href="{concat($namespaces//namespace[@prefix='skos']/@uri, 'prefLabel')}">skos:prefLabel</a>
-					</dt>
-					<dd>
-						<xsl:apply-templates select="skos:prefLabel" mode="prefLabel">
-							<xsl:sort select="@xml:lang"/>
-						</xsl:apply-templates>
-					</dd>
+				<xsl:if test="not($mode = 'sparql')">
+					<xsl:if test="skos:prefLabel">
+						<dt>
+							<a href="{concat($namespaces//namespace[@prefix='skos']/@uri, 'prefLabel')}">skos:prefLabel</a>
+						</dt>
+						<dd>
+							<xsl:apply-templates select="skos:prefLabel" mode="prefLabel">
+								<xsl:sort select="@xml:lang"/>
+							</xsl:apply-templates>
+						</dd>
+					</xsl:if>
+					<xsl:if test="ontolex:otherForm">
+						<dt>
+							<a href="{concat($namespaces//namespace[@prefix='lexinfo']/@uri, 'plural')}">lexinfo:plural</a>
+						</dt>
+						<dd>
+							<xsl:apply-templates select="ontolex:otherForm/ontolex:Form/ontolex:writtenRep" mode="prefLabel">
+								<xsl:sort select="@xml:lang"/>
+							</xsl:apply-templates>
+						</dd>
+					</xsl:if>
+					<xsl:apply-templates select="skos:definition" mode="list-item">
+						<xsl:sort select="@xml:lang"/>
+					</xsl:apply-templates>
 				</xsl:if>
-				<xsl:if test="ontolex:otherForm">
-					<dt>
-						<a href="{concat($namespaces//namespace[@prefix='lexinfo']/@uri, 'plural')}">lexinfo:plural</a>
-					</dt>
-					<dd>
-						<xsl:apply-templates select="ontolex:otherForm/ontolex:Form/ontolex:writtenRep" mode="prefLabel">
-							<xsl:sort select="@xml:lang"/>
+				
+				<!-- choose the method of sorting -->
+				<xsl:choose>
+					<xsl:when test="name() = 'dcterms:ProvenanceStatement'">
+						<xsl:apply-templates mode="list-item">
+							<xsl:sort select="xs:dateTime(prov:Activity/prov:atTime)"/>
 						</xsl:apply-templates>
-					</dd>
-				</xsl:if>
-				<xsl:apply-templates select="skos:definition" mode="list-item">
-					<xsl:sort select="@xml:lang"/>
-				</xsl:apply-templates>
-				<xsl:apply-templates select="*[not(name() = 'skos:prefLabel') and not(name() = 'skos:definition')]" mode="list-item">
-					<xsl:sort select="name()"/>
-					<xsl:sort select="@rdf:resource"/>
-				</xsl:apply-templates>
+					</xsl:when>
+					<xsl:otherwise>
+						<!-- display all properties sorted in order in the SPARQL HTML page, otherwise display other properties after the prefLabels and definitions -->
+						<xsl:choose>
+							<xsl:when test="$mode = 'sparql'">
+								<xsl:apply-templates mode="list-item">
+									<xsl:sort select="name()"/>
+									<xsl:sort select="@rdf:resource"/>
+									<xsl:sort select="@xml:lang"/>
+								</xsl:apply-templates>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:apply-templates select="*[not(name() = 'skos:prefLabel') and not(name() = 'skos:definition')]" mode="list-item">
+									<xsl:sort select="name()"/>
+									<xsl:sort select="@rdf:resource"/>
+									<xsl:sort select="@xml:lang"/>
+								</xsl:apply-templates>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:otherwise>
+				</xsl:choose>
 			</dl>
 		</div>
 	</xsl:template>

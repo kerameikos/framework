@@ -101,6 +101,7 @@
 								<td>
 									<xsl:apply-templates select="." mode="type">
 										<xsl:with-param name="hasObjects" select="false()"/>
+										<xsl:with-param name="mode">sparql</xsl:with-param>
 									</xsl:apply-templates>
 								</td>
 							</tr>
