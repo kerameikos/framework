@@ -7,6 +7,15 @@
 
 	<!-- process any object except those which have been deprecated -->
 	<xsl:template match="*[not(dcterms:isReplacedBy)]" mode="generateDoc">
+		<xsl:param name="provenance"/>
+
+		<!-- sort by timetamps; don't rely on RDF/XML element order -->
+		<xsl:variable name="timestamps" as="item()*">
+			<xsl:perform-sort select="$provenance/descendant::prov:atTime">
+				<xsl:sort select="xs:dateTime(.)" order="ascending"/>
+			</xsl:perform-sort>
+		</xsl:variable>
+
 		<doc>
 			<xsl:variable name="uri" select="@rdf:about"/>
 			<xsl:variable name="id" select="tokenize(@rdf:about, '/')[last()]"/>
@@ -27,9 +36,7 @@
 			<xsl:for-each select="rdf:type">
 				<xsl:variable name="uri" select="@rdf:resource"/>
 				<field name="type">
-					<xsl:value-of
-						select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
-					/>
+					<xsl:value-of select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"/>
 				</field>
 				<field name="type_uri">
 					<xsl:value-of select="$uri"/>
@@ -41,19 +48,19 @@
 
 			<xsl:apply-templates select="skos:prefLabel[@xml:lang='en']"/>
 
-			<!-- labels -->			
+			<!-- labels -->
 			<xsl:for-each select="skos:prefLabel | skos:altLabel">
 				<field name="label">
 					<xsl:value-of select="."/>
 				</field>
 			</xsl:for-each>
-			
+
 			<field name="conceptScheme">
 				<xsl:value-of select="skos:inScheme/@rdf:resource"/>
 			</field>
 
-			<!-- definition -->			
-			<xsl:apply-templates select="skos:definition[@xml:lang='en']"/>			
+			<!-- definition -->
+			<xsl:apply-templates select="skos:definition[@xml:lang='en']"/>
 
 			<!-- associated URIs -->
 			<xsl:for-each select="skos:exactMatch | skos:relatedMatch">
@@ -70,6 +77,7 @@
 			<!-- geo -->
 			<xsl:apply-templates select="geo:location"/>
 
+			<!-- provenance -->
 			<field name="indexed_timestamp">
 				<xsl:variable name="timestamp" select="string(current-dateTime())"/>
 				<xsl:choose>
@@ -82,32 +90,27 @@
 				</xsl:choose>
 			</field>
 
-			<xsl:if test="//dcterms:ProvenanceStatement[foaf:topic/@rdf:resource = $uri]">
-				<xsl:variable name="timestamps" select="//dcterms:ProvenanceStatement[foaf:topic/@rdf:resource = $uri]/descendant::prov:atTime"/>
-				
-				<field name="created_timestamp">
-					<xsl:choose>
-						<xsl:when test="contains($timestamps[1], 'Z')">
-							<xsl:value-of select="$timestamps[1]"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="concat($timestamps[1], 'Z')"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</field>
-				
-				<field name="modified_timestamp">
-					<xsl:choose>
-						<xsl:when test="contains($timestamps[last()], 'Z')">
-							<xsl:value-of select="$timestamps[last()]"/>
-						</xsl:when>
-						<xsl:otherwise>
-							<xsl:value-of select="concat($timestamps[last()], 'Z')"/>
-						</xsl:otherwise>
-					</xsl:choose>
-				</field>
-			</xsl:if>
-			
+			<field name="created_timestamp">
+				<xsl:choose>
+					<xsl:when test="contains($timestamps[1], 'Z')">
+						<xsl:value-of select="$timestamps[1]"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="concat($timestamps[1], 'Z')"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</field>
+
+			<field name="modified_timestamp">
+				<xsl:choose>
+					<xsl:when test="contains($timestamps[last()], 'Z')">
+						<xsl:value-of select="$timestamps[last()]"/>
+					</xsl:when>
+					<xsl:otherwise>
+						<xsl:value-of select="concat($timestamps[last()], 'Z')"/>
+					</xsl:otherwise>
+				</xsl:choose>
+			</field>
 
 			<field name="text">
 				<xsl:value-of select="$id"/>
@@ -123,17 +126,17 @@
 			</field>
 		</doc>
 	</xsl:template>
-	
+
 	<xsl:template match="skos:prefLabel|rdfs:label">
 		<field name="prefLabel">
 			<xsl:value-of select="."/>
 		</field>
 	</xsl:template>
-	
+
 	<xsl:template match="skos:definition">
 		<field name="definition">
 			<xsl:value-of select="."/>
-		</field>		
+		</field>
 	</xsl:template>
 
 	<xsl:template match="geo:location">

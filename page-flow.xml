@@ -23,6 +23,9 @@
 	<page path="/kerameikos/admin/import/" view="xforms/import.xhtml"/>
 	<page path="/kerameikos/admin/" view="xforms/admin.xhtml" id="admin"/>
 	
+	<!-- Solr -->
+	<page path="/kerameikos/admin/all.solr" model="xpl/models/rdf/aggregate-all.xpl" view="xpl/views/serializations/rdf/solr.xpl"/>
+	
 	<!-- authentication -->
 	<page path="/kerameikos/signup" view="xforms/signup.xhtml"/>
 	<page path="/kerameikos/login" view="xforms/login.html"/>
