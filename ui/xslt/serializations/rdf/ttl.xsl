@@ -6,16 +6,9 @@
 
 	<xsl:variable name="namespaces" as="item()*">
 		<namespaces>
-			<namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
-			<namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
-			<namespace prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
-			<namespace prefix="geo" uri="http://www.w3.org/2003/01/geo/wgs84_pos#"/>
-			<namespace prefix="kid" uri="http://kerameikos.org/id/"/>
-			<namespace prefix="kon" uri="http://kerameikos.org/ontology#"/>
-			<namespace prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#"/>
-			<namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>
-			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
-			<namespace prefix="xsd" uri="http://www.w3.org/2001/XMLSchema#"/>
+			<xsl:for-each select="/rdf:RDF/namespace::*[not(name()='xml')]">
+				<namespace prefix="{name()}" uri="{.}"/>
+			</xsl:for-each>
 		</namespaces>
 	</xsl:variable>
 	

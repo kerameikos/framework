@@ -30,21 +30,17 @@
 	</xsl:template>
 
 	<xsl:template name="body">
-		<xsl:variable name="default-query"><![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
-PREFIX dcterms:	<http://purl.org/dc/terms/>
-PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
-PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX kon:	<http://kerameikos.org/ontology#>
-PREFIX org:	<http://www.w3.org/ns/org#>
-PREFIX prov:	<http://www.w3.org/ns/prov#>
-PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
-PREFIX xsd:	<http://www.w3.org/2001/XMLSchema#>
-
-SELECT * WHERE {
+		<xsl:variable name="default-query">
+			<xsl:variable name="select"><![CDATA[SELECT * WHERE {
   ?s ?p ?o
 } LIMIT 100]]></xsl:variable>
+			
+			<xsl:apply-templates select="/config/namespaces/namespace[@default = true()]">
+				<xsl:sort select="@prefix"/>
+			</xsl:apply-templates>
+			<xsl:text>&#x00a;</xsl:text>
+			<xsl:value-of select="$select"/>
+		</xsl:variable>
 
 		<div class="container-fluid content">
 			<div class="row">
@@ -56,6 +52,23 @@ SELECT * WHERE {
 						</textarea>
 						<br/>
 						<div class="col-md-6">
+							<div class="form-group">
+							<h4>Additional prefixes</h4>
+							<ul class="list-inline">
+								<xsl:for-each select="/config/namespaces/namespace">
+									<xsl:sort select="@prefix"/>
+									
+									<li>
+										<xsl:if test="@default = true()">
+											<xsl:attribute name="class">hidden</xsl:attribute>
+										</xsl:if>
+										<button class="prefix-button btn btn-default" title="{@uri}" uri="{@uri}">
+											<xsl:value-of select="@prefix"/>
+										</button>
+									</li>
+								</xsl:for-each>
+							</ul>
+						</div>
 							<div class="form-group">
 								<label for="output">Output</label>
 								<select name="output" class="form-control">
@@ -76,6 +89,14 @@ SELECT * WHERE {
 				</div>
 			</div>
 		</div>
+	</xsl:template>
+	
+	<xsl:template match="namespace">
+		<xsl:text>PREFIX </xsl:text>
+		<xsl:value-of select="@prefix"/>
+		<xsl:text>: &lt;</xsl:text>
+		<xsl:value-of select="@uri"/>
+		<xsl:text>&gt;&#x00a;</xsl:text>
 	</xsl:template>
 
 </xsl:stylesheet>

@@ -32,18 +32,8 @@
 	<xsl:variable name="display_path">../</xsl:variable>
 
 	<!-- definition of namespaces for turning in solr type field URIs into abbreviations -->
-	<xsl:variable name="namespaces" as="item()*">
-		<namespaces>
-			<namespace prefix="dcterms" uri="http://purl.org/dc/terms/"/>
-			<namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/"/>
-			<namespace prefix="geo" uri="http://www.w3.org/2003/01/geo/wgs84_pos#"/>
-			<namespace prefix="foaf" uri="http://xmlns.com/foaf/0.1/"/>
-			<namespace prefix="kon" uri="http://kerameikos.org/ontology#"/>
-			<namespace prefix="org" uri="http://www.w3.org/ns/org#"/>
-			<namespace prefix="osgeo" uri="http://data.ordnancesurvey.co.uk/ontology/geometry/"/>
-			<namespace prefix="skos" uri="http://www.w3.org/2004/02/skos/core#"/>
-			<namespace prefix="un" uri="http://www.owl-ontologies.com/Ontology1181490123.owl#"/>
-		</namespaces>
+	<xsl:variable name="namespaces" as="node()*">
+		<xsl:copy-of select="//config/namespaces"/>
 	</xsl:variable>
 
 	<xsl:template match="/">
