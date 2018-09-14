@@ -35,6 +35,9 @@
 					<validate-trigger>false</validate-trigger>
 					<import-trigger>false</import-trigger>
 					<parse-wikipedia>true</parse-wikipedia>
+					<new_id>true</new_id>
+					<content_before/>
+					<content_after/>
 					<wiki-id></wiki-id>
 					<wiki-title></wiki-title>
 					<wiki-lang></wiki-lang>
@@ -300,8 +303,7 @@ PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 					<query id="ask">ASK {&lt;URI&gt; rdf:type CLASS}</query>
 					<query id="ask-person">ASK {&lt;URI&gt; rdf:type ?type . FILTER (?type = foaf:Organization)} </query>
-					<query id="editor">SELECT ?uri ?label WHERE {?uri a foaf:Person ; skos:inScheme &lt;http://kerameikos.org/editor/&gt; ; skos:prefLabel
-						?label . FILTER(langMatches(lang(?label), "en"))} ORDER BY ?label</query>
+					<query id="editor">SELECT ?uri ?label WHERE {?uri a foaf:Person ; skos:inScheme &lt;http://kerameikos.org/editor/&gt; ; skos:prefLabel ?label} ORDER BY ?label</query>
 				</templates>
 			</xforms:instance>
 
@@ -333,6 +335,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 					readonly="../mappings-valid = false() or ../metadata-valid = false()"/>
 				<xforms:bind nodeset="import-trigger" id="import-trigger" type="xs:boolean" relevant=". = true()"/>
 				<xforms:bind nodeset="parse-wikipedia" type="xs:boolean"/>
+				<xforms:bind nodeset="new_id" type="xs:boolean"/>
 			</xforms:bind>
 
 			<xforms:bind nodeset="instance('mappings')"
@@ -628,7 +631,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				<xforms:send submission="submit-sparqlQuery"/>
 				<xforms:action xxforms:iterate="instance('sparqlResponse')//res:result" ev:event="xforms-submit-done">
 					<xforms:var name="uri" select="data(res:binding[@name='uri']/res:uri)"/>
-					<xforms:var name="label" select="(res:binding[@name='label']/res:literal)"/>
+					<xforms:var name="label" select="data(res:binding[@name='label']/res:literal)"/>
 					<xforms:insert context="instance('editor-list')" nodeset="./child::node()[last()]"
 						origin="xforms:element('item', (xforms:attribute('uri', $uri), $label))"/>
 				</xforms:action>
