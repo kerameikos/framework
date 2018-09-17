@@ -198,8 +198,14 @@ ORDER BY ASC(?publisher) ASC(?title)]]></query>
 										<tbody>
 											<xforms:repeat nodeset="descendant::void:Dataset">
 												<tr>
-													<td><a href="{@rdf:about}" target="_blank"><xforms:output ref="dcterms:title"
-														></xforms:output></a></td>
+													<td>
+														<xforms:trigger appearance="minimal">
+															<xforms:label value="dcterms:title"/>
+															<xforms:action ev:event="DOMActivate">
+																<xforms:load show="new" resource="{@rdf:about}"/>
+															</xforms:action>
+														</xforms:trigger>
+													</td>
 													<td><xforms:output ref="dcterms:publisher"></xforms:output></td>
 													<td class="text-center">
 														<xforms:trigger appearance="minimal">
