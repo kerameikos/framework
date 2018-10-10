@@ -18,6 +18,8 @@
 		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="/apps/kerameikos/xforms/css/style.css" />
 
+		<!--TODO: sync CRUD operations from kerameikos import; split wikidata import into labels and URIs -->
+
 		<xforms:model>
 			<!-- configurations and form controls -->
 			<xforms:instance id="control-instance" xxforms:exclude-result-prefixes="#all">
@@ -34,7 +36,11 @@
 					<load-trigger>false</load-trigger>
 					<validate-trigger>false</validate-trigger>
 					<import-trigger>false</import-trigger>
-					<parse-wikipedia>true</parse-wikipedia>
+					<import-wikidata-labels>true</import-wikidata-labels>
+					<import-wikidata-uris>true</import-wikidata-uris>
+					<new_id>true</new_id>
+					<content_before_hash></content_before_hash>
+					<content_after_hash></content_after_hash>
 					<wiki-id></wiki-id>
 					<wiki-title></wiki-title>
 					<wiki-lang></wiki-lang>
@@ -48,14 +54,14 @@
 			</xforms:instance>
 
 			<!-- RDF templates -->
-			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
-				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:prov="http://www.w3.org/ns/prov#"
-					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
+			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="#default xhtml xforms xs ev xxforms fr res xi kerameikos atom">
+				<rdf:RDF xmlns="" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+					xmlns:prov="http://www.w3.org/ns/prov#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 					xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 					xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
 					xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
 					xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
-					xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#" xmlns=""/>
+					xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#"/>
 			</xforms:instance>
 
 			<xforms:instance id="changeNote-template" xxforms:exclude-result-prefixes="#all">
@@ -84,7 +90,7 @@
 					<dcterms:creator rdf:resource=""/>
 				</prov:Entity>
 			</xforms:instance>
-			
+
 			<xforms:instance id="plural-template" xxforms:exclude-result-prefixes="#all">
 				<ontolex:otherForm>
 					<ontolex:Form>
@@ -93,7 +99,7 @@
 					</ontolex:Form>
 				</ontolex:otherForm>
 			</xforms:instance>
-			
+
 			<!-- instance for spreadsheet RDF as a static file -->
 			<xforms:instance id="spreadsheet-rdf" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
 				<rdf:RDF/>
@@ -332,7 +338,9 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				<xforms:bind nodeset="validate-trigger" id="validate-trigger" type="xs:boolean"
 					readonly="../mappings-valid = false() or ../metadata-valid = false()"/>
 				<xforms:bind nodeset="import-trigger" id="import-trigger" type="xs:boolean" relevant=". = true()"/>
-				<xforms:bind nodeset="parse-wikipedia" type="xs:boolean"/>
+				<xforms:bind nodeset="import-wikidata-labels" type="xs:boolean"/>
+				<xforms:bind nodeset="import-wikidata-uris" type="xs:boolean"/>
+				<xforms:bind nodeset="new_id" type="xs:boolean"/>
 			</xforms:bind>
 
 			<xforms:bind nodeset="instance('mappings')"
@@ -481,15 +489,10 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				<xforms:action ev:event="xforms-submit-done">
 					<!-- process wikidata XML if the entity has an @id and it starts with Q -->
 					<xforms:action if="starts-with(instance('wikidata')//entity/@id, 'Q')">
-						<xforms:var name="mapping">skos:exactMatch</xforms:var>
-						<!-- insert the wikidata URI -->
-						<xforms:var name="wikidata-uri" select="concat('https://www.wikidata.org/entity/', instance('wikidata')//entity/@id)"/>
-						<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
-							if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource=$wikidata-uri])"
-							origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $wikidata-uri), ''))"/>
 
 						<!-- import new labels, but only ones that follow the two-digit ISO standard -->
-						<xforms:action xxforms:iterate="instance('wikidata')//entity/labels/label[string-length(@language) = 2]">
+						<xforms:action if="instance('control-instance')/import-wikidata-labels = true()"
+							xxforms:iterate="instance('wikidata')//entity/labels/label[string-length(@language) = 2]">
 							<xforms:var name="lang" select="data(context()/@language)"/>
 							<xforms:var name="label" select="data(context()/@value)"/>
 							<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
@@ -497,18 +500,31 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 								origin="xforms:element('skos:prefLabel', (xforms:attribute('xml:lang', $lang), $label))"/>
 						</xforms:action>
 
-						<!-- iterate through claims with matching properties to link to external vocabulary systems -->
-						<xforms:action
-							xxforms:iterate="instance('wikidata')//entity/claims/property[@id='P214' or @id='P227' or @id='P213' or @id='P268' or @id='P269'
-							or @id='P245' or @id='P1014' or @id='P1566' or @id='P1667' or @id='P1900']">
-							<xforms:var name="property" select="data(context()/@id)"/>
-							<xforms:var name="id" select="replace(data(context()/descendant::mainsnak[1]/datavalue/@value), ' ', '')"/>
-							<xforms:var name="uri" select="concat(instance('wikidata-properties')/property[@id=$property], $id)"/>
+						<!-- insert URIs -->
+						<xforms:action if="instance('control-instance')/import-wikidata-uris = true()">
+							<xforms:var name="mapping">skos:exactMatch</xforms:var>
 
+							<!-- insert the wikidata URI -->
+							<xforms:var name="wikidata-uri" select="concat('http://www.wikidata.org/entity/', instance('wikidata')//entity/@id)"/>
 							<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
-								if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource=$uri])"
-								origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $uri), ''))"/>
+								if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource=$wikidata-uri])"
+								origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $wikidata-uri), ''))"/>
+
+							<!-- iterate through claims with matching properties to link to external vocabulary systems -->
+							<xforms:action
+								xxforms:iterate="instance('wikidata')//entity/claims/property[@id='P214' or @id='P227' or @id='P213' or @id='P268' or @id='P269'
+								or @id='P245' or @id='P1014' or @id='P1566' or @id='P1667' or @id='P1900']">
+								<xforms:var name="property" select="data(context()/@id)"/>
+								<xforms:var name="id" select="replace(data(context()/descendant::mainsnak[1]/datavalue/@value), ' ', '')"/>
+								<xforms:var name="uri" select="concat(instance('wikidata-properties')/property[@id=$property], $id)"/>
+
+								<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
+									if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource=$uri])"
+									origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $uri), ''))"/>
+							</xforms:action>
 						</xforms:action>
+
+
 					</xforms:action>
 					<!-- clear wiki stuff from control-instance -->
 					<xforms:setvalue ref="instance('control-instance')/wiki-title"/>
@@ -554,61 +570,26 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				instance="rdf">
 				<!-- ************ RDF PROCESSING TO CREATE A NEW ID ************** -->
 				<xforms:action ev:event="xforms-submit-error">
+					<!-- set new_id to true -->
+					<xforms:setvalue ref="instance('control-instance')/new_id" value="true()"/>
+
+					<!-- create the Concept object -->
 					<xforms:var name="uri" select="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>
 					<xforms:insert context="instance('rdf')" origin="xforms:element(instance('control-instance')/type, xforms:attribute('rdf:about', $uri))"/>
 					<!-- insert rdf:type as skos:Concept -->
 					<xforms:insert context="instance('rdf')/*[last()]"
 						origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/2004/02/skos/core#Concept'))"/>
 					<!-- insert skos:inScheme -->
-					<xforms:insert context="instance('rdf')/*[last()]"
+					<xforms:insert context="instance('rdf')/*[last()]" nodeset="./child::node()[last()]"
 						origin="xforms:element('skos:inScheme', xforms:attribute('rdf:resource', 'http://kerameikos.org/id/'))"/>
-
-					<!-- *** Provenance *** -->
-					<xforms:insert context="instance('rdf')/*[last()]" nodeset="./child::node()[last()]" origin="instance('changeNote-template')"/>
-					<xforms:setvalue ref="instance('rdf')/*[last()]/skos:changeNote/@rdf:resource" value="concat($uri, '#provenance')"/>
-
-					<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]" origin="instance('provenance-template')"/>
-					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/@rdf:about" value="concat($uri, '#provenance')"/>
-					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/foaf:topic/@rdf:resource" value="$uri"/>
-
-					<!-- Create Activity -->
-					<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement" nodeset="./child::node()[last()]"
-						origin="xforms:element('prov:wasGeneratedBy')"/>
-					<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy" origin="instance('activity-template')"/>
-					<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity"
-						origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/ns/prov#Create'))"/>
-					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/dcterms:type"
-						>spreadsheet</xforms:setvalue>
-					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
-						value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
-					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:atTime" value="current-dateTime()"/>
-					<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:used/@rdf:resource"
-						value="instance('control-instance')/spreadsheet_uri"/>
 				</xforms:action>
 
 				<!-- ************ RDF PROCESSING TO ADD SUPPLEMENTAL INFORMATION ************** -->
-				<xforms:action ev:event="xforms-submit-done">					
-					<!-- *** PROVENANCE *** -->
-					<!-- evaluate whether there is already a prov:Activity that prov:used the spreadsheet URI -->					
-					<xforms:action if="instance('rdf')//prov:Activity[prov:used/@rdf:resource = instance('control-instance')/spreadsheet_uri]">
-						<!-- if this ID has already been created/updated by this spreadsheet, then update the timestamp -->						
-						<xforms:setvalue ref="instance('rdf')//prov:Activity[prov:used/@rdf:resource = instance('control-instance')/spreadsheet_uri]/prov:atTime" value="current-dateTime()"/>
-					</xforms:action>
-					<xforms:action if="not(instance('rdf')//prov:Activity[prov:used/@rdf:resource = instance('control-instance')/spreadsheet_uri])">
-						<!-- insert new Activity for Modify -->
-						<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement" nodeset="./child::node()[last()]"
-							origin="xforms:element('prov:activity')"/>
-						<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]" origin="instance('activity-template')"/>
-						<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity"
-							origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/ns/prov#Modify'))"/>
-						<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/dcterms:type"
-							>spreadsheet</xforms:setvalue>
-						<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
-							value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
-						<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:atTime" value="current-dateTime()"/>
-						<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:used/@rdf:resource"
-							value="instance('control-instance')/spreadsheet_uri"/>
-					</xforms:action>
+				<xforms:action ev:event="xforms-submit-done">
+					<!-- set new_id to false to initiate the comparing of content before and after -->
+					<xforms:setvalue ref="instance('control-instance')/new_id" value="false()"/>
+					<xforms:setvalue ref="instance('control-instance')/content_before_hash"
+						value="digest(normalize-space(saxon:serialize(instance('rdf'), 'xml')), 'MD5', 'hex')"/>
 				</xforms:action>
 			</xforms:submission>
 
@@ -632,6 +613,12 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 					<xforms:insert context="instance('editor-list')" nodeset="./child::node()[last()]"
 						origin="xforms:element('item', (xforms:attribute('uri', $uri), $label))"/>
 				</xforms:action>
+			</xforms:action>
+			
+			<!-- ********** XFORMS-READY ********** -->
+			<xforms:action ev:event="xforms-ready">
+				<!-- test spreadsheet RDF validity on xforms-ready -->
+				<xforms:setvalue ref="instance('control-instance')/metadata-valid" value="true()" if="xxforms:valid(instance('spreadsheet-rdf'), true())"/>
 			</xforms:action>
 		</xforms:model>
 	</head>
@@ -769,6 +756,23 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 								<h3>Mapping</h3>
 								<p>Associate the headings with allowable properties, where applicable. Note that the Kerameikos ID, Preferred Label (English),
 									and Definition (English) are required.</p>
+
+								<div class="subsection">
+									<h4>Wikidata Imports</h4>
+									<p>When applicable, the following metadata will be imported from Wikidata when a relevant Wikipedia, Wikidata, or DBPedia
+										URI has been parsed from a skos:exactMatch or skos:closeMatch column.</p>
+									<div>
+										<xforms:input ref="instance('control-instance')/import-wikidata-labels">
+											<xforms:label>Labels</xforms:label>
+										</xforms:input>
+									</div>
+									<div>
+										<xforms:input ref="instance('control-instance')/import-wikidata-uris">
+											<xforms:label>Matching URIs</xforms:label>
+										</xforms:input>
+									</div>
+								</div>
+
 								<xforms:group ref="instance('mappings')">
 									<xforms:group ref=".[count(mapping[@to='id']) != 1]">
 										<div class="alert-danger alert-box alert">
@@ -1216,9 +1220,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 								<xforms:trigger bind="import-trigger">
 									<xforms:label>Import Data</xforms:label>
 									<xforms:action ev:event="DOMActivate">
-										<!-- set the count for the progress dialog -->
-										<!--<xforms:setvalue ref="instance('control-instance')/count" value="count(instance('feed')//atom:entry)"></xforms:setvalue>-->
-										<!--<xxforms:show dialog="progress-dialog"></xxforms:show>-->
+										
 										<!-- begin processing the spreadsheet into RDF -->
 										<xforms:action xxforms:iterate="instance('feed')//atom:entry">
 											<!-- set position for progress dialog -->
@@ -1232,7 +1234,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 											<!-- clear data from RDF instance before loading-->
 											<xforms:delete nodeset="instance('rdf')/*"/>
 											<xforms:send submission="load-rdf"/>
-											
+
 											<!-- *** BEGIN ATOM TO RDF IMPORT *** -->
 											<xforms:action
 												xxforms:iterate="instance('feed')//atom:entry[position()=$position]/*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended']">
@@ -1255,10 +1257,16 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 														<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"/>
 
 														<!-- insert template and set values -->
-														<xforms:action if="not(instance('rdf')/*[1]/ontolex:otherForm/ontolex:Form/ontolex:writtenRep[@xml:lang=$lang])">
-															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]" origin="instance('plural-template')"/>
-															<xforms:setvalue ref="instance('rdf')/*[1]/ontolex:otherForm[last()]/ontolex:Form/ontolex:writtenRep" value="$value"/>
-															<xforms:setvalue ref="instance('rdf')/*[1]/ontolex:otherForm[last()]/ontolex:Form/ontolex:writtenRep/@xml:lang" value="$lang"/>
+														<xforms:action
+															if="not(instance('rdf')/*[1]/ontolex:otherForm/ontolex:Form/ontolex:writtenRep[@xml:lang=$lang])">
+															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
+																origin="instance('plural-template')"/>
+															<xforms:setvalue
+																ref="instance('rdf')/*[1]/ontolex:otherForm[last()]/ontolex:Form/ontolex:writtenRep"
+																value="$value"/>
+															<xforms:setvalue
+																ref="instance('rdf')/*[1]/ontolex:otherForm[last()]/ontolex:Form/ontolex:writtenRep/@xml:lang"
+																value="$lang"/>
 														</xforms:action>
 													</xforms:action>
 
@@ -1278,7 +1286,8 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																	origin="xforms:element($property, (xforms:attribute('rdf:resource', $value), ''))"
 																	if="not(instance('rdf')/*[1]/*[name()=$property][@rdf:resource = $value])"/>
 																<!-- Harvest data from wikidata if applicable -->
-																<xforms:action if="instance('control-instance')/parse-wikipedia = true()">
+																<xforms:action
+																	if="instance('control-instance')/import-wikidata-labels = true() or instance('control-instance')/import-wikidata-uris = true()">
 																	<xforms:var name="title" select="tokenize($value, '/')[last()]"/>
 																	<xforms:action if="string($title)">
 																		<xforms:setvalue ref="instance('control-instance')/wiki-title" value="$title"/>
@@ -1307,7 +1316,8 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																		if="not(instance('rdf')/*[1]/*[name()=$property][@rdf:resource = $dbpedia-uri])"/>
 																</xforms:action>
 																<!-- Harvest data from wikidata if applicable -->
-																<xforms:action if="instance('control-instance')/parse-wikipedia = true()">
+																<xforms:action
+																	if="instance('control-instance')/import-wikidata-labels = true() or instance('control-instance')/import-wikidata-uris = true()">
 																	<xforms:action if="string($title) and string($lang)">
 																		<xforms:setvalue ref="instance('control-instance')/wiki-title" value="$title"/>
 																		<xforms:setvalue ref="instance('control-instance')/wiki-lang" value="$lang"/>
@@ -1323,7 +1333,8 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 															<!-- parse wikidata entity ID -->
 															<xforms:var name="wiki-id" select="tokenize($value, '/')[last()]"/>
 															<!-- Harvest data from wikidata if applicable -->
-															<xforms:action if="instance('control-instance')/parse-wikipedia = true()">
+															<xforms:action
+																if="instance('control-instance')/import-wikidata-labels = true() or instance('control-instance')/import-wikidata-uris = true()">
 																<xforms:action if="string($wiki-id)">
 																	<xforms:setvalue ref="instance('control-instance')/wiki-id" value="$wiki-id"/>
 																	<xforms:send submission="get-wikidata"/>
@@ -1436,30 +1447,109 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 															if="not(instance('rdf')/org:Membership[@rdf:about=$membershipUri]/*[name()=$mapping])"/>
 													</xforms:action>
 												</xforms:action>
-											</xforms:action>											
-											
+											</xforms:action>
+
 											<!-- *** BEGIN CRUD OPERATIONS *** -->
-											<!-- save file back to disk -->
-											<xforms:setvalue ref="instance('save-config')/url"
-												value="concat('file://', instance('config')/data_path, '/id/',  instance('control-instance')/id, '.rdf')"/>
-											<xforms:insert nodeset="instance('dump')"
-												origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('rdf'), instance('save-config')), 'data')"/>
-											
-											<!-- delete graphs from triplestore, then repost updates -->
-											<xforms:setvalue ref="instance('sparqlUpdate')"
-												value="replace(instance('sparqlUpdate-templates')/query[@id='delete-concept'], 'URI', $uri)"/>
-											<xforms:send submission="delete-graph"/>
-											<xforms:send submission="post-rdf"/>
-											
-											<!-- post to Solr -->
-											<xforms:insert nodeset="instance('addIndex')"
-												origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
-											<xforms:send submission="post-solr-doc"/>
+											<!-- if the ID is new, then insert dcterms:ProvenanceStatement and a prov:wasGeneratedBy statement -->
+											<xforms:action if="instance('control-instance')/new_id = true()">
+
+												<!-- insert skos:changeNote template into the concept -->
+												<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
+													origin="instance('changeNote-template')"/>
+												<xforms:setvalue ref="instance('rdf')/*[1]/skos:changeNote/@rdf:resource" value="concat($uri, '#provenance')"/>
+
+												<!-- *** Insert ProvenanceStatement *** -->
+												<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
+													origin="instance('provenance-template')"/>
+												<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/@rdf:about"
+													value="concat($uri, '#provenance')"/>
+												<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/foaf:topic/@rdf:resource" value="$uri"/>
+
+												<!-- Create Activity -->
+												<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement" nodeset="./child::node()[last()]"
+													origin="xforms:element('prov:wasGeneratedBy')"/>
+												<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy"
+													origin="instance('activity-template')"/>
+												<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity"
+													origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/ns/prov#Create'))"/>
+												<xforms:setvalue
+													ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/dcterms:type"
+													>spreadsheet</xforms:setvalue>
+												<xforms:setvalue
+													ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
+													value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
+												<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:atTime"
+													value="current-dateTime()"/>
+												<xforms:setvalue
+													ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:used/@rdf:resource"
+													value="instance('control-instance')/spreadsheet_uri"/>
+
+												<!-- save file back to disk -->
+												<xforms:setvalue ref="instance('save-config')/url"
+													value="concat('file://', instance('config')/data_path, '/id/',  instance('control-instance')/id, '.rdf')"/>
+												<xforms:insert nodeset="instance('dump')"
+													origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('rdf'), instance('save-config')), 'data')"/>
+
+												<!-- Post RDF (no deletion necessary ) -->
+												<xforms:send submission="post-rdf"/>
+												<!-- post to Solr -->
+												<xforms:insert nodeset="instance('addIndex')"
+													origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
+												<xforms:send submission="post-solr-doc"/>
+											</xforms:action>
+
+											<!-- if the ID is not new, hash encode the content after previous actions -->
+											<xforms:action if="instance('control-instance')/new_id = false()">
+												<xforms:setvalue ref="instance('control-instance')/content_after_hash"
+													value="digest(normalize-space(saxon:serialize(instance('rdf'), 'xml')), 'MD5', 'hex')"/>
+
+												<!-- if the old and new hashes are different, then insert a new modification event -->
+												<xforms:action
+													if="not(instance('control-instance')/content_before_hash = instance('control-instance')/content_after_hash)">
+													<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement" nodeset="./child::node()[last()]"
+														origin="xforms:element('prov:activity')"/>
+													<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]"
+														origin="instance('activity-template')"/>
+													<xforms:insert context="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity"
+														origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/ns/prov#Modify'))"/>
+													<xforms:setvalue
+														ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/dcterms:type"
+														>spreadsheet</xforms:setvalue>
+													<xforms:setvalue
+														ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
+														value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
+													<xforms:setvalue
+														ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:atTime"
+														value="current-dateTime()"/>
+													<xforms:setvalue
+														ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:used/@rdf:resource"
+														value="instance('control-instance')/spreadsheet_uri"/>
+
+													<!-- save file back to disk, but only if the content has changed -->
+													<xforms:setvalue ref="instance('save-config')/url"
+														value="concat('file://', instance('config')/data_path, '/id/',  instance('control-instance')/id, '.rdf')"/>
+													<xforms:insert nodeset="instance('dump')"
+														origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('rdf'), instance('save-config')), 'data')"/>
+
+													<!-- delete graphs from triplestore, then repost updates -->
+													<xforms:setvalue ref="instance('sparqlUpdate')"
+														value="replace(instance('sparqlUpdate-templates')/query[@id='delete-concept'], 'URI', $uri)"/>
+													<xforms:send submission="delete-graph"/>
+													<xforms:send submission="post-rdf"/>
+
+													<!-- post to Solr -->
+													<xforms:insert nodeset="instance('addIndex')"
+														origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
+													<xforms:send submission="post-solr-doc"/>
+												</xforms:action>
+											</xforms:action>
+											<!-- end of ID processing action: CRUD operations moved to new or updated IDs only -->
 										</xforms:action>
 
 										<!-- *** after each row in the spreadsheet has been processed, create/update the spreadsheet RDF *** -->
 										<xforms:delete nodeset="instance('rdf')/*"/>
-										<xforms:insert context="instance('rdf')" origin="instance('spreadsheet-rdf')/prov:Entity[@rdf:about = instance('control-instance')/spreadsheet_uri]"/>
+										<xforms:insert context="instance('rdf')"
+											origin="instance('spreadsheet-rdf')/prov:Entity[@rdf:about = instance('control-instance')/spreadsheet_uri]"/>
 
 										<!-- update SPARQL endpoint -->
 										<xforms:setvalue ref="instance('sparqlUpdate')"
@@ -1472,7 +1562,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 											value="concat('file://', instance('config')/data_path, '/spreadsheets/spreadsheets.rdf')"/>
 										<xforms:insert nodeset="instance('dump')"
 											origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('spreadsheet-rdf'), instance('save-config')), 'data')"/>
-										
+
 										<xforms:toggle case="process-complete"/>
 									</xforms:action>
 								</xforms:trigger>
