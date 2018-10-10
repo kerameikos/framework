@@ -46,8 +46,8 @@
 	<!-- RDF -->
 	<page path="/kerameikos/(id|editor)/(.*)\.rdf" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/serialize-rdfxml.xpl"/>	
 	<page path="/kerameikos/(id|editor)/(.*)\.kml" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/kml.xpl"/>
-	<page path="/kerameikos/(id|editor)/(.*)\.ttl" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/ttl.xpl"/>
-	<page path="/kerameikos/(id|editor)/(.*)\.jsonld" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/json-ld.xpl"/>
+	<page path="/kerameikos/(id|editor)/(.*)\.ttl" view="xpl/controllers/call-rdflib.xpl"/>
+	<page path="/kerameikos/(id|editor)/(.*)\.jsonld" view="xpl/controllers/call-rdflib.xpl"/>
 	<page path="/kerameikos/(id|editor)/(.*)\.solr" model="xpl/models/rdf/get-id.xpl" view="xpl/views/serializations/rdf/solr.xpl"/>
 	<page path="/kerameikos/(id|editor)/(.*)" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>
 	
@@ -90,9 +90,9 @@
 	<!-- **** DATA DUMPS **** -->	
 	<page path="/kerameikos/pelagios.void.rdf" view="dump/pelagios.void.rdf"/>
 	<page path="/kerameikos/pelagios.rdf" model="xpl/models/solr/pelagios.xpl" view="xpl/views/serializations/solr/pelagios.xpl"/>
-	<page path="/kerameikos/kerameikos.org.rdf" view="xpl/controllers/serialize-dump.xpl"/>
-	<page path="/kerameikos/kerameikos.org.jsonld" view="xpl/controllers/serialize-dump.xpl"/>
-	<page path="/kerameikos/kerameikos.org.ttl" view="xpl/controllers/serialize-dump.xpl"/>
+	<page path="/kerameikos/kerameikos.org.rdf" view="xpl/models/rdf/aggregate-all.xpl"/>
+	<page path="/kerameikos/kerameikos.org.jsonld" view="xpl/controllers/call-rdflib.xpl"/>
+	<page path="/kerameikos/kerameikos.org.ttl"  view="xpl/controllers/call-rdflib.xpl"/>
 
 	<!-- **** CONCEPT SCHEMES **** -->
 	<page path="/kerameikos/(id|editor)/" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>	

@@ -57,6 +57,20 @@
 				</xsl:template>
 			</xsl:stylesheet>
 		</p:input>
+		<p:output name="data" id="model"/>
+	</p:processor>
+	
+	<p:processor name="oxf:xml-converter">
+		<p:input name="data" href="#model"/>
+		<p:input name="config">
+			<config>
+				<content-type>application/rdf+xml</content-type>
+				<encoding>utf-8</encoding>
+				<version>1.0</version>
+				<indent>true</indent>
+				<indent-amount>4</indent-amount>
+			</config>
+		</p:input>
 		<p:output name="data" ref="data"/>
 	</p:processor>
 </p:config>
