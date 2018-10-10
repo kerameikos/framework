@@ -169,6 +169,7 @@
 
 					<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type">
 						<xsl:with-param name="hasObjects" select="$hasObjects" as="xs:boolean"/>
+						<xsl:with-param name="mode">record</xsl:with-param>
 					</xsl:apply-templates>
 
 					<!-- ProvenanceStatement is hidden by default -->
@@ -184,6 +185,7 @@
 						<div style="display:none" id="provenance">
 							<xsl:apply-templates select="/content/rdf:RDF/*[name() = 'dcterms:ProvenanceStatement']" mode="type">
 								<xsl:with-param name="hasObjects" select="false()" as="xs:boolean"/>
+								<xsl:with-param name="mode">record</xsl:with-param>
 							</xsl:apply-templates>
 						</div>
 					</xsl:if>

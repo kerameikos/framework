@@ -943,6 +943,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 										</xforms:action>
 									</xforms:trigger>
 								</small></h1>
+							
 							<xforms:group ref="instance('doc')">
 								<xforms:group ref="*[1]">
 									<xforms:var name="type" select="name()"/>
@@ -1512,6 +1513,12 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 																		</xforms:itemset>
 																		<xforms:alert>Required</xforms:alert>
 																	</xforms:select1>
+																	<xforms:trigger appearance="minimal">
+																		<xforms:dispatch target="delete-description-dialog" name="fr-show" ev:event="DOMActivate"></xforms:dispatch>
+																		<xforms:label>
+																			<span class="glyphicon glyphicon-remove"></span>
+																		</xforms:label>
+																	</xforms:trigger>
 																</xforms:group>
 															</xforms:group>
 															<xforms:group ref=".[not(position() = last())]">
@@ -1570,6 +1577,22 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				</div>
 			</div>
 		</div>
+		
+		<!-- ***** DIALOGS ***** -->
+		<fr:alert-dialog id="delete-description-dialog">
+			<fr:label>Delete Description</fr:label>
+			<fr:message>It isn't recommended to delete a description of provenance activity unless the edit is to fix a minor typo. Continue?</fr:message>
+			<fr:positive-choice>
+				<fr:label>Yes</fr:label>
+				<xforms:action ev:event="DOMActivate">
+					<xforms:delete nodeset="instance('doc')/descendant::prov:Activity[last()]/dcterms:description"/>
+				</xforms:action>
+			</fr:positive-choice>
+			<fr:negative-choice>
+				<fr:label>No</fr:label>
+			</fr:negative-choice>
+		</fr:alert-dialog>
+		
 		<xxforms:dialog id="broader-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
 			<xforms:label>Broader Concept</xforms:label>
 			<div>

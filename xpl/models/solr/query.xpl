@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!--
-	Copyright (C) 2010 Ethan Gruber
-	EADitor: http://code.google.com/p/eaditor/
-	Apache License 2.0: http://code.google.com/p/eaditor/
-	
+<!-- Author: Ethan Gruber
+	Date: September 2018
+	Function: Execute a Solr query that is used for the HTML browse page or the Atom feed
 -->
 <p:config xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors">
 
@@ -26,6 +24,10 @@
 			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 				<!-- url params -->
 				<xsl:param name="q" select="doc('input:request')/request/parameters/parameter[name='q']/value"/>
+				<xsl:param name="start" select="if (doc('input:request')/request/parameters/parameter[name='start']/value castable as xs:integer) then
+					doc('input:request')/request/parameters/parameter[name='start']/value  else 0"/>
+				<xsl:param name="rows" as="xs:integer">100</xsl:param>
+				
 				<xsl:param name="sort">
 					<xsl:choose>
 						<xsl:when test="string(doc('input:request')/request/parameters/parameter[name='sort']/value)">
@@ -38,16 +40,6 @@
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:param>
-				<xsl:param name="start" select="doc('input:request')/request/parameters/parameter[name='start']/value"/>
-				<xsl:variable name="start_var" as="xs:integer">
-					<xsl:choose>
-						<xsl:when test="number($start)">
-							<xsl:value-of select="$start"/>
-						</xsl:when>
-						<xsl:otherwise>0</xsl:otherwise>
-					</xsl:choose>
-				</xsl:variable>
-				<xsl:param name="rows" as="xs:integer">100</xsl:param>
 				
 				<!-- insert other params -->
 				<xsl:variable name="other-params">
@@ -62,10 +54,12 @@
 				<xsl:variable name="service">
 					<xsl:choose>
 						<xsl:when test="string($q)">
-							<xsl:value-of select="concat($solr-url, '?q=', encode-for-uri($q), '&amp;sort=', encode-for-uri($sort), '&amp;start=',$start_var, '&amp;rows=100&amp;facet=true&amp;facet.field=type&amp;facet.sort=index', $other-params)"/>
+							<xsl:value-of select="concat($solr-url, '?q=', encode-for-uri($q), '&amp;sort=', encode-for-uri($sort), '&amp;start=',$start,
+								'&amp;rows=100&amp;facet=true&amp;facet.field=type&amp;facet.field=role_facet&amp;facet.sort=index&amp;facet.limit=-1', $other-params)"/>
 						</xsl:when>
 						<xsl:otherwise>
-							<xsl:value-of select="concat($solr-url, '?q=*:*&amp;sort=', encode-for-uri($sort), '&amp;start=',$start_var, '&amp;rows=100&amp;facet=true&amp;facet.field=type&amp;facet.sort=index', $other-params)"/>
+							<xsl:value-of select="concat($solr-url, '?q=*:*&amp;sort=', encode-for-uri($sort), '&amp;start=',$start,
+								'&amp;rows=100&amp;facet=true&amp;facet.field=type&amp;facet.field=role_facet&amp;facet.sort=index&amp;facet.limit=-1', $other-params)"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
