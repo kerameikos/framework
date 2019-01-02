@@ -14,7 +14,7 @@
 				<xsl:template match="/">
 					<config>
 						<url>
-							<xsl:value-of select="concat('file://', /config/ontology_path, '/kerameikos.rdf')"/>
+							<xsl:value-of select="concat(/config/ontology_path, '/kerameikos.rdf')"/>
 						</url>						
 						<mode>xml</mode>
 						<content-type>application/xml</content-type>

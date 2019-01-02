@@ -22,7 +22,7 @@
 				<xsl:variable name="id" select="substring-after(., 'id/')"/>
 
 				<role uri="{.}">
-					<xsl:value-of select="document(concat('file://', $data_path, '/id/', $id, '.rdf'))//skos:prefLabel[@xml:lang = 'en']"/>
+					<xsl:value-of select="document(concat($data_path, '/id/', $id, '.rdf'))//skos:prefLabel[@xml:lang = 'en']"/>
 				</role>
 			</xsl:for-each>
 		</roles>

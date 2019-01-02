@@ -4,8 +4,9 @@
 	<url>http://localhost:8080/orbeon/kerameikos/</url>
 	<solr_published>http://localhost:8080/solr/kerameikos/</solr_published>
 	<solr_fuseki>http://localhost:8080/solr/kerameikos-fuseki/</solr_fuseki>
-	<data_path>/usr/local/projects/kerameikos-data</data_path>
-	<ontology_path>/usr/local/projects/ontology/</ontology_path>
+	<data_path>oxf:/kerameikos-data</data_path>
+	<absolute_data_path>/usr/local/projects/kerameikos-data</absolute_data_path>
+	<ontology_path>oxf:/kerameikos-ontology</ontology_path>
 	<sparql>
 		<query>http://localhost:8080/fuseki/kerameikos/query</query>
 		<update>http://localhost:8080/fuseki/kerameikos/update</update>

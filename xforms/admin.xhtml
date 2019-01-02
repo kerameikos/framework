@@ -578,7 +578,7 @@ SELECT * WHERE {
 					<xforms:send submission="delete-id-from-solr"/>
 					<!-- delete the RDF file from the disk -->
 					<xforms:setvalue ref="instance('delete-config')/delete/url"
-						value="concat('file://', instance('config')/data_path, '/id/',  instance('control-instance')/id, '.rdf')"/>
+						value="concat(instance('config')/data_path, '/id/',  instance('control-instance')/id, '.rdf')"/>
 					<xforms:insert nodeset="instance('dump')"
 						origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/delete-id.xpl', 'configuration', instance('delete-config'), 'data')"/>
 					<xforms:setvalue ref="instance('control-instance')/status">ID successfully deleted from system.</xforms:setvalue>

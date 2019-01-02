@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Author: Ethan Gruber
-	Date: August 2018
-	Function: Use the Orbeon directory-scanner processor to get a listing of all RDF files in the data_path. Aggregate into one RDF/XML file
+	Date: January 2019
+	Function: Use the Orbeon directory-scanner processor to get a listing of all RDF files in the data_path (as of Orbeon 2018: oxf:/). Aggregate into one RDF/XML file
 -->
 <p:config xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors">
 
@@ -13,7 +13,7 @@
 		<p:input name="data" href="../../../config.xml"/>
 		<p:input name="config">
 			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
-				<xsl:variable name="directory" select="concat('file:', /config/data_path)"/>
+				<xsl:variable name="directory" select="/config/data_path"/>
 
 				<xsl:template match="/">
 					<config>
@@ -36,6 +36,8 @@
 
 	<p:processor name="oxf:unsafe-xslt">
 		<p:input name="data" href="#directory-scan"/>
+		<p:input name="config-xml" href="../../../config.xml"/>
+		
 		<p:input name="config">
 			<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xsl xs"
 				xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:prov="http://www.w3.org/ns/prov#"
@@ -46,12 +48,12 @@
 				xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
 				xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#" version="2.0">
 
-				<xsl:variable name="path" select="/directory/@path"/>
+				<xsl:variable name="data_path" select="doc('input:config-xml')/config/data_path"/>
 
 				<xsl:template match="/">
 					<rdf:RDF>
 						<xsl:for-each select="descendant::file">
-							<xsl:copy-of select="document(concat('file://', $path, '/', @path))/rdf:RDF/*"/>
+							<xsl:copy-of select="document(concat($data_path, '/', @path))/rdf:RDF/*"/>
 						</xsl:for-each>
 					</rdf:RDF>
 				</xsl:template>
