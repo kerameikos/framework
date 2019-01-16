@@ -16,6 +16,13 @@
 	<admin_email_to/>
 	<mapboxKey>pk.eyJ1IjoiZXdnMTE4IiwiYSI6IjViNDRlMzgxMjkyMDg0MGIxYTNlMzlkMjk1ZTI5Yzg5In0.1FU6cKAs4-vPMroB_l_0lA</mapboxKey>
 	<google_analytics/>
+	<documentation>
+		<page stub="../editor/" label="Editors"/>
+	</documentation>
+	<datacite>
+		<publisher>University of Virginia</publisher>
+		<rights rightsURI="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License (ODbL) v1.0</rights>
+	</datacite>
 	<namespaces>
 		<namespace prefix="crm" uri="http://www.cidoc-crm.org/cidoc-crm/" default="true"/>
 		<namespace prefix="dcterms" uri="http://purl.org/dc/terms/" default="true"/>

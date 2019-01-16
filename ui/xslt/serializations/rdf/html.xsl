@@ -10,20 +10,27 @@
 	<xsl:include href="../../vis-templates.xsl"/>
 	<xsl:include href="html-templates.xsl"/>
 
-	<!-- URL parameters -->
-	<xsl:param name="filter" select="doc('input:request')/request/parameters/parameter[name = 'filter']/value"/>
-	<xsl:param name="dist" select="doc('input:request')/request/parameters/parameter[name = 'dist']/value"/>
-	<xsl:param name="compare" select="doc('input:request')/request/parameters/parameter[name = 'compare']/value"/>
-	<xsl:param name="numericType" select="doc('input:request')/request/parameters/parameter[name = 'type']/value"/>
-
 	<!-- config and global variables -->
 	<xsl:variable name="display_path">../</xsl:variable>
-	<xsl:variable name="id" select="tokenize(/content/rdf:RDF/*[1]/@rdf:about, '/')[last()]"/>
 	<xsl:variable name="html-uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 	<xsl:variable name="mode">record</xsl:variable>
 	<xsl:variable name="base-query"
 		select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
 	<xsl:variable name="type" select="/content/rdf:RDF/*[1]/name()"/>
+	<xsl:variable name="conceptURI" select="/content/rdf:RDF/*[1]/@rdf:about"/>
+	<xsl:variable name="id"
+		select="
+			if ($type = 'skos:ConceptScheme') then
+				tokenize($conceptURI, '/')[last() - 1]
+			else
+				tokenize($conceptURI, '/')[last()]"/>
+
+	<xsl:variable name="scheme" select="
+			if ($type = 'skos:ConceptScheme') then
+				''
+			else
+				tokenize($conceptURI, '/')[last() - 1]"/>
+
 	<xsl:variable name="title" select="/content/rdf:RDF/*[1]/skos:prefLabel[@xml:lang = 'en']"/>
 
 	<!-- definition of namespaces for turning in solr type field URIs into abbreviations -->
@@ -163,10 +170,13 @@
 	</xsl:template>
 
 	<xsl:template name="body">
-		<div class="container-fluid content">
+		<div class="container-fluid content">			
+			
+			
+			
 			<div class="row">
 				<div class="col-md-12">
-
+					
 					<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type">
 						<xsl:with-param name="hasObjects" select="$hasObjects" as="xs:boolean"/>
 						<xsl:with-param name="mode">record</xsl:with-param>
@@ -191,74 +201,78 @@
 					</xsl:if>
 
 					<hr/>
-					<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
-						<xsl:if test="$hasGeo = true()">
+				</div>
+			</div>
+			
+			<xsl:if test="string($scheme)">
+				<xsl:call-template name="data-export"/>
+			</xsl:if>
+			
+
+			<!-- add context based on concept scheme -->
+			<xsl:choose>
+				<xsl:when test="$scheme = 'id'">
+					<xsl:if test="$hasGeo = true()">
+						<div class="row">
 							<div class="col-md-12 page-section">
 								<div id="mapcontainer" class="map-normal">
 									<div id="info"/>
 								</div>
 							</div>
-						</xsl:if>
-						<xsl:if test="$hasObjects = true()">
-							<div id="iiif-window" style="width:800px;height:600px;display:none"/>
-
-							<div class="row">
-								<div class="col-md-12 page-section">
-									<h2>
-										<xsl:text>Objects of this Typology</xsl:text>
-										<small>
-											<a href="#" class="toggle-button" id="toggle-listObjects" title="Click to hide or show the analysis form">
-												<span class="glyphicon glyphicon-triangle-bottom"/>
-											</a>
-										</small>
-									</h2>
-
-									<div id="listObjects"/>
-								</div>
-							</div>
-
-							<div class="row">
-								<div class="col-md-12 page-section">
-									<h2>
-										<xsl:text>Quantitative Analysis</xsl:text>
-										<small>
-											<a href="#" class="toggle-button" id="toggle-quant" title="Click to hide or show the analysis form">
-												<span class="glyphicon glyphicon-triangle-bottom"/>
-											</a>
-										</small>
-									</h2>
-									<xsl:call-template name="distribution-form">
-										<xsl:with-param name="mode" select="$mode"/>
-									</xsl:call-template>
-								</div>
-							</div>
-						</xsl:if>
-					</xsl:if>
-				</div>
-				<xsl:if test="not(/content/rdf:RDF/skos:ConceptScheme)">
-					<div class="col-md-12">
-						<div>
-							<h3>Data Export</h3>
-							<ul class="list-inline">
-								<li>
-									<a href="{$id}.rdf">RDF/XML</a>
-								</li>
-								<li>
-									<a href="{$id}.ttl">TTL</a>
-								</li>
-								<li>
-									<a href="{$id}.jsonld">JSON-LD</a>
-								</li>
-								<xsl:if test="/content/rdf:RDF/geo:SpatialThing">
-									<li>
-										<a href="{$id}.kml">KML</a>
-									</li>
-								</xsl:if>
-							</ul>
 						</div>
-					</div>
-				</xsl:if>
-			</div>
+
+					</xsl:if>
+					<xsl:if test="$hasObjects = true()">
+						<div id="iiif-window" style="width:800px;height:600px;display:none"/>
+
+						<div class="row">
+							<div class="col-md-12 page-section">
+								<h2>
+									<xsl:text>Objects of this Typology</xsl:text>
+									<small>
+										<a href="#" class="toggle-button" id="toggle-listObjects" title="Click to hide or show the analysis form">
+											<span class="glyphicon glyphicon-triangle-bottom"/>
+										</a>
+									</small>
+								</h2>
+
+								<div id="listObjects"/>
+							</div>
+						</div>
+
+						<div class="row">
+							<div class="col-md-12 page-section">
+								<h2>
+									<xsl:text>Quantitative Analysis</xsl:text>
+									<small>
+										<a href="#" class="toggle-button" id="toggle-quant" title="Click to hide or show the analysis form">
+											<span class="glyphicon glyphicon-triangle-bottom"/>
+										</a>
+									</small>
+								</h2>
+								<xsl:call-template name="distribution-form">
+									<xsl:with-param name="mode" select="$mode"/>
+								</xsl:call-template>
+							</div>
+						</div>
+					</xsl:if>
+				</xsl:when>
+				<xsl:when test="$scheme = 'editor'">
+					<xsl:if test="doc('input:id-count')//res:binding[@name = 'count']/res:literal &gt; 0">
+						<xsl:variable name="count" select="doc('input:id-count')//res:binding[@name = 'count']/res:literal"/>
+						<div class="row">
+							<div class="col-md-12 page-section">
+								<hr/>
+								<h2>Kerameikos Contributions</h2>
+								<xsl:apply-templates select="doc('input:spreadsheet-list')/rdf:RDF[count(prov:Entity) &gt; 0]" mode="spreadsheets"/>
+								<xsl:apply-templates select="doc('input:id-list')/res:sparql" mode="edited-ids">
+									<xsl:with-param name="count" select="$count"/>
+								</xsl:apply-templates>
+							</div>
+						</div>
+					</xsl:if>
+				</xsl:when>
+			</xsl:choose>
 
 			<div class="hidden">
 				<span id="mapboxKey">
@@ -317,17 +331,101 @@
 		</div>
 	</xsl:template>
 
-	<!-- templates -->
-	<xsl:template name="dbpedia-abstract">
-		<xsl:param name="uri"/>
+	<!-- Related ID and spreadsheet templates for enhancing context of /editor pages -->
+	<xsl:template match="rdf:RDF" mode="spreadsheets">
 
-		<xsl:variable name="dbpedia-rdf" as="item()*">
-			<xsl:copy-of select="document(concat('http://dbpedia.org/data/', substring-after($uri, 'resource/'), '.rdf'))/*"/>
-		</xsl:variable>
-		<div>
-			<h3>Abstract (dbpedia)</h3>
-			<xsl:value-of select="$dbpedia-rdf//dbpedia-owl:abstract[@xml:lang = 'en']"/>
-		</div>
+		<!-- load SPARQL as text -->
+		<xsl:variable name="query" select="doc('input:getSpreadsheets-query')"/>
+
+		<h3>Spreadsheets</h3>
+		<p>This editor has contributed Kerameikos IDs through the following spreadsheets (<a
+				href="{$display_path}query?query={encode-for-uri(replace($query, '%URI%', $conceptURI))}&amp;output=json" title="Download list">
+				<span class="glyphicon glyphicon-download"/> Download list</a>):</p>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Description</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				<xsl:for-each select="prov:Entity">
+					<xsl:sort select="prov:atTime[1]" order="descending"/>
+					<tr>
+						<td>
+							<a href="{@rdf:about}">
+								<xsl:value-of select="dcterms:description"/>
+							</a>
+						</td>
+						<td>
+							<xsl:value-of select="format-dateTime(prov:atTime[1], '[D] [MNn] [Y0001]')"/>
+						</td>
+					</tr>
+				</xsl:for-each>
+			</tbody>
+		</table>
+	</xsl:template>
+
+	<xsl:template match="res:sparql" mode="edited-ids">
+		<xsl:param name="count"/>
+
+		<!-- load SPARQL as text -->
+		<xsl:variable name="query" select="doc('input:getEditedIds-query')"/>
+
+		<xsl:variable name="describe" select="replace(replace(replace($query, '%URI%', $conceptURI), ' %LIMIT%', ''), 'SELECT', 'DESCRIBE')"/>
+
+		<h3>Concepts</h3>
+		<xsl:choose>
+			<xsl:when test="$count &gt; 25">
+				<p>This is a partial list of <strong>25</strong> of <strong><xsl:value-of select="$count"/></strong> IDs created or updated by this editor (<a
+						href="{$display_path}query?query={encode-for-uri(replace(replace($query, '%URI%', $conceptURI), ' %LIMIT%', ''))}&amp;output=csv"
+						title="Download list">
+						<span class="glyphicon glyphicon-download"/> Download list</a>):</p>
+			</xsl:when>
+			<xsl:otherwise>
+				<p>This is a list of <strong><xsl:value-of select="$count"/></strong> IDs created or updated by this editor:</p>
+			</xsl:otherwise>
+		</xsl:choose>
+
+		<p>
+			<strong>Download as: </strong>
+			<a href="{$display_path}query?query={encode-for-uri($describe)}&amp;output=xml" title="RDF/XML">RDF/XML</a>
+			<xsl:text> | </xsl:text>
+			<a href="{$display_path}query?query={encode-for-uri($describe)}&amp;output=text" title="Turtle">Turtle</a>
+			<xsl:text> | </xsl:text>
+			<a href="{$display_path}query?query={encode-for-uri($describe)}&amp;output=json" title="JSON-LD">JSON-LD</a>
+		</p>
+
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Label</th>
+					<th>Spreadsheet</th>
+					<th>Date</th>
+				</tr>
+			</thead>
+			<tbody>
+				<xsl:for-each select="descendant::res:result">
+					<tr>
+						<td>
+							<a href="{res:binding[@name='concept']/res:uri}">
+								<xsl:value-of select="res:binding[@name = 'label']/res:literal"/>
+							</a>
+						</td>
+						<td>
+							<xsl:if test="res:binding[@name = 'spreadsheet']">
+								<a href="{res:binding[@name='spreadsheet']/res:uri}">
+									<xsl:value-of select="res:binding[@name = 'desc']/res:literal"/>
+								</a>
+							</xsl:if>
+						</td>
+						<td>
+							<xsl:value-of select="format-dateTime(res:binding[@name = 'date']/res:literal, '[D] [MNn] [Y0001]')"/>
+						</td>
+					</tr>
+				</xsl:for-each>
+			</tbody>
+		</table>
 	</xsl:template>
 
 	<xsl:template name="lgpn-bio">
@@ -373,5 +471,44 @@
 			</xsl:otherwise>
 		</xsl:choose>
 		<xsl:text>)</xsl:text>
+	</xsl:template>
+	
+	<xsl:template name="data-export">
+		<div class="row">
+			<div class="col-md-12">
+				<div>
+					<ul class="list-inline">
+						<li><strong>Data Export: </strong></li>
+						<li>
+							<a href="{$id}.rdf">RDF/XML</a>
+						</li>
+						<li>
+							<a href="{$id}.ttl">TTL</a>
+						</li>
+						<li>
+							<a href="{$id}.jsonld">JSON-LD</a>
+						</li>
+						<xsl:if test="/content/rdf:RDF/geo:SpatialThing">
+							<li>
+								<a href="{$id}.kml">KML</a>
+							</li>
+						</xsl:if>
+					</ul>
+				</div>
+				
+				<!-- insert a DataCite XML link for an editor with IDs -->
+				<xsl:if test="$scheme = 'editor'">
+					<xsl:if test="doc('input:id-count')//res:binding[@name = 'count']/res:literal &gt; 0">
+						<div>
+							<a href="{$id}.xml" title="DataCite XML Metadata">
+								<img src="{$display_path}ui/images/datacite-medium.png" alt="DataCite Logo: https://datacite.org/"></img>
+							</a>
+							<br/>
+							<a href="{$id}.xml">DataCite XML Metadata</a>
+						</div>	
+					</xsl:if>
+				</xsl:if>
+			</div>
+		</div>
 	</xsl:template>
 </xsl:stylesheet>

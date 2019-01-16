@@ -52,7 +52,7 @@
 											<xsl:value-of select="@rdf:about"/>
 										</xsl:when>
 										<xsl:otherwise>
-											<xsl:value-of select="substring-after(@rdf:about, 'id/')"/>
+											<xsl:value-of select="tokenize(@rdf:about, '/')[last()]"/>
 										</xsl:otherwise>
 									</xsl:choose>
 								</xsl:otherwise>
@@ -207,4 +207,5 @@
 	
 	<!-- hide the ontolex:otherFrom from the HTML output: plural displayed after prefLabel -->
 	<xsl:template match="ontolex:otherForm" mode="list-item"/>
+	
 </xsl:stylesheet>

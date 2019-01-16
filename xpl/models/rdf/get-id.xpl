@@ -40,6 +40,9 @@
 											<xsl:when test="contains($pieces[last()], '.kml')">
 												<xsl:value-of select="substring-before($pieces[last()], '.kml')"/>
 											</xsl:when>
+											<xsl:when test="contains($pieces[last()], '.xml')">
+												<xsl:value-of select="substring-before($pieces[last()], '.xml')"/>
+											</xsl:when>
 											<xsl:when test="contains($pieces[last()], '.ttl')">
 												<xsl:value-of select="substring-before($pieces[last()], '.ttl')"/>
 											</xsl:when>

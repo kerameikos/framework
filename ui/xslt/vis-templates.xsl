@@ -5,6 +5,12 @@
 	xmlns:org="http://www.w3.org/ns/org#" xmlns:kerameikos="http://kerameikos.org/" xmlns:kid="http://kerameikos.org/id/"
 	xmlns:kon="http://kerameikos.org/ontology#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" exclude-result-prefixes="#all" version="2.0">
 
+	<!-- URL parameters -->
+	<xsl:param name="filter" select="doc('input:request')/request/parameters/parameter[name = 'filter']/value"/>
+	<xsl:param name="dist" select="doc('input:request')/request/parameters/parameter[name = 'dist']/value"/>
+	<xsl:param name="compare" select="doc('input:request')/request/parameters/parameter[name = 'compare']/value"/>
+	<xsl:param name="numericType" select="doc('input:request')/request/parameters/parameter[name = 'type']/value"/>
+
 	<!-- ********** VISUALIZATION TEMPLATES *********** -->
 	<xsl:template name="distribution-form">
 		<xsl:param name="mode"/>
