@@ -170,10 +170,7 @@
 	</xsl:template>
 
 	<xsl:template name="body">
-		<div class="container-fluid content">			
-			
-			
-			
+		<div class="container-fluid content">	
 			<div class="row">
 				<div class="col-md-12">
 					
@@ -199,7 +196,6 @@
 							</xsl:apply-templates>
 						</div>
 					</xsl:if>
-
 					<hr/>
 				</div>
 			</div>
@@ -261,8 +257,7 @@
 					<xsl:if test="doc('input:id-count')//res:binding[@name = 'count']/res:literal &gt; 0">
 						<xsl:variable name="count" select="doc('input:id-count')//res:binding[@name = 'count']/res:literal"/>
 						<div class="row">
-							<div class="col-md-12 page-section">
-								<hr/>
+							<div class="col-md-12 page-section">								
 								<h2>Kerameikos Contributions</h2>
 								<xsl:apply-templates select="doc('input:spreadsheet-list')/rdf:RDF[count(prov:Entity) &gt; 0]" mode="spreadsheets"/>
 								<xsl:apply-templates select="doc('input:id-list')/res:sparql" mode="edited-ids">
@@ -272,6 +267,14 @@
 						</div>
 					</xsl:if>
 				</xsl:when>
+				<xsl:otherwise>
+					<!-- context for ConceptSchemes -->
+					<xsl:choose>
+						<xsl:when test="$id = 'editor'">
+							<xsl:apply-templates select="doc('input:editors')/res:sparql[count(descendant::res:result) &gt; 0]" mode="editors"/>
+						</xsl:when>
+					</xsl:choose>
+				</xsl:otherwise>
 			</xsl:choose>
 
 			<div class="hidden">
@@ -427,6 +430,40 @@
 			</tbody>
 		</table>
 	</xsl:template>
+	
+	<xsl:template match="res:sparql" mode="editors">
+		<div class="row">
+			<div class="col-md-12 page-section">
+				<h2>Editors</h2>
+				<table class="table table-striped">
+					<thead>
+						<tr>
+							<th>Name</th>
+							<th>ORCID</th>
+						</tr>
+					</thead>
+					<tbody>
+						<xsl:for-each select="descendant::res:result">
+							<tr>
+								<td>
+									<a href="{res:binding[@name='editor']/res:uri}">
+										<xsl:value-of select="res:binding[@name = 'name']/res:literal"/>
+									</a>
+								</td>
+								<td>
+									<xsl:if test="res:binding[@name = 'orcid']">
+										<a href="{res:binding[@name='orcid']/res:uri}">
+											<xsl:value-of select="tokenize(res:binding[@name = 'orcid']/res:uri, '/')[last()]"/>
+										</a>
+									</xsl:if>
+								</td>
+							</tr>
+						</xsl:for-each>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</xsl:template>
 
 	<xsl:template name="lgpn-bio">
 		<xsl:param name="uri"/>
@@ -508,6 +545,7 @@
 						</div>	
 					</xsl:if>
 				</xsl:if>
+				<hr/>
 			</div>
 		</div>
 	</xsl:template>
