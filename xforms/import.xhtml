@@ -1207,6 +1207,9 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 									<xforms:label>Import Data</xforms:label>
 									<xforms:action ev:event="DOMActivate">
 										
+										<!-- set a single time for all entities -->
+										<xforms:var name="dateTime" select="current-dateTime()"/>
+										
 										<!-- begin processing the spreadsheet into RDF -->
 										<xforms:action xxforms:iterate="instance('feed')//atom:entry">
 											<!-- set position for progress dialog -->
@@ -1450,7 +1453,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 													ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
 													value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"></xforms:setvalue>
 												<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:atTime"
-													value="current-dateTime()"></xforms:setvalue>
+													value="$dateTime"></xforms:setvalue>
 												<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:used/@rdf:resource"
 													value="instance('control-instance')/spreadsheet_uri"></xforms:setvalue>
 												
@@ -1489,7 +1492,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 														ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
 														value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"></xforms:setvalue>
 													<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:atTime"
-														value="current-dateTime()"></xforms:setvalue>
+														value="$dateTime"></xforms:setvalue>
 													<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:used/@rdf:resource"
 														value="instance('control-instance')/spreadsheet_uri"></xforms:setvalue>
 													
