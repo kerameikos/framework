@@ -112,7 +112,13 @@
 	<xsl:template match="/">
 		<html lang="en" prefix="{$prefix}">
 			<head>
-				<title id="{$id}">Kerameikos.org: <xsl:value-of select="//skos:prefLabel[@xml:lang = 'en']"/></title>
+				<title id="{$id}">Kerameikos.org: <xsl:value-of
+						select="
+							if (//skos:prefLabel[@xml:lang = 'en']) then
+								//skos:prefLabel[@xml:lang = 'en']
+							else
+								$id"
+					/></title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
@@ -170,10 +176,10 @@
 	</xsl:template>
 
 	<xsl:template name="body">
-		<div class="container-fluid content">	
+		<div class="container-fluid content">
 			<div class="row">
 				<div class="col-md-12">
-					
+
 					<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type">
 						<xsl:with-param name="hasObjects" select="$hasObjects" as="xs:boolean"/>
 						<xsl:with-param name="mode">record</xsl:with-param>
@@ -199,11 +205,11 @@
 					<hr/>
 				</div>
 			</div>
-			
+
 			<xsl:if test="string($scheme)">
 				<xsl:call-template name="data-export"/>
 			</xsl:if>
-			
+
 
 			<!-- add context based on concept scheme -->
 			<xsl:choose>
@@ -257,7 +263,7 @@
 					<xsl:if test="doc('input:id-count')//res:binding[@name = 'count']/res:literal &gt; 0">
 						<xsl:variable name="count" select="doc('input:id-count')//res:binding[@name = 'count']/res:literal"/>
 						<div class="row">
-							<div class="col-md-12 page-section">								
+							<div class="col-md-12 page-section">
 								<h2>Kerameikos Contributions</h2>
 								<xsl:apply-templates select="doc('input:spreadsheet-list')/rdf:RDF[count(prov:Entity) &gt; 0]" mode="spreadsheets"/>
 								<xsl:apply-templates select="doc('input:id-list')/res:sparql" mode="edited-ids">
@@ -430,7 +436,7 @@
 			</tbody>
 		</table>
 	</xsl:template>
-	
+
 	<xsl:template match="res:sparql" mode="editors">
 		<div class="row">
 			<div class="col-md-12 page-section">
@@ -509,13 +515,15 @@
 		</xsl:choose>
 		<xsl:text>)</xsl:text>
 	</xsl:template>
-	
+
 	<xsl:template name="data-export">
 		<div class="row">
 			<div class="col-md-12">
 				<div>
 					<ul class="list-inline">
-						<li><strong>Data Export: </strong></li>
+						<li>
+							<strong>Data Export: </strong>
+						</li>
 						<li>
 							<a href="{$id}.rdf">RDF/XML</a>
 						</li>
@@ -532,17 +540,17 @@
 						</xsl:if>
 					</ul>
 				</div>
-				
+
 				<!-- insert a DataCite XML link for an editor with IDs -->
 				<xsl:if test="$scheme = 'editor'">
 					<xsl:if test="doc('input:id-count')//res:binding[@name = 'count']/res:literal &gt; 0">
 						<div>
 							<a href="{$id}.xml" title="DataCite XML Metadata">
-								<img src="{$display_path}ui/images/datacite-medium.png" alt="DataCite Logo: https://datacite.org/"></img>
+								<img src="{$display_path}ui/images/datacite-medium.png" alt="DataCite Logo: https://datacite.org/"/>
 							</a>
 							<br/>
 							<a href="{$id}.xml">DataCite XML Metadata</a>
-						</div>	
+						</div>
 					</xsl:if>
 				</xsl:if>
 				<hr/>
