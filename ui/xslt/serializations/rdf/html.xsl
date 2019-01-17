@@ -445,6 +445,7 @@
 					<thead>
 						<tr>
 							<th>Name</th>
+							<th>Affiliation</th>
 							<th>ORCID</th>
 						</tr>
 					</thead>
@@ -454,6 +455,11 @@
 								<td>
 									<a href="{res:binding[@name='editor']/res:uri}">
 										<xsl:value-of select="res:binding[@name = 'name']/res:literal"/>
+									</a>
+								</td>
+								<td>
+									<a href="{res:binding[@name='wikidata']/res:uri}">
+										<xsl:value-of select="res:binding[@name = 'org']/res:literal"/>
 									</a>
 								</td>
 								<td>
