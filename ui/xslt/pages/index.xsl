@@ -8,6 +8,7 @@
 			<head>
 				<title>Kerameikos.org</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
+				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
@@ -27,6 +28,7 @@
 			<div class="container">
 				<div class="row text-center">
 					<div class="col-md-12">
+						<img src="{$display_path}ui/images/kerameikos-logo.svg" style="height:150px"/>
 						<h1>κεραμεικος</h1>
 					</div>
 				</div>
@@ -34,10 +36,11 @@
 		</div>
 		<div class="container-fluid banner hidden-xs hidden-sm">
 			<div class="row">
-				<div class="col-md-6 col-md-offset-6">
-					<div class="row banner-background text-right">
+				<div class="col-md-4 col-md-offset-8">
+					<div class="row banner-background text-center">
 						<div class="col-md-12">
-							<h1>κεραμεικος</h1>
+							<img src="{$display_path}ui/images/kerameikos-logo.svg"/>
+							<h2>κεραμεικος</h2>
 						</div>
 					</div>
 				</div>
@@ -55,7 +58,7 @@
 								<li>
 									<a href="kerameikos.org.rdf">RDF/XML</a>
 								</li>
-									<li>
+								<li>
 									<a href="kerameikos.org.ttl">Turtle</a>
 								</li>
 								<li>
@@ -96,9 +99,9 @@
 						<p>
 							<img src="{$display_path}ui/images/neh_logo_horizontal_2c_c_outl_0.png" style="width:300px" alt="NEH Logo"/>
 						</p>
-						<p>In August 2018, the <a href="https://www.neh.gov/">National Endowment for the Humanities</a> awarded Kerameikos $85,382 as part of
-							the Digital Humanities Advancement program. An 18-month long Level II project, this will fund the creation of all necessary Archaic
-							and Classical Greek pottery concepts the building of various aggregation or data harvesting tools.</p>
+						<p>In August 2018, the <a href="https://www.neh.gov/">National Endowment for the Humanities</a> awarded Kerameikos $85,382 as part of the Digital Humanities
+							Advancement program. An 18-month long Level II project, this will fund the creation of all necessary Archaic and Classical Greek pottery concepts the
+							building of various aggregation or data harvesting tools.</p>
 					</div>
 					<!--<div>						
 						<h3>Collaborators</h3>

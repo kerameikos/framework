@@ -16,6 +16,7 @@
 			<head>
 				<title>Kerameikos.org: SPARQL Results</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
+				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
 				<!-- bootstrap -->
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
