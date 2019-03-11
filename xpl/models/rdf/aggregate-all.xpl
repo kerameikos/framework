@@ -39,7 +39,7 @@
 		<p:input name="config-xml" href="../../../config.xml"/>
 		
 		<p:input name="config">
-			<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xsl xs"
+			<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="xsl xs p oxf"
 				xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:prov="http://www.w3.org/ns/prov#"
 				xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:owl="http://www.w3.org/2002/07/owl#"
 				xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
@@ -58,20 +58,6 @@
 					</rdf:RDF>
 				</xsl:template>
 			</xsl:stylesheet>
-		</p:input>
-		<p:output name="data" id="model"/>
-	</p:processor>
-	
-	<p:processor name="oxf:xml-converter">
-		<p:input name="data" href="#model"/>
-		<p:input name="config">
-			<config>
-				<content-type>application/rdf+xml</content-type>
-				<encoding>utf-8</encoding>
-				<version>1.0</version>
-				<indent>true</indent>
-				<indent-amount>4</indent-amount>
-			</config>
 		</p:input>
 		<p:output name="data" ref="data"/>
 	</p:processor>

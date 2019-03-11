@@ -91,7 +91,7 @@
 	<!-- **** DATA DUMPS **** -->	
 	<page path="/kerameikos/pelagios.void.rdf" view="dump/pelagios.void.rdf"/>
 	<page path="/kerameikos/pelagios.rdf" model="xpl/models/solr/pelagios.xpl" view="xpl/views/serializations/solr/pelagios.xpl"/>
-	<page path="/kerameikos/kerameikos.org.rdf" view="xpl/models/rdf/aggregate-all.xpl"/>
+	<page path="/kerameikos/kerameikos.org.rdf" model="xpl/models/rdf/aggregate-all.xpl" view="xpl/controllers/serialize-rdfxml.xpl"/>
 	<page path="/kerameikos/kerameikos.org.jsonld" view="xpl/controllers/call-rdflib.xpl"/>
 	<page path="/kerameikos/kerameikos.org.ttl"  view="xpl/controllers/call-rdflib.xpl"/>
 

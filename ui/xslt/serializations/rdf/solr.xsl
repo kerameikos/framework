@@ -30,7 +30,7 @@
 
 	<xsl:template match="/">
 		<add>
-			<xsl:for-each select="/content/rdf:RDF/*[rdf:type/@rdf:resource = 'http://www.w3.org/2004/02/skos/core#Concept' and skos:inScheme/@rdf:resource='http://kerameikos.org/id/'][not(child::dcterms:isReplacedBy)]">
+			<xsl:for-each select="//rdf:RDF/*[rdf:type/@rdf:resource = 'http://www.w3.org/2004/02/skos/core#Concept' and skos:inScheme/@rdf:resource='http://kerameikos.org/id/'][not(child::dcterms:isReplacedBy)]">
 				<xsl:variable name="uri" select="@rdf:about"/>
 				
 				<xsl:apply-templates select="self::node()" mode="generateDoc">
