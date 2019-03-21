@@ -127,7 +127,18 @@
 										<xsl:variable name="id" select="position()"/>
 
 										<select id="{$id}">
-											<triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
+											<union>
+												<group>
+													<triple s="?{$id}" p="rdf:type" o="skos:Concept" filter="(?{$id} = {$object})"/>
+												</group>
+												<group>
+													<triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
+												</group>
+												<group>
+													<triple s="?broader" p="skos:broader" o="{$object}"/>
+													<triple s="?broader" p="skos:exactMatch" o="?{$id}"/>
+												</group>												
+											</union>											
 										</select>
 										<triple s="?prod" p="crm:P7_took_place_at" o="?{$id}"/>
 									</xsl:when>
@@ -135,7 +146,10 @@
 										<xsl:variable name="id" select="position()"/>
 
 										<select id="{$id}">
-											<triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
+											<union>
+												<triple s="?{$id}" p="rdf:type" o="skos:Concept" filter="(?{$id} = {$object})"/>
+												<triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
+											</union>											
 										</select>
 										<triple s="?object" p="kon:hasShape" o="?{$id}"/>
 									</xsl:when>
@@ -236,37 +250,50 @@
 						<xsl:text>{ SELECT </xsl:text>
 						<xsl:value-of select="concat('?', @id)"/>
 						<xsl:text> WHERE { </xsl:text>
-						<xsl:apply-templates select="triple|group"/>
+						<xsl:apply-templates/>
 						<xsl:text>}}&#x0A;</xsl:text>
 					</xsl:template>
 
+					<!-- default templates for constructed SPARQL -->
 					<xsl:template match="triple">
 						<xsl:value-of select="concat(@s, ' ', @p, ' ', @o, if (@filter) then concat(' FILTER ', @filter) else '', '.')"/>
 						<xsl:if test="not(parent::union)">
 							<xsl:text>&#x0A;</xsl:text>
 						</xsl:if>
 					</xsl:template>
-
+					
 					<xsl:template match="optional">
 						<xsl:text>OPTIONAL {</xsl:text>
 						<xsl:apply-templates select="triple"/>
 						<xsl:text>}&#x0A;</xsl:text>
 					</xsl:template>
-
+					
 					<xsl:template match="group">
+						<xsl:if test="position() &gt; 1">
+							<xsl:text>UNION </xsl:text>
+						</xsl:if>
+						<xsl:text>{</xsl:text>
 						<xsl:apply-templates select="triple"/>
+						<xsl:text>}&#x0A;</xsl:text>
 					</xsl:template>
-
+					
 					<xsl:template match="union">
-						<xsl:for-each select="triple|group">
-							<xsl:if test="position() &gt; 1">
-								<xsl:text>UNION </xsl:text>
-							</xsl:if>
-							<xsl:text>{</xsl:text>
-							<xsl:apply-templates select="self::node()"/>
-							<xsl:text>}&#x0A;</xsl:text>
-						</xsl:for-each>
-					</xsl:template>
+						<xsl:choose>
+							<xsl:when test="child::group">
+								<xsl:apply-templates select="group"/>
+							</xsl:when>
+							<xsl:otherwise>
+								<xsl:for-each select="triple">
+									<xsl:if test="position() &gt; 1">
+										<xsl:text>UNION </xsl:text>
+									</xsl:if>
+									<xsl:text>{</xsl:text>
+									<xsl:apply-templates select="self::node()"/>
+									<xsl:text>}&#x0A;</xsl:text>
+								</xsl:for-each>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:template>	
 
 				</xsl:stylesheet>
 			</p:input>
