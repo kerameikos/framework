@@ -36,6 +36,7 @@
 					<import-trigger>false</import-trigger>
 					<import-wikidata-labels>true</import-wikidata-labels>
 					<import-wikidata-uris>true</import-wikidata-uris>
+					<overwrite-definitions>false</overwrite-definitions>
 					<new_id>true</new_id>
 					<content_before_hash></content_before_hash>
 					<content_after_hash></content_after_hash>
@@ -334,6 +335,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				<xforms:bind nodeset="import-trigger" id="import-trigger" type="xs:boolean" relevant=". = true()"/>
 				<xforms:bind nodeset="import-wikidata-labels" type="xs:boolean"></xforms:bind>
 				<xforms:bind nodeset="import-wikidata-uris" type="xs:boolean"></xforms:bind>
+				<xforms:bind nodeset="overwrite-definitions" type="xs:boolean"></xforms:bind>
 				<xforms:bind nodeset="new_id" type="xs:boolean"/>
 			</xforms:bind>
 
@@ -569,6 +571,9 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 					<!-- insert rdf:type as skos:Concept -->
 					<xforms:insert context="instance('rdf')/*[last()]"
 						origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/2004/02/skos/core#Concept'))"></xforms:insert>
+					<!-- insert skos:inScheme -->
+					<xforms:insert context="instance('rdf')/*[last()]" nodeset="./child::node()[last()]"
+						origin="xforms:element('skos:inScheme', xforms:attribute('rdf:resource', 'http://kerameikos.org/id/'))"/>
 				</xforms:action>
 				
 				<!-- ************ RDF PROCESSING TO ADD SUPPLEMENTAL INFORMATION ************** -->
@@ -755,6 +760,11 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 									<div>
 										<xforms:input ref="instance('control-instance')/import-wikidata-uris">
 											<xforms:label>Matching URIs</xforms:label>
+										</xforms:input>										
+									</div>
+									<div>
+										<xforms:input ref="instance('control-instance')/overwrite-definitions">
+											<xforms:label>Overwrite Definitions</xforms:label>
 										</xforms:input>										
 									</div>
 								</div>
@@ -1095,22 +1105,21 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																/>
 															</xforms:action>
 														</xforms:action>
-														<xforms:action if="$mapping='skos:broader' or $mapping='org:role' or $mapping='org:organization'">
+														<xforms:action if="$mapping='org:role' or $mapping='org:organization'">
 															<xforms:action if="string-length($value) &gt; 0">
 																<!-- these are properties that must be linked internally to other Kerameikos IDs -->
 																<xforms:insert if="not(contains($value, 'http://kerameikos.org/id/'))"
 																	context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																	origin="xforms:element('error', concat($mapping, ' does not link to a Kerameikos URI: ', $value))"/>
 																<xforms:action if="contains($value, 'http://kerameikos.org/id/')">
-																	<!-- if the URI space is nm:, then test whether the URI has already been validated via SPARQL. If not, then submit a SPARQL query -->
+																	<!-- if the URI space is kid:, then test whether the URI has already been validated via SPARQL. If not, then submit a SPARQL query -->
 																	<xforms:action
 																		if="instance('kerameikos-ids')/id[@uri=$value and @mapping=$mapping] = false()"
 																		context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																		origin="xforms:element('error', concat($mapping, ' links to a non-existent Kerameikos URI or the URI is a different class: ', $value))"/>
 																	<xforms:action if="not(instance('kerameikos-ids')/id[@uri=$value and @mapping=$mapping])">
 																		<!--if the $mapping is an org:organization and class is a foaf:Person, then the target entity must be an organization (foaf:Organization);
-																	if the $mapping is an org:role, the class must be either a foaf:Person or foaf:Organization, and the target must be a foaf:Organization;
-																	otherwise, it will be assumed the mapping is skos:broader and the target class is the same as the source class. -->
+																	if the $mapping is an org:role, the class must be either a foaf:Person or foaf:Organization, and the target must be a foaf:Organization -->
 																		<xforms:var name="class"
 																			select="if ((instance('control-instance')/type = 'foaf:Person' or instance('control-instance')/type = 'foaf:Organization') and $mapping='org:role') then 'org:Role' else if ((instance('control-instance')/type = 'foaf:Person' or instance('control-instance')/type = 'foaf:Organization') and $mapping='org:organization') then 'foaf:Organization' else instance('control-instance')/type"/>
 																		<xforms:setvalue ref="instance('sparqlQuery')"
@@ -1127,6 +1136,50 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																				origin="xforms:element('error', concat($mapping, ' links to a non-existent Kerameikos URI or the URI is a different class: ', $value))"
 																			/>
 																		</xforms:action>
+																	</xforms:action>
+																</xforms:action>
+															</xforms:action>
+														</xforms:action>
+														<xforms:action if="$mapping='skos:broader'">
+															<xforms:action if="string-length($value) &gt; 0">
+																<!-- these are properties that must be linked internally to other Kerameikos IDs -->
+																<xforms:insert if="not(contains($value, 'http://kerameikos.org/id/'))"
+																	context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
+																	origin="xforms:element('error', concat($mapping, ' does not link to a Kerameikos URI: ', $value))"/>
+																<xforms:action if="contains($value, 'http://kerameikos.org/id/')">
+																	<!-- if the URI space is kid:, then test whether the URI has already been validated via SPARQL. If not, then submit a SPARQL query -->
+																	<xforms:action
+																		if="instance('kerameikos-ids')/id[@uri=$value and @mapping=$mapping] = false()"
+																		context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
+																		origin="xforms:element('error', concat($mapping, ' links to a non-existent Kerameikos URI or the URI is a different class: ', $value))"/>
+																	<xforms:action if="not(instance('kerameikos-ids')/id[@uri=$value and @mapping=$mapping])">
+																		<xforms:var name="id" select="tokenize($value, '/')[last()]"/>
+																		
+																		<!-- look in the spreadsheet to see if this ID exists -->
+																		<xforms:action if="instance('feed')//atom:entry[*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended'][name()=instance('mappings')/mapping[@to='id']/@from] = $id]">
+																			<xforms:insert context="instance('kerameikos-ids')"
+																				nodeset="./child::node()[last()]"
+																				origin="xforms:element('id', (xforms:attribute('uri', $value), xforms:attribute('mapping', $mapping), true()))"/>
+																		</xforms:action>
+																		<!-- if not, execute SPARQL query -->
+																		<xforms:action if="not(instance('feed')//atom:entry[*[namespace-uri()='http://schemas.google.com/spreadsheets/2006/extended'][name()=instance('mappings')/mapping[@to='id']/@from] = $id])">																			
+																			<!--skos:broader and the target class is the same as the source class. -->
+																			<xforms:var name="class" select="instance('control-instance')/type"/>
+																			<xforms:setvalue ref="instance('sparqlQuery')"
+																				value="concat(instance('sparql-templates')/prefix, ' ', replace(replace(instance('sparql-templates')/query[@id='ask'], 'URI', $value), 'CLASS', $class))"/>
+																			<xforms:send submission="submit-sparqlQuery"/>
+																			<!-- if the SPARQL query concludes successfully, then create an entry in kerameikos-ids and display an error if the ASK if false -->
+																			<xforms:action ev:event="xforms-submit-done">
+																				<xforms:insert context="instance('kerameikos-ids')"
+																					nodeset="./child::node()[last()]"
+																					origin="xforms:element('id', (xforms:attribute('uri', $value), xforms:attribute('mapping', $mapping), data(instance('sparqlResponse')/descendant::res:boolean)))"/>
+																				<xforms:insert if="instance('sparqlResponse')/descendant::res:boolean = 'false'"
+																					context="instance('validation-model')/record[last()]"
+																					nodeset="./child::node()[last()]"
+																					origin="xforms:element('error', concat($mapping, ' links to a non-existent Kerameikos URI or the URI is a different class: ', $value))"
+																				/>
+																			</xforms:action>
+																		</xforms:action>																		
 																	</xforms:action>
 																</xforms:action>
 															</xforms:action>
@@ -1234,11 +1287,32 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 													<xforms:var name="mapping" select="instance('mappings')/mapping[@from=$from]/@to"/>
 													<!-- handle labels, definitions, scopenNote -->
 													<xforms:action
-														if="$mapping = 'skos:prefLabel' or $mapping='skos:definition' or $mapping='skos:altLabel' or $mapping='skos:scopeNote'">
+														if="$mapping = 'skos:prefLabel' or $mapping='skos:altLabel' or $mapping='skos:scopeNote'">
 														<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"/>
 														<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 															origin="xforms:element($mapping, (xforms:attribute('xml:lang', $lang), $value))"
 															if="not(instance('rdf')/*[1]/*[name()=$mapping][@xml:lang=$lang])"/>
+													</xforms:action>
+													<xforms:action
+														if="$mapping='skos:definition'">
+														<xforms:var name="lang" select="instance('mappings')/mapping[@from=$from]/@lang"/>
+														
+														<xforms:action if="instance('control-instance')/overwrite-definitions = true()">
+															<!-- overwrite definition if there is already a definition with this language -->
+															<xforms:action if="instance('rdf')/*[1]/skos:definition[@xml:lang=$lang]">
+																<xforms:setvalue ref="instance('rdf')/*[1]/skos:definition[@xml:lang=$lang]" value="$value"/>
+															</xforms:action>															
+															<!-- otherwise, insert a new definition -->
+															<xforms:action if="not(instance('rdf')/*[1]/skos:definition[@xml:lang=$lang])">
+																<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
+																	origin="xforms:element($mapping, (xforms:attribute('xml:lang', $lang), $value))"/>
+															</xforms:action>
+														</xforms:action>
+														<xforms:action if="instance('control-instance')/overwrite-definitions = false()">
+															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
+																origin="xforms:element($mapping, (xforms:attribute('xml:lang', $lang), $value))"
+																if="not(instance('rdf')/*[1]/*[name()=$mapping][@xml:lang=$lang])"/>
+														</xforms:action>
 													</xforms:action>
 
 													<!-- create the plural lexical form data object as a blank node -->
