@@ -99,14 +99,18 @@
 						<p>
 							<img src="{$display_path}ui/images/neh_logo_horizontal_2c_c_outl_0.png" style="width:300px" alt="NEH Logo"/>
 						</p>
-						<p>In August 2018, the <a href="https://www.neh.gov/">National Endowment for the Humanities</a> awarded Kerameikos $85,382 as part of the Digital Humanities
-							Advancement program. An 18-month long Level II project, this will fund the creation of all necessary Archaic and Classical Greek pottery concepts the
-							building of various aggregation or data harvesting tools.</p>
+						<p>In August 2018, the <a href="https://www.neh.gov/">National Endowment for the Humanities</a> awarded Kerameikos $85,382 as part of
+							the Digital Humanities Advancement program. An 18-month long Level II project, this will fund the creation of all necessary Archaic
+							and Classical Greek pottery concepts the building of various aggregation or data harvesting tools.</p>
 					</div>
-					<!--<div>						
+					<div>
 						<h3>Collaborators</h3>
-						<img src="{$display_path}ui/images/rev_uva_logo_color.png" alt="UVA Logo"/>
-					</div>-->
+						<a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">
+							<img src="{$display_path}ui/images/iath.svg" title="IATH" alt="IATH" style="width:120px"/>
+						</a>
+						<p><a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">The Institute for Advanced Technology
+								in the Humanities</a> at the University of Virginia hosts Kerameikos.org</p>
+					</div>
 
 				</div>
 			</div>
