@@ -105,29 +105,30 @@
 					</div>
 					<div>
 						<h3>Collaborators</h3>
-						<div class="row">
+						<div class="row" style="margin-bottom:20px">
 							<div class="col-md-4">
 								<a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">
-									<img src="{$display_path}ui/images/iath.svg" title="Institute for Advanced Technology in the Humanities" alt="IATH Logo" style="width:120px"/>
+									<img src="{$display_path}ui/images/iath.svg" title="Institute for Advanced Technology in the Humanities" alt="IATH Logo"
+										style="width:120px"/>
 								</a>
 							</div>
 							<div class="col-md-8">
 								<a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">The Institute for Advanced
-									Technology in the Humanities</a>
-							</div>
+									Technology in the Humanities</a> at the University of Virginia hosts Kerameikos.org. </div>
 						</div>
-						<div class="row">
+						<div class="row" style="margin-bottom:20px">
 							<div class="col-md-4">
 								<a href="https://www.beazley.ox.ac.uk/index.htm" title="The Beazley Archive">
-									<img src="{$display_path}ui/images/ox_small_special_pos_rect.svg" title="The Beazley Archive, Classical Art Research Center, University of Oxford" alt="Oxford Logo" style="width:120px"/>
+									<img src="{$display_path}ui/images/ox_small_special_pos_rect.svg"
+										title="The Beazley Archive, Classical Art Research Center, University of Oxford" alt="Oxford Logo" style="width:120px"/>
 								</a>
 							</div>
 							<div class="col-md-8">
-								<a href="https://www.beazley.ox.ac.uk/index.htm" title="The Beazley Archive">The Beazley Archive, Classical Art Research Center, University of Oxford</a>
-							</div>
+								<a href="https://www.beazley.ox.ac.uk/index.htm" title="The Beazley Archive">The Beazley Archive</a>, Classical Art Research
+								Center, University of Oxford has provided the vocabularies that are the foundation for the project. </div>
 						</div>
-						
-						
+
+
 						<!--<div class="col-md-6">
 							<a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">
 								<img src="{$display_path}ui/images/iath.svg" title="IATH" alt="IATH" style="width:120px"/>
