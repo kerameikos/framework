@@ -105,11 +105,36 @@
 					</div>
 					<div>
 						<h3>Collaborators</h3>
-						<a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">
-							<img src="{$display_path}ui/images/iath.svg" title="IATH" alt="IATH" style="width:120px"/>
-						</a>
-						<p><a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">The Institute for Advanced Technology
-								in the Humanities</a> at the University of Virginia hosts Kerameikos.org</p>
+						<div class="row">
+							<div class="col-md-4">
+								<a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">
+									<img src="{$display_path}ui/images/iath.svg" title="Institute for Advanced Technology in the Humanities" alt="IATH Logo" style="width:120px"/>
+								</a>
+							</div>
+							<div class="col-md-8">
+								<a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">The Institute for Advanced
+									Technology in the Humanities</a>
+							</div>
+						</div>
+						<div class="row">
+							<div class="col-md-4">
+								<a href="https://www.beazley.ox.ac.uk/index.htm" title="The Beazley Archive">
+									<img src="{$display_path}ui/images/ox_small_special_pos_rect.svg" title="The Beazley Archive, Classical Art Research Center, University of Oxford" alt="Oxford Logo" style="width:120px"/>
+								</a>
+							</div>
+							<div class="col-md-8">
+								<a href="https://www.beazley.ox.ac.uk/index.htm" title="The Beazley Archive">The Beazley Archive, Classical Art Research Center, University of Oxford</a>
+							</div>
+						</div>
+						
+						
+						<!--<div class="col-md-6">
+							<a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">
+								<img src="{$display_path}ui/images/iath.svg" title="IATH" alt="IATH" style="width:120px"/>
+							</a>
+							<p><a href="http://iath.virginia.edu" title="Institute for Advanced Technology in the Humanities">The Institute for Advanced
+									Technology in the Humanities</a> at the University of Virginia hosts Kerameikos.org</p>
+						</div>-->
 					</div>
 
 				</div>
