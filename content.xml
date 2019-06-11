@@ -26,6 +26,10 @@
 
 		<h3>Papers and Presentations</h3>
 		<ul>
+			<li><b>2019: </b>Gondek, Renee, Ethan Gruber, Tyler Jo Smith. "Kerameikos.org: A Linked Open Greek Pottery Project", FIEC / CA 2019, London,
+				UK.</li>
+			<li><b>2019: </b>Gondek, Renee, Ethan Gruber, Tyler Jo Smith. "Kerameikos.org: Linked Open Data for Greek Pottery" (poster), Computer Applications
+				in Archaeology, Krakow, Poland. <a href="https://doi.org/10.5281/zenodo.3243539">DOI: 10.5281/zenodo.3243539</a></li>
 			<li><b>2019: </b>Gondek, Renee and Ethan Gruber. "Kerameikos.org: A Network Science Approach to the Study of Greek Pottery", UVA Archaeology Brown
 				Bag, 22 March 2019.</li>
 			<li><b>2019: </b>Gondek, Renee and Ethan Gruber. "Linked Open Greek Pottery: Kerameikos.org", NEH Project Directors' meeting, 18 March 2019: <a
@@ -33,8 +37,8 @@
 			<li><b>2016: </b>Gruber, Ethan and Tyler Jo Smith. "Kerameikos.org: The Semantic Web Meets Greek Pottery", <a href="http://dh.virginia.edu/"
 					>DH@UVa</a>, Scholar’s Lab UVa, 14 October 2016</li>
 			<li><b>2015: </b>Gondek, Renee and Ethan Gruber. Roundtable on databases and pottery. Computer Applications in Archaeology, Siena, Italy.</li>
-			<li><b>2014: </b>Gruber, Ethan and Tyler Jo Smith. <a href="https://caa2014.sciencesconf.org/46119/document">Linked Open Greek Pottery</a>.
-				Presented at Computer Applications in Archaeology, Paris, France.</li>
+			<li><b>2014: </b>Gruber, Ethan and Tyler Jo Smith. "<a href="https://caa2014.sciencesconf.org/46119/document">Linked Open Greek Pottery</a>",
+				Computer Applications in Archaeology, Paris, France.</li>
 		</ul>
 	</index>
 	<apis>
