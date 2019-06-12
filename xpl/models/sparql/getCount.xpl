@@ -239,7 +239,6 @@
 						<config>
 							<url>
 								<xsl:value-of select="$service"/>
-								<!--<xsl:copy-of select="$statements"/>-->
 							</url>
 							<content-type>application/xml</content-type>
 							<encoding>utf-8</encoding>

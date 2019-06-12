@@ -190,42 +190,6 @@
 						<encoding>utf-8</encoding>
 					</config>
 				</xsl:template>
-				
-				<xsl:template match="select">
-					<xsl:text>{ SELECT </xsl:text>
-					<xsl:value-of select="concat('?', @id)"/>
-					<xsl:text> WHERE { </xsl:text>
-					<xsl:apply-templates select="triple|group"/>
-					<xsl:text>}}&#x0A;</xsl:text>
-				</xsl:template>
-				
-				<xsl:template match="triple">
-					<xsl:value-of select="concat(@s, ' ', @p, ' ', @o, if (@filter) then concat(' FILTER ', @filter) else '', '.')"/>
-					<xsl:if test="not(parent::union)">
-						<xsl:text>&#x0A;</xsl:text>
-					</xsl:if>
-				</xsl:template>
-				
-				<xsl:template match="optional">
-					<xsl:text>OPTIONAL {</xsl:text>
-					<xsl:apply-templates select="triple"/>
-					<xsl:text>}&#x0A;</xsl:text>
-				</xsl:template>
-				
-				<xsl:template match="group">
-					<xsl:apply-templates select="triple"/>
-				</xsl:template>
-				
-				<xsl:template match="union">
-					<xsl:for-each select="triple|group">
-						<xsl:if test="position() &gt; 1">
-							<xsl:text>UNION </xsl:text>
-						</xsl:if>
-						<xsl:text>{</xsl:text>
-						<xsl:apply-templates select="self::node()"/>
-						<xsl:text>}&#x0A;</xsl:text>
-					</xsl:for-each>
-				</xsl:template>
 			</xsl:stylesheet>
 		</p:input>
 		<p:output name="data" id="url-generator-config"/>
