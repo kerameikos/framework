@@ -80,7 +80,7 @@ $(document).ready(function () {
             
             //set CSV download URL
             params.push('format=csv');
-            href = path + 'apis/getCount?' + params.join('&');
+            href = path + 'apis/getDistribution?' + params.join('&');
             $('#dist-chart-container').children('div.control-row').children('a[title=Download]').attr('href', href);
             
             //render the chart
@@ -475,7 +475,7 @@ function renderChart(path, urlParams) {
         var y = 'percentage';
     }
     
-    $.get(path + 'apis/getCount', $.param(urlParams, true),
+    $.get(path + 'apis/getDistribution', $.param(urlParams, true),
     function (data) {
         $('#dist-chart-container').removeClass('hidden');
         $('#chart').html('');

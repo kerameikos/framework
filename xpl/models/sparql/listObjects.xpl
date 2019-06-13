@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	XPL handling SPARQL queries from Fuseki.
-	Function: get an HTML (text) response for related coin types to display via AJAX in a record page
+	Author: Ethan Gruber
+	Date: June 2019
+	Function: Generate an XML metamodel to execute the SPARQL query for the object list of vases associated with a particular SKOS concept
 -->
 <p:config xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 
@@ -16,120 +17,59 @@
 		</p:input>
 		<p:output name="data" id="request"/>
 	</p:processor>
-	
+
+	<!-- get query from a text file on disk -->
+	<p:processor name="oxf:url-generator">
+		<p:input name="config">
+			<config>
+				<url>oxf:/apps/kerameikos/ui/sparql/listObjects.sparql</url>
+				<content-type>text/plain</content-type>
+				<encoding>utf-8</encoding>
+			</config>
+		</p:input>
+		<p:output name="data" id="query"/>
+	</p:processor>
+
+	<p:processor name="oxf:text-converter">
+		<p:input name="data" href="#query"/>
+		<p:input name="config">
+			<config/>
+		</p:input>
+		<p:output name="data" id="query-document"/>
+	</p:processor>
+
 	<p:processor name="oxf:unsafe-xslt">
-		<p:input name="request" href="#request"/>		
+		<p:input name="request" href="#request"/>
+		<p:input name="query" href="#query-document"/>
 		<p:input name="data" href=" ../../../config.xml"/>
 		<p:input name="config">
-			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+				xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all">
+				<xsl:include href="../../../ui/xslt/controllers/metamodel-templates.xsl"/>
+				<xsl:include href="../../../ui/xslt/controllers/sparql-metamodel.xsl"/>
+				
 				<xsl:param name="id" select="doc('input:request')/request/parameters/parameter[name='id']/value"/>
 				<xsl:param name="type" select="doc('input:request')/request/parameters/parameter[name='type']/value"/>
-				
+
 				<xsl:variable name="sparql_endpoint" select="/config/sparql/query"/>
-				
-				<xsl:variable name="prefixes">
-					<![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX dcterms:	<http://purl.org/dc/terms/>
-PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
-PREFIX owl:	<http://www.w3.org/2002/07/owl#>
-PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
-PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
-PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX kon:	<http://kerameikos.org/ontology#>
-PREFIX edm:	<http://www.europeana.eu/schemas/edm/>
-SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel ?format WHERE {]]>
+
+				<xsl:variable name="query" select="doc('input:query')"/>
+
+				<xsl:variable name="statements" as="element()*">
+					<xsl:call-template name="kerameikos:listObjectsStatements">
+						<xsl:with-param name="type" select="$type"/>
+						<xsl:with-param name="id" select="$id"/>
+					</xsl:call-template>
 				</xsl:variable>
-				
-				<xsl:variable name="metadata">
-					<![CDATA[?object dcterms:title ?title ;
-dcterms:identifier ?id .
-OPTIONAL {?object crm:P50_has_current_keeper ?kuri .
-?kuri skos:prefLabel ?keeper FILTER ( lang(?keeper) = "en" )} 
-OPTIONAL {?object foaf:thumbnail ?thumb} .
-OPTIONAL {?object foaf:depiction ?ref
-	OPTIONAL {?ref dcterms:isReferencedBy ?manifest}}
-OPTIONAL {?object edm:isShownBy ?3dmodel 
-	OPTIONAL {?3dmodel dcterms:format ?format}}}]]>
+
+				<xsl:variable name="statementsSPARQL">
+					<xsl:apply-templates select="$statements/*"/>
 				</xsl:variable>
-				
-				<xsl:variable name="select">
-					<xsl:choose>
-						<xsl:when test="$type='crm:E4_Period'">
-							<![CDATA[{SELECT ?m WHERE {
-  {kid:RDFID skos:exactMatch ?m}
-  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
-  UNION {?m skos:broader+ kid:RDFID}
-  UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
-?object crm:P108i_was_produced_by ?prod .
-?prod  crm:P10_falls_within ?m.]]>
-						</xsl:when>
-						<xsl:when test="$type='crm:E57_Material'">
-							<![CDATA[{SELECT ?m WHERE {
-   {kid:RDFID skos:exactMatch ?m}
-  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
-  UNION {?m skos:broader+ kid:RDFID}
-  UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
-?object crm:P45_consists_of ?m.]]>
-						</xsl:when>
-						<xsl:when test="$type='kon:ProductionPlace'">
-							<![CDATA[{SELECT ?m WHERE {
-  {kid:RDFID skos:exactMatch ?m}
-  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
-  UNION {?m skos:broader+ kid:RDFID}
-  UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
-?object crm:P108i_was_produced_by ?prod .
-?prod crm:P7_took_place_at ?m.]]>
-						</xsl:when>
-						<xsl:when test="$type='crm:E40_Legal_Body'">
-							<![CDATA[?object crm:P50_has_current_keeper kid:RDFID .]]>
-						</xsl:when>
-						<xsl:when test="$type='kon:Shape'">
-							<![CDATA[{SELECT ?m WHERE {
-  {kid:RDFID skos:exactMatch ?m}
-  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
-  UNION {?m skos:broader+ kid:RDFID}
-  UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
-?object kon:hasShape ?m.]]>
-						</xsl:when>
-						<xsl:when test="$type='kon:Technique'">
-							<![CDATA[{SELECT ?m WHERE {
-  {kid:RDFID skos:exactMatch ?m}
-  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}
-  UNION {?m skos:broader+ kid:RDFID}
-  UNION {?narrower skos:broader+ kid:RDFID ; skos:exactMatch ?m}}}
-?object crm:P32_used_general_technique ?m .]]>
-						</xsl:when>
-						<!--<xsl:when test="$type='kon:Ware'">
-					<![CDATA[SELECT ?object ?title ?id ?thumb ?ref ?keeper WHERE {
-{?object kon:hasShape kid:RDFID }
-UNION {kid:RDFID skos:exactMatch ?matches .
-?object kon:hasShape ?matches}
-UNION {?types skos:broader kid:RDFID .
-?object kon:hasShape ?types}
-UNION {?types skos:broader kid:RDFID .
-?types skos:exactMatch ?matches .
-?object kon:hasShape ?matches}]]>
-				</xsl:when>-->
-						<xsl:when test="$type='foaf:Person'">
-							<![CDATA[{SELECT ?m WHERE {
-  {kid:RDFID skos:exactMatch ?m} 
-  UNION {?m a skos:Concept FILTER (?m = kid:RDFID)}}}
-?object crm:P108i_was_produced_by ?prod .
-?prod crm:P14_carried_out_by ?m .]]>
-						</xsl:when>
-						<xsl:when test="$type='foaf:Organization'">
-							<![CDATA[{SELECT ?m WHERE {kid:RDFID skos:exactMatch ?m}}
-?object crm:P108i_was_produced_by ?prod .
-?prod crm:P14_carried_out_by ?m .]]>
-						</xsl:when>
-					</xsl:choose>
-				</xsl:variable>
-				
+
+				<xsl:variable name="service"
+					select="concat($sparql_endpoint, '?query=', encode-for-uri(replace($query, '%STATEMENTS%', $statementsSPARQL)), '&amp;output=xml')"/> 
+
 				<xsl:template match="/">
-					<xsl:variable name="query" select="concat($prefixes, replace($select, 'RDFID', $id), $metadata)"/>
-					<xsl:variable name="service" select="concat(/config/sparql/query, '?query=', encode-for-uri(normalize-space($query)), '&amp;output=xml')"/>
-					
 					<config>
 						<url>
 							<xsl:value-of select="$service"/>
@@ -138,12 +78,11 @@ UNION {?types skos:broader kid:RDFID .
 						<encoding>utf-8</encoding>
 					</config>
 				</xsl:template>
-				
 			</xsl:stylesheet>
 		</p:input>
 		<p:output name="data" id="url-generator-config"/>
 	</p:processor>
-	
+
 	<p:processor name="oxf:url-generator">
 		<p:input name="config" href="#url-generator-config"/>
 		<p:output name="data" ref="data"/>

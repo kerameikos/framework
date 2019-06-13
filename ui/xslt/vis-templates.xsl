@@ -153,7 +153,7 @@
 							</params>
 						</xsl:variable>
 
-						<a href="{$display_path}apis/getCount?{string-join($queryParams/*, '&amp;')}" title="Download CSV" class="btn btn-primary">
+						<a href="{$display_path}apis/getDistribution?{string-join($queryParams/*, '&amp;')}" title="Download CSV" class="btn btn-primary">
 							<span class="glyphicon glyphicon-download"/>Download CSV</a>
 					</xsl:when>
 					<xsl:otherwise>

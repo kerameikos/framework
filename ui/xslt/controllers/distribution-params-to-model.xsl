@@ -10,7 +10,7 @@
 	<xsl:param name="format" select="doc('input:request')/request/parameters/parameter[name = 'format']/value"/>
 
 	<!-- config variables -->
-	<xsl:variable name="sparql_endpoint" select="/config/sparql_query"/>
+	<xsl:variable name="sparql_endpoint" select="/config/sparql/query"/>
 	<xsl:variable name="query" select="doc('input:query')"/>
 
 	<!-- parse query statements into a data object -->
@@ -27,6 +27,14 @@
 				<xsl:with-param name="object">?dist</xsl:with-param>
 				<xsl:with-param name="dist" select="$dist"/>
 			</xsl:call-template>
+			
+			<xsl:if test="$dist='productionPlace' and $format='csv'">
+				<optional>
+					<triple s="?dist" p="geo:location" o="?loc"/>
+					<triple s="?loc" p="geo:lat" o="?lat"/>
+					<triple s="?loc" p="geo:long" o="?long"/>
+				</optional>
+			</xsl:if>
 		</statements>
 	</xsl:variable>
 
