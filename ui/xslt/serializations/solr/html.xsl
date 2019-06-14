@@ -421,8 +421,8 @@
 			</xsl:if>
 			
 			<xsl:text> WHERE {&#x000a;</xsl:text>
-			<!-- ensure that only Nomisma IDs are returned -->
-			<xsl:text>FILTER strStarts(str(?uri), "http://nomisma.org/id/") .&#x000a;</xsl:text>
+			<!-- ensure that only Kerameikos IDs are returned -->
+			<xsl:text>?uri skos:inScheme kid: .&#x000a;</xsl:text>
 			<xsl:text>?uri skos:prefLabel ?label FILTER langMatches(lang(?label), "en") .&#x000a;</xsl:text>
 			<xsl:text>OPTIONAL {?uri skos:definition ?definition FILTER langMatches(lang(?definition), "en")}&#x000a;</xsl:text>
 			<!-- display the type of concept if the type isn't in the query -->
