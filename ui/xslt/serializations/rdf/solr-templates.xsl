@@ -194,7 +194,7 @@
 			<xsl:value-of select="$uri"/>
 		</field>
 		<field name="role_facet">
-			<xsl:value-of select="$roles/role[@uri = $uri]"/>
+			<xsl:value-of select="concat($roles/role[@uri=$uri], '|', $uri)"/>
 		</field>
 	</xsl:template>
 
