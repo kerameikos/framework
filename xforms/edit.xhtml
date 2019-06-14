@@ -197,6 +197,14 @@
 			<xforms:instance id="source-template" xxforms:exclude-result-prefixes="#all">
 				<dcterms:source rdf:resource=""/>
 			</xforms:instance>
+			
+			<xforms:instance id="startDate-template" xxforms:exclude-result-prefixes="#all">
+				<edm:begin rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear"/>
+			</xforms:instance>
+			
+			<xforms:instance id="endDate-template" xxforms:exclude-result-prefixes="#all">
+				<edm:end rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear"/>
+			</xforms:instance>
 
 			<xforms:instance id="lat-template" xxforms:exclude-result-prefixes="#all">
 				<geo:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal"/>
@@ -1365,20 +1373,20 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 												<strong>Alert:</strong> There cannot be multiple memberships with identical URIs.</div>
 										</xforms:group>
 										<div class="trigger_container">
-											<!--<xforms:group ref=".[count(nmo:hasStartDate) = 0]">
+											<xforms:group ref=".[count(edm:begin) = 0]">
 											<xforms:trigger appearance="minimal">
 												<xforms:label>
 													<span class="glyphicon glyphicon-plus"></span>Start Date</xforms:label>
-												<xforms:insert ev:event="DOMActivate" origin="instance('hasStartDate-template')" context="." nodeset="./child::node()[last()]"></xforms:insert>
+												<xforms:insert ev:event="DOMActivate" origin="instance('startDate-template')" context="." nodeset="./child::node()[last()]"></xforms:insert>
 											</xforms:trigger>
 										</xforms:group>
-										<xforms:group ref=".[count(nmo:hasEndDate) = 0]">
+										<xforms:group ref=".[count(edm:end) = 0]">
 											<xforms:trigger appearance="minimal">
 												<xforms:label>
 													<span class="glyphicon glyphicon-plus"></span>End Date</xforms:label>
-												<xforms:insert ev:event="DOMActivate" origin="instance('hasEndDate-template')" context="." nodeset="./child::node()[last()]"></xforms:insert>
+												<xforms:insert ev:event="DOMActivate" origin="instance('endDate-template')" context="." nodeset="./child::node()[last()]"></xforms:insert>
 											</xforms:trigger>
-										</xforms:group>-->
+										</xforms:group>
 											<xforms:group ref=".[count(org:organization) = 0]">
 												<xforms:trigger appearance="minimal">
 													<xforms:label>
@@ -1420,7 +1428,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											</div>
 										</xforms:group>
 										<!-- start and end date -->
-										<!--<xforms:group ref="nmo:hasStartDate">
+										<xforms:group ref="edm:begin">
 										<xforms:var name="year" select="if (number(.) &lt; 0) then abs(number(.)) + 1 else number(.)"></xforms:var>
 										<div>
 											<xforms:input ref=".">
@@ -1436,7 +1444,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											</xforms:trigger>
 										</div>
 									</xforms:group>
-									<xforms:group ref="nmo:hasEndDate">
+									<xforms:group ref="edm:end">
 										<xforms:var name="year" select="if (number(.) &lt; 0) then abs(number(.)) + 1 else number(.)"></xforms:var>
 										<div>
 											<xforms:input ref=".">
@@ -1451,7 +1459,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 												</xforms:label>
 											</xforms:trigger>
 										</div>
-									</xforms:group>-->
+									</xforms:group>
 										<xforms:group ref="org:organization">
 											<div>
 												<xforms:output ref="@rdf:resource">

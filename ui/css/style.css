@@ -213,27 +213,23 @@ a:hover{
   ***************************************
  */
 .result-doc{
-    margin: 10px 0;
-    padding: 10px 0;
-    border-bottom: 1px solid silver;
+	margin:10px 0;
+	padding:10px 0;
+	border-bottom:1px solid silver;
 }
 .doc-label{
-    font-size: 120%;
+	font-size:120%;
 }
 .paging_div{
-    padding: 10px 0;
-    vertical-align: top
+	padding:10px 0;
+	vertical-align:top
 }
 .page-nos{
-    text-align: right;
+	text-align:right;
 }
-.filter-form{
-    display: inline;
-}
-.filter-form input,
-.filter-form select,
-.filter-form button{
-    margin: 0 10px;
+#filter-form .form-control{
+	width:20em;
+	display:inline;
 }
 /*
   ***************************************

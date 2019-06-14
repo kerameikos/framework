@@ -17,7 +17,7 @@
 				<div class="navbar-collapse collapse">
 					<ul class="nav navbar-nav">
 						<li>
-							<a href="{$display_path}browse/">Browse</a>
+							<a href="{$display_path}browse">Browse</a>
 						</li>
 						<li class="dropdown">
 							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Research Tools <b class="caret"/></a>
@@ -53,7 +53,7 @@
 						</li>
 					</ul>
 					<div class="col-sm-3 col-md-3 pull-right">
-						<form class="navbar-form" role="search" action="{$display_path}browse/" method="get">
+						<form class="navbar-form" role="search" action="{$display_path}browse" method="get">
 							<div class="input-group">
 								<input type="text" class="form-control" placeholder="Search" name="q" id="srch-term"/>
 								<div class="input-group-btn">

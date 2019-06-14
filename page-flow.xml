@@ -58,7 +58,7 @@
 	<page path="/kerameikos/ontology.ttl" model="xpl/models/ontology/get-ontology.xpl" view="xpl/views/serializations/rdf/ttl.xpl"/>
 	
 	<!-- Solr -->
-	<page path="/kerameikos/browse/" model="xpl/models/solr/query.xpl" view="xpl/controllers/conneg-results.xpl"/>	
+	<page path="/kerameikos/browse" model="xpl/models/solr/query.xpl" view="xpl/controllers/conneg-results.xpl"/>	
 	<page path="/kerameikos/feed/" model="xpl/models/solr/query.xpl" view="xpl/views/serializations/solr/atom.xpl"/>
 	
 	<!-- SPARQL wrapper (URL generator) -->
