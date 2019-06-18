@@ -1438,7 +1438,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 										</xforms:group>
 										<!-- start and end date -->
 										<xforms:group ref="edm:begin">
-										<xforms:var name="year" select="if (number(.) &lt; 0) then abs(number(.)) + 1 else number(.)"></xforms:var>
+											<xforms:var name="year" select="abs(number(.))"/>
 										<div>
 											<xforms:input ref=".">
 												<xforms:label>Start Date</xforms:label>
@@ -1454,7 +1454,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 										</div>
 									</xforms:group>
 									<xforms:group ref="edm:end">
-										<xforms:var name="year" select="if (number(.) &lt; 0) then abs(number(.)) + 1 else number(.)"></xforms:var>
+										<xforms:var name="year" select="abs(number(.))"/>
 										<div>
 											<xforms:input ref=".">
 												<xforms:label>End Date</xforms:label>
