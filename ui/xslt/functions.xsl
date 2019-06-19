@@ -74,6 +74,44 @@
 		<xsl:value-of select="document($service)/response"/>
 	</xsl:function>
 	
+	<xsl:function name="kerameikos:parseFilter">
+		<xsl:param name="query"/>
+		
+		<xsl:variable name="pieces" select="tokenize(normalize-space($query), ';')"/>
+		<xsl:for-each select="$pieces">
+			<xsl:choose>
+				<xsl:when test="matches(normalize-space(.), '^from\s')">
+					<xsl:analyze-string select="." regex="from\s(.*)">
+						<xsl:matching-substring>
+							<xsl:text>From Date: </xsl:text>
+							<xsl:value-of select="kerameikos:normalizeYear(regex-group(1))"/>
+						</xsl:matching-substring>
+					</xsl:analyze-string>
+				</xsl:when>
+				<xsl:when test="matches(normalize-space(.), '^to\s')">
+					<xsl:analyze-string select="." regex="to\s(.*)">
+						<xsl:matching-substring>
+							<xsl:text>To Date: </xsl:text>
+							<xsl:value-of select="kerameikos:normalizeYear(regex-group(1))"/>
+						</xsl:matching-substring>
+					</xsl:analyze-string>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:analyze-string select="." regex="(.*)\s(kid:.*)">
+						<xsl:matching-substring>
+							<xsl:value-of select="normalize-space(regex-group(1))"/>
+							<xsl:text>: </xsl:text>
+							<xsl:value-of select="kerameikos:getLabel(regex-group(2))"/>
+						</xsl:matching-substring>
+					</xsl:analyze-string>
+				</xsl:otherwise>
+			</xsl:choose>
+			<xsl:if test="not(position() = last())">
+				<xsl:text> &amp; </xsl:text>
+			</xsl:if>
+		</xsl:for-each>
+	</xsl:function>
+	
 	
 	<!-- ********************************** TEMPLATES ************************************ -->
 	<xsl:template name="kerameikos:evaluateDatatype">
