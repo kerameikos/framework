@@ -74,7 +74,7 @@
 		<div class="container-fluid content">
 			<div class="row">
 				<div class="col-md-12">
-					<h1>Browse Nomisma IDs</h1>
+					<h1>Browse Kerameikos IDs</h1>
 					
 					<xsl:call-template name="filter"/>
 					<xsl:choose>
