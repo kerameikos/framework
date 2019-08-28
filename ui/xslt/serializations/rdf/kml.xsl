@@ -98,7 +98,7 @@
 
 
 			<xsl:if test="$lgpn-tei//tei:birth/tei:placeName[contains(@ref, 'pleiades')]">
-				<xsl:variable name="pleiades-uri" select="concat('http://pleiades.stoa.org/places/', substring-after($lgpn-tei//tei:birth/tei:placeName[contains(@ref, 'pleiades')]/@ref, ':'))"/>
+				<xsl:variable name="pleiades-uri" select="concat('https://pleiades.stoa.org/places/', substring-after($lgpn-tei//tei:birth/tei:placeName[contains(@ref, 'pleiades')]/@ref, ':'))"/>
 				<xsl:variable name="placeName" select="$lgpn-tei//tei:birth/tei:placeName"/>
 				<xsl:variable name="pleiades-rdf" as="item()*">
 					<xsl:copy-of select="document(concat($pleiades-uri, '/rdf'))/*"/>

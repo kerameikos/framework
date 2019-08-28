@@ -115,7 +115,7 @@
 
 						<!-- ********* SUBMISSIONS ***********-->
 						<xforms:submission id="query-pleiades" serialization="none" method="get"
-							action="http://pleiades.stoa.org/search_rss?Title={instance('control-instance')/query}&amp;portal_type=Place" instance="feed" replace="instance">
+							action="https://pleiades.stoa.org/search_rss?Title={instance('control-instance')/query}&amp;portal_type=Place" instance="feed" replace="instance">
 							<xforms:header>
 								<xforms:name>User-Agent</xforms:name>
 								<xforms:value>XForms/Kerameikos.org</xforms:value>

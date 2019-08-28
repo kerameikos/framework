@@ -21,10 +21,10 @@ OPTIONAL { ?object edm:isShownBy ?model .
 ?model dcterms:format ?modelFormat ;
 	dcterms:publisher ?modelPublisher}
 ?object crm:P108i_was_produced_by/crm:P7_took_place_at ?place .
-{?place skos:exactMatch ?match FILTER strStarts(str(?match), "http://pleiades")}
-UNION {?place ^ skos:exactMatch ?kid .
+{?place skos:exactMatch ?match FILTER strStarts(str(?match), "https://pleiades")}
+UNION {?place^skos:exactMatch ?kid .
   ?kid skos:inScheme kid: ;
-       skos:exactMatch ?match FILTER strStarts(str(?match), "http://pleiades")}
+       skos:exactMatch ?match FILTER strStarts(str(?match), "https://pleiades")}
 OPTIONAL {?object crm:P108i_was_produced_by/crm:P4_has_time-span ?timeSpan .
 ?timeSpan crm:P82a_begin_of_the_begin ?startDate .
 ?timeSpan crm:P82b_end_of_the_end ?endDate}

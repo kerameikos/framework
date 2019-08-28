@@ -512,7 +512,7 @@
 		<xsl:text> (</xsl:text>
 		<xsl:choose>
 			<xsl:when test="contains(@ref, 'pleiades')">
-				<a href="http://pleiades.stoa.org/places/{substring-after(@ref, ':')}">
+				<a href="https://pleiades.stoa.org/places/{substring-after(@ref, ':')}">
 					<xsl:value-of select="."/>
 				</a>
 			</xsl:when>
