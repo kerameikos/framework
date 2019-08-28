@@ -1,0 +1,16 @@
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
+PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
+PREFIX void: <http://rdfs.org/ns/void#>
+
+SELECT DISTINCT ?dataset ?title ?description ?license ?rights ?publisher WHERE {
+?coin a crm:E22_Man-Made_Object ;
+        void:inDataset ?dataset .
+?dataset dcterms:description ?description FILTER (langMatches(lang(?description), "en") || lang(?description) = "") .
+?dataset dcterms:publisher ?publisher ;
+         dcterms:title ?title FILTER (langMatches(lang(?title), "en") || lang(?title) = "")
+OPTIONAL {?dataset dcterms:rights ?rights}
+OPTIONAL {?dataset dcterms:license ?license}
+}

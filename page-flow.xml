@@ -94,6 +94,8 @@
 	<page path="/kerameikos/kerameikos.org.rdf" model="xpl/models/rdf/aggregate-all.xpl" view="xpl/controllers/serialize-rdfxml.xpl"/>
 	<page path="/kerameikos/kerameikos.org.jsonld" view="xpl/controllers/call-rdflib.xpl"/>
 	<page path="/kerameikos/kerameikos.org.ttl"  view="xpl/controllers/call-rdflib.xpl"/>
+	<page path="/kerameikos/pelagios-objects.void.rdf" model="xpl/models/sparql/pelagiosObjectsVoid.xpl" view="xpl/views/serializations/sparql/pelagiosObjectsVoid.xpl"/>
+	<page path="/kerameikos/pelagios-objects\.([0-9]+)\.rdf" model="xpl/models/sparql/pelagiosObjects.xpl" view="xpl/views/serializations/sparql/pelagiosObjects.xpl"/>
 
 	<!-- **** CONCEPT SCHEMES **** -->
 	<page path="/kerameikos/(id|editor)/" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>	

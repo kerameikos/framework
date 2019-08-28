@@ -78,9 +78,9 @@
 									<td>
 										<strong>VoID for Concepts: </strong>
 										<a href="pelagios.void.rdf">RDF/XML</a>
-										<!--<br/>
+										<br/>
 										<strong>VoID for Partner Objects: </strong>
-										<a href="pelagios-objects.void.rdf">RDF/XML</a>-->
+										<a href="pelagios-objects.void.rdf">RDF/XML</a>
 									</td>
 								</tr>
 							</table>
