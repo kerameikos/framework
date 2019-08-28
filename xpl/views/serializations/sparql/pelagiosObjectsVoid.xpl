@@ -30,7 +30,7 @@
 		<p:output name="data" id="query-document"/>
 	</p:processor>
 	
-	<!-- get total count of coins -->
+	<!-- get total count of objects related to Pleiades URIs -->
 	<p:processor name="oxf:unsafe-xslt">		
 		<p:input name="data" href="../../../../config.xml"/>
 		<p:input name="query" href="#query-document"/>

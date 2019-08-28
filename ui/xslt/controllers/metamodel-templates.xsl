@@ -89,7 +89,7 @@
 										<xsl:if test="$object castable as xs:integer">
 											<xsl:variable name="gYear" select="format-number(number($object), '0000')"/>
 
-											<triple s="?coinType" p="nmo:hasStartDate" o="?startDate">
+											<triple s="?vase" p="nmo:hasStartDate" o="?startDate">
 												<xsl:attribute name="filter">
 													<xsl:text>(?startDate >= "</xsl:text>
 													<xsl:value-of select="$gYear"/>
@@ -102,7 +102,7 @@
 										<xsl:if test="$object castable as xs:integer">
 											<xsl:variable name="gYear" select="format-number(number($object), '0000')"/>
 
-											<triple s="?coinType" p="nmo:hasEndDate" o="?endDate">
+											<triple s="?vase" p="nmo:hasEndDate" o="?endDate">
 												<xsl:attribute name="filter">
 													<xsl:text>(?endDate &lt;= "</xsl:text>
 													<xsl:value-of select="$gYear"/>

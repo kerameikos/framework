@@ -16,7 +16,7 @@
 		<statements>
 			<!-- parse filters -->
 			<xsl:call-template name="kerameikos:filterToMetamodel">
-				<xsl:with-param name="subject">?coinType</xsl:with-param>
+				<xsl:with-param name="subject">?vase</xsl:with-param>
 				<xsl:with-param name="filter" select="$filter"/>
 			</xsl:call-template>
 
