@@ -13,9 +13,9 @@
 			xmlns:owl="http://www.w3.org/2002/07/owl#">
 			<void:Dataset rdf:about="{$url}#objects">
 				<dcterms:title>Kerameikos.org Partner Objects</dcterms:title>
-				<dcterms:description>Pleiades annotations relating to coins of Kerameikos.org partners, made available through semantic reasoning between typologies, Nomisma SKOS
+				<dcterms:description>Pleiades annotations relating to coins of Kerameikos.org partners, made available through semantic reasoning between typologies, Kerameikos SKOS
 					concepts, and Pleiades URIs. Organizations that directly contribute to Pelagios are supressed from this data dump.</dcterms:description>
-				<dcterms:rights>Nomisma integrates coins from archaeological and museum databases that have varying degrees of open licensing. See the dcterms:license within
+				<dcterms:rights>Kerameikos integrates objects from archaeological and museum databases that have varying degrees of open licensing. See the dcterms:license within
 					void:subsets for specific conditions.</dcterms:rights>
 				<dcterms:subject rdf:resource="http://dbpedia.org/resource/Annotation"/>
 

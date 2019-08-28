@@ -305,7 +305,7 @@ function getFacets(mode, prop, type, next, path) {
             "facet": prop
         }
         
-        //add filter if we are filtering against the current Nomisma ID
+        //add filter if we are filtering against the current Kerameikos ID
         if (mode == 'filter') {
             params.filter = $('#base-query').text();
         }

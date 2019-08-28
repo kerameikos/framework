@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns="http://datacite.org/schema/kernel-4" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:nm="http://nomisma.org/id/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-	xmlns:nmo="http://nomisma.org/ontology#" xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:foaf="http://xmlns.com/foaf/0.1/"
-	xmlns:nomisma="http://nomisma.org/" xmlns:org="http://www.w3.org/ns/org#" exclude-result-prefixes="#all" version="2.0">
+	xmlns:kon="http://kerameikos.org/ontology#" xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:org="http://www.w3.org/ns/org#"
+	exclude-result-prefixes="#all" version="2.0">
 
 	<xsl:template match="/">
 		<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4"
@@ -52,7 +52,7 @@
 				<xsl:value-of select="@rdf:about"/>
 			</alternateIdentifier>
 		</alternateIdentifiers>
-		
+
 		<formats>
 			<format>application/rdf+xml</format>
 			<format>application/ld+json</format>
@@ -62,9 +62,9 @@
 			<xsl:apply-templates select="/content/config/datacite/rights"/>
 		</rightsList>
 		<descriptions>
-			<description xml:lang="en-us" descriptionType="Abstract">Contributions of <xsl:value-of select="skos:prefLabel"/> to <xsl:value-of
-					select="/content/config/title"/>. These represent any SKOS Concepts (RDF) created or updated by this editor, by means of batch uploaded
-				through Google Sheets or manual editing in the back-end.</description>
+			<description xml:lang="en-us" descriptionType="Abstract">Contributions of <xsl:value-of select="skos:prefLabel"/> to <xsl:value-of select="/content/config/title"/>.
+				These represent any SKOS Concepts (RDF) created or updated by this editor, by means of batch uploaded through Google Sheets or manual editing in the
+				back-end.</description>
 		</descriptions>
 	</xsl:template>
 

@@ -2,7 +2,7 @@
 <!--
 	Author: Ethan Gruber
 	Date: August 2018
-	Function: Attach the correct HTTP header content type to RDF/XML serialized from Nomisma namespaces or the ontology	
+	Function: Attach the correct HTTP header content type to RDF/XML serialized from Kerameikos namespaces or the ontology	
 -->
 <p:config xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors">
 

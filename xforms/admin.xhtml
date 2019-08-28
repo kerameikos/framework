@@ -523,11 +523,11 @@ SELECT * WHERE {
 		</fr:alert-dialog>
 		<fr:alert-dialog id="refresh-triplestore-dialog">
 			<fr:label>Refresh Triplestore</fr:label>
-			<fr:message>This will refresh the Nomisma data in the triplestore. It may cause momentary loss of SPARQL functionality. Continue?</fr:message>
+			<fr:message>This will refresh the Kerameikos data in the triplestore. It may cause momentary loss of SPARQL functionality. Continue?</fr:message>
 			<fr:positive-choice>
 				<fr:label>Yes</fr:label>
 				<xforms:action ev:event="DOMActivate">
-					<!-- first delete all Nomisma concepts -->
+					<!-- first delete all Kerameikos concepts -->
 					<xforms:setvalue ref="instance('sparqlUpdate')" value="instance('sparqlUpdate-templates')/query[@id='delete-all-ids']"/>
 					<xforms:send submission="delete-graph"/>
 					<!-- then get the current RDF/XML and post it -->
