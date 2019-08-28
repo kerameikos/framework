@@ -1,0 +1,17 @@
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
+PREFIX kid:	<http://kerameikos.org/id/>
+PREFIX void: <http://rdfs.org/ns/void#>
+PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
+
+SELECT (count(?object) as ?count) WHERE {
+?object a crm:E22_Man-Made_Object ;
+    crm:P108i_was_produced_by/crm:P7_took_place_at ?place .
+{?place skos:exactMatch ?match FILTER strStarts(str(?match), "https://pleiades")}
+UNION {?place^skos:exactMatch ?kid .
+  ?kid skos:inScheme kid: ;
+       skos:exactMatch ?match FILTER strStarts(str(?match), "https://pleiades")}
+?object void:inDataset ?dataset
+}

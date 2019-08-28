@@ -2,7 +2,7 @@
 <!--
 	Author: Ethan Gruber
 	Date: August 2019
-	Function: Serialize SPARQL results for datasets into Pelagios-complaint VoID RDF
+	Function: Serialize SPARQL results for datasets into Pelagios-complaint VoID RDF. Include a count of related objects for splitting into 5000 vase chunks.
 -->
 <p:config xmlns:p="http://www.orbeon.com/oxf/pipeline"
 	xmlns:oxf="http://www.orbeon.com/oxf/processors">
@@ -10,31 +10,36 @@
 	<p:param type="input" name="data"/>
 	<p:param type="output" name="data"/>
 	
+	<!-- get query from a text file on disk -->
+	<p:processor name="oxf:url-generator">
+		<p:input name="config">
+			<config>
+				<url>oxf:/apps/kerameikos/ui/sparql/pelagiosObjectsCount.sparql</url>
+				<content-type>text/plain</content-type>
+				<encoding>utf-8</encoding>
+			</config>
+		</p:input>
+		<p:output name="data" id="query"/>
+	</p:processor>
+	
+	<p:processor name="oxf:text-converter">		
+		<p:input name="data" href="#query"/>
+		<p:input name="config">
+			<config/>
+		</p:input>
+		<p:output name="data" id="query-document"/>
+	</p:processor>
+	
 	<!-- get total count of coins -->
 	<p:processor name="oxf:unsafe-xslt">		
 		<p:input name="data" href="../../../../config.xml"/>
+		<p:input name="query" href="#query-document"/>
 		<p:input name="config">
 			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema">
 				
 				<!-- config variables -->
 				<xsl:variable name="sparql_endpoint" select="/config/sparql/query"/>
-				<xsl:variable name="query"><![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
-PREFIX dcterms:	<http://purl.org/dc/terms/>
-PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
-PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX void: <http://rdfs.org/ns/void#>
-PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
-
-SELECT (count(?object) as ?count) WHERE {
-?object a crm:E22_Man-Made_Object ;
-    crm:P108i_was_produced_by/crm:P7_took_place_at ?place .
-{?place skos:exactMatch ?match FILTER strStarts(str(?match), "https://pleiades")}
-UNION {?place^skos:exactMatch ?kid .
-  ?kid skos:inScheme kid: ;
-       skos:exactMatch ?match FILTER strStarts(str(?match), "https://pleiades")}
-?object void:inDataset ?dataset
-}]]></xsl:variable>
+				<xsl:variable name="query" select="doc('input:query')"/>
 				
 				<xsl:variable name="service" select="concat($sparql_endpoint, '?query=', encode-for-uri($query), '&amp;output=xml')"/>
 				
