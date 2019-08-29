@@ -409,7 +409,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 			<!-- ************* QUERY ATOM **********************-->
 			<!-- query local atom feed to power skos:broader -->
 			<xforms:submission id="query-feed" serialization="none" method="get"
-				action="/kerameikos/feed/?q=type:&#x022;{encode-for-uri(instance('control-instance')/atom-type)}&#x022;+AND+label:{instance('control-instance')/atom-search}&amp;sort=score+desc"
+				action="/kerameikos/feed/?q=type:{encode-for-uri(normalize-space(instance('control-instance')/atom-type))}+AND+label:{instance('control-instance')/atom-search}&amp;sort=score+desc"
 				instance="feed" replace="instance">
 				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to communicate with kerameikos.org Atom feed.</xforms:message>
 			</xforms:submission>
@@ -1662,6 +1662,69 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							<xforms:label>Definition</xforms:label>
 						</xforms:output>
 					</div>
+				</xforms:group>
+				<xforms:group ref=".[count(instance('feed')//atom:entry) = 0 and string(instance('feed')/atom:title)]">
+					<h4>No results found.</h4>
+				</xforms:group>
+			</div>
+		</xxforms:dialog>
+		
+		<xxforms:dialog id="organization-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+			<xforms:label>Parent Workshop/Group</xforms:label>
+			<div>
+				<xforms:input ref="instance('control-instance')/atom-search"/>
+				<xforms:trigger>
+					<xforms:label>Search</xforms:label>
+					<!-- delete current options in the instance and initiate new query -->
+					<xforms:action ev:event="DOMActivate">
+						<xforms:send submission="query-feed"/>
+					</xforms:action>
+				</xforms:trigger>
+			</div>
+			<div style="width:400px;">
+				<xforms:group ref=".[count(instance('feed')//atom:entry) &gt; 0]">
+					<h4>Results</h4>
+					<div>
+						<xforms:select1 ref="instance('control-instance')/atom-id" appearance="compact">
+							<xforms:itemset nodeset="instance('feed')//atom:entry">
+								<xforms:label ref="atom:title"/>
+								<xforms:value ref="atom:id"/>
+							</xforms:itemset>
+							<xforms:action ev:event="xforms-value-changed">
+								<xforms:setvalue ref="instance('control-instance')/atom-summary"
+									value="instance('feed')//atom:entry[atom:id = instance('control-instance')/atom-id]/atom:summary"/>
+							</xforms:action>
+						</xforms:select1>
+						<xforms:trigger>
+							<xforms:label>Select</xforms:label>
+							<xforms:action ev:event="DOMActivate">
+								<xforms:insert
+									context="instance('doc')/org:Membership[position() = number(instance('control-instance')/membership-position)]"
+									nodeset="./child::node()[last()]"
+									origin="xforms:element('org:organization', (xforms:attribute('rdf:resource', concat('http://kerameikos.org/id/', instance('control-instance')/atom-id)), ''))"/>
+								<!-- blank atom search nodes and atom feed -->
+								<xforms:delete nodeset="instance('feed')/*"/>
+								<xforms:setvalue ref="instance('control-instance')/atom-search"/>
+								<xforms:setvalue ref="instance('control-instance')/atom-id"/>
+								<xforms:setvalue ref="instance('control-instance')/atom-summary"/>
+								<xxforms:hide dialog="organization-dialog"/>
+							</xforms:action>
+						</xforms:trigger>
+					</div>
+					<xforms:group ref=".[string-length(instance('control-instance')/atom-summary) &gt; 0]">
+						<div>
+							<xforms:output ref="instance('control-instance')/atom-summary">
+								<xforms:label>Definition</xforms:label>
+							</xforms:output>
+							<xforms:trigger appearance="minimal">
+								<xforms:label>
+									<span class="glyphicon glyphicon-new-window"></span>
+								</xforms:label>
+								<xforms:load ev:event="DOMActivate" show="new"
+									ref="concat('http://kerameikos.org/id/', instance('control-instance')/atom-id)"/>
+							</xforms:trigger>
+						</div>
+					</xforms:group>
 				</xforms:group>
 				<xforms:group ref=".[count(instance('feed')//atom:entry) = 0 and string(instance('feed')/atom:title)]">
 					<h4>No results found.</h4>
