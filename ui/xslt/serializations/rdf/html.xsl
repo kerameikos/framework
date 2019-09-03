@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
-	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
-	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/" xmlns:prov="http://www.w3.org/ns/prov#"
-	exclude-result-prefixes="#all" version="2.0">
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#"
+	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:res="http://www.w3.org/2005/sparql-results#"
+	xmlns:kerameikos="http://kerameikos.org/" xmlns:prov="http://www.w3.org/ns/prov#" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:include href="../../functions.xsl"/>
 	<xsl:include href="../../vis-templates.xsl"/>
@@ -14,12 +13,19 @@
 	<xsl:variable name="display_path">../</xsl:variable>
 	<xsl:variable name="html-uri" select="concat(/content/config/url, 'id/', $id, '.html')"/>
 	<xsl:variable name="mode">record</xsl:variable>
-	<xsl:variable name="base-query"
-		select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
+	<xsl:variable name="base-query">
+		<xsl:choose>
+			<xsl:when test="$type = 'crm:E40_Legal_Body'">
+				<xsl:value-of select="concat('keeper kid:', $id)"/>
+			</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:variable>
 	<xsl:variable name="type" select="/content/rdf:RDF/*[1]/name()"/>
 	<xsl:variable name="conceptURI" select="/content/rdf:RDF/*[1]/@rdf:about"/>
-	<xsl:variable name="id"
-		select="
+	<xsl:variable name="id" select="
 			if ($type = 'skos:ConceptScheme') then
 				tokenize($conceptURI, '/')[last() - 1]
 			else
@@ -117,8 +123,7 @@
 							if (//skos:prefLabel[@xml:lang = 'en']) then
 								//skos:prefLabel[@xml:lang = 'en']
 							else
-								$id"
-					/></title>
+								$id"/></title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
@@ -326,12 +331,10 @@
 							<br/>
 							<img id="zoomout" title="Zoom Out" src="{$display_path}ui/images/skins/dark/zoomout.png"/>
 							<br/>
-							<img id="light_on" title="Disable Light Control" src="{$display_path}ui/images/skins/dark/light_on.png"
-								style="position:absolute; visibility:hidden;"/>
+							<img id="light_on" title="Disable Light Control" src="{$display_path}ui/images/skins/dark/light_on.png" style="position:absolute; visibility:hidden;"/>
 							<img id="light" title="Enable Light Control" src="{$display_path}ui/images/skins/dark/light.png"/>
 							<br/>
-							<img id="full_on" title="Exit Full Screen" src="{$display_path}ui/images/skins/dark/full_on.png"
-								style="position:absolute; visibility:hidden;"/>
+							<img id="full_on" title="Exit Full Screen" src="{$display_path}ui/images/skins/dark/full_on.png" style="position:absolute; visibility:hidden;"/>
 							<img id="full" title="Full Screen" src="{$display_path}ui/images/skins/dark/full.png"/>
 						</div>
 						<canvas id="draw-canvas" style="background-image: url({$display_path}ui/images/skins/backgrounds/dark.jpg)"/>
@@ -388,8 +391,7 @@
 		<xsl:choose>
 			<xsl:when test="$count &gt; 25">
 				<p>This is a partial list of <strong>25</strong> of <strong><xsl:value-of select="$count"/></strong> IDs created or updated by this editor (<a
-						href="{$display_path}query?query={encode-for-uri(replace(replace($query, '%URI%', $conceptURI), ' %LIMIT%', ''))}&amp;output=csv"
-						title="Download list">
+						href="{$display_path}query?query={encode-for-uri(replace(replace($query, '%URI%', $conceptURI), ' %LIMIT%', ''))}&amp;output=csv" title="Download list">
 						<span class="glyphicon glyphicon-download"/> Download list</a>):</p>
 			</xsl:when>
 			<xsl:otherwise>
@@ -482,8 +484,7 @@
 		<xsl:param name="uri"/>
 
 		<xsl:variable name="lgpn-tei" as="element()*">
-			<xsl:copy-of
-				select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
+			<xsl:copy-of select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
 		</xsl:variable>
 
 		<xsl:if test="$lgpn-tei/descendant::tei:birth">
