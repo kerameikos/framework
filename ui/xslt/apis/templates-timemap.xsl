@@ -213,8 +213,12 @@ SELECT DISTINCT ?object ?place ?label ?title ?fromDate ?toDate ?thumb ?id ?keepe
 		</xsl:variable>
 		<xsl:variable name="metadata">
 			<xsl:choose>
-				<xsl:when test="$type='kon:ProductionPlace'"><![CDATA[?object dcterms:title ?title .
-?object dcterms:identifier ?id
+				<xsl:when test="$type='kon:ProductionPlace'"><![CDATA[?object crm:P1_is_identified_by ?id1 ;
+    crm:P1_is_identified_by ?id2 .
+?id1 a crm:E33_E41_Linguistic_Appellation ;
+    crm:P190_has_symbolic_content ?title .
+?id2 a crm:E42_Identifier ;
+    crm:P190_has_symbolic_content ?id .
 {?object crm:P50_has_current_keeper ?kuri .
 ?kuri skos:prefLabel ?keeper .
 FILTER ( lang(?keeper) = "en" )}

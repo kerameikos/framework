@@ -11,8 +11,10 @@ PREFIX edm:	<http://www.europeana.eu/schemas/edm/>
 
 SELECT ?object ?title ?dataset ?startDate ?endDate ?thumb ?ref ?manifest ?service ?match ?model ?modelFormat ?modelPublisher WHERE {
 ?object a crm:E22_Man-Made_Object ;
-        dcterms:title ?title ;
-        void:inDataset ?dataset  .
+        crm:P1_is_identified_by ?id1 ;
+        void:inDataset ?dataset .
+?id1 a crm:E33_E41_Linguistic_Appellation ;
+    crm:P190_has_symbolic_content ?title .
 OPTIONAL { ?object foaf:thumbnail ?thumb }
 OPTIONAL { ?object foaf:depiction ?ref 
 	OPTIONAL { ?ref dcterms:isReferencedBy ?manifest ;

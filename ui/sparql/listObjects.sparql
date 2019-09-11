@@ -11,8 +11,12 @@ PREFIX edm:	<http://www.europeana.eu/schemas/edm/>
 
 SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel ?format WHERE {
 %STATEMENTS%
-?object dcterms:title ?title ;
-    dcterms:identifier ?id .
+?object crm:P1_is_identified_by ?id1 ;
+    crm:P1_is_identified_by ?id2 .
+?id1 a crm:E33_E41_Linguistic_Appellation ;
+    crm:P190_has_symbolic_content ?title .
+?id2 a crm:E42_Identifier ;
+    crm:P190_has_symbolic_content ?id .
 OPTIONAL {?object crm:P50_has_current_keeper ?kuri .
     ?kuri skos:prefLabel ?keeper FILTER (langMatches(lang(?keeper), "en"))} 
 OPTIONAL {?object foaf:thumbnail ?thumb} .
