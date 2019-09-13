@@ -15,7 +15,6 @@
 
 		<xforms:model>
 			<!-- ***** RDF templates ***** -->
-
 			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="#default xhtml xforms xs ev xxforms fr res xi kerameikos">
 				<rdf:RDF xmlns="" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:void="http://rdfs.org/ns/void#" xmlns:foaf="http://xmlns.com/foaf/0.1/"
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:edm="http://www.europeana.eu/schemas/edm/"
@@ -74,6 +73,22 @@
 						<crm:P82b_end_of_the_end rdf:datatype="http://www.w3.org/2001/XMLSchema#gYear"/>
 					</crm:E52_Time-Span>
 				</crm:P4_has_time-span>
+			</xforms:instance>
+
+			<xforms:instance id="dimension-template" xxforms:exclude-result-prefixes="#all">
+				<crm:P43_has_dimension>
+					<crm:E54_Dimension>
+						<crm:P2_has_type rdf:resource=""/>
+						<crm:P90_has_value rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal"/>
+						<crm:P91_has_unit rdf:resource="http://vocab.getty.edu/aat/300379098"/>
+					</crm:E54_Dimension>
+				</crm:P43_has_dimension>
+			</xforms:instance>
+
+			<xforms:instance id="representation-template" xxforms:exclude-result-prefixes="#all">
+				<crm:P138i_has_representation rdf:resource="">
+					<crm:E36_Visual_Item/>
+				</crm:P138i_has_representation>
 			</xforms:instance>
 
 			<!-- Concordance URIs -->
@@ -258,7 +273,7 @@ SELECT ?uri ?type WHERE {
 				<div class="col-md-12">
 					<p><a href="../"><span class="glyphicon glyphicon-arrow-left"></span>Return to Admin</a></p>
 					<xforms:group ref=".[string-length(instance('control-instance')/status) &gt; 0]">
-						<div class="bg-info alert-box">
+						<div class="alert alert-success alert-box">
 							<span class="glyphicon glyphicon-info-sign"></span>
 							<strong>Status:</strong>
 							<xforms:output ref="instance('control-instance')/status"/>
@@ -344,6 +359,11 @@ SELECT ?uri ?type WHERE {
 						<xforms:case id="harvest-json">
 							<xforms:group ref="instance('void-rdf')/void:Dataset">
 								<div>
+									<xforms:input ref="@rdf:about">
+										<xforms:label>Dataset URI</xforms:label>
+									</xforms:input>
+								</div>
+								<div>
 									<xforms:input ref="void:dataDump/@rdf:resource">
 										<xforms:label>Harvest URL</xforms:label>
 									</xforms:input>
@@ -355,11 +375,11 @@ SELECT ?uri ?type WHERE {
 										<xforms:action ev:event="xforms-submit-done">
 											<!-- extract all possible URIs and execute SPARQL queries to get their Kerameikos.org exactMatch, if applicable -->
 											<xforms:action
-												xxforms:iterate="distinct-values(instance('json')/produced_by/carried_out_by/_/id|instance('json')/produced_by/took_place_at/_/id|instance('json')/made_of/_/id|instance('json')/technique/_/id|instance('json')/classified_as/_/id|instance('json')/current_owner/id)">
+												xxforms:iterate="distinct-values(instance('json')/produced_by/carried_out_by/_/id|instance('json')/produced_by/took_place_at/_/id|instance('json')/made_of/_/id|instance('json')/technique/_/id|instance('json')/classified_as/_/id|instance('json')/current_owner/id|instance('json')//style/_/id)">
 												<xforms:var name="uri" select="normalize-space(data(context()))"/>
 
 												<!-- perform lookup only if the URI hasn't already been mapped (applicable for eventual API pagination) -->
-												<xforms:action if="not(instance('mappings')/mapping[@from = $uri])">
+												<xforms:action if="not(instance('mappings')/mapping[@from = $uri]/@to)">
 													<!-- set the SPARQL query-->
 													<xforms:setvalue ref="instance('sparqlQuery')"
 														value="replace(instance('sparql-templates')/query[@id='get-match'], '%MATCH%', $uri)"/>
@@ -381,7 +401,12 @@ SELECT ?uri ?type WHERE {
 
 											<!-- interate through all HMOs in the JSON-LD response -->
 											<xforms:action xxforms:iterate="instance('json')/descendant-or-self::node()[type='HumanMadeObject']">
-												<xforms:setvalue ref="instance('object')/@rdf:about" value="context()/id"/>
+												<!-- use the home page link when available, otherwise use the URI for the HMO -->
+												<xforms:var name="objectURI"
+													select="if (context()/subject_of/_[classified_as/_/id = 'http://vocab.getty.edu/aat/300266277'])
+													then context()/subject_of/_[classified_as/_/id = 'http://vocab.getty.edu/aat/300266277']/id else context()/id"/>
+
+												<xforms:setvalue ref="instance('object')/@rdf:about" value="$objectURI"/>
 
 												<!-- Identifiers: Title and Accession number -->
 												<xforms:action xxforms:iterate="context()/identified_by/_">
@@ -411,13 +436,24 @@ SELECT ?uri ?type WHERE {
 													</xforms:action>
 												</xforms:action>
 
+												<!-- iterate through visual item depictions to parse out styles -->
+												<xforms:action xxforms:iterate="context()/shows/_[child::style]/style//id">
+													<xforms:var name="uri" select="data(context())"/>
+
+													<xforms:var name="match"
+														select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+
+													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+														origin="xforms:element('kon:hasStyle', (xforms:attribute('rdf:resource', $match)))"/>
+												</xforms:action>
+
 												<!-- create material and technique properties -->
 												<xforms:action xxforms:iterate="context()/made_of/_|context()/technique/_">
 													<xforms:var name="uri" select="context()/id"/>
 													<xforms:var name="element"
 														select="if (ancestor::node()/name() = 'made_of') then 'crm:P45_consists_of' else 'crm:P32_used_general_technique'"/>
 													<xforms:var name="match"
-														select="if (instance('mappings')/mapping[@from = $uri]) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+														select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
 
 													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
 														origin="xforms:element($element, (xforms:attribute('rdf:resource', $match)))"/>
@@ -435,7 +471,7 @@ SELECT ?uri ?type WHERE {
 															<xforms:action xxforms:iterate="context()/_">
 																<xforms:var name="uri" select="context()/id"/>
 																<xforms:var name="match"
-																	select="if (instance('mappings')/mapping[@from = $uri]) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+																	select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
 
 																<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
 																	nodeset="./child::node()[last()]"
@@ -446,7 +482,7 @@ SELECT ?uri ?type WHERE {
 															<xforms:action xxforms:iterate="context()/_">
 																<xforms:var name="uri" select="context()/id"/>
 																<xforms:var name="match"
-																	select="if (instance('mappings')/mapping[@from = $uri]) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+																	select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
 
 																<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
 																	nodeset="./child::node()[last()]"
@@ -476,15 +512,61 @@ SELECT ?uri ?type WHERE {
 													</xforms:action>
 												</xforms:action>
 
+												<!-- insert and convert dimensions to metric -->
+												<xforms:action if="count(context()/dimension/_) &gt; 0">
+													<xforms:action xxforms:iterate="context()/dimension/_">
+
+														<!-- ensure that the value is numeric -->
+														<xforms:action if="context()/value castable as xs:decimal">
+															<xforms:var name="units" select="context()/unit/id"/>
+															<xforms:var name="val" select="number(context()/value)"/>
+
+															<!-- insert the dimension template, but only if the units conform to AAT -->
+															<xforms:action if="matches($units, 'https?://vocab.getty.edu/aat/\d+')">
+																<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+																	origin="instance('dimension-template')"/>
+
+																<!-- set the dimension type -->
+																<xforms:setvalue
+																	ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P2_has_type/@rdf:resource"
+																	value="context()/classified_as/_[1]/id"/>
+
+																<!-- perform some math to convert inches to centimeters, if applicable -->
+																<xforms:action if="$units = 'http://vocab.getty.edu/aat/300379100'">
+																	<!-- inches -->
+																	<xforms:setvalue ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P90_has_value"
+																		value="format-number($val * 2.54, '###.##')"/>
+																</xforms:action>
+																<xforms:action if="$units = 'http://vocab.getty.edu/aat/300379098'">
+																	<!-- cm -->
+																	<xforms:setvalue ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P90_has_value"
+																		value="$val"/>
+																</xforms:action>
+															</xforms:action>
+														</xforms:action>
+													</xforms:action>
+												</xforms:action>
+
+												<!-- digital images -->
+												<xforms:action xxforms:iterate="context()/representation/_">
+													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]" origin="instance('representation-template')"/>
+													<xforms:setvalue ref="instance('object')/crm:P138i_has_representation[last()]/@rdf:resource" value="context()/id"/>
+
+												</xforms:action>
+
 												<!-- insert collection link -->
 												<xforms:action if="context()/current_owner">
 													<xforms:var name="uri" select="context()/current_owner/id"/>
 													<xforms:var name="match"
-														select="if (instance('mappings')/mapping[@from = $uri]) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+														select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
 
 													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
 														origin="xforms:element('crm:P50_has_current_keeper', (xforms:attribute('rdf:resource', $match)))"/>
 												</xforms:action>
+
+												<!-- insert void:inDataset -->
+												<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+													origin="xforms:element('void:inDataset', (xforms:attribute('rdf:resource', data(instance('void-rdf')/void:Dataset/@rdf:about))))"/>
 
 												<!-- insert HMO template into primary RDF instance after processing -->
 												<xforms:insert context="instance('rdf')" nodeset="child::node()[last()]" origin="instance('object')"/>
