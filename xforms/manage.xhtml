@@ -1,8 +1,8 @@
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ev="http://www.w3.org/2001/xml-events"
-	xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:fr="http://orbeon.org/oxf/xml/form-runner"
-	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:void="http://rdfs.org/ns/void#" xmlns:dcterms="http://purl.org/dc/terms/"
-	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:res="http://www.w3.org/2005/sparql-results#"
-	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:fr="http://orbeon.org/oxf/xml/form-runner" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:void="http://rdfs.org/ns/void#"
+	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:kon="http://kerameikos.org/ontology#"
+	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
 	<head>
 		<title>Kerameikos: Manage Datasets</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css" />
@@ -16,17 +16,19 @@
 		<xforms:model>
 			<!-- ***** RDF templates ***** -->
 			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="#default xhtml xforms xs ev xxforms fr res xi kerameikos">
-				<rdf:RDF xmlns="" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:void="http://rdfs.org/ns/void#" xmlns:foaf="http://xmlns.com/foaf/0.1/"
-					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:edm="http://www.europeana.eu/schemas/edm/"
-					xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-					xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#"/>
+				<rdf:RDF xmlns="" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:void="http://rdfs.org/ns/void#"
+					xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
+					xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dcterms="http://purl.org/dc/terms/"
+					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
+					xmlns:kon="http://kerameikos.org/ontology#"/>
 			</xforms:instance>
 
 			<xforms:instance id="void-rdf" xxforms:exclude-result-prefixes="#default xhtml xforms xs ev xxforms fr res xi kerameikos">
 				<rdf:RDF xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:void="http://rdfs.org/ns/void#" xmlns:foaf="http://xmlns.com/foaf/0.1/"
-					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:edm="http://www.europeana.eu/schemas/edm/"
-					xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-					xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#">
+					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
+					xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dcterms="http://purl.org/dc/terms/"
+					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
+					xmlns:kon="http://kerameikos.org/ontology#">
 					<void:Dataset rdf:about="https://discovernewfields.org/">
 						<dcterms:title xml:lang="en"/>
 						<dcterms:description xml:lang="en"/>
@@ -86,9 +88,17 @@
 			</xforms:instance>
 
 			<xforms:instance id="representation-template" xxforms:exclude-result-prefixes="#all">
-				<crm:P138i_has_representation rdf:resource="">
-					<crm:E36_Visual_Item/>
+				<crm:P138i_has_representation>
+					<crm:E36_Visual_Item rdf:about=""/>
 				</crm:P138i_has_representation>
+			</xforms:instance>
+
+			<xforms:instance id="manifest-template" xxforms:exclude-result-prefixes="#all">
+				<crm:P129i_is_subject_of>
+					<crm:E73_Information_Object rdf:about=""/>
+					<dcterms:format>application/ld+json;profile="http://iiif.io/api/presentation/2/context.json"</dcterms:format>
+					<dcterms:conformsTo rdf:resource="http://iiif.io/api/presentation"/>
+				</crm:P129i_is_subject_of>
 			</xforms:instance>
 
 			<!-- Concordance URIs -->
@@ -144,12 +154,7 @@ DELETE {?s ?p ?o} WHERE {
   crm:P108i_was_produced_by ?prod .
   ?prod crm:P4_has_time-span ?s . ?s ?p ?o }
 UNION { ?object void:inDataset <DATASET> ;
-  crm:P108i_was_produced_by ?s . ?s ?p ?o }
-UNION { ?object void:inDataset <DATASET> ;
-  foaf:depiction ?resource . 
-  ?resource svcs:has_service ?s . ?s ?p ?o }
-UNION { ?object void:inDataset <DATASET> ;
-  foaf:depiction ?s . ?s ?p ?o }
+  crm:P108i_was_produced_by|crm:P1_is_identified_by|crm:P43_has_dimension|crm:P138i_has_representation|crm:P129i_is_subject_of ?s . ?s ?p ?o }
 UNION { ?s void:inDataset <DATASET> . ?s ?p ?o}
 }]]>
 					</query>
@@ -211,9 +216,10 @@ SELECT ?uri ?type WHERE {
 				<xforms:message ev:event="xforms-submit-error" level="modal">SPARQL query failed.</xforms:message>
 			</xforms:submission>
 
-			<xforms:submission id="delete-graph" action="{instance('config')/sparql/update}" ref="instance('sparqlUpdate')" serialization="text/plain" replace="none" method="post"
-				mediatype="application/sparql-update">
-				<xforms:setvalue ev:event="xforms-submit-done" ref="instance('control-instance')/status">Graph successfully deleted from endpoint.</xforms:setvalue>
+			<xforms:submission id="delete-graph" action="{instance('config')/sparql/update}" ref="instance('sparqlUpdate')" serialization="text/plain"
+				replace="none" method="post" mediatype="application/sparql-update">
+				<xforms:setvalue ev:event="xforms-submit-done" ref="instance('control-instance')/status">Graph successfully deleted from
+					endpoint.</xforms:setvalue>
 				<xforms:message ev:event="xforms-submit-error" level="modal">SPARQL update failed.</xforms:message>
 			</xforms:submission>
 
@@ -223,27 +229,30 @@ SELECT ?uri ?type WHERE {
 				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to post VoID metadata.</xforms:message>
 			</xforms:submission>
 
-			<xforms:submission id="post-dump" action="{instance('config')/sparql/store}?default" ref="instance('rdf')" replace="none" method="post" mediatype="application/rdf+xml">
+			<xforms:submission id="post-dump" action="{instance('config')/sparql/store}?default" ref="instance('rdf')" replace="none" method="post"
+				mediatype="application/rdf+xml">
 				<xforms:setvalue ev:event="xforms-submit-done" ref="instance('control-instance')/status">Successfully posted to endpoint.</xforms:setvalue>
 				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to post data dump.</xforms:message>
 			</xforms:submission>
 
 			<!-- ************************* LOAD RDF/XML ************************** -->
-			<xforms:submission id="load-void" serialization="none" method="get" action="{instance('control-instance')/void_uri}" replace="instance" instance="void-rdf">
+			<xforms:submission id="load-void" serialization="none" method="get" action="{instance('control-instance')/void_uri}" replace="instance"
+				instance="void-rdf">
 				<xforms:action ev:event="xforms-submit-error">
 					<xforms:message level="modal">Unable to load VoID metadata RDF.</xforms:message>
 				</xforms:action>
 			</xforms:submission>
 
-			<xforms:submission id="load-dump" serialization="none" method="get" action="{instance('control-instance')/dump_uri}" replace="instance" instance="rdf">
+			<xforms:submission id="load-dump" serialization="none" method="get" action="{instance('control-instance')/dump_uri}" replace="instance"
+				instance="rdf">
 				<xforms:action ev:event="xforms-submit-error">
 					<xforms:message level="modal">Unable to load VoID dump.</xforms:message>
 				</xforms:action>
 			</xforms:submission>
 
 			<!-- ************************* LOAD LINKED ART JSON-LD ************************** -->
-			<xforms:submission id="load-json" serialization="none" method="get" action="{instance('void-rdf')/void:Dataset/void:dataDump/@rdf:resource}" replace="instance"
-				instance="json">
+			<xforms:submission id="load-json" serialization="none" method="get" action="{instance('void-rdf')/void:Dataset/void:dataDump/@rdf:resource}"
+				replace="instance" instance="json">
 				<xforms:action ev:event="xforms-submit-error">
 					<xforms:message level="modal">Unable to load JSON-LD. Either it is not JSON or the URL is incorrect.</xforms:message>
 				</xforms:action>
@@ -413,13 +422,17 @@ SELECT ?uri ?type WHERE {
 													<xforms:var name="content" select="context()/content"/>
 
 													<xforms:action if="context()/classified_as/_/id = 'http://vocab.getty.edu/aat/300404670'">
-														<xforms:insert context="instance('object')" nodeset="./child::node()[last()]" origin="instance('title-template')"/>
-														<xforms:setvalue ref="instance('object')/crm:P1_is_identified_by[last()]/crm:E35_Title/crm:P190_has_symbolic_content"
+														<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+															origin="instance('title-template')"/>
+														<xforms:setvalue
+															ref="instance('object')/crm:P1_is_identified_by[last()]/crm:E33_E41_Linguistic_Appellation/crm:P190_has_symbolic_content"
 															value="$content"/>
 													</xforms:action>
 													<xforms:action if="context()/classified_as/_/id = 'http://vocab.getty.edu/aat/300312355'">
-														<xforms:insert context="instance('object')" nodeset="./child::node()[last()]" origin="instance('accession-template')"/>
-														<xforms:setvalue ref="instance('object')/crm:P1_is_identified_by[last()]/crm:E42_Identifier/crm:P190_has_symbolic_content"
+														<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+															origin="instance('accession-template')"/>
+														<xforms:setvalue
+															ref="instance('object')/crm:P1_is_identified_by[last()]/crm:E42_Identifier/crm:P190_has_symbolic_content"
 															value="$content"/>
 													</xforms:action>
 												</xforms:action>
@@ -428,7 +441,8 @@ SELECT ?uri ?type WHERE {
 												<xforms:action xxforms:iterate="context()/classified_as/_[@type='object']">
 													<xforms:var name="uri" select="context()/id"/>
 
-													<xforms:action if="instance('mappings')/mapping[@from = $uri]/@type = 'http://kerameikos.org/ontology#Shape'">
+													<xforms:action
+														if="instance('mappings')/mapping[@from = $uri]/@type = 'http://kerameikos.org/ontology#Shape'">
 														<xforms:var name="match" select="instance('mappings')/mapping[@from = $uri]/@to"/>
 
 														<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
@@ -461,7 +475,8 @@ SELECT ?uri ?type WHERE {
 
 												<!-- begin processing production event, if applicable -->
 												<xforms:action if="context()/produced_by">
-													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]" origin="instance('production-template')"/>
+													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+														origin="instance('production-template')"/>
 
 													<!-- iterate through all production properties -->
 													<xforms:action xxforms:iterate="context()/produced_by/*">
@@ -475,7 +490,8 @@ SELECT ?uri ?type WHERE {
 
 																<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
 																	nodeset="./child::node()[last()]"
-																	origin="xforms:element('crm:P14_carried_out_by', (xforms:attribute('rdf:resource', $match)))"/>
+																	origin="xforms:element('crm:P14_carried_out_by', (xforms:attribute('rdf:resource', $match)))"
+																/>
 															</xforms:action>
 														</xforms:action>
 														<xforms:action if="$property = 'took_place_at'">
@@ -486,7 +502,8 @@ SELECT ?uri ?type WHERE {
 
 																<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
 																	nodeset="./child::node()[last()]"
-																	origin="xforms:element('crm:P7_took_place_at', (xforms:attribute('rdf:resource', $match)))"/>
+																	origin="xforms:element('crm:P7_took_place_at', (xforms:attribute('rdf:resource', $match)))"
+																/>
 															</xforms:action>
 														</xforms:action>
 														<xforms:action if="$property = 'timespan'">
@@ -534,12 +551,14 @@ SELECT ?uri ?type WHERE {
 																<!-- perform some math to convert inches to centimeters, if applicable -->
 																<xforms:action if="$units = 'http://vocab.getty.edu/aat/300379100'">
 																	<!-- inches -->
-																	<xforms:setvalue ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P90_has_value"
+																	<xforms:setvalue
+																		ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P90_has_value"
 																		value="format-number($val * 2.54, '###.##')"/>
 																</xforms:action>
 																<xforms:action if="$units = 'http://vocab.getty.edu/aat/300379098'">
 																	<!-- cm -->
-																	<xforms:setvalue ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P90_has_value"
+																	<xforms:setvalue
+																		ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P90_has_value"
 																		value="$val"/>
 																</xforms:action>
 															</xforms:action>
@@ -549,9 +568,36 @@ SELECT ?uri ?type WHERE {
 
 												<!-- digital images -->
 												<xforms:action xxforms:iterate="context()/representation/_">
-													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]" origin="instance('representation-template')"/>
-													<xforms:setvalue ref="instance('object')/crm:P138i_has_representation[last()]/@rdf:resource" value="context()/id"/>
+													<xforms:var name="binding" select="context()" as="node()?"/>
+													
+													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+														origin="instance('representation-template')"/>
+													<xforms:setvalue
+														ref="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item/@rdf:about"
+														value="$binding/id"/>
 
+													<!-- insert label, if applicable -->
+													<xforms:insert context="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item"
+														nodeset="./child::node()[last()]" origin="xforms:element('rdfs:label', data($binding/_label))"
+														if="string(data($binding/_label))"/>
+
+													<!-- evaluate classified_as or conforms_to as image or IIIF -->
+													<xforms:insert context="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item"
+														nodeset="./child::node()[last()]"
+														origin="xforms:element('dcterms:conformsTo', (xforms:attribute('rdf:resource', 'http://iiif.io/api/image')))"
+														if="$binding/conforms_to"/>
+													<xforms:insert context="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item"
+														nodeset="./child::node()[last()]" origin="xforms:element('dcterms:format', 'image/jpeg')"
+														if="$binding/classified_as"/>
+												</xforms:action>
+
+												<!-- if there's a IIIF Manifest link -->
+												<xforms:action if="context()/subject_of/_[conforms_to/_/id = 'http://iiif.io/api/presentation']">
+													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+														origin="instance('manifest-template')"/>
+													<xforms:setvalue
+														ref="instance('object')/crm:P129i_is_subject_of[last()]/crm:E73_Information_Object/@rdf:about"
+														value="context()/subject_of/_[conforms_to/_/id = 'http://iiif.io/api/presentation']/id"/>
 												</xforms:action>
 
 												<!-- insert collection link -->
@@ -702,7 +748,8 @@ SELECT ?uri ?type WHERE {
 						<xforms:send submission="load-void"/>
 						<xforms:action ev:event="xforms-submit-done">
 							<xforms:toggle case="validate-void"/>
-							<xforms:setvalue ref="instance('control-instance')/validate-trigger" value="true()" if="xxforms:valid(instance('void-rdf'), true())"/>
+							<xforms:setvalue ref="instance('control-instance')/validate-trigger" value="true()" if="xxforms:valid(instance('void-rdf'), true())"
+							/>
 						</xforms:action>
 						<xxforms:hide dialog="lookup-dialog"/>
 					</xforms:action>

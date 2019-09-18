@@ -9,7 +9,14 @@ PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX kon:	<http://kerameikos.org/ontology#>
 PREFIX edm:	<http://www.europeana.eu/schemas/edm/>
 
-SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel ?format WHERE {
+CONSTRUCT {?object a crm:E22_Man-Made_Object ;
+            dcterms:title ?title ;
+            dcterms:identifier ?id ;
+            dcterms:publisher ?keeper; 
+            crm:P138i_has_representation ?representation ;
+            crm:P129i_is_subject_of ?manifest .
+          ?representation dcterms:format ?format ;
+            dcterms:conformsTo ?conformsTo} WHERE {
 %STATEMENTS%
 ?object crm:P1_is_identified_by ?id1 ;
     crm:P1_is_identified_by ?id2 .
@@ -17,11 +24,9 @@ SELECT DISTINCT ?object ?title ?id ?thumb ?ref ?keeper ?manifest ?3dmodel ?forma
     crm:P190_has_symbolic_content ?title .
 ?id2 a crm:E42_Identifier ;
     crm:P190_has_symbolic_content ?id .
-OPTIONAL {?object crm:P50_has_current_keeper ?kuri .
-    ?kuri skos:prefLabel ?keeper FILTER (langMatches(lang(?keeper), "en"))} 
-OPTIONAL {?object foaf:thumbnail ?thumb} .
-OPTIONAL {?object foaf:depiction ?ref
-	OPTIONAL {?ref dcterms:isReferencedBy ?manifest}}
-OPTIONAL {?object edm:isShownBy ?3dmodel 
-	OPTIONAL {?3dmodel dcterms:format ?format}}
+OPTIONAL {?object crm:P50_has_current_keeper/skos:prefLabel ?keeper FILTER (langMatches(lang(?keeper), "en"))} 
+OPTIONAL {?object crm:P138i_has_representation ?representation
+	OPTIONAL {?representation dcterms:format ?format}
+	OPTIONAL {?representation dcterms:conformsTo ?conformsTo}}
+OPTIONAL {?object crm:P129i_is_subject_of ?manifest}
 }

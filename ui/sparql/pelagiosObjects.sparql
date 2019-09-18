@@ -9,19 +9,16 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 PREFIX svcs: <http://rdfs.org/sioc/services#>
 PREFIX edm:	<http://www.europeana.eu/schemas/edm/>
 
-SELECT ?object ?title ?dataset ?startDate ?endDate ?thumb ?ref ?manifest ?service ?match ?model ?modelFormat ?modelPublisher WHERE {
+SELECT ?object ?title ?dataset ?startDate ?endDate ?representation ?manifest ?match WHERE {
 ?object a crm:E22_Man-Made_Object ;
         crm:P1_is_identified_by ?id1 ;
         void:inDataset ?dataset .
 ?id1 a crm:E33_E41_Linguistic_Appellation ;
     crm:P190_has_symbolic_content ?title .
-OPTIONAL { ?object foaf:thumbnail ?thumb }
-OPTIONAL { ?object foaf:depiction ?ref 
-	OPTIONAL { ?ref dcterms:isReferencedBy ?manifest ;
-		svcs:has_service ?service}}
-OPTIONAL { ?object edm:isShownBy ?model .
-?model dcterms:format ?modelFormat ;
-	dcterms:publisher ?modelPublisher}
+OPTIONAL {?object crm:P138i_has_representation ?representation
+	OPTIONAL {?representation dcterms:format ?format}
+	OPTIONAL {?representation dcterms:conformsTo ?conformsTo}}
+OPTIONAL {?object crm:P129i_is_subject_of ?manifest}
 ?object crm:P108i_was_produced_by/crm:P7_took_place_at ?place .
 {?place skos:exactMatch ?match FILTER strStarts(str(?match), "https://pleiades")}
 UNION {?place^skos:exactMatch ?kid .
