@@ -2,8 +2,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:res="http://www.w3.org/2005/sparql-results#"
 	xmlns:void="http://rdfs.org/ns/void#" xmlns:pelagios="http://pelagios.github.io/vocab/terms#" xmlns:relations="http://pelagios.github.io/vocab/relations#"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:edm="http://www.europeana.eu/schemas/edm/"
-	xmlns:svcs="http://rdfs.org/sioc/services#" xmlns:doap="http://usefulinc.com/ns/doap#" xmlns:oa="http://www.w3.org/ns/oa#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-	xmlns:foaf="http://xmlns.com/foaf/0.1/" exclude-result-prefixes="#all" version="2.0">
+	xmlns:svcs="http://rdfs.org/sioc/services#" xmlns:doap="http://usefulinc.com/ns/doap#" xmlns:oa="http://www.w3.org/ns/oa#"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
+	exclude-result-prefixes="#all" version="2.0">
 
 	<xsl:variable name="url" select="/content/config/url"/>
 	<xsl:param name="page" select="tokenize(tokenize(doc('input:request')/request/request-url, '/')[last()], '\.')[2]"/>
@@ -22,35 +23,45 @@
 				</foaf:Organization>
 			</xsl:if>
 
-			<xsl:apply-templates select="descendant::res:result"/>
+			<xsl:apply-templates select="descendant::crm:E22_Man-Made_Object"/>
 		</rdf:RDF>
 	</xsl:template>
 
-	<xsl:template match="res:result">
-		<xsl:variable name="uri" select="res:binding[@name = 'object']/res:uri"/>
+	<xsl:template match="crm:E22_Man-Made_Object">
+		<xsl:variable name="uri" select="@rdf:about"/>
 
 		<pelagios:AnnotatedThing rdf:about="{$url}pelagios-objects.rdf#{encode-for-uri($uri)}">
-			<dcterms:title>
-				<xsl:value-of select="res:binding[@name = 'title']/res:literal"/>
-			</dcterms:title>
+
+			<xsl:copy-of select="dcterms:title"/>
+
 			<foaf:homepage rdf:resource="{$uri}"/>
-			<xsl:if test="res:binding[@name = 'startDate'] and res:binding[@name = 'endDate']">
+			<xsl:if test="edm:begin and edm:end">
 				<dcterms:temporal>
 					<xsl:text>start=</xsl:text>
-					<xsl:value-of select="number(res:binding[@name = 'startDate'])"/>
+					<xsl:value-of select="number(edm:begin)"/>
 					<xsl:text>; end=</xsl:text>
-					<xsl:value-of select="number(res:binding[@name = 'endDate'])"/>
+					<xsl:value-of select="number(edm:end)"/>
 				</dcterms:temporal>
 			</xsl:if>
-			<xsl:if test="res:binding[@name = 'model']">
-				<edm:isShownBy rdf:resource="{res:binding[@name='model']/res:uri}"/>
+
+			<!-- 3D model is edm:isShownBy -->
+			<xsl:if
+				test="crm:P138i_has_representation[descendant::dcterms:format = 'application/octet-stream' or descendant::dcterms:format/@rdf:resource = 'http://vocab.getty.edu/aat/300379693']">
+				<edm:isShownBy
+					rdf:resource="{crm:P138i_has_representation[descendant::dcterms:format = 'application/octet-stream' or descendant::dcterms:format/@rdf:resource = 'http://vocab.getty.edu/aat/300379693']/*/@rdf:about}"
+				/>
 			</xsl:if>
-			<xsl:apply-templates select="res:binding[@name='thumb'] | res:binding[@name='ref']" mode="image"/>
-			<void:inDataset rdf:resource="{res:binding[@name='dataset']/res:uri}"/>
+
+			<!-- apply-templates for static images or IIIF services -->
+			<xsl:apply-templates
+				select="crm:P138i_has_representation[descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image' or descendant::dcterms:format = 'image/jpeg']"
+				mode="image"/>
+
+			<xsl:copy-of select="void:inDataset"/>
 		</pelagios:AnnotatedThing>
 
 		<oa:Annotation rdf:about="{$url}pelagios-objects.rdf#{encode-for-uri($uri)}/annotations/01">
-			<oa:hasBody rdf:resource="{res:binding[@name='match']/res:uri}#this"/>
+			<oa:hasBody rdf:resource="{dcterms:coverage/@rdf:resource}#this"/>
 			<oa:hasTarget rdf:resource="{$url}pelagios-objects.rdf#{encode-for-uri($uri)}"/>
 			<pelagios:relation rdf:resource="http://pelagios.github.io/vocab/relations#attestsTo"/>
 			<oa:annotatedBy rdf:resource="{$url}pelagios-objects.rdf#agents/me"/>
@@ -59,29 +70,49 @@
 			</oa:annotatedAt>
 		</oa:Annotation>
 
+		<!-- *** Web Resources *** -->
+		<!-- IIIF service -->
+		<xsl:apply-templates select="crm:P138i_has_representation[descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']"
+			mode="web-resource"/>
 
-		<!-- edm:WebResource and svcs:Service for IIIF integration -->
-		<xsl:for-each select="res:binding[@name='manifest']">
-			<edm:WebResource rdf:about="{parent::node()/res:binding[@name='ref']/res:uri}">
-				<dcterms:isReferencedBy rdf:resource="{res:uri}"/>
-				<svcs:has_service rdf:resource="{parent::node()/res:binding[@name='service']/res:uri}"/>
-			</edm:WebResource>
+		<!-- 3D model -->
+		<xsl:apply-templates
+			select="crm:P138i_has_representation[descendant::dcterms:format = 'application/octet-stream' or descendant::dcterms:format/@rdf:resource = 'http://vocab.getty.edu/aat/300379693']"
+			mode="web-resource"/>
+	</xsl:template>
 
-			<svcs:Service rdf:about="{parent::node()/res:binding[@name = 'service']/res:uri}">
-				<dcterms:conformsTo rdf:resource="http://iiif.io/api/image"/>
-				<doap:implements rdf:resource="http://iiif.io/api/image/2/level1.json"/>
-			</svcs:Service>
-		</xsl:for-each>
+	<xsl:template match="crm:P138i_has_representation" mode="image">
+		<xsl:choose>
+			<xsl:when test="descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image'">
+				<foaf:thumbnail rdf:resource="{concat(*/@rdf:about, '/full/120,/0/default.jpg')}"/>
+				<foaf:depiction rdf:resource="{concat(*/@rdf:about, '/full/800,/0/default.jpg')}"/>
+			</xsl:when>
+			<xsl:when test="descendant::dcterms:format = 'image/jpeg'">
+				<foaf:depiction rdf:resource="{*/@rdf:about}"/>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:template>
 
-		<!-- include 3D model -->
-		<xsl:if test="res:binding[@name = 'model']">
-			<edm:WebResource rdf:about="{res:binding[@name='model']/res:uri}">
-				<dcterms:format rdf:resource="{res:binding[@name='modelFormat']/res:uri}"/>
-				<dcterms:publisher>
-					<xsl:value-of select="res:binding[@name = 'modelPublisher']/res:literal"/>
-				</dcterms:publisher>
-			</edm:WebResource>
-		</xsl:if>
+	<xsl:template match="crm:P138i_has_representation" mode="web-resource">
+		<xsl:choose>
+			<xsl:when test="descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image'">
+				<edm:WebResource rdf:about="{concat(*/@rdf:about, '/full/800,/0/default.jpg')}">
+					<dcterms:isReferencedBy rdf:resource="{parent::node()/crm:P129i_is_subject_of/@rdf:resource}"/>
+					<svcs:has_service rdf:resource="{*/@rdf:about}"/>
+				</edm:WebResource>
+				<svcs:Service rdf:about="{*/@rdf:about}">
+					<dcterms:conformsTo rdf:resource="http://iiif.io/api/image"/>
+					<doap:implements rdf:resource="http://iiif.io/api/image/2/level1.json"/>
+				</svcs:Service>
+			</xsl:when>
+			<xsl:when
+				test="descendant::dcterms:format = 'application/octet-stream' or descendant::dcterms:format/@rdf:resource = 'http://vocab.getty.edu/aat/300379693'">
+				<edm:WebResource rdf:about="{*/@rdf:about}">
+					<xsl:copy-of select="descendant::dcterms:format"/>
+				</edm:WebResource>
+			</xsl:when>
+		</xsl:choose>
+
 	</xsl:template>
 
 	<xsl:template match="res:binding" mode="image">
