@@ -295,8 +295,13 @@ a:hover{
 }
 .obj-container{
     z-index: 1;
-    cursor:pointer;
+    /*cursor:pointer;*/
     color: #c94f2a;
+}
+a.fancybox {
+    height:100%;
+    width:100%;
+    display:block;
 }
 @media (min-width : 992px){
     .obj-container{

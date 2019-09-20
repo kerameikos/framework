@@ -34,16 +34,18 @@
 				</xsl:choose>
 			</xsl:variable>
 
-			<div title="{$title}" style="background-image: url('{$image}')" id="{$uri}">
+			<div style="background-image: url('{$image}')">
 				<xsl:choose>
-					
+
 					<!-- when there's a IIIF manifest, display IIIF Leaflet viewer -->
 					<xsl:when test="crm:P129i_is_subject_of">
 						<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container iiif-image</xsl:attribute>
 						<xsl:attribute name="href">#iiif-window</xsl:attribute>
 						<xsl:attribute name="manifest" select="crm:P129i_is_subject_of/@rdf:resource"/>
+						<xsl:attribute name="uri" select="$uri"/>
+						<xsl:attribute name="title" select="$title"/>
 						<span class="glyphicon glyphicon-zoom-in iiif-zoom-glyph" title="Click image(s) to zoom" style="display:none"/>
-						
+
 						<!-- include 3D model link -->
 						<xsl:apply-templates
 							select="crm:P138i_has_representation[descendant::dcterms:format = 'application/octet-stream' or descendant::dcterms:format/@rdf:resource = 'http://vocab.getty.edu/aat/300379693']">
@@ -54,18 +56,24 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:variable name="rel" select="concat(digest:md5Hex(string($uri)), '-gallery')"/>
-
-						<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container fancybox</xsl:attribute>
-						<xsl:attribute name="href" select="$image"/>
-						<xsl:attribute name="rel" select="$rel"/>
-
-						<div class="hidden">
-							<xsl:apply-templates
-								select="crm:P138i_has_representation[descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image' or descendant::dcterms:format = 'image/jpeg']">
-								<xsl:with-param name="rel" select="$rel"/>
-							</xsl:apply-templates>
-						</div>
 						
+						<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container</xsl:attribute>
+
+						<a href="{$image}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>						
+
+						<!-- create gallery for multiple images per vase -->
+						<xsl:if
+							test="count(crm:P138i_has_representation[descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image' or descendant::dcterms:format = 'image/jpeg']) &gt; 1">
+							<div class="hidden">
+								<xsl:apply-templates
+									select="crm:P138i_has_representation[descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image' or descendant::dcterms:format = 'image/jpeg'][position() &gt; 1]">
+									<xsl:with-param name="rel" select="$rel"/>
+									<xsl:with-param name="uri" select="$uri"/>
+									<xsl:with-param name="title" select="$title"/>
+								</xsl:apply-templates>
+							</div>
+						</xsl:if>
+
 						<!-- include 3D model link -->
 						<xsl:apply-templates
 							select="crm:P138i_has_representation[descendant::dcterms:format = 'application/octet-stream' or descendant::dcterms:format/@rdf:resource = 'http://vocab.getty.edu/aat/300379693']">
@@ -85,10 +93,14 @@
 
 		<xsl:choose>
 			<xsl:when test="descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image'">
-				<img src="{concat(*/@rdf:about, '/full/800,/0/default.jpg')}" rel="{$rel}"/>
+				<a href="{concat(*/@rdf:about, '/full/800,/0/default.jpg')}" rel="{$rel}" uri="{$uri}" title="{$title}" class="fancybox">
+					<img src="{concat(*/@rdf:about, '/full/800,/0/default.jpg')}"/>
+				</a>
 			</xsl:when>
 			<xsl:when test="descendant::dcterms:format = 'image/jpeg'">
-				<img src="{*/@rdf:about}" rel="{$rel}"/>
+				<a href="{*/@rdf:about}" rel="{$rel}" uri="{$uri}" title="{$title}" class="fancybox">
+					<img src="{*/@rdf:about}"/>
+				</a>
 			</xsl:when>
 			<xsl:when
 				test="descendant::dcterms:format = 'application/octet-stream' or descendant::dcterms:format/@rdf:resource = 'http://vocab.getty.edu/aat/300379693'">

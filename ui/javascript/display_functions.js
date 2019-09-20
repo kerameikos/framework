@@ -53,7 +53,7 @@ $(document).ready(function () {
     
     $('.iiif-image').fancybox({
         beforeShow: function () {
-            this.title = '<a href="' + this.element.attr('id') + '">' + this.element.attr('title') + '</a>'
+            this.title = '<a href="' + this.element.attr('uri') + '">' + this.element.attr('title') + '</a>'
             var manifest = this.element.attr('manifest');
             //remove and replace #iiif-container, if different or new
             if (manifest != $('#manifest').text()) {
@@ -70,22 +70,16 @@ $(document).ready(function () {
         }
     });
     
-    $('#listObjects').on('click', '.fancybox', function () {
-        var href = $(this).attr('href');
-        var title = '<a href="' + $(this).attr('id') + '">' + $(this).attr('title') + '</a>';
-        
-        $.fancybox({
-            type: 'image',
-            href: href,
-            beforeShow: function () {
-                this.title = title
-            },
-            helpers: {
-                title: {
-                    type: 'inside'
-                }
+    $('a.fancybox').fancybox({
+        type: 'image',
+        beforeShow: function () {
+            this.title = '<a href="' + this.element.attr('uri') + '">' + this.element.attr('title') + '</a>'
+        },
+        helpers: {
+            title: {
+                type: 'inside'
             }
-        });
+        }
     });
     
     //if there is a div with a id=listObjects, then initiate ajax call
