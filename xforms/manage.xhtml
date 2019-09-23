@@ -123,7 +123,20 @@
 					<dump_uri></dump_uri>
 					<dataset></dataset>
 					<validate-trigger>false</validate-trigger>
+					<import-json-trigger>false</import-json-trigger>
 				</controls>
+			</xforms:instance>			
+			
+			<xforms:instance id="languages">
+				<xi:include href="instances/languages.xml"/>
+			</xforms:instance>
+			
+			<xforms:instance id="rights">
+				<xi:include href="instances/rights.xml"/>
+			</xforms:instance>
+			
+			<xforms:instance id="licenses">
+				<xi:include href="instances/licenses.xml"/>
 			</xforms:instance>
 
 			<!-- SPARQL instances -->
@@ -194,7 +207,7 @@ SELECT ?uri ?type WHERE {
 			<!-- ************* BINDINGS **********************-->
 			<xforms:bind nodeset="instance('void-rdf')">
 				<xforms:bind nodeset="void:Dataset">
-					<xforms:bind nodeset="rdf:about" required="true()" type="xs:anyURI"/>
+					<xforms:bind nodeset="rdf:about" required="true()" type="xs:anyURI" constraint="matches(., 'https?://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?$')"/>
 					<xforms:bind nodeset="dcterms:title" required="true()"/>
 					<xforms:bind nodeset="dcterms:description"
 						constraint="if (not(@rdf:resource)) then string-length(normalize-space(.)) &gt; 0 else string-length(normalize-space(.)) = 0"/>
@@ -202,7 +215,7 @@ SELECT ?uri ?type WHERE {
 						constraint="if (not(@rdf:resource)) then string-length(normalize-space(.)) &gt; 0 else string-length(normalize-space(.)) = 0"/>
 					<xforms:bind nodeset="dcterms:license"
 						constraint="if (not(@rdf:resource)) then string-length(normalize-space(.)) &gt; 0 else string-length(normalize-space(.)) = 0"/>
-					<xforms:bind nodeset="//@rdf:resource" type="xs:anyURI" required="true()" constraint="matches(., '^https?://')"/>
+					<xforms:bind nodeset="//@rdf:resource" type="xs:anyURI" required="true()" constraint="matches(., 'https?://(-\.)?([^\s/?\.#-]+\.?)+(/[^\s]*)?$')"/>
 				</xforms:bind>
 			</xforms:bind>
 
@@ -255,6 +268,248 @@ SELECT ?uri ?type WHERE {
 				replace="instance" instance="json">
 				<xforms:action ev:event="xforms-submit-error">
 					<xforms:message level="modal">Unable to load JSON-LD. Either it is not JSON or the URL is incorrect.</xforms:message>
+				</xforms:action>
+				
+				<!-- iterate through each JSON Human-Made-Object at the level of each API call -->
+				<xforms:action ev:event="xforms-submit-done">
+					<!-- extract all possible URIs and execute SPARQL queries to get their Kerameikos.org exactMatch, if applicable -->
+					<xforms:action
+						xxforms:iterate="distinct-values(instance('json')/produced_by/carried_out_by/_/id|instance('json')/produced_by/took_place_at/_/id|instance('json')/made_of/_/id|instance('json')/technique/_/id|instance('json')/classified_as/_/id|instance('json')/current_owner/id|instance('json')//style/_/id)">
+						<xforms:var name="uri" select="normalize-space(data(context()))"/>
+						
+						<!-- perform lookup only if the URI hasn't already been mapped (applicable for eventual API pagination) -->
+						<xforms:action if="not(instance('mappings')/mapping[@from = $uri]/@to)">
+							<!-- set the SPARQL query-->
+							<xforms:setvalue ref="instance('sparqlQuery')"
+								value="replace(instance('sparql-templates')/query[@id='get-match'], '%MATCH%', $uri)"/>
+							<xforms:send submission="submit-sparqlQuery"/>
+							
+							<!-- if there's a response, then insert the corresponding Kerameikos URI and class -->
+							<xforms:action if="instance('sparqlResponse')//res:result">
+								<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]"
+									origin="xforms:element('mapping', (xforms:attribute('from', $uri), xforms:attribute('to', instance('sparqlResponse')//res:binding[@name='uri']/res:uri), xforms:attribute('type', instance('sparqlResponse')//res:binding[@name='type']/res:uri)))"
+								/>
+							</xforms:action>
+							<!-- otherwise insert a mapping @from without a @to to prevent further HTTP requests -->
+							<xforms:action if="not(instance('sparqlResponse')//res:result)">
+								<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]"
+									origin="xforms:element('mapping', (xforms:attribute('from', $uri)))"/>
+							</xforms:action>
+						</xforms:action>
+					</xforms:action>
+					
+					<!-- interate through all HMOs in the JSON-LD response -->
+					<xforms:action xxforms:iterate="instance('json')/descendant-or-self::node()[type='HumanMadeObject']">
+						<!-- use the home page link when available, otherwise use the URI for the HMO -->
+						<xforms:var name="objectURI"
+							select="if (context()/subject_of/_[classified_as/_/id = 'http://vocab.getty.edu/aat/300266277'])
+							then context()/subject_of/_[classified_as/_/id = 'http://vocab.getty.edu/aat/300266277']/id else context()/id"/>
+						
+						<xforms:setvalue ref="instance('object')/@rdf:about" value="$objectURI"/>
+						
+						<!-- Identifiers: Title and Accession number -->
+						<xforms:action xxforms:iterate="context()/identified_by/_">
+							<xforms:var name="content" select="context()/content"/>
+							
+							<xforms:action if="context()/classified_as/_/id = 'http://vocab.getty.edu/aat/300404670'">
+								<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+									origin="instance('title-template')"/>
+								<xforms:setvalue
+									ref="instance('object')/crm:P1_is_identified_by[last()]/crm:E33_E41_Linguistic_Appellation/crm:P190_has_symbolic_content"
+									value="$content"/>
+							</xforms:action>
+							<xforms:action if="context()/classified_as/_/id = 'http://vocab.getty.edu/aat/300312355'">
+								<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+									origin="instance('accession-template')"/>
+								<xforms:setvalue
+									ref="instance('object')/crm:P1_is_identified_by[last()]/crm:E42_Identifier/crm:P190_has_symbolic_content"
+									value="$content"/>
+							</xforms:action>
+						</xforms:action>
+						
+						<!-- iterate through types in order to parse the shape -->
+						<xforms:action xxforms:iterate="context()/classified_as/_[@type='object']">
+							<xforms:var name="uri" select="context()/id"/>
+							
+							<xforms:action
+								if="instance('mappings')/mapping[@from = $uri]/@type = 'http://kerameikos.org/ontology#Shape'">
+								<xforms:var name="match" select="instance('mappings')/mapping[@from = $uri]/@to"/>
+								
+								<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+									origin="xforms:element('kon:hasShape', (xforms:attribute('rdf:resource', $match)))"/>
+							</xforms:action>
+						</xforms:action>
+						
+						<!-- iterate through visual item depictions to parse out styles -->
+						<xforms:action xxforms:iterate="context()/shows/_[child::style]/style//id">
+							<xforms:var name="uri" select="data(context())"/>
+							
+							<xforms:var name="match"
+								select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+							
+							<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+								origin="xforms:element('kon:hasStyle', (xforms:attribute('rdf:resource', $match)))"/>
+						</xforms:action>
+						
+						<!-- create material and technique properties -->
+						<xforms:action xxforms:iterate="context()/made_of/_|context()/technique/_">
+							<xforms:var name="uri" select="context()/id"/>
+							<xforms:var name="element"
+								select="if (ancestor::node()/name() = 'made_of') then 'crm:P45_consists_of' else 'crm:P32_used_general_technique'"/>
+							<xforms:var name="match"
+								select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+							
+							<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+								origin="xforms:element($element, (xforms:attribute('rdf:resource', $match)))"/>
+						</xforms:action>
+						
+						<!-- begin processing production event, if applicable -->
+						<xforms:action if="context()/produced_by">
+							<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+								origin="instance('production-template')"/>
+							
+							<!-- iterate through all production properties -->
+							<xforms:action xxforms:iterate="context()/produced_by/*">
+								<xforms:var name="property" select="context()/name()"/>
+								
+								<xforms:action if="$property = 'carried_out_by'">
+									<xforms:action xxforms:iterate="context()/_">
+										<xforms:var name="uri" select="context()/id"/>
+										<xforms:var name="match"
+											select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+										
+										<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
+											nodeset="./child::node()[last()]"
+											origin="xforms:element('crm:P14_carried_out_by', (xforms:attribute('rdf:resource', $match)))"
+										/>
+									</xforms:action>
+								</xforms:action>
+								<xforms:action if="$property = 'took_place_at'">
+									<xforms:action xxforms:iterate="context()/_">
+										<xforms:var name="uri" select="context()/id"/>
+										<xforms:var name="match"
+											select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+										
+										<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
+											nodeset="./child::node()[last()]"
+											origin="xforms:element('crm:P7_took_place_at', (xforms:attribute('rdf:resource', $match)))"
+										/>
+									</xforms:action>
+								</xforms:action>
+								<xforms:action if="$property = 'timespan'">
+									<!-- only process timespan if there's a start and end, and they conform to xsd:dateTime -->
+									
+									<xforms:action
+										if="context()/begin_of_the_begin castable as xs:dateTime and context()/end_of_the_end castable as xs:dateTime">
+										<!-- convert to xsd:gYear -->
+										<xforms:var name="begin"
+											select="if (starts-with(context()/begin_of_the_begin, '-')) then substring(context()/begin_of_the_begin, 1, 5) else substring(context()/begin_of_the_begin, 1, 4)"/>
+										<xforms:var name="end"
+											select="if (starts-with(context()/end_of_the_end, '-')) then substring(context()/end_of_the_end, 1, 5) else substring(context()/end_of_the_end, 1, 4)"/>
+										
+										<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
+											nodeset="./child::node()[last()]" origin="instance('timespan-template')"/>
+										
+										<xforms:setvalue ref="instance('object')/crm:P108i_was_produced_by//crm:P82a_begin_of_the_begin"
+											value="if (number($begin) &lt; 0) then format-number(number($begin) - 1, '0000') else $begin"/>
+										<xforms:setvalue ref="instance('object')/crm:P108i_was_produced_by//crm:P82b_end_of_the_end"
+											value="if (number($end) &lt; 0) then format-number(number($end) - 1, '0000') else $end"/>
+									</xforms:action>
+								</xforms:action>
+							</xforms:action>
+						</xforms:action>
+						
+						<!-- insert and convert dimensions to metric -->
+						<xforms:action if="count(context()/dimension/_) &gt; 0">
+							<xforms:action xxforms:iterate="context()/dimension/_">
+								
+								<!-- ensure that the value is numeric -->
+								<xforms:action if="context()/value castable as xs:decimal">
+									<xforms:var name="units" select="context()/unit/id"/>
+									<xforms:var name="val" select="number(context()/value)"/>
+									
+									<!-- insert the dimension template, but only if the units conform to AAT -->
+									<xforms:action if="matches($units, 'https?://vocab.getty.edu/aat/\d+')">
+										<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+											origin="instance('dimension-template')"/>
+										
+										<!-- set the dimension type -->
+										<xforms:setvalue
+											ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P2_has_type/@rdf:resource"
+											value="context()/classified_as/_[1]/id"/>
+										
+										<!-- perform some math to convert inches to centimeters, if applicable -->
+										<xforms:action if="$units = 'http://vocab.getty.edu/aat/300379100'">
+											<!-- inches -->
+											<xforms:setvalue
+												ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P90_has_value"
+												value="format-number($val * 2.54, '###.##')"/>
+										</xforms:action>
+										<xforms:action if="$units = 'http://vocab.getty.edu/aat/300379098'">
+											<!-- cm -->
+											<xforms:setvalue
+												ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P90_has_value"
+												value="$val"/>
+										</xforms:action>
+									</xforms:action>
+								</xforms:action>
+							</xforms:action>
+						</xforms:action>
+						
+						<!-- digital images -->
+						<xforms:action xxforms:iterate="context()/representation/_">
+							<xforms:var name="binding" select="context()" as="node()?"/>
+							
+							<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+								origin="instance('representation-template')"/>
+							<xforms:setvalue
+								ref="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item/@rdf:about"
+								value="$binding/id"/>
+							
+							<!-- insert label, if applicable -->
+							<xforms:insert context="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item"
+								nodeset="./child::node()[last()]" origin="xforms:element('rdfs:label', data($binding/_label))"
+								if="string(data($binding/_label))"/>
+							
+							<!-- evaluate classified_as or conforms_to as image or IIIF -->
+							<xforms:insert context="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item"
+								nodeset="./child::node()[last()]"
+								origin="xforms:element('dcterms:conformsTo', (xforms:attribute('rdf:resource', 'http://iiif.io/api/image')))"
+								if="$binding/conforms_to"/>
+							<xforms:insert context="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item"
+								nodeset="./child::node()[last()]" origin="xforms:element('dcterms:format', 'image/jpeg')"
+								if="$binding/classified_as"/>
+						</xforms:action>
+						
+						<!-- if there's a IIIF Manifest link -->
+						<xforms:action if="context()/subject_of/_[conforms_to/_/id = 'http://iiif.io/api/presentation']">
+							<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+								origin="instance('manifest-template')"/>
+							<xforms:setvalue
+								ref="instance('object')/crm:P129i_is_subject_of[last()]/crm:E73_Information_Object/@rdf:about"
+								value="context()/subject_of/_[conforms_to/_/id = 'http://iiif.io/api/presentation']/id"/>
+						</xforms:action>
+						
+						<!-- insert collection link -->
+						<xforms:action if="context()/current_owner">
+							<xforms:var name="uri" select="context()/current_owner/id"/>
+							<xforms:var name="match"
+								select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+							
+							<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+								origin="xforms:element('crm:P50_has_current_keeper', (xforms:attribute('rdf:resource', $match)))"/>
+						</xforms:action>
+						
+						<!-- insert void:inDataset -->
+						<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+							origin="xforms:element('void:inDataset', (xforms:attribute('rdf:resource', data(instance('void-rdf')/void:Dataset/@rdf:about))))"/>
+						
+						<!-- insert HMO template into primary RDF instance after processing -->
+						<xforms:insert context="instance('rdf')" nodeset="child::node()[last()]" origin="instance('object')"/>
+						
+						<!-- clear template after completion -->
+						<xforms:delete nodeset="instance('object')/*"/>
+					</xforms:action>
 				</xforms:action>
 			</xforms:submission>
 
@@ -367,6 +622,28 @@ SELECT ?uri ?type WHERE {
 						</xforms:case>
 						<xforms:case id="harvest-json">
 							<xforms:group ref="instance('void-rdf')/void:Dataset">
+								<xforms:group ref=".[not(string(dcterms:title))]">
+									<div class="alert alert-danger alert-box">
+										<span class="glyphicon glyphicon-exclamation-sign"></span>
+										<strong>Alert:</strong> Title is required. </div>
+								</xforms:group>
+								<xforms:group ref=".[not(string(dcterms:description)) and not(dcterms:description[@rdf:resource castable as xs:anyURI])]">
+									<div class="alert alert-danger alert-box">
+										<span class="glyphicon glyphicon-exclamation-sign"></span>
+										<strong>Alert:</strong> Description is required. </div>
+								</xforms:group>
+								<xforms:group ref=".[not(string(dcterms:publisher)) and not(dcterms:publisher[@rdf:resource castable as xs:anyURI])]">
+									<div class="alert alert-danger alert-box">
+										<span class="glyphicon glyphicon-exclamation-sign"></span>
+										<strong>Alert:</strong> Publisher is required. </div>
+								</xforms:group>
+								<xforms:group ref=".[not(dcterms:license[@rdf:resource castable as xs:anyURI])]">
+									<div class="alert alert-danger alert-box">
+										<span class="glyphicon glyphicon-exclamation-sign"></span>
+										<strong>Alert:</strong> License or rights statement is required. </div>
+								</xforms:group>
+								
+								
 								<div>
 									<xforms:input ref="@rdf:about">
 										<xforms:label>Dataset URI</xforms:label>
@@ -381,246 +658,19 @@ SELECT ?uri ?type WHERE {
 									<xforms:label>Begin Harvest</xforms:label>
 									<xforms:action ev:event="DOMActivate">
 										<xforms:send submission="load-json"/>
+										
+										<!-- after the completion of the request, initiate SPARQL publication -->
+										<!--<xforms:send submission="post-dump"/>
 										<xforms:action ev:event="xforms-submit-done">
-											<!-- extract all possible URIs and execute SPARQL queries to get their Kerameikos.org exactMatch, if applicable -->
-											<xforms:action
-												xxforms:iterate="distinct-values(instance('json')/produced_by/carried_out_by/_/id|instance('json')/produced_by/took_place_at/_/id|instance('json')/made_of/_/id|instance('json')/technique/_/id|instance('json')/classified_as/_/id|instance('json')/current_owner/id|instance('json')//style/_/id)">
-												<xforms:var name="uri" select="normalize-space(data(context()))"/>
-
-												<!-- perform lookup only if the URI hasn't already been mapped (applicable for eventual API pagination) -->
-												<xforms:action if="not(instance('mappings')/mapping[@from = $uri]/@to)">
-													<!-- set the SPARQL query-->
-													<xforms:setvalue ref="instance('sparqlQuery')"
-														value="replace(instance('sparql-templates')/query[@id='get-match'], '%MATCH%', $uri)"/>
-													<xforms:send submission="submit-sparqlQuery"/>
-
-													<!-- if there's a response, then insert the corresponding Kerameikos URI and class -->
-													<xforms:action if="instance('sparqlResponse')//res:result">
-														<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]"
-															origin="xforms:element('mapping', (xforms:attribute('from', $uri), xforms:attribute('to', instance('sparqlResponse')//res:binding[@name='uri']/res:uri), xforms:attribute('type', instance('sparqlResponse')//res:binding[@name='type']/res:uri)))"
-														/>
-													</xforms:action>
-													<!-- otherwise insert a mapping @from without a @to to prevent further HTTP requests -->
-													<xforms:action if="not(instance('sparqlResponse')//res:result)">
-														<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]"
-															origin="xforms:element('mapping', (xforms:attribute('from', $uri)))"/>
-													</xforms:action>
-												</xforms:action>
-											</xforms:action>
-
-											<!-- interate through all HMOs in the JSON-LD response -->
-											<xforms:action xxforms:iterate="instance('json')/descendant-or-self::node()[type='HumanMadeObject']">
-												<!-- use the home page link when available, otherwise use the URI for the HMO -->
-												<xforms:var name="objectURI"
-													select="if (context()/subject_of/_[classified_as/_/id = 'http://vocab.getty.edu/aat/300266277'])
-													then context()/subject_of/_[classified_as/_/id = 'http://vocab.getty.edu/aat/300266277']/id else context()/id"/>
-
-												<xforms:setvalue ref="instance('object')/@rdf:about" value="$objectURI"/>
-
-												<!-- Identifiers: Title and Accession number -->
-												<xforms:action xxforms:iterate="context()/identified_by/_">
-													<xforms:var name="content" select="context()/content"/>
-
-													<xforms:action if="context()/classified_as/_/id = 'http://vocab.getty.edu/aat/300404670'">
-														<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-															origin="instance('title-template')"/>
-														<xforms:setvalue
-															ref="instance('object')/crm:P1_is_identified_by[last()]/crm:E33_E41_Linguistic_Appellation/crm:P190_has_symbolic_content"
-															value="$content"/>
-													</xforms:action>
-													<xforms:action if="context()/classified_as/_/id = 'http://vocab.getty.edu/aat/300312355'">
-														<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-															origin="instance('accession-template')"/>
-														<xforms:setvalue
-															ref="instance('object')/crm:P1_is_identified_by[last()]/crm:E42_Identifier/crm:P190_has_symbolic_content"
-															value="$content"/>
-													</xforms:action>
-												</xforms:action>
-
-												<!-- iterate through types in order to parse the shape -->
-												<xforms:action xxforms:iterate="context()/classified_as/_[@type='object']">
-													<xforms:var name="uri" select="context()/id"/>
-
-													<xforms:action
-														if="instance('mappings')/mapping[@from = $uri]/@type = 'http://kerameikos.org/ontology#Shape'">
-														<xforms:var name="match" select="instance('mappings')/mapping[@from = $uri]/@to"/>
-
-														<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-															origin="xforms:element('kon:hasShape', (xforms:attribute('rdf:resource', $match)))"/>
-													</xforms:action>
-												</xforms:action>
-
-												<!-- iterate through visual item depictions to parse out styles -->
-												<xforms:action xxforms:iterate="context()/shows/_[child::style]/style//id">
-													<xforms:var name="uri" select="data(context())"/>
-
-													<xforms:var name="match"
-														select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
-
-													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-														origin="xforms:element('kon:hasStyle', (xforms:attribute('rdf:resource', $match)))"/>
-												</xforms:action>
-
-												<!-- create material and technique properties -->
-												<xforms:action xxforms:iterate="context()/made_of/_|context()/technique/_">
-													<xforms:var name="uri" select="context()/id"/>
-													<xforms:var name="element"
-														select="if (ancestor::node()/name() = 'made_of') then 'crm:P45_consists_of' else 'crm:P32_used_general_technique'"/>
-													<xforms:var name="match"
-														select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
-
-													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-														origin="xforms:element($element, (xforms:attribute('rdf:resource', $match)))"/>
-												</xforms:action>
-
-												<!-- begin processing production event, if applicable -->
-												<xforms:action if="context()/produced_by">
-													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-														origin="instance('production-template')"/>
-
-													<!-- iterate through all production properties -->
-													<xforms:action xxforms:iterate="context()/produced_by/*">
-														<xforms:var name="property" select="context()/name()"/>
-
-														<xforms:action if="$property = 'carried_out_by'">
-															<xforms:action xxforms:iterate="context()/_">
-																<xforms:var name="uri" select="context()/id"/>
-																<xforms:var name="match"
-																	select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
-
-																<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
-																	nodeset="./child::node()[last()]"
-																	origin="xforms:element('crm:P14_carried_out_by', (xforms:attribute('rdf:resource', $match)))"
-																/>
-															</xforms:action>
-														</xforms:action>
-														<xforms:action if="$property = 'took_place_at'">
-															<xforms:action xxforms:iterate="context()/_">
-																<xforms:var name="uri" select="context()/id"/>
-																<xforms:var name="match"
-																	select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
-
-																<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
-																	nodeset="./child::node()[last()]"
-																	origin="xforms:element('crm:P7_took_place_at', (xforms:attribute('rdf:resource', $match)))"
-																/>
-															</xforms:action>
-														</xforms:action>
-														<xforms:action if="$property = 'timespan'">
-															<!-- only process timespan if there's a start and end, and they conform to xsd:dateTime -->
-
-															<xforms:action
-																if="context()/begin_of_the_begin castable as xs:dateTime and context()/end_of_the_end castable as xs:dateTime">
-																<!-- convert to xsd:gYear -->
-																<xforms:var name="begin"
-																	select="if (starts-with(context()/begin_of_the_begin, '-')) then substring(context()/begin_of_the_begin, 1, 5) else substring(context()/begin_of_the_begin, 1, 4)"/>
-																<xforms:var name="end"
-																	select="if (starts-with(context()/end_of_the_end, '-')) then substring(context()/end_of_the_end, 1, 5) else substring(context()/end_of_the_end, 1, 4)"/>
-
-																<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
-																	nodeset="./child::node()[last()]" origin="instance('timespan-template')"/>
-
-																<xforms:setvalue ref="instance('object')/crm:P108i_was_produced_by//crm:P82a_begin_of_the_begin"
-																	value="if (number($begin) &lt; 0) then format-number(number($begin) - 1, '0000') else $begin"/>
-																<xforms:setvalue ref="instance('object')/crm:P108i_was_produced_by//crm:P82b_end_of_the_end"
-																	value="if (number($end) &lt; 0) then format-number(number($end) - 1, '0000') else $end"/>
-															</xforms:action>
-														</xforms:action>
-													</xforms:action>
-												</xforms:action>
-
-												<!-- insert and convert dimensions to metric -->
-												<xforms:action if="count(context()/dimension/_) &gt; 0">
-													<xforms:action xxforms:iterate="context()/dimension/_">
-
-														<!-- ensure that the value is numeric -->
-														<xforms:action if="context()/value castable as xs:decimal">
-															<xforms:var name="units" select="context()/unit/id"/>
-															<xforms:var name="val" select="number(context()/value)"/>
-
-															<!-- insert the dimension template, but only if the units conform to AAT -->
-															<xforms:action if="matches($units, 'https?://vocab.getty.edu/aat/\d+')">
-																<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-																	origin="instance('dimension-template')"/>
-
-																<!-- set the dimension type -->
-																<xforms:setvalue
-																	ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P2_has_type/@rdf:resource"
-																	value="context()/classified_as/_[1]/id"/>
-
-																<!-- perform some math to convert inches to centimeters, if applicable -->
-																<xforms:action if="$units = 'http://vocab.getty.edu/aat/300379100'">
-																	<!-- inches -->
-																	<xforms:setvalue
-																		ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P90_has_value"
-																		value="format-number($val * 2.54, '###.##')"/>
-																</xforms:action>
-																<xforms:action if="$units = 'http://vocab.getty.edu/aat/300379098'">
-																	<!-- cm -->
-																	<xforms:setvalue
-																		ref="instance('object')/crm:P43_has_dimension[last()]/crm:E54_Dimension/crm:P90_has_value"
-																		value="$val"/>
-																</xforms:action>
-															</xforms:action>
-														</xforms:action>
-													</xforms:action>
-												</xforms:action>
-
-												<!-- digital images -->
-												<xforms:action xxforms:iterate="context()/representation/_">
-													<xforms:var name="binding" select="context()" as="node()?"/>
-													
-													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-														origin="instance('representation-template')"/>
-													<xforms:setvalue
-														ref="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item/@rdf:about"
-														value="$binding/id"/>
-
-													<!-- insert label, if applicable -->
-													<xforms:insert context="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item"
-														nodeset="./child::node()[last()]" origin="xforms:element('rdfs:label', data($binding/_label))"
-														if="string(data($binding/_label))"/>
-
-													<!-- evaluate classified_as or conforms_to as image or IIIF -->
-													<xforms:insert context="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item"
-														nodeset="./child::node()[last()]"
-														origin="xforms:element('dcterms:conformsTo', (xforms:attribute('rdf:resource', 'http://iiif.io/api/image')))"
-														if="$binding/conforms_to"/>
-													<xforms:insert context="instance('object')/crm:P138i_has_representation[last()]/crm:E36_Visual_Item"
-														nodeset="./child::node()[last()]" origin="xforms:element('dcterms:format', 'image/jpeg')"
-														if="$binding/classified_as"/>
-												</xforms:action>
-
-												<!-- if there's a IIIF Manifest link -->
-												<xforms:action if="context()/subject_of/_[conforms_to/_/id = 'http://iiif.io/api/presentation']">
-													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-														origin="instance('manifest-template')"/>
-													<xforms:setvalue
-														ref="instance('object')/crm:P129i_is_subject_of[last()]/crm:E73_Information_Object/@rdf:about"
-														value="context()/subject_of/_[conforms_to/_/id = 'http://iiif.io/api/presentation']/id"/>
-												</xforms:action>
-
-												<!-- insert collection link -->
-												<xforms:action if="context()/current_owner">
-													<xforms:var name="uri" select="context()/current_owner/id"/>
-													<xforms:var name="match"
-														select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
-
-													<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-														origin="xforms:element('crm:P50_has_current_keeper', (xforms:attribute('rdf:resource', $match)))"/>
-												</xforms:action>
-
-												<!-- insert void:inDataset -->
-												<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-													origin="xforms:element('void:inDataset', (xforms:attribute('rdf:resource', data(instance('void-rdf')/void:Dataset/@rdf:about))))"/>
-
-												<!-- insert HMO template into primary RDF instance after processing -->
-												<xforms:insert context="instance('rdf')" nodeset="child::node()[last()]" origin="instance('object')"/>
-
-												<!-- clear template after completion -->
-												<xforms:delete nodeset="instance('object')/*"/>
-											</xforms:action>
-										</xforms:action>
+											<xforms:send submission="post-void"/>
+										</xforms:action>-->
+										
+										<!-- refresh page after dumps have been posted -->
+										<xforms:setvalue ref="instance('sparqlQuery')" value="instance('sparql-templates')/query[@id='get-datasets']"/>
+										<xforms:send submission="submit-sparqlQuery"/>
+										<xforms:delete nodeset="instance('datasets')/*"/>
+										<xforms:insert context="instance('datasets')" origin="instance('sparqlResponse')/*"/>
+										<xforms:toggle case="default"/>
 									</xforms:action>
 								</xforms:trigger>
 							</xforms:group>
@@ -630,25 +680,26 @@ SELECT ?uri ?type WHERE {
 								<xforms:group ref="void:Dataset[@rdf:about]">
 									<!-- display error messages for missing fields -->
 									<!--<xforms:group ref=".[not(string(dcterms:title))]">
-										<div class="bg-danger alert-box">
+										<div class="alert alert-danger alert-box">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Title is required. </div>
-									</xforms:group>-->
-									<!--<xforms:group ref=".[not(string(dcterms:description)) and not(dcterms:description[@rdf:resource castable as xs:anyURI])]">
-										<div class="bg-danger alert-box">
+									</xforms:group>
+									<xforms:group ref=".[not(string(dcterms:description)) and not(dcterms:description[@rdf:resource castable as xs:anyURI])]">
+										<div class="alert alert-danger alert-box">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Description is required. </div>
-									</xforms:group>-->
+									</xforms:group>
 									<xforms:group ref=".[not(string(dcterms:publisher)) and not(dcterms:publisher[@rdf:resource castable as xs:anyURI])]">
-										<div class="bg-danger alert-box">
+										<div class="alert alert-danger alert-box">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> Publisher is required. </div>
 									</xforms:group>
-									<xforms:group ref=".[not(string(dcterms:license)) and not(dcterms:license[@rdf:resource castable as xs:anyURI])]">
-										<div class="bg-danger alert-box">
+									<xforms:group ref=".[not(dcterms:license[@rdf:resource castable as xs:anyURI])]">
+										<div class="alert alert-danger alert-box">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
-											<strong>Alert:</strong> Description is required. </div>
-									</xforms:group>
+											<strong>Alert:</strong> License or rights statement is required. </div>
+									</xforms:group>-->
+									
 									<div>
 										<xforms:output ref="@rdf:about">
 											<xforms:label>URI</xforms:label>
@@ -712,7 +763,10 @@ SELECT ?uri ?type WHERE {
 												</xforms:action>
 
 												<!-- refresh page after dumps have been posted -->
+												<xforms:setvalue ref="instance('sparqlQuery')" value="instance('sparql-templates')/query[@id='get-datasets']"/>
 												<xforms:send submission="submit-sparqlQuery"/>
+												<xforms:delete nodeset="instance('datasets')/*"/>
+												<xforms:insert context="instance('datasets')" origin="instance('sparqlResponse')/*"/>
 												<xforms:toggle case="default"/>
 											</xforms:action>
 										</xforms:action>

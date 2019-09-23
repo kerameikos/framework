@@ -20,6 +20,7 @@
 		<page stub="../editor/" label="Editors"/>
 	</documentation>
 	<datacite>
+		<id>10.25888</id>
 		<publisher>University of Virginia</publisher>
 		<rights rightsURI="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License (ODbL) v1.0</rights>
 	</datacite>

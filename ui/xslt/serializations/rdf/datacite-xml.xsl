@@ -14,7 +14,7 @@
 
 	<xsl:template match="foaf:Person">
 		<identifier identifierType="DOI">
-			<xsl:value-of select="concat('ID', '/', tokenize(@rdf:about, '/')[last()])"/>
+			<xsl:value-of select="concat(/content/config/datacite/id, '/', tokenize(@rdf:about, '/')[last()])"/>
 		</identifier>
 		<creators>
 			<creator>
