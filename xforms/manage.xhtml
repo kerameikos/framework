@@ -24,8 +24,8 @@
 			</xforms:instance>
 
 			<xforms:instance id="void-rdf" xxforms:exclude-result-prefixes="#default xhtml xforms xs ev xxforms fr res xi kerameikos">
-				<rdf:RDF xmlns="" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:void="http://rdfs.org/ns/void#" xmlns:foaf="http://xmlns.com/foaf/0.1/"
-					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
+				<rdf:RDF xmlns="" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:void="http://rdfs.org/ns/void#"
+					xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 					xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dcterms="http://purl.org/dc/terms/"
 					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
 					xmlns:kon="http://kerameikos.org/ontology#">
@@ -35,7 +35,7 @@
 						<dcterms:publisher rdf:resource="http://kerameikos.org/id/ima_newfields"/>
 						<!--<dcterms:license rdf:resource=""/>-->
 						<dcterms:rights rdf:resource="http://rightsstatements.org/vocab/NoC-US/1.0/"/>
-						<void:dataDump rdf:resource="http://kerameikos.org/rdf/test-import.json"/>
+						<void:dataDump rdf:resource="http://kerameikos.org/rdf/GreekPotteryObjectsSample.json"/>
 					</void:Dataset>
 				</rdf:RDF>
 			</xforms:instance>
@@ -196,10 +196,11 @@ UNION { ?s void:inDataset <DATASET> . ?s ?p ?o}
 					<query id="get-datasets"><![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX dcterms:	<http://purl.org/dc/terms/>
 PREFIX void:	<http://rdfs.org/ns/void#>
+PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 CONSTRUCT {?uri rdf:type void:Dataset ; dcterms:publisher ?publisher; dcterms:title ?title ; void:dataDump ?dump}
 WHERE {?uri a void:Dataset ; 
-  dcterms:publisher ?publisher ; 
-  void:dataDump ?dump; 
+  dcterms:publisher | dcterms:publisher/skos:prefLabel ?publisher FILTER (isLiteral(?publisher)) .
+  ?uri void:dataDump ?dump; 
   dcterms:title ?title FILTER (lang(?title) = "" || langMatches(lang(?title), "en")) }
 ORDER BY ASC(?publisher) ASC(?title)]]></query>
 					<query id="get-collections"><![CDATA[PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -312,7 +313,7 @@ SELECT ?uri ?type WHERE {
 				<xforms:action ev:event="xforms-submit-done">
 					<!-- extract all possible URIs and execute SPARQL queries to get their Kerameikos.org exactMatch, if applicable -->
 					<xforms:action
-						xxforms:iterate="distinct-values(instance('json')/produced_by/carried_out_by/_/id|instance('json')/produced_by/took_place_at/_/id|instance('json')/made_of/_/id|instance('json')/technique/_/id|instance('json')/classified_as/_/id|instance('json')/current_owner/id|instance('json')//style/_/id)">
+						xxforms:iterate="distinct-values(instance('json')//produced_by/carried_out_by/_/id|instance('json')//produced_by/took_place_at/_/id|instance('json')//made_of/_/id|instance('json')//technique/_/id|instance('json')//*[type='HumanMadeObject']/classified_as/_/id|instance('json')//current_owner/id|instance('json')//style/_/id)">
 						<xforms:var name="uri" select="normalize-space(data(context()))"/>
 
 						<!-- perform lookup only if the URI hasn't already been mapped (applicable for eventual API pagination) -->
@@ -541,13 +542,13 @@ SELECT ?uri ?type WHERE {
 				<xforms:delete nodeset="instance('datasets')/*"/>
 				<xforms:insert context="instance('datasets')" origin="instance('sparqlResponse')/*"/>
 			</xforms:action>
-			
+
 			<!-- **************** XFORMS-READY ********************** -->
 			<xforms:action ev:event="xforms-ready">
 				<!-- enable import trigger if the document is valid on ready -->
-				
+
 				<!-- can be disabled after testing -->
-				<xforms:setvalue ref="instance('control-instance')/import-json-trigger" value="true()" if="xxforms:valid(instance('void-rdf'), true())"/>				
+				<xforms:setvalue ref="instance('control-instance')/import-json-trigger" value="true()" if="xxforms:valid(instance('void-rdf'), true())"/>
 			</xforms:action>
 		</xforms:model>
 	</head>
@@ -669,8 +670,7 @@ SELECT ?uri ?type WHERE {
 						<xforms:case id="harvest-json">
 							<xforms:group ref="instance('void-rdf')/void:Dataset">
 
-								<xforms:group
-									ref=".[not(count(dcterms:title/@xml:lang) = count(distinct-values(dcterms:title/@xml:lang)))]">
+								<xforms:group ref=".[not(count(dcterms:title/@xml:lang) = count(distinct-values(dcterms:title/@xml:lang)))]">
 									<div class="alert-danger alert alert-box">
 										<p>
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
@@ -678,8 +678,7 @@ SELECT ?uri ?type WHERE {
 									</div>
 								</xforms:group>
 
-								<xforms:group
-									ref=".[not(count(dcterms:description/@xml:lang) = count(distinct-values(dcterms:description/@xml:lang)))]">
+								<xforms:group ref=".[not(count(dcterms:description/@xml:lang) = count(distinct-values(dcterms:description/@xml:lang)))]">
 									<div class="alert-danger alert alert-box">
 										<p>
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
@@ -700,17 +699,18 @@ SELECT ?uri ?type WHERE {
 											<span class="glyphicon glyphicon-plus"></span> Description</xforms:label>
 										<xforms:insert ev:event="DOMActivate" context="." nodeset="./child::node()[last()]"
 											origin="xforms:element('dcterms:description', (xforms:attribute('xml:lang', '')))"/>
-									</xforms:trigger>									
+									</xforms:trigger>
 									<xforms:group ref=".[count(dcterms:license) = 0]">
 										<xforms:trigger appearance="minimal">
 											<xforms:label>
 												<span class="glyphicon glyphicon-plus"></span> License</xforms:label>
 											<xforms:action ev:event="DOMActivate">
-												<xforms:insert context="instance('control-instance')" nodeset="./child::node()[last()]" origin="xforms:element('license', '')"/>
+												<xforms:insert context="instance('control-instance')" nodeset="./child::node()[last()]"
+													origin="xforms:element('license', '')"/>
 												<xforms:insert context="." nodeset="./child::node()[last()]"
 													origin="xforms:element('dcterms:license', (xforms:attribute('rdf:resource', '')))"/>
 											</xforms:action>
-											
+
 										</xforms:trigger>
 									</xforms:group>
 									<xforms:group ref=".[count(dcterms:rights) = 0]">
@@ -718,12 +718,13 @@ SELECT ?uri ?type WHERE {
 											<xforms:label>
 												<span class="glyphicon glyphicon-plus"></span> Rights</xforms:label>
 											<xforms:action ev:event="DOMActivate">
-												<xforms:insert context="instance('control-instance')" nodeset="./child::node()[last()]" origin="xforms:element('rights', '')"/>
+												<xforms:insert context="instance('control-instance')" nodeset="./child::node()[last()]"
+													origin="xforms:element('rights', '')"/>
 												<xforms:insert context="." nodeset="./child::node()[last()]"
 													origin="xforms:element('dcterms:rights', (xforms:attribute('rdf:resource', '')))"/>
 											</xforms:action>
 										</xforms:trigger>
-									</xforms:group>									
+									</xforms:group>
 								</div>
 
 								<div>
@@ -878,7 +879,7 @@ SELECT ?uri ?type WHERE {
 													</xforms:textarea>
 												</div>
 											</xforms:group>
-											
+
 											<!-- allow deletion of license if there's a rights -->
 											<xforms:group ref=".[count(instance('void-rdf')/void:Dataset/dcterms:rights) &gt; 0]">
 												<xforms:trigger appearance="minimal">
@@ -893,10 +894,10 @@ SELECT ?uri ?type WHERE {
 											</xforms:group>
 										</div>
 									</xforms:group>
-									
+
 									<xforms:group ref="rights">
 										<div>
-											
+
 											<xforms:select1 ref=".">
 												<xforms:label>Rights</xforms:label>
 												<xforms:alert>Required</xforms:alert>
@@ -912,14 +913,14 @@ SELECT ?uri ?type WHERE {
 													<xforms:label>Other Rights (specify)</xforms:label>
 													<xforms:value>other</xforms:value>
 												</xforms:item>
-												
+
 												<xforms:action ev:event="xforms-value-changed">
 													<xforms:var name="val" select="."/>
-													
+
 													<xforms:action if="starts-with($val, 'http')">
 														<xforms:setvalue ref="instance('void-rdf')/void:Dataset/dcterms:rights"/>
 														<xforms:setvalue ref="instance('void-rdf')/void:Dataset/dcterms:rights/@rdf:resource" value="$val"/>
-														
+
 														<xforms:delete nodeset="instance('control-instance')/rights/@other"/>
 													</xforms:action>
 													<xforms:action if="$val = 'other'">
@@ -929,18 +930,18 @@ SELECT ?uri ?type WHERE {
 														<!-- blank values -->
 														<xforms:setvalue ref="instance('void-rdf')/void:Dataset/dcterms:rights"/>
 														<xforms:setvalue ref="instance('void-rdf')/void:Dataset/dcterms:rights/@rdf:resource"/>
-														
+
 														<xforms:delete nodeset="instance('control-instance')/rights/@other"/>
 													</xforms:action>
 												</xforms:action>
 											</xforms:select1>
-											
+
 											<xforms:group ref="@other">
 												<div>
 													<xforms:textarea ref=".">
 														<xforms:label>Other Rights</xforms:label>
 														<xforms:alert>Required</xforms:alert>
-														
+
 														<xforms:action ev:event="xforms-value-changed">
 															<xforms:var name="val" select="."/>
 															<!-- set the @rdf:resource if the value is a URL, otherwise set the literal -->
@@ -949,7 +950,7 @@ SELECT ?uri ?type WHERE {
 																<xforms:insert context="instance('void-rdf')/void:Dataset/dcterms:rights"
 																	origin="xforms:attribute('rdf:resource', '')"
 																	if="not(instance('void-rdf')/void:Dataset/dcterms:rights/@rdf:resource)"/>
-																
+
 																<xforms:setvalue ref="instance('void-rdf')/void:Dataset/dcterms:rights/@rdf:resource"
 																	value="$val"/>
 																<xforms:setvalue ref="instance('void-rdf')/void:Dataset/dcterms:rights"/>
@@ -962,7 +963,7 @@ SELECT ?uri ?type WHERE {
 													</xforms:textarea>
 												</div>
 											</xforms:group>
-											
+
 											<!-- allow deletion of rights if there's a license -->
 											<xforms:group ref=".[count(instance('void-rdf')/void:Dataset/dcterms:license) &gt; 0]">
 												<xforms:trigger appearance="minimal">
@@ -986,10 +987,10 @@ SELECT ?uri ?type WHERE {
 										<xforms:send submission="load-json"/>
 
 										<!-- after the completion of the request, initiate SPARQL publication -->
-										<!--<xforms:send submission="post-dump"/>
+										<xforms:send submission="post-dump"/>
 										<xforms:action ev:event="xforms-submit-done">
 											<xforms:send submission="post-void"/>
-										</xforms:action>-->
+										</xforms:action>
 
 										<!-- refresh page after dumps have been posted -->
 										<xforms:setvalue ref="instance('sparqlQuery')" value="instance('sparql-templates')/query[@id='get-datasets']"/>
