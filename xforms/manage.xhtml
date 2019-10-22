@@ -2,7 +2,9 @@
 	xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:xi="http://www.w3.org/2001/XInclude"
 	xmlns:fr="http://orbeon.org/oxf/xml/form-runner" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:void="http://rdfs.org/ns/void#"
 	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:kon="http://kerameikos.org/ontology#"
-	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#">
+	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:crmsci="http://www.ics.forth.gr/isl/CRMsci/"
+	xmlns:crmgeo="http://www.ics.forth.gr/isl/CRMgeo/" xmlns:crmarchaeo="http://www.cidoc-crm.org/cidoc-crm/CRMarchaeo/"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#">
 	<head>
 		<title>Kerameikos: Manage Datasets</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css" />
@@ -20,7 +22,9 @@
 					xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 					xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:dcterms="http://purl.org/dc/terms/"
 					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
-					xmlns:kon="http://kerameikos.org/ontology#"/>
+					xmlns:kon="http://kerameikos.org/ontology#" xmlns:crmsci="http://www.ics.forth.gr/isl/CRMsci/"
+					xmlns:crmarchaeo="http://www.cidoc-crm.org/cidoc-crm/CRMarchaeo/" xmlns:crmgeo="http://www.ics.forth.gr/isl/CRMgeo/"
+					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"/>
 			</xforms:instance>
 
 			<xforms:instance id="void-rdf" xxforms:exclude-result-prefixes="#default xhtml xforms xs ev xxforms fr res xi kerameikos">
@@ -35,7 +39,7 @@
 						<dcterms:publisher rdf:resource="http://kerameikos.org/id/ima_newfields"/>
 						<!--<dcterms:license rdf:resource=""/>-->
 						<dcterms:rights rdf:resource="http://rightsstatements.org/vocab/NoC-US/1.0/"/>
-						<void:dataDump rdf:resource="http://kerameikos.org/rdf/GreekPotteryObjectsSample.json"/>
+						<void:dataDump rdf:resource="http://kerameikos.org/rdf/test-import.json"/>
 					</void:Dataset>
 				</rdf:RDF>
 			</xforms:instance>
@@ -102,9 +106,51 @@
 				</crm:P129i_is_subject_of>
 			</xforms:instance>
 
+			<!-- archaeological context -->
+			<xforms:instance id="encounter-template" xxforms:exclude-result-prefixes="#all">
+				<crmsci:S19_Encounter_Event>
+					<crm:P7_took_place_at>
+						<crm:E53_Place>
+							<rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+							<crm:P89_falls_within rdf:resource=""/>
+						</crm:E53_Place>
+					</crm:P7_took_place_at>
+				</crmsci:S19_Encounter_Event>
+			</xforms:instance>
+
+			<xforms:instance id="place-template" xxforms:exclude-result-prefixes="#all">
+				<crm:E53_Place rdf:about="">
+					<rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
+				</crm:E53_Place>
+			</xforms:instance>
+
+			<xforms:instance id="spatialThing-template" xxforms:exclude-result-prefixes="#all">
+				<crmgeo:SP5_Geometric_Place_Expression rdf:about="">
+					<rdf:type rdf:resource="http://www.w3.org/2003/01/geo/wgs84_pos#SpatialThing"/>
+					<crmgeo:Q9_is_expressed_in_terms_of rdf:resource="http://www.wikidata.org/entity/Q215848"/>
+					<geo:lat rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal"/>
+					<geo:long rdf:datatype="http://www.w3.org/2001/XMLSchema#decimal"/>
+					<crmgeo:asWKT rdf:datatype="http://www.opengis.net/ont/geosparql#wktLiteral"/>
+				</crmgeo:SP5_Geometric_Place_Expression>
+			</xforms:instance>
+
+			<!-- errors or warnings -->
+			<xforms:instance id="warnings" xxforms:exclude-result-prefixes="#all">
+				<warnings xmlns=""></warnings>
+			</xforms:instance>
+
+			<xforms:instance id="errors" xxforms:exclude-result-prefixes="#all">
+				<errors xmlns=""></errors>
+			</xforms:instance>
+
 			<!-- Concordance URIs -->
 			<xforms:instance id="mappings" xxforms:exclude-result-prefixes="#all">
 				<mappings xmlns=""></mappings>
+			</xforms:instance>
+
+			<!-- Matches made to findspots -->
+			<xforms:instance id="findspot-matches" xxforms:exclude-result-prefixes="#all">
+				<findspots xmlns=""></findspots>
 			</xforms:instance>
 
 			<!-- Linked Art JSON-LD instance -->
@@ -149,6 +195,16 @@
 
 			<xforms:instance id="collections" xxforms:exclude-result-prefixes="#all">
 				<collections xmlns=""></collections>
+			</xforms:instance>
+
+			<!-- Wikidata properties -->
+			<xforms:instance id="wikidata-properties" xxforms:exclude-result-prefixes="#all">
+				<props xmlns="">
+					<prop namespace="vocab.getty.edu">P1667</prop>
+					<prop namespace="sws.geonames.org">P1566</prop>
+					<prop namespace="data.ordnancesurvey.co.uk">P3120</prop>
+					<prop namespace="pleiades.stoa.org">P1584</prop>
+				</props>
 			</xforms:instance>
 
 			<!-- SPARQL instances -->
@@ -216,6 +272,42 @@ SELECT ?uri ?type WHERE {
   ?uri skos:exactMatch <%MATCH%> ;
        rdf:type ?type FILTER (?type != skos:Concept)
 }]]></query>
+					<query id="get-wikidata-match"><![CDATA[PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+SELECT ?uri WHERE {
+  ?uri skos:exactMatch <%MATCH%> ;
+       skos:inScheme <http://www.wikidata.org/entity/>
+}]]></query>
+					<query id="query-wikidata-match"><![CDATA[CONSTRUCT {
+  ?place a skos:Concept; 
+  		   skos:prefLabel ?placeLabel;
+           skos:exactMatch ?osgeo;
+           skos:exactMatch ?tgn;
+           skos:exactMatch ?geonames ;
+           skos:exactMatch ?pleiades ;
+           dct:coverage ?coord .
+}
+WHERE {
+  ?place wdt:PROP "ID" .
+  OPTIONAL {?place wdt:P3120 ?osgeoid .
+  	BIND (uri(concat("http://data.ordnancesurvey.co.uk/id/", ?osgeoid)) as ?osgeo)
+  }
+  OPTIONAL {?place wdt:P1667 ?tgnid .
+  	BIND (uri(concat("http://vocab.getty.edu/tgn/", ?tgnid)) as ?tgn)}
+  OPTIONAL {?place wdt:P1566 ?geonamesid .
+  	BIND (uri(concat("http://sws.geonames.org/", ?geonamesid)) as ?geonames)}
+  OPTIONAL {?place wdt:P1584 ?pleiadesid .
+  	BIND (uri(concat("https://pleiades.stoa.org/places/", ?pleiadesid)) as ?pleiades)}
+  OPTIONAL {?place p:P625/ps:P625 ?coord}
+  SERVICE wikibase:label {
+	bd:serviceParam wikibase:language "en"
+  }
+}]]></query>
+					<query id="query-wikidata-hierarchy"><![CDATA[SELECT ?parent ?parentLabel WHERE {
+  wd:ID wdt:P131+ ?parent.
+  SERVICE wikibase:label {
+	bd:serviceParam wikibase:language "en"
+  }}]]></query>
 				</templates>
 			</xforms:instance>
 
@@ -302,6 +394,20 @@ SELECT ?uri ?type WHERE {
 				</xforms:action>
 			</xforms:submission>
 
+			<!-- ************************* QUERY WIKIDATA SPARQL ENDPOINT ************************** -->
+			<xforms:submission id="query-wikidata" action="https://query.wikidata.org/sparql?query={encode-for-uri(instance('sparqlQuery'))}"
+				ref="instance('sparqlResponse')" replace="instance" method="get">
+				<xforms:header>
+					<xforms:name>Accept</xforms:name>
+					<xforms:value>application/rdf+xml</xforms:value>
+				</xforms:header>
+				<xforms:header>
+					<xforms:name>User-Agent</xforms:name>
+					<xforms:value>XForms/Kerameikos.org</xforms:value>
+				</xforms:header>
+				<xforms:message ev:event="xforms-submit-error" level="modal">Wikidata SPARQL query failed.</xforms:message>
+			</xforms:submission>
+
 			<!-- ************************* LOAD LINKED ART JSON-LD ************************** -->
 			<xforms:submission id="load-json" serialization="none" method="get" action="{instance('void-rdf')/void:Dataset/void:dataDump/@rdf:resource}"
 				replace="instance" instance="json">
@@ -314,7 +420,10 @@ SELECT ?uri ?type WHERE {
 					<!-- extract all possible URIs and execute SPARQL queries to get their Kerameikos.org exactMatch, if applicable -->
 					<xforms:action
 						xxforms:iterate="distinct-values(instance('json')//produced_by/carried_out_by/_/id|instance('json')//produced_by/took_place_at/_/id|instance('json')//made_of/_/id|instance('json')//technique/_/id|instance('json')//*[type='HumanMadeObject']/classified_as/_/id|instance('json')//current_owner/id|instance('json')//style/_/id)">
-						<xforms:var name="uri" select="normalize-space(data(context()))"/>
+						<xforms:var name="val" select="normalize-space(data(context()))"/>
+						<xforms:var name="uri"
+							select="if (starts-with($val, 'aat:') or starts-with($val, 'ulan:') or starts-with($val, 'tgn:')) then concat('http://vocab.getty.edu/', substring-before($val, ':'), '/', substring-after($val, ':'))
+							else $val"/>
 
 						<!-- perform lookup only if the URI hasn't already been mapped (applicable for eventual API pagination) -->
 						<xforms:action if="not(instance('mappings')/mapping[@from = $uri]/@to)">
@@ -333,6 +442,143 @@ SELECT ?uri ?type WHERE {
 								<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]"
 									origin="xforms:element('mapping', (xforms:attribute('from', $uri)))"/>
 							</xforms:action>
+						</xforms:action>
+					</xforms:action>
+
+					<!-- iterate though findspot URIs and perform Wikidata SPARQL queries to get matching URIs and coordinates, if applicable -->
+					<xforms:action xxforms:iterate="distinct-values(instance('json')/was_found_by/took_place_at/part_of/_/id)">
+						<xforms:var name="val" select="normalize-space(data(context()))"/>
+						<xforms:var name="uri"
+							select="if (starts-with($val, 'tgn:')) then concat('http://vocab.getty.edu/tgn/', substring-after($val, ':'))
+							else $val"/>
+
+
+						<xforms:action
+							if="matches($uri, 'https?://') and (contains($uri, 'vocab.getty.edu/tgn/') or contains($uri, 'wikidata.org') or contains($uri, 'sws.geonames.org') or contains($uri, 'data.ordnancesurvey.co.uk') or contains($uri, 'pleiades.stoa.org'))">
+
+							<!-- if the findspot URI is not found in the matches instances, then execute a SPARQL query to see if the Place exists 
+								in the Kerameikos SPARQL endpoint already -->
+							<xforms:action if="not(instance('findspot-matches')/findspot = $uri)">
+								<xforms:setvalue ref="instance('sparqlQuery')"
+									value="replace(instance('sparql-templates')/query[@id='get-wikidata-match'], '%MATCH%', $uri)"/>
+								<xforms:send submission="submit-sparqlQuery"/>
+
+								<!-- if the URI is in the SPARQL endpoint, add it to the findspot-matches instance -->
+								<xforms:action if="instance('sparqlResponse')//res:result">
+									<xforms:insert context="instance('findspot-matches')" nodeset="./child::node()[last()]"
+										origin="xforms:element('findspot', (xforms:attribute('matches', instance('sparqlResponse')//res:result/res:binding[@name='uri']/res:uri), $uri))"
+									/>
+								</xforms:action>
+
+								<!-- if the URI isn't in the SPARQL endpoint, then execute Wikidata SPARQL queries to generate E53_Place nodes, coordinates, and hierarchy -->
+								<xforms:action if="not(instance('sparqlResponse')//res:result)">
+									<xforms:var name="id"
+										select="if (contains($uri, 'sws.geonames.org')) then tokenize($uri, '/')[last() - 1] else tokenize($uri, '/')[last()]"/>
+									<xforms:var name="namespace" select="tokenize($uri, '/')[3]"/>
+									<xforms:var name="prop" select="instance('wikidata-properties')/prop[@namespace = $namespace]"/>
+
+									<!-- set the SPARQL query-->
+									<xforms:setvalue ref="instance('sparqlQuery')"
+										value="replace(replace(instance('sparql-templates')/query[@id='query-wikidata-match'], 'PROP', $prop), 'ID', $id)"/>
+									<xforms:send submission="query-wikidata"/>
+
+									<!-- MATCH FOUND IN WIKIDATA: 
+										if there is a resulting Q Entity in Wikidata, then insert the findspot into the matches instance and 
+										generate subsquent place nodes in the Kerameikos SPARQL endpoint -->
+									<xforms:action if="count(instance('sparqlResponse')/rdf:Description) = 1">
+										<xforms:var name="q_entity" select="instance('sparqlResponse')/rdf:Description/@rdf:about"/>
+
+										<!-- insert E53_Place and set related metadata -->
+										<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]" origin="instance('place-template')"/>
+										<xforms:setvalue ref="instance('rdf')/crm:E53_Place[last()]/@rdf:about" value="$q_entity"/>
+										<xforms:insert context="instance('rdf')/crm:E53_Place[last()]" nodeset="./child::node()[last()]"
+											origin="instance('sparqlResponse')//skos:exactMatch"/>
+										<xforms:insert context="instance('rdf')/crm:E53_Place[last()]" nodeset="./child::node()[last()]"
+											origin="instance('sparqlResponse')//skos:prefLabel"/>
+										
+										<!-- reset value of Geonames to append forward slash because Wikidata will not concatenate it -->
+										<xforms:setvalue ref="instance('rdf')/crm:E53_Place[last()]/skos:exactMatch[contains(@rdf:resource, 'sws.geonames.org')]/@rdf:resource"
+											value="concat(instance('rdf')/crm:E53_Place[last()]/skos:exactMatch[contains(@rdf:resource, 'sws.geonames.org')]/@rdf:resource, '/')"/>
+
+										<!-- if there are coordinates, insert the geo: and crm: properties and the spatialThing template -->
+										<xforms:action if="instance('sparqlResponse')/rdf:Description/dcterms:coverage">
+											<xforms:var name="geoURI" select="concat($q_entity, '#this')"/>
+											<xforms:var name="coords" select="instance('sparqlResponse')/rdf:Description/dcterms:coverage[1]"/>
+
+											<xforms:insert context="instance('rdf')/crm:E53_Place[last()]" nodeset="./child::node()[last()]"
+												origin="xforms:element('geo:location', xforms:attribute('rdf:resource', $geoURI))"/>
+											<xforms:insert context="instance('rdf')/crm:E53_Place[last()]" nodeset="./child::node()[last()]"
+												origin="xforms:element('crm:P168_place_is_defined_by', xforms:attribute('rdf:resource', $geoURI))"/>
+
+											<!-- set geo: and crmgeo: properties -->
+											<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
+												origin="instance('spatialThing-template')"/>
+											<xforms:setvalue ref="instance('rdf')/crmgeo:SP5_Geometric_Place_Expression[last()]/@rdf:about" value="$geoURI"/>
+											<xforms:setvalue ref="instance('rdf')/crmgeo:SP5_Geometric_Place_Expression[last()]/crmgeo:asWKT" value="$coords"/>
+											<xforms:setvalue ref="instance('rdf')/crmgeo:SP5_Geometric_Place_Expression[last()]/geo:long"
+												value="tokenize(substring-before(substring-after($coords, '('), ')'), ' ')[1]"/>
+											<xforms:setvalue ref="instance('rdf')/crmgeo:SP5_Geometric_Place_Expression[last()]/geo:lat"
+												value="tokenize(substring-before(substring-after($coords, '('), ')'), ' ')[2]"/>
+										</xforms:action>
+
+										<!-- perform a hierarchical Wikidata SPARQL query in order to generate E53_Places for each parent of the Q entity -->
+										<xforms:setvalue ref="instance('sparqlQuery')"
+											value="replace(instance('sparql-templates')/query[@id='query-wikidata-hierarchy'], 'ID', tokenize($q_entity, '/')[last()])"/>
+										<xforms:send submission="query-wikidata"/>
+
+										<xforms:action if="count(instance('sparqlResponse')//res:result) &gt; 0">
+											<!-- insert the part_of into the primary gazetteer URI that corresponds to the first E53_Place -->
+											<xforms:insert context="instance('rdf')/crm:E53_Place[last()]" nodeset="./child::node()[last()]"
+												origin="xforms:element('crm:P89_falls_within', xforms:attribute('rdf:resource', instance('sparqlResponse')//res:result[1]/res:binding[@name='parent']/res:uri))"/>
+
+											<!-- if there are results, iterate through each result create a new E53_Place -->
+											<xforms:action xxforms:iterate="instance('sparqlResponse')//res:result">
+												<xforms:var name="parentURI" select="data(context()/res:binding[@name='parent']/res:uri)"/>
+												<xforms:var name="parentLabel" select="data(context()/res:binding[@name='parentLabel']/res:literal)"/>
+
+												<!-- insert an E53_Place if it doesn't already exist in the RDF -->
+												<xforms:action if="not(instance('rdf')/crm:E53_Place[@rdf:about = $parentURI])">
+													<xforms:var name="part_of"
+														select="data(context()/following-sibling::res:result[1]/res:binding[@name='parent']/res:uri)"/>
+
+													<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
+														origin="instance('place-template')"/>
+													<xforms:setvalue ref="instance('rdf')/crm:E53_Place[last()]/@rdf:about" value="$parentURI"/>
+													<xforms:insert context="instance('rdf')/crm:E53_Place[last()]" nodeset="./child::node()[last()]"
+														origin="xforms:element('skos:prefLabel', (xforms:attribute('xml:lang', 'en'), $parentLabel))"/>
+
+													<!-- insert the URI of the next sibling to link places hierarchically, if applicable -->
+													<xforms:insert context="instance('rdf')/crm:E53_Place[last()]" nodeset="./child::node()[last()]"
+														origin="xforms:element('crm:P89_falls_within', xforms:attribute('rdf:resource', $part_of))"
+														if="string($part_of)"/>
+												</xforms:action>
+											</xforms:action>
+										</xforms:action>
+
+										<!-- insert findspot concordance into matches instance to prevent further lookups for this URI -->
+										<xforms:insert context="instance('findspot-matches')" nodeset="./child::node()[last()]"
+											origin="xforms:element('findspot', (xforms:attribute('matches', $q_entity), $uri))"/>
+									</xforms:action>
+
+									<!-- MATCH NOT FOUND IN WIKIDATA: 
+										if the matching URI is not found, then insert an error about the lack of a match to Wikidata -->
+									<xforms:action if="not(count(instance('sparqlResponse')/rdf:Description) = 1)">
+										<xforms:insert context="instance('errors')" nodeset="./child::node()[last()]"
+											origin="xforms:element('error', concat('The findspot URI ', $uri, ' does not resolve to a Wikidata Q entity. The corresponding Wikidata entity may need to be updated.'))"/>
+
+										<!-- insert the findspot URI into the instance('findspot-matches') to prevent additional lookups -->
+										<xforms:insert context="instance('findspot-matches')" nodeset="./child::node()[last()]"
+											origin="xforms:element('findspot', $uri)"/>
+									</xforms:action>
+								</xforms:action>
+							</xforms:action>
+						</xforms:action>
+
+						<!-- if the URI doesn't conform to a parseable entity, then insert a warning -->
+						<xforms:action
+							if="not(matches($uri, 'https?://') and (contains($uri, 'vocab.getty.edu/tgn/') or contains($uri, 'wikidata.org') or contains($uri, 'sws.geonames.org') or contains($uri, 'http://data.ordnancesurvey.co.uk') or contains($uri, 'pleiades.stoa.org')))">
+							<xforms:insert context="instance('warnings')" nodeset="./child::node()[last()]"
+								origin="xforms:element('warning', concat('The findspot URI ', $uri, ' is not an allowable gazetteer.'))"/>
 						</xforms:action>
 					</xforms:action>
 
@@ -483,6 +729,46 @@ SELECT ?uri ?type WHERE {
 							</xforms:action>
 						</xforms:action>
 
+						<!-- archaeological context, if applicable -->
+						<xforms:action if="context()/was_found_by[took_place_at/part_of/_/id]">
+							<xforms:var name="uri" select="if (context()/was_found_by/id) then context()/was_found_by/id else concat($objectURI, '#discovery')"/>
+							<xforms:var name="gazetteerURI" select="context()/was_found_by/took_place_at/part_of/_[1]/id"/>
+
+							<!-- insert property into object -->
+							<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
+								origin="xforms:element('crmsci:O19i_was_object_found_by', (xforms:attribute('rdf:resource', $uri)))"/>
+
+							<!-- insert Encounter Event into instance('rdf') if it doesn't already exist (multiple objects can theoretically be tied to one Encounter) -->
+							<xforms:action if="not(instance('rdf')/crmsci:S19_Encounter_Event[@rdf:about = $uri])">
+								<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]" origin="instance('encounter-template')"/>
+								<xforms:insert context="instance('rdf')/crmsci:S19_Encounter_Event[last()]" origin="xforms:attribute('rdf:about', $uri)"/>
+
+								<!-- insert URI into crm:E53_Place if applicable -->
+								<xforms:action if="matches(context()/was_found_by/took_place_at/id, 'https?://')">
+									<xforms:var name="$placeURI" select="data(context()/was_found_by/took_place_at/id)"/>
+
+									<xforms:insert context="instance('rdf')/crmsci:S19_Encounter_Event[last()]/crm:P7_took_place_at/crm:E53_Place"
+										origin="xforms:attribute('rdf:about', $placeURI)"/>
+								</xforms:action>
+
+								<!-- insert optional label -->
+								<xforms:action if="string(context()/was_found_by/took_place_at/_label)">
+									<xforms:var name="label" select="data(context()/was_found_by/took_place_at/_label)"/>
+
+									<xforms:insert context="instance('rdf')/crmsci:S19_Encounter_Event[last()]/crm:P7_took_place_at/crm:E53_Place"
+										origin="xforms:element('skos:prefLabel', $label)"/>
+								</xforms:action>
+
+								<!-- if the gazetteer URI has already been validated upon JSON load, then insert the part_of property (if there's a corresponding @matches) -->
+								<xforms:action if="instance('findspot-matches')/findspot[. = $gazetteerURI]/@matches">
+									<!-- set parent gazetteer URI -->
+									<xforms:setvalue
+										ref="instance('rdf')/crmsci:S19_Encounter_Event[last()]/crm:P7_took_place_at/crm:E53_Place/crm:P89_falls_within/@rdf:resource"
+										value="instance('findspot-matches')/findspot[. = $gazetteerURI]/@matches"/>
+								</xforms:action>
+							</xforms:action>
+						</xforms:action>
+
 						<!-- digital images -->
 						<xforms:action xxforms:iterate="context()/representation/_">
 							<xforms:var name="binding" select="context()" as="node()?"/>
@@ -601,8 +887,6 @@ SELECT ?uri ?type WHERE {
 									<!-- toggle interface -->
 									<xforms:toggle case="harvest-json"/>
 								</xforms:action>
-
-
 							</xforms:action>
 						</xforms:trigger>
 					</div>
@@ -987,17 +1271,17 @@ SELECT ?uri ?type WHERE {
 										<xforms:send submission="load-json"/>
 
 										<!-- after the completion of the request, initiate SPARQL publication -->
-										<xforms:send submission="post-dump"/>
+										<!--<xforms:send submission="post-dump"/>
 										<xforms:action ev:event="xforms-submit-done">
 											<xforms:send submission="post-void"/>
 										</xforms:action>
 
-										<!-- refresh page after dumps have been posted -->
+										<!-\- refresh page after dumps have been posted -\->
 										<xforms:setvalue ref="instance('sparqlQuery')" value="instance('sparql-templates')/query[@id='get-datasets']"/>
 										<xforms:send submission="submit-sparqlQuery"/>
 										<xforms:delete nodeset="instance('datasets')/*"/>
 										<xforms:insert context="instance('datasets')" origin="instance('sparqlResponse')/*"/>
-										<xforms:toggle case="default"/>
+										<xforms:toggle case="default"/>-->
 									</xforms:action>
 								</xforms:trigger>
 							</xforms:group>
