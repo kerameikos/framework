@@ -226,16 +226,19 @@ DELETE {?s ?p ?o} WHERE { <DATASET> ?p ?o . ?s ?p ?o . FILTER (?s = <DATASET>)}]
 					</query>
 					<query id="delete-dump">
 						<![CDATA[PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX crmsci:	<http://www.ics.forth.gr/isl/CRMsci/>
+PREFIX crmgeo:	<http://www.ics.forth.gr/isl/CRMgeo/>
 PREFIX void:	<http://rdfs.org/ns/void#>
-PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
-PREFIX dcterms:	<http://purl.org/dc/terms/>
-PREFIX svcs:	<http://rdfs.org/sioc/services#>
 DELETE {?s ?p ?o} WHERE { 
 { ?object void:inDataset <DATASET> ;
-  crm:P108i_was_produced_by ?prod .
+    crmsci:O19i_was_object_found_by ?enounter .
+  ?encounter a crmsci:S19_Encounter_Event ;
+    crm:P7_took_place_at ?s . ?s ?p ?o }
+UNION { ?object void:inDataset <DATASET> ;
+    crm:P108i_was_produced_by ?prod .
   ?prod crm:P4_has_time-span ?s . ?s ?p ?o }
 UNION { ?object void:inDataset <DATASET> ;
-  crm:P108i_was_produced_by|crm:P1_is_identified_by|crm:P43_has_dimension|crm:P138i_has_representation|crm:P129i_is_subject_of ?s . ?s ?p ?o }
+    crm:P108i_was_produced_by|crm:P1_is_identified_by|crm:P43_has_dimension|crm:P138i_has_representation|crm:P129i_is_subject_of|crmsci:O19i_was_object_found_by ?s . ?s ?p ?o }
 UNION { ?s void:inDataset <DATASET> . ?s ?p ?o}
 }]]>
 					</query>
@@ -270,6 +273,7 @@ SELECT ?uri ?label WHERE {
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 SELECT ?uri ?type WHERE {
   ?uri skos:exactMatch <%MATCH%> ;
+  	   skos:inScheme <http://kerameikos.org/id/> ;
        rdf:type ?type FILTER (?type != skos:Concept)
 }]]></query>
 					<query id="ask-wikidata-match"><![CDATA[PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -1320,17 +1324,17 @@ WHERE {
 										</xforms:action>
 										<xforms:action if="count(instance('errors')/error) = 0">
 											<!-- after the completion of the request, initiate SPARQL publication -->
-											<!--<xforms:send submission="post-dump"/>
+											<xforms:send submission="post-dump"/>
 											<xforms:action ev:event="xforms-submit-done">
 												<xforms:send submission="post-void"/>
 											</xforms:action>
 
-											<!-\- refresh page after dumps have been posted -\->
+											<!-- refresh page after dumps have been posted -->
 											<xforms:setvalue ref="instance('sparqlQuery')" value="instance('sparql-templates')/query[@id='get-datasets']"/>
 											<xforms:send submission="submit-sparqlQuery"/>
 											<xforms:delete nodeset="instance('datasets')/*"/>
 											<xforms:insert context="instance('datasets')" origin="instance('sparqlResponse')/*"/>
-											<xforms:toggle case="default"/>-->
+											<xforms:toggle case="default"/>
 										</xforms:action>
 									</xforms:action>
 								</xforms:trigger>
