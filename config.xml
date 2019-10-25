@@ -36,6 +36,7 @@
 		<namespace prefix="kon" uri="http://kerameikos.org/ontology#" default="true"/>
 		<namespace prefix="org" uri="http://www.w3.org/ns/org#" default="true"/>
 		<namespace prefix="osgeo" uri="http://data.ordnancesurvey.co.uk/ontology/geometry/"/>
+		<namespace prefix="ogc" uri="http://www.opengis.net/ont/geosparql#"/>
 		<namespace prefix="prov" uri="http://www.w3.org/ns/prov#"/>
 		<namespace prefix="rdf" uri="http://www.w3.org/1999/02/22-rdf-syntax-ns#" default="true"/>
 		<namespace prefix="rdfs" uri="http://www.w3.org/2000/01/rdf-schema#"/>

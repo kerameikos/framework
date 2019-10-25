@@ -50,13 +50,13 @@
 
 	<!-- variables to determine whether the map should show when or whether the quantitative analysis functions should be included -->
 	<xsl:variable name="hasGeo" as="xs:boolean" select="
-			if (/content/res:sparql[1]/res:boolean = 'true') then
+		if (doc('input:hasProductionPlaces')//res:boolean = true() or doc('input:hasFindspots')//res:boolean = true()) then
 				true()
 			else
 				false()"/>
 
 	<xsl:variable name="hasObjects" as="xs:boolean" select="
-			if (/content/res:sparql[2]/res:boolean = 'true') then
+		if (doc('input:hasObjects')//res:boolean = true()) then
 				true()
 			else
 				false()"/>
@@ -185,7 +185,6 @@
 		<div class="container-fluid content">
 			<div class="row">
 				<div class="col-md-12">
-
 					<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type">
 						<xsl:with-param name="hasObjects" select="$hasObjects" as="xs:boolean"/>
 						<xsl:with-param name="mode">record</xsl:with-param>

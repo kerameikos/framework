@@ -144,6 +144,100 @@
             </xsl:when>
         </xsl:choose>
     </xsl:template>
+    
+    <xsl:template name="kerameikos:getFindspotsStatements">
+        <xsl:param name="type"/>
+        <xsl:param name="id"/>
+        
+        <statements>
+            <xsl:choose>
+                <xsl:when test="$type = 'crm:E4_Period'">
+                    <xsl:call-template name="kerameikos:matchingConcepts">
+                        <xsl:with-param name="id" select="$id"/>
+                        <xsl:with-param name="type" select="$type"/>
+                    </xsl:call-template>                    
+                    
+                    <triple s="?object" p="crm:P108i_was_produced_by" o="?prod"/>
+                    <triple s="?prod" p="crm:P10_falls_within" o="?m"/>
+                    
+                    <xsl:call-template name="kerameikos:findspotLocations"/>
+                </xsl:when>
+                <xsl:when test="$type = 'crm:E57_Material'">
+                    <xsl:call-template name="kerameikos:matchingConcepts">
+                        <xsl:with-param name="id" select="$id"/>
+                        <xsl:with-param name="type" select="$type"/>
+                    </xsl:call-template>                    
+                    
+                    <triple s="?object" p="crm:P45_consists_of" o="?m"/>
+                    
+                    <xsl:call-template name="kerameikos:findspotLocations"/>
+                </xsl:when>
+                <xsl:when test="$type='kon:ProductionPlace'">                    
+                    <xsl:call-template name="kerameikos:matchingConcepts">
+                        <xsl:with-param name="id" select="$id"/>
+                        <xsl:with-param name="type" select="$type"/>
+                    </xsl:call-template>
+                    
+                    <triple s="?object" p="crm:P108i_was_produced_by" o="?prod"/>
+                    <triple s="?prod" p="crm:P7_took_place_at" o="?m"/>
+                    
+                    <xsl:call-template name="kerameikos:findspotLocations"/>
+                </xsl:when>
+                <xsl:when test="$type = 'crm:E40_Legal_Body'">
+                    <triple s="?object" p="crm:P50_has_current_keeper" o="kid:{$id}"/>                      
+                    
+                    <xsl:call-template name="kerameikos:findspotLocations"/>
+                </xsl:when>  
+                <xsl:when test="$type = 'kon:Shape'">
+                    <xsl:call-template name="kerameikos:matchingConcepts">
+                        <xsl:with-param name="id" select="$id"/>
+                        <xsl:with-param name="type" select="$type"/>
+                    </xsl:call-template>
+                    
+                    <triple s="?object" p="kon:hasShape" o="?m"/>
+                    
+                    <xsl:call-template name="kerameikos:findspotLocations"/>
+                </xsl:when>
+                <xsl:when test="$type = 'kon:Technique'">
+                    <xsl:call-template name="kerameikos:matchingConcepts">
+                        <xsl:with-param name="id" select="$id"/>
+                        <xsl:with-param name="type" select="$type"/>
+                    </xsl:call-template>
+                    
+                    <triple s="?object" p="crm:P32_used_general_technique" o="?m"/>
+                    
+                    <xsl:call-template name="kerameikos:findspotLocations"/>
+                </xsl:when>
+                
+                <xsl:when test="$type = 'foaf:Person'">
+                    <xsl:call-template name="kerameikos:matchingConcepts">
+                        <xsl:with-param name="id" select="$id"/>
+                        <xsl:with-param name="type" select="$type"/>
+                    </xsl:call-template>
+                    
+                    <triple s="?object" p="crm:P108i_was_produced_by" o="?prod"/>
+                    <triple s="?prod" p="crm:P14_carried_out_by" o="?m"/>
+                    
+                    <xsl:call-template name="kerameikos:findspotLocations"/>
+                </xsl:when>
+            </xsl:choose>            
+        </statements>
+    </xsl:template>
+    
+    <xsl:template name="kerameikos:findspotLocations">
+        <triple s="?object" p="crmsci:O19i_was_object_found_by" o="?encounter"/>
+        <triple s="?encounter" p="rdf:type" o="crmsci:S19_Encounter_Event"/>        
+        <union>
+            <group>
+                <triple s="?encounter" p="crm:P7_took_place_at" o="?place"/>
+                <triple s="?place" p="geo:location" o="?loc"/>
+            </group>
+            <group>
+                <triple s="?encounter" p="crm:P7_took_place_at/crm:P89_falls_within" o="?place"/>
+                <triple s="?place" p="geo:location" o="?loc"/>
+            </group>
+        </union>
+    </xsl:template>
 
     <xsl:template name="kerameikos:getProductionPlacesStatements">
         <xsl:param name="type"/>

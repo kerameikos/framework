@@ -240,6 +240,16 @@ UNION { ?object void:inDataset <DATASET> ;
 UNION { ?object void:inDataset <DATASET> ;
     crm:P108i_was_produced_by|crm:P1_is_identified_by|crm:P43_has_dimension|crm:P138i_has_representation|crm:P129i_is_subject_of|crmsci:O19i_was_object_found_by ?s . ?s ?p ?o }
 UNION { ?s void:inDataset <DATASET> . ?s ?p ?o}
+}]]></query>
+					<query id="delete-places">
+						<![CDATA[PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX crmsci:	<http://www.ics.forth.gr/isl/CRMsci/>
+PREFIX crmgeo:	<http://www.ics.forth.gr/isl/CRMgeo/>
+PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
+DELETE {?s ?p ?o} WHERE { 
+{ ?place skos:inScheme <http://www.wikidata.org/entity/> ;
+    crm:P168_place_is_defined_by ?s . ?s ?p ?o }
+UNION { ?s skos:inScheme <http://www.wikidata.org/entity/> . ?s ?p ?o}
 }]]>
 					</query>
 				</templates>
@@ -427,7 +437,7 @@ WHERE {
 				<xforms:action ev:event="xforms-submit-done">
 					<!-- extract all possible URIs and execute SPARQL queries to get their Kerameikos.org exactMatch, if applicable -->
 					<xforms:action
-						xxforms:iterate="distinct-values(instance('json')//produced_by/carried_out_by/_/id|instance('json')//produced_by/took_place_at/_/id|instance('json')//made_of/_/id|instance('json')//technique/_/id|instance('json')//*[type='HumanMadeObject']/classified_as/_/id|instance('json')//current_owner/id|instance('json')//style/_/id)">
+						xxforms:iterate="distinct-values(instance('json')//produced_by/carried_out_by/_/id|instance('json')//produced_by/took_place_at/_/id|instance('json')//made_of/_/id|instance('json')//technique/_/id|instance('json')/descendant-or-self::node()[type='HumanMadeObject']/classified_as/_/id|instance('json')//current_owner/id|instance('json')//style/_/id)">
 						<xforms:var name="val" select="normalize-space(data(context()))"/>
 						<xforms:var name="uri"
 							select="if (starts-with($val, 'aat:') or starts-with($val, 'ulan:') or starts-with($val, 'tgn:')) then concat('http://vocab.getty.edu/', substring-before($val, ':'), '/', substring-after($val, ':'))
@@ -1336,6 +1346,14 @@ WHERE {
 											<xforms:insert context="instance('datasets')" origin="instance('sparqlResponse')/*"/>
 											<xforms:toggle case="default"/>
 										</xforms:action>
+									</xforms:action>
+								</xforms:trigger>
+								
+								<xforms:trigger>
+									<xforms:label>Delete Places</xforms:label>
+									<xforms:action ev:event="DOMActivate">
+										<xforms:setvalue ref="instance('sparqlUpdate')" value="instance('sparqlUpdate-template')/query[@id='delete-places']"/>
+										<xforms:send submission="delete-graph"/>
 									</xforms:action>
 								</xforms:trigger>
 							</xforms:group>
