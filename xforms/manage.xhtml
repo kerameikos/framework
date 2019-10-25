@@ -464,7 +464,7 @@ WHERE {
 					</xforms:action>
 
 					<!-- iterate though findspot URIs and perform Wikidata SPARQL queries to get matching URIs and coordinates, if applicable -->
-					<xforms:action xxforms:iterate="distinct-values(instance('json')/was_found_by/took_place_at/part_of/_/id)">
+					<xforms:action xxforms:iterate="distinct-values(instance('json')//was_found_by/took_place_at/part_of/_/id)">
 						<xforms:var name="val" select="normalize-space(data(context()))"/>
 						<xforms:var name="uri"
 							select="if (starts-with($val, 'tgn:')) then concat('http://vocab.getty.edu/tgn/', substring-after($val, ':'))
