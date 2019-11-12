@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#"
-	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:res="http://www.w3.org/2005/sparql-results#"
-	xmlns:kerameikos="http://kerameikos.org/" xmlns:prov="http://www.w3.org/ns/prov#" exclude-result-prefixes="#all" version="2.0">
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
+	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
+	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/" xmlns:prov="http://www.w3.org/ns/prov#"
+	exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:include href="../../functions.xsl"/>
 	<xsl:include href="../../vis-templates.xsl"/>
@@ -19,13 +20,15 @@
 				<xsl:value-of select="concat('keeper kid:', $id)"/>
 			</xsl:when>
 			<xsl:otherwise>
-				<xsl:value-of select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
+				<xsl:value-of
+					select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:variable>
 	<xsl:variable name="type" select="/content/rdf:RDF/*[1]/name()"/>
 	<xsl:variable name="conceptURI" select="/content/rdf:RDF/*[1]/@rdf:about"/>
-	<xsl:variable name="id" select="
+	<xsl:variable name="id"
+		select="
 			if ($type = 'skos:ConceptScheme') then
 				tokenize($conceptURI, '/')[last() - 1]
 			else
@@ -47,19 +50,6 @@
 			</xsl:for-each>
 		</namespaces>
 	</xsl:variable>
-
-	<!-- variables to determine whether the map should show when or whether the quantitative analysis functions should be included -->
-	<xsl:variable name="hasGeo" as="xs:boolean" select="
-		if (doc('input:hasProductionPlaces')//res:boolean = true() or doc('input:hasFindspots')//res:boolean = true()) then
-				true()
-			else
-				false()"/>
-
-	<xsl:variable name="hasObjects" as="xs:boolean" select="
-		if (doc('input:hasObjects')//res:boolean = true()) then
-				true()
-			else
-				false()"/>
 
 	<xsl:variable name="classes" as="node()*">
 		<classes>
@@ -123,7 +113,8 @@
 							if (//skos:prefLabel[@xml:lang = 'en']) then
 								//skos:prefLabel[@xml:lang = 'en']
 							else
-								$id"/></title>
+								$id"
+					/></title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
 				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
@@ -139,37 +130,34 @@
 				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet.ajax.min.js"/>
 
 				<!-- mapping -->
-				<xsl:if test="$hasGeo = true()">
-					<!--<script type="text/javascript" src="{$display_path}ui/javascript/heatmap.min.js"/>
+				<!--<script type="text/javascript" src="{$display_path}ui/javascript/heatmap.min.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-heatmap.js"/>-->
-					<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
-				</xsl:if>
+				<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
+				
 				<!-- distribution visualization -->
-				<xsl:if test="$hasObjects = true()">
-					<script type="text/javascript" src="https://d3plus.org/js/d3.js"/>
-					<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>
-					<!--<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>-->
-
-					<!-- 3D hop -->
-					<!--STYLESHEET-->
-					<link type="text/css" rel="stylesheet" href="{$display_path}ui/css/3dhop.css"/>
-					<!--SPIDERGL-->
-					<script type="text/javascript" src="{$display_path}ui/javascript/spidergl.js"/>
-					<!--PRESENTER-->
-					<script type="text/javascript" src="{$display_path}ui/javascript/presenter.js"/>
-					<!--3D MODELS LOADING AND RENDERING-->
-					<script type="text/javascript" src="{$display_path}ui/javascript/nexus.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/ply.js"/>
-					<!--TRACKBALLS-->
-					<script type="text/javascript" src="{$display_path}ui/javascript/trackball_sphere.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/trackball_turntable.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/trackball_turntable_pan.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/trackball_pantilt.js"/>
-					<!--UTILITY-->
-					<script type="text/javascript" src="{$display_path}ui/javascript/init.js"/>
-				</xsl:if>
+				<script type="text/javascript" src="https://d3plus.org/js/d3.js"/>
+				<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>
+				<!--<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>-->
+				
+				<!-- 3D hop -->
+				<!--STYLESHEET-->
+				<link type="text/css" rel="stylesheet" href="{$display_path}ui/css/3dhop.css"/>
+				<!--SPIDERGL-->
+				<script type="text/javascript" src="{$display_path}ui/javascript/spidergl.js"/>
+				<!--PRESENTER-->
+				<script type="text/javascript" src="{$display_path}ui/javascript/presenter.js"/>
+				<!--3D MODELS LOADING AND RENDERING-->
+				<script type="text/javascript" src="{$display_path}ui/javascript/nexus.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/ply.js"/>
+				<!--TRACKBALLS-->
+				<script type="text/javascript" src="{$display_path}ui/javascript/trackball_sphere.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/trackball_turntable.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/trackball_turntable_pan.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/trackball_pantilt.js"/>
+				<!--UTILITY-->
+				<script type="text/javascript" src="{$display_path}ui/javascript/init.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 			</head>
@@ -181,44 +169,39 @@
 		</html>
 	</xsl:template>
 
+
+
 	<xsl:template name="body">
 		<div class="container-fluid content">
-			<div class="row">
-				<div class="col-md-12">
-					<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type">
-						<xsl:with-param name="hasObjects" select="$hasObjects" as="xs:boolean"/>
-						<xsl:with-param name="mode">record</xsl:with-param>
-					</xsl:apply-templates>
-
-					<!-- ProvenanceStatement is hidden by default -->
-					<xsl:if test="/content/rdf:RDF/dcterms:ProvenanceStatement">
-						<h3>
-							<xsl:text>Data Provenance</xsl:text>
-							<small>
-								<a href="#" class="toggle-button" id="toggle-provenance" title="Click to hide or show the analysis form">
-									<span class="glyphicon glyphicon-triangle-right"/>
-								</a>
-							</small>
-						</h3>
-						<div style="display:none" id="provenance">
-							<xsl:apply-templates select="/content/rdf:RDF/*[name() = 'dcterms:ProvenanceStatement']" mode="type">
-								<xsl:with-param name="hasObjects" select="false()" as="xs:boolean"/>
-								<xsl:with-param name="mode">record</xsl:with-param>
-							</xsl:apply-templates>
-						</div>
-					</xsl:if>
-					<hr/>
-				</div>
-			</div>
-
-			<xsl:if test="string($scheme)">
-				<xsl:call-template name="data-export"/>
-			</xsl:if>
-
-
-			<!-- add context based on concept scheme -->
 			<xsl:choose>
 				<xsl:when test="$scheme = 'id'">
+					<!-- variables to determine whether the map should show when or whether the quantitative analysis functions should be included -->
+					<xsl:variable name="hasGeo" as="xs:boolean"
+						select="
+							if (doc('input:hasProductionPlaces')//res:boolean = true() or doc('input:hasFindspots')//res:boolean = true()) then
+								true()
+							else
+								false()"/>
+
+					<xsl:variable name="hasObjects" as="xs:boolean"
+						select="
+							if (doc('input:hasObjects')//res:boolean = true()) then
+								true()
+							else
+								false()"/>
+
+
+					<!-- param passed in from record page -->
+					<xsl:if test="$hasObjects = true() and position() = 1">
+						<div class="subsection">
+							<a href="#listObjects">Objects of this Typology</a>
+							<xsl:text> | </xsl:text>
+							<a href="#quant">Quantitative Analysis</a>
+						</div>
+					</xsl:if>
+
+					<xsl:call-template name="rdf-display-structure"/>
+
 					<xsl:if test="$hasGeo = true()">
 						<div class="row">
 							<div class="col-md-12 page-section">
@@ -265,6 +248,9 @@
 					</xsl:if>
 				</xsl:when>
 				<xsl:when test="$scheme = 'editor'">
+
+					<xsl:call-template name="rdf-display-structure"/>
+
 					<xsl:if test="doc('input:id-count')//res:binding[@name = 'count']/res:literal &gt; 0">
 						<xsl:variable name="count" select="doc('input:id-count')//res:binding[@name = 'count']/res:literal"/>
 						<div class="row">
@@ -279,6 +265,9 @@
 					</xsl:if>
 				</xsl:when>
 				<xsl:otherwise>
+
+					<xsl:call-template name="rdf-display-structure"/>
+
 					<!-- context for ConceptSchemes -->
 					<xsl:choose>
 						<xsl:when test="$id = 'editor'">
@@ -330,10 +319,12 @@
 							<br/>
 							<img id="zoomout" title="Zoom Out" src="{$display_path}ui/images/skins/dark/zoomout.png"/>
 							<br/>
-							<img id="light_on" title="Disable Light Control" src="{$display_path}ui/images/skins/dark/light_on.png" style="position:absolute; visibility:hidden;"/>
+							<img id="light_on" title="Disable Light Control" src="{$display_path}ui/images/skins/dark/light_on.png"
+								style="position:absolute; visibility:hidden;"/>
 							<img id="light" title="Enable Light Control" src="{$display_path}ui/images/skins/dark/light.png"/>
 							<br/>
-							<img id="full_on" title="Exit Full Screen" src="{$display_path}ui/images/skins/dark/full_on.png" style="position:absolute; visibility:hidden;"/>
+							<img id="full_on" title="Exit Full Screen" src="{$display_path}ui/images/skins/dark/full_on.png"
+								style="position:absolute; visibility:hidden;"/>
 							<img id="full" title="Full Screen" src="{$display_path}ui/images/skins/dark/full.png"/>
 						</div>
 						<canvas id="draw-canvas" style="background-image: url({$display_path}ui/images/skins/backgrounds/dark.jpg)"/>
@@ -341,6 +332,40 @@
 				</div>
 			</div>
 		</div>
+	</xsl:template>
+
+	<xsl:template name="rdf-display-structure">
+
+		<div class="row">
+			<div class="col-md-12">
+				<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type">
+					<xsl:with-param name="mode">record</xsl:with-param>
+				</xsl:apply-templates>
+
+				<!-- ProvenanceStatement is hidden by default -->
+				<xsl:if test="/content/rdf:RDF/dcterms:ProvenanceStatement">
+					<h3>
+						<xsl:text>Data Provenance</xsl:text>
+						<small>
+							<a href="#" class="toggle-button" id="toggle-provenance" title="Click to hide or show the analysis form">
+								<span class="glyphicon glyphicon-triangle-right"/>
+							</a>
+						</small>
+					</h3>
+					<div style="display:none" id="provenance">
+						<xsl:apply-templates select="/content/rdf:RDF/*[name() = 'dcterms:ProvenanceStatement']" mode="type">
+							<xsl:with-param name="hasObjects" select="false()" as="xs:boolean"/>
+							<xsl:with-param name="mode">record</xsl:with-param>
+						</xsl:apply-templates>
+					</div>
+				</xsl:if>
+				<hr/>
+			</div>
+		</div>
+
+		<xsl:if test="string($scheme)">
+			<xsl:call-template name="data-export"/>
+		</xsl:if>
 	</xsl:template>
 
 	<!-- Related ID and spreadsheet templates for enhancing context of /editor pages -->
@@ -390,7 +415,8 @@
 		<xsl:choose>
 			<xsl:when test="$count &gt; 25">
 				<p>This is a partial list of <strong>25</strong> of <strong><xsl:value-of select="$count"/></strong> IDs created or updated by this editor (<a
-						href="{$display_path}query?query={encode-for-uri(replace(replace($query, '%URI%', $conceptURI), ' %LIMIT%', ''))}&amp;output=csv" title="Download list">
+						href="{$display_path}query?query={encode-for-uri(replace(replace($query, '%URI%', $conceptURI), ' %LIMIT%', ''))}&amp;output=csv"
+						title="Download list">
 						<span class="glyphicon glyphicon-download"/> Download list</a>):</p>
 			</xsl:when>
 			<xsl:otherwise>
@@ -483,7 +509,8 @@
 		<xsl:param name="uri"/>
 
 		<xsl:variable name="lgpn-tei" as="element()*">
-			<xsl:copy-of select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
+			<xsl:copy-of
+				select="document(concat('http://clas-lgpn2.classics.ox.ac.uk/cgi-bin/lgpn_search.cgi?id=', substring-after($uri, 'id/'), ';style=xml'))/*"/>
 		</xsl:variable>
 
 		<xsl:if test="$lgpn-tei/descendant::tei:birth">

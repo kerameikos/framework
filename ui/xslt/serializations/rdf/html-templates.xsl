@@ -21,7 +21,6 @@
 	</xsl:template>
 
 	<xsl:template match="*" mode="type">
-		<xsl:param name="hasObjects"/>
 		<xsl:param name="mode"/>
 		
 		<div>
@@ -72,15 +71,6 @@
 					<xsl:text>)</xsl:text>
 				</small>
 			</xsl:element>
-
-			<!-- param passed in from record page -->
-			<xsl:if test="$hasObjects = true() and position() = 1">
-				<div class="subsection">
-					<a href="#listObjects">Objects of this Typology</a>
-					<xsl:text> | </xsl:text>
-					<a href="#quant">Quantitative Analysis</a>
-				</div>
-			</xsl:if>
 
 			<dl class="dl-horizontal">
 				<xsl:if test="not($mode = 'sparql')">
