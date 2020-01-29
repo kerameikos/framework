@@ -464,7 +464,7 @@ WHERE {
 					</xforms:action>
 
 					<!-- iterate though findspot URIs and perform Wikidata SPARQL queries to get matching URIs and coordinates, if applicable -->
-					<xforms:action xxforms:iterate="distinct-values(instance('json')//was_found_by/took_place_at/part_of/_/id)">
+					<xforms:action xxforms:iterate="distinct-values(instance('json')//encountered/took_place_at/part_of/_/id)">
 						<xforms:var name="val" select="normalize-space(data(context()))"/>
 						<xforms:var name="uri"
 							select="if (starts-with($val, 'tgn:')) then concat('http://vocab.getty.edu/tgn/', substring-after($val, ':'))
@@ -768,9 +768,9 @@ WHERE {
 						</xforms:action>
 
 						<!-- archaeological context, if applicable -->
-						<xforms:action if="context()/was_found_by[took_place_at/part_of/_/id]">
-							<xforms:var name="uri" select="if (context()/was_found_by/id) then context()/was_found_by/id else concat($objectURI, '#discovery')"/>
-							<xforms:var name="gazetteerURI" select="context()/was_found_by/took_place_at/part_of/_[1]/id"/>
+						<xforms:action if="context()/encountered[took_place_at/part_of/_/id]">
+							<xforms:var name="uri" select="if (context()/encountered/id) then context()/encountered/id else concat($objectURI, '#discovery')"/>
+							<xforms:var name="gazetteerURI" select="context()/encountered/took_place_at/part_of/_[1]/id"/>
 
 							<!-- insert property into object -->
 							<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
@@ -786,23 +786,23 @@ WHERE {
 
 								<!-- *** E53_Place processing *** -->
 								<!-- insert URI into crm:E53_Place if applicable -->
-								<xforms:action if="matches(context()/was_found_by/took_place_at/id, 'https?://')">
-									<xforms:var name="$placeURI" select="data(context()/was_found_by/took_place_at/id)"/>
+								<xforms:action if="matches(context()/encountered/took_place_at/id, 'https?://')">
+									<xforms:var name="$placeURI" select="data(context()/encountered/took_place_at/id)"/>
 
 									<xforms:insert context="instance('rdf')/crmsci:S19_Encounter_Event[last()]/crm:P7_took_place_at/crm:E53_Place"
 										origin="xforms:attribute('rdf:about', $placeURI)"/>
 								</xforms:action>
 
 								<!-- insert optional label into E53_Place -->
-								<xforms:action if="string(context()/was_found_by/took_place_at/_label)">
-									<xforms:var name="label" select="data(context()/was_found_by/took_place_at/_label)"/>
+								<xforms:action if="string(context()/encountered/took_place_at/_label)">
+									<xforms:var name="label" select="data(context()/encountered/took_place_at/_label)"/>
 
 									<xforms:insert context="instance('rdf')/crmsci:S19_Encounter_Event[last()]/crm:P7_took_place_at/crm:E53_Place"
 										origin="xforms:element('skos:prefLabel', (xforms:attribute('xml:lang', 'en'), $label))"/>
 								</xforms:action>
 
 								<!-- insert types of place -->
-								<xforms:action xxforms:iterate="context()/was_found_by/took_place_at/classified_as/_">
+								<xforms:action xxforms:iterate="context()/encountered/took_place_at/classified_as/_">
 									<xforms:var name="type" select="data(context()/id)"/>
 
 									<xforms:insert context="instance('rdf')/crmsci:S19_Encounter_Event[last()]/crm:P7_took_place_at/crm:E53_Place"
