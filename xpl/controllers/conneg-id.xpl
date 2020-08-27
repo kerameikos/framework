@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<!-- Author: Ethan Gruber
+	Function: Evaluate Accept HTTP header and perform the correct content negotiation -->
 <p:pipeline xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors">
-
+	
 	<p:param type="input" name="data"/>
 	<p:param type="output" name="data"/>
-
+	
 	<p:processor name="oxf:request">
 		<p:input name="config">
 			<config>
@@ -27,17 +29,9 @@
 						<xsl:choose>
 							<xsl:when test="$content-type='application/ld+json'">json-ld</xsl:when>
 							<xsl:when test="$content-type='application/vnd.google-earth.kml+xml'">kml</xsl:when>
-							<xsl:when test="$content-type='application/rdf+xml'">xml</xsl:when>
+							<xsl:when test="$content-type='application/rdf+xml' or $content-type='application/xml' or $content-type='text/xml'">xml</xsl:when>
 							<xsl:when test="$content-type='text/turtle'">turtle</xsl:when>
-							<xsl:when test="$content-type='text/html'">html</xsl:when>
-							<xsl:when test="not(string($content-type)) or $content-type='*/*' or contains($content-type, 'text/html')">
-								<xsl:text>html</xsl:text>
-								<!--<xsl:variable name="pieces" select="tokenize(/request/request-url, '/')"/>
-								<xsl:choose>
-									<xsl:when test="string-length($pieces[last()]) &gt; 0">303</xsl:when>
-									<xsl:otherwise>html</xsl:otherwise>
-								</xsl:choose>-->
-							</xsl:when>
+							<xsl:when test="contains($content-type, 'text/html') or $content-type='*/*' or not(string($content-type))">html</xsl:when>
 							<xsl:otherwise>error</xsl:otherwise>
 						</xsl:choose>
 					</content-type>
@@ -51,6 +45,18 @@
 		<p:when test="content-type='xml'">
 			<p:processor name="oxf:identity">
 				<p:input name="data" href="#data"/>		
+				<p:output name="data" id="model"/>
+			</p:processor>
+			
+			<p:processor name="oxf:xml-serializer">
+				<p:input name="data" href="#model"/>
+				<p:input name="config">
+					<config>
+						<content-type>application/rdf+xml</content-type>
+						<indent>true</indent>
+						<indent-amount>4</indent-amount>
+					</config>
+				</p:input>
 				<p:output name="data" ref="data"/>
 			</p:processor>
 		</p:when>
@@ -76,18 +82,40 @@
 			</p:processor>
 		</p:when>
 		<p:when test="content-type='html'">
-			<p:processor name="oxf:pipeline">
-				<p:input name="config" href="../views/serializations/rdf/html.xpl"/>
-				<p:input name="data" href="#data"/>		
-				<p:output name="data" ref="data"/>
-			</p:processor>
-		</p:when>
-		<p:when test="content-type='303'">
-			<p:processor name="oxf:pipeline">
+			<!-- read the data. if the RDF contains the dcterms:isReplacedBy property, then create an HTTP 303 redirect -->
+			<p:processor name="oxf:unsafe-xslt">
 				<p:input name="data" href="#data"/>
-				<p:input name="config" href="303-redirect.xpl"/>		
-				<p:output name="data" ref="data"/>
+				<p:input name="config">
+					<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
+						<xsl:template match="/">
+							<redirect>
+								<xsl:choose>
+									<xsl:when test="descendant::dcterms:isReplacedBy/@rdf:resource">true</xsl:when>
+									<xsl:otherwise>false</xsl:otherwise>
+								</xsl:choose>
+							</redirect>
+						</xsl:template>
+					</xsl:stylesheet>
+				</p:input>
+				<p:output name="data" id="redirect-config"/>
 			</p:processor>
+			
+			<p:choose href="#redirect-config">
+				<p:when test="redirect='true'">
+					<p:processor name="oxf:pipeline">
+						<p:input name="data" href="#data"/>
+						<p:input name="config" href="303-redirect.xpl"/>		
+						<p:output name="data" ref="data"/>
+					</p:processor>
+				</p:when>
+				<p:otherwise>
+					<p:processor name="oxf:pipeline">
+						<p:input name="data" href="#data"/>	
+						<p:input name="config" href="../views/serializations/rdf/html.xpl"/>						
+						<p:output name="data" ref="data"/>
+					</p:processor>
+				</p:otherwise>
+			</p:choose>
 		</p:when>
 		<p:otherwise>
 			<p:processor name="oxf:pipeline">
