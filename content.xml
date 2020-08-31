@@ -85,13 +85,13 @@
 							<a href="#getRdf">getRdf</a>
 						</td>
 						<td>
-							<a href="api/getRdf?identifiers=attica|black_figure|exekias">RDF/XML</a>
+							<a href="apis/getRdf?identifiers=attica|black_figure|exekias">RDF/XML</a>
 						</td>
 						<td>
-							<a href="api/getRdf?identifiers=attica|black_figure|exekias&amp;format=json">JSON-LD</a>
+							<a href="apis/getRdf?identifiers=attica|black_figure|exekias&amp;format=json">JSON-LD</a>
 						</td>
 						<td>
-							<a href="api/getRdf?identifiers=attica|black_figure|exekias&amp;format=ttl">RDF/TTL</a>
+							<a href="apis/getRdf?identifiers=attica|black_figure|exekias&amp;format=ttl">RDF/TTL</a>
 						</td>
 					</tr>
 				</tbody>
