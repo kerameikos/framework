@@ -2,9 +2,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
-	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
-	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/" xmlns:prov="http://www.w3.org/ns/prov#"
-	exclude-result-prefixes="#all" version="2.0">
+	xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/"
+	xmlns:prov="http://www.w3.org/ns/prov#" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:include href="../../functions.xsl"/>
 	<xsl:include href="../../vis-templates.xsl"/>
@@ -133,14 +133,14 @@
 				<!--<script type="text/javascript" src="{$display_path}ui/javascript/heatmap.min.js"/>
 					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-heatmap.js"/>-->
 				<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
-				
+
 				<!-- distribution visualization -->
 				<script type="text/javascript" src="https://d3plus.org/js/d3.js"/>
 				<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>
 				<!--<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>-->
-				
+
 				<!-- 3D hop -->
 				<!--STYLESHEET-->
 				<link type="text/css" rel="stylesheet" href="{$display_path}ui/css/3dhop.css"/>
