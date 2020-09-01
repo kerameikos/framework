@@ -132,10 +132,10 @@
 							<_object>
 								<type>TimeSpan</type>
 								<begin_of_the_begin>
-									<xsl:value-of select="kerameikos:expandDatetoDateTime($dates[1], 'begin')"/>
+									<xsl:value-of select="kerameikos:expandDate($dates[1], 'begin')"/>
 								</begin_of_the_begin>
 								<end_of_the_end>
-									<xsl:value-of select="kerameikos:expandDatetoDateTime($dates[1], 'end')"/>
+									<xsl:value-of select="kerameikos:expandDate($dates[1], 'end')"/>
 								</end_of_the_end>
 							</_object>
 						</timespan>
@@ -160,10 +160,10 @@
 							<_object>
 								<type>TimeSpan</type>
 								<begin_of_the_begin>
-									<xsl:value-of select="kerameikos:expandDatetoDateTime($dates[last()], 'begin')"/>
+									<xsl:value-of select="kerameikos:expandDate($dates[last()], 'begin')"/>
 								</begin_of_the_begin>
 								<end_of_the_end>
-									<xsl:value-of select="kerameikos:expandDatetoDateTime($dates[last()], 'end')"/>
+									<xsl:value-of select="kerameikos:expandDate($dates[last()], 'end')"/>
 								</end_of_the_end>
 							</_object>
 						</timespan>
