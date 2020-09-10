@@ -663,7 +663,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 										</xforms:label>
 										<xforms:action ev:event="DOMActivate">
 											<xforms:setvalue ref="instance('control-instance')/atom-type"
-												value="concat(namespace-uri(instance('doc')/*[1]), substring-after($type, ':'))"/>
+												value="concat('&#x022;', $type, '&#x022;')"/>
 											<xxforms:show dialog="broader-dialog"/>
 										</xforms:action>
 									</xforms:trigger>
