@@ -45,7 +45,7 @@ function initialize_map(id) {
     var map = new L.Map('mapcontainer', {
         center: new L.LatLng(0, 0),
         zoom: 4,
-        layers:[awmcterrain]
+        layers:[imperium]
     });
     
     //add productionLayer from AJAX
