@@ -17,16 +17,11 @@ function initialize_map(id) {
     var mapboxKey = $('#mapboxKey').text();
     
     //baselayers
-    var awmcterrain = L.tileLayer(
-    'https://api.tiles.mapbox.com/v4/isawnyu.map-knmctlkh/{z}/{x}/{y}.png?access_token=' + mapboxKey, {
-        attribution: 'Powered by <a href="http://leafletjs.com/">Leaflet</a> and <a href="https://www.mapbox.com/">Mapbox</a>. Map base by <a title="Ancient World Mapping Center (UNC-CH)" href="http://awmc.unc.edu">AWMC</a>, 2014 (cc-by-nc).',
-        maxZoom: 12
-    });
-    
-    /* Not added by default, only through user control action */
-    var terrain = L.tileLayer(
-    'https://api.tiles.mapbox.com/v4/isawnyu.map-p75u7mnj/{z}/{x}/{y}.png?access_token=' + mapboxKey, {
-        attribution: 'Powered by <a href="http://leafletjs.com/">Leaflet</a> and <a href="https://www.mapbox.com/">Mapbox</a>. Map base by <a title="Institute for the Study of the Ancient World (ISAW)" href="http://isaw.nyu.edu">ISAW</a>, 2014 (cc-by).'
+    var mb_physical = L.tileLayer(
+    'https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+        attribution: 'Map data &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors, ' +
+        '<a href="http://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
+        'Imagery © <a href="http://mapbox.com">Mapbox</a>', id: 'mapbox/outdoors-v11', maxZoom: 12, accessToken: mapboxKey
     });
     
     var osm = L.tileLayer(
@@ -45,7 +40,7 @@ function initialize_map(id) {
     var map = new L.Map('mapcontainer', {
         center: new L.LatLng(0, 0),
         zoom: 4,
-        layers:[imperium]
+        layers:[mb_physical]
     });
     
     //add productionLayer from AJAX
@@ -62,11 +57,10 @@ function initialize_map(id) {
     
     //add controls
     var baseMaps = {
-        "Ancient Terrain": awmcterrain,
-        "Modern Terrain": terrain,
-        "Modern Streets": osm,
-        "Imperium": imperium
-    };
+	   "Terrain and Streets": mb_physical,
+		"Modern Streets": osm,
+		"Imperium": imperium
+	};
     
     var overlayMaps = {
     };
