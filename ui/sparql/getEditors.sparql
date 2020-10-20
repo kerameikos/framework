@@ -9,7 +9,7 @@ SELECT ?editor ?name ?orcid ?org ?wikidata WHERE {
   ?editor a foaf:Person ;
             skos:inScheme <http://kerameikos.org/editor/> ;
             skos:prefLabel ?name ;
-  OPTIONAL {org:hasMembership ?membership .
+  OPTIONAL {?editor org:hasMembership ?membership .
             ?membership org:organization/skos:prefLabel ?org ;
               org:organization/skos:exactMatch ?wikidata }
   OPTIONAL {?editor skos:exactMatch ?orcid FILTER contains(str(?orcid), "orcid.org")}
