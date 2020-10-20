@@ -98,6 +98,12 @@
 					</ontolex:Form>
 				</ontolex:otherForm>
 			</xforms:instance>
+			
+			<xforms:instance id="time-span-template" xxforms:exclude-result-prefixes="#all">
+				<crm:P4_has_time-span>
+					<crm:E52_Time-Span/>
+				</crm:P4_has_time-span>
+			</xforms:instance>
 
 			<!-- instance for spreadsheet RDF as a static file -->
 			<xforms:instance id="spreadsheet-rdf" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
@@ -194,7 +200,8 @@
 					<property label="Alternative Label">skos:altLabel</property>
 					<property label="Plural Label" constraint="kon:Shape">ontolex:otherForm</property>
 					<property label="Broader Concept" exclude="foaf:Person">skos:broader</property>
-					<property label="End Date">edm:end</property>
+					<property label="End Date" constraint="crm:E4_Period">end</property>
+					<property label="End Date" exclude="crm:E4_Period">edm:end</property>
 					<property label="Exact Match">skos:exactMatch</property>
 					<property label="Latitude" constraint="kon:ProductionPlace">geo:lat</property>
 					<property label="Longitude" constraint="kon:ProductionPlace">geo:long</property>
@@ -203,7 +210,8 @@
 					<property label="Role" constraint="foaf:Person">org:role</property>
 					<property label="Scope Note">skos:scopeNote</property>
 					<property label="Source">dcterms:source</property>
-					<property label="Start Date">edm:begin</property>
+					<property label="Start Date" constraint="crm:E4_Period">begin</property>
+					<property label="Start Date" exclude="crm:E4_Period">>edm:begin</property>
 				</properties>
 			</xforms:instance>
 
@@ -341,7 +349,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 			</xforms:bind>
 
 			<xforms:bind nodeset="instance('mappings')"
-				constraint="count(mapping[@to = 'id']) = 1 and count(mapping[@to = 'skos:prefLabel'][@lang='en']) = 1 and count(mapping[@to = 'skos:definition'][@lang='en']) = 1 and count(mapping[@to='edm:begin']) &lt;= 1 and  count(mapping[@to='edm:end']) &lt;= 1 and  count(mapping[@to='org:role']) &lt;= 1 and count(mapping[@to='org:organization']) &lt;= 1 and count(mapping[@to='geo:lat']) &lt;= 1 and count(mapping[@to='geo:long']) &lt;= 1 and count(mapping[@to='bio:birth']) &lt;= 1 and count(mapping[@to='bio:death']) &lt;= 1">
+				constraint="count(mapping[@to = 'id']) = 1 and count(mapping[@to = 'skos:prefLabel'][@lang='en']) = 1 and count(mapping[@to = 'skos:definition'][@lang='en']) = 1 and count(mapping[@to='edm:begin']) &lt;= 1 and  count(mapping[@to='edm:end']) &lt;= 1 and count(mapping[@to='begin']) &lt;= 1 and  count(mapping[@to='end']) &lt;= 1 and  count(mapping[@to='org:role']) &lt;= 1 and count(mapping[@to='org:organization']) &lt;= 1 and count(mapping[@to='geo:lat']) &lt;= 1 and count(mapping[@to='geo:long']) &lt;= 1 and count(mapping[@to='bio:birth']) &lt;= 1 and count(mapping[@to='bio:death']) &lt;= 1">
 				<!-- language bindings -->
 				<xforms:bind nodeset="mapping[@to='skos:prefLabel']">
 					<xforms:bind nodeset="@lang" required="true()"
@@ -466,7 +474,8 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 						<xforms:action if="not(instance('spreadsheet-rdf')/prov:Entity[@rdf:about = instance('control-instance')/spreadsheet_uri])">
 							<!-- if there is no matching URI for the spreadsheet (prov:Entity), then insert the spreadsheet template into the spreadsheet RDF -->
 							<xforms:insert context="instance('spreadsheet-rdf')" nodeset="./child::node()[last()]" origin="instance('spreadsheet-template')"/>
-							<xforms:setvalue ref="instance('spreadsheet-rdf')/prov:Entity/@rdf:about" value="instance('control-instance')/spreadsheet_uri"/>
+							<xforms:setvalue ref="instance('spreadsheet-rdf')/prov:Entity[last()]/@rdf:about"
+								value="instance('control-instance')/spreadsheet_uri"/>
 						</xforms:action>
 
 						<xforms:toggle case="mapping-interface"/>
@@ -826,7 +835,17 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> There can not be more than one start date.</div>
 									</xforms:group>
+									<xforms:group ref=".[count(mapping[@to='begin']) &gt; 1]">
+										<div class="alert-danger alert-box alert">
+											<span class="glyphicon glyphicon-exclamation-sign"></span>
+											<strong>Alert:</strong> There can not be more than one start date.</div>
+									</xforms:group>
 									<xforms:group ref=".[count(mapping[@to='edm:end']) &gt; 1]">
+										<div class="alert-danger alert-box alert">
+											<span class="glyphicon glyphicon-exclamation-sign"></span>
+											<strong>Alert:</strong> There can not be more than one end date.</div>
+									</xforms:group>
+									<xforms:group ref=".[count(mapping[@to='end']) &gt; 1]">
 										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> There can not be more than one end date.</div>
@@ -1041,6 +1060,29 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																origin="xforms:element('error', concat('End Date is not a number: ', $value))"/>
 														</xforms:action>
+														
+														<!-- start and end dates for an E4_Period -->
+														<xforms:action if="$mapping = 'begin' and string-length($value) &gt; 0">
+															<xforms:insert if="not($value castable as xs:integer)"
+																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
+																origin="xforms:element('error', concat('Start Date is not a number: ', $value))"/>
+															<!-- if the start date and end date are both numbers, ensure that the start date is before the end date -->
+															<xforms:action if="instance('mappings')/mapping[@to='end'] and $value castable as xs:integer">
+																<xforms:var name="endDate"
+																	select="normalize-space(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='end']/@from])"/>
+																<xforms:action if="string-length($endDate) &gt; 0 and $endDate castable as xs:integer">
+																	<xforms:insert if="number($value) &gt; number($endDate)"
+																		context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
+																		origin="xforms:element('error', 'Start date post-dates end date.')"/>
+																</xforms:action>
+															</xforms:action>
+														</xforms:action>
+														<xforms:action if="$mapping = 'end' and string-length($value) &gt; 0">
+															<xforms:insert if="not($value castable as xs:integer)"
+																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
+																origin="xforms:element('error', concat('End Date is not a number: ', $value))"/>
+														</xforms:action>
+														
 														<!-- validate birth and death dates -->
 														<xforms:action if="$mapping = 'bio:birth' and string-length($value) &gt; 0">
 															<xforms:insert
@@ -1465,24 +1507,8 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 															origin="xforms:element($mapping, (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#decimal'), $value))"
 															if="not(instance('rdf')/geo:SpatialThing/*[name()=$mapping])"/>
 													</xforms:action>
-													<!-- create bio:birth or bio:death property and associated bio:Birth and bio:Death object -->
-													<!--<xforms:action if="$mapping = 'bio:birth' or $mapping='bio:death'">
-														<xforms:var name="fragmentUri" select="concat($uri, '#', substring-after($mapping, ':'))"/>
-														<xforms:var name="class" select="concat('bio:', translate(substring-after($mapping, ':'), 'bd', 'BD'))"/>
-														<xforms:var name="datatype"
-															select="if ($value castable as xs:date) then 'date' else if ($value castable as xs:gYearMonth) then 'gYearMonth' else 'gYear'"/>
-														<!-\- if there is no existing SpatialThing, then create one and insert the updated latitude and longitude. Do no overwrite existing values -\->
-														<xforms:action if="not(instance('rdf')/*[name()=$class])">
-															<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
-																origin="xforms:element($class, (xforms:attribute('rdf:about', $fragmentUri), ''))"/>
-															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
-																origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $fragmentUri), ''))"/>
-														</xforms:action>
-														<xforms:insert context="instance('rdf')/*[name()=$class]" nodeset="./child::node()[last()]"
-															origin="xforms:element('dcterms:date', (xforms:attribute('rdf:datatype', concat('http://www.w3.org/2001/XMLSchema#', $datatype)), $value))"
-															if="not(instance('rdf')/*[name()=$class]/dcterms:date)"/>
-													</xforms:action>-->
-													<!-- validate start and end dates -->
+													
+													<!-- write start and end dates for non-E4_Period concepts -->
 													<xforms:action if="$mapping = 'edm:begin' or $mapping='edm:end'">
 														<xforms:var name="membershipUri"
 															select="concat($uri, '#', substring-after(data(instance('feed')//atom:entry[position()=$position]/*[name()=instance('mappings')/mapping[@to='org:role']/@from]), 'id/'))"/>
@@ -1510,6 +1536,34 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																if="not(instance('rdf')/*[1]/*[name()=$mapping])"/>
 														</xforms:action>
 													</xforms:action>
+													
+													<!-- insert time-span for E4_Period -->
+													<xforms:action if="$mapping = 'begin' or $mapping = 'end'">
+														<!-- insert the time-span if it doesn't already exist -->
+														<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]" origin="instance('time-span-template')" 
+															if="not(instance('rdf')/*[1]/crm:P4_has_time-span)"/>
+														
+														<xforms:action if="$mapping = 'begin'">
+															<!-- insert the begin property if it doesn't exist -->
+															<xforms:insert context="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span" nodeset="./child::node()[last()]"
+																origin="xforms:element('crm:P82a_begin_of_the_begin', (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#gYear')))"
+																if="not(instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span/crm:P82a_begin_of_the_begin)"/>
+															
+															<!-- always set/reset value of the property -->
+															<xforms:setvalue ref="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span/crm:P82a_begin_of_the_begin" value="format-number(number($value), '0000')"/>
+														</xforms:action>
+														
+														<xforms:action if="$mapping = 'end'">
+															<!-- insert the begin property if it doesn't exist -->
+															<xforms:insert context="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span" nodeset="./child::node()[last()]"
+																origin="xforms:element('crm:P82b_end_of_the_end', (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#gYear')))"
+																if="not(instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span/crm:P82b_end_of_the_end)"/>
+															
+															<!-- always set/reset value of the property -->
+															<xforms:setvalue ref="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span/crm:P82b_end_of_the_end" value="format-number(number($value), '0000')"/>
+														</xforms:action>
+													</xforms:action>
+													
 													<!-- write org ontology properties into the org:Membership -->
 													<xforms:action if="$mapping='org:role' or $mapping='org:organization'">
 														<xforms:var name="membershipUri"
