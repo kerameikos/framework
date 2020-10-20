@@ -8,7 +8,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 SELECT ?editor ?name ?orcid ?org ?wikidata WHERE {
   ?editor a foaf:Person ;
             skos:inScheme <http://kerameikos.org/editor/> ;
-            skos:prefLabel ?name ;
+            skos:prefLabel ?name FILTER langMatches(lang(?name), "en")
   OPTIONAL {?editor org:hasMembership ?membership .
             ?membership org:organization/skos:prefLabel ?org ;
               org:organization/skos:exactMatch ?wikidata }
