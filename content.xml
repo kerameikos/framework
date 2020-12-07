@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <content>
 	<index>
-		<h2>Kerameikos.org</h2>
+		<h2>Kerameikos.org </h2>
+		<a href="https://twitter.com/kerameikos_org?ref_src=twsrc%5Etfw" class="twitter-follow-button" data-show-count="false">Follow
+			@kerameikos_org</a>
+		<script async="" src="https://platform.twitter.com/widgets.js" charset="utf-8"/>
 		<p>Kerameikos.org is a collaborative project dedicated to defining the intellectual concepts of pottery following the tenets of linked open data and the
 			formulation of an ontology for representing and sharing ceramic data across disparate data systems. While the project is focused primarily on the
 			definition of concepts within Greek black- and red-figure pottery, Kerameikos.org is extensible toward the definition of concepts in other fields of
@@ -26,12 +29,18 @@
 
 		<h3>Papers and Presentations</h3>
 		<ul>
+			<li><b>2020: </b>Gondek, Renee, Ethan Gruber, Tyler Jo Smith. "<a
+					href="https://drive.google.com/file/d/1UAo3YfZTFnxB2mzZob9Kw2UmzcnodOUC/view?usp=sharing">Kerameikos.org: 2020 Current Work and Future
+					Plans</a>" (poster), Linked Pasts 6 (virtual conference).</li>
+			<li><b>2020: </b>Gondek, Renee, Ethan Gruber, Tyler Jo Smith. "Kerameikos.org: Pottery and Linked Open Data" (lightning talk), presented in a
+				workshop, "The Digital Futures of Ancient Objects: Discussing Next Steps for Collaborative Digital Humanities Projects" organized by Rebecca
+				Levitan, AIA-SCS 2020, Washington, DC.</li>
 			<li><b>2019: </b>Gondek, Renee, Ethan Gruber, Tyler Jo Smith. "Kerameikos.org: A Linked Open Greek Pottery Project", FIEC / CA 2019, London,
 				UK.</li>
 			<li><b>2019: </b>Gondek, Renee, Ethan Gruber, Tyler Jo Smith. "Kerameikos.org: Linked Open Data for Greek Pottery" (poster), Computer Applications
 				in Archaeology, Krakow, Poland. <a href="https://doi.org/10.5281/zenodo.3243539">DOI: 10.5281/zenodo.3243539</a></li>
-			<li><b>2019: </b>Gondek, Renee, Ethan Gruber, and Tyler Jo Smith (in absentia). "Kerameikos.org: A Network Science Approach to the Study of Greek Pottery", UVA Archaeology Brown
-				Bag, 22 March 2019.</li>
+			<li><b>2019: </b>Gondek, Renee, Ethan Gruber, and Tyler Jo Smith (in absentia). "Kerameikos.org: A Network Science Approach to the Study of Greek
+				Pottery", UVA Archaeology Brown Bag, 22 March 2019.</li>
 			<li><b>2019: </b>Gondek, Renee and Ethan Gruber. "Linked Open Greek Pottery: Kerameikos.org", NEH Project Directors' meeting, 18 March 2019: <a
 					href="https://doi.org/10.5281/zenodo.2597608">DOI: 10.5281/zenodo.2597608</a>.</li>
 			<li><b>2016: </b>Gruber, Ethan and Tyler Jo Smith. "Kerameikos.org: The Semantic Web Meets Greek Pottery", <a href="http://dh.virginia.edu/"
