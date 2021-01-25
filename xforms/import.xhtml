@@ -211,7 +211,7 @@
 					<property label="Longitude" constraint="kon:ProductionPlace">geo:long</property>
 					<property label="Organization" constraint="foaf:Person|foaf:Organization|foaf:Group">org:organization</property>
 					<property label="Other Link">rdfs:seeAlso</property>
-					<property label="Role" constraint="foaf:Person">org:role</property>
+					<property label="Role" constraint="foaf:Person|foaf:Organization|foaf:Group">org:role</property>
 					<property label="Scope Note">skos:scopeNote</property>
 					<property label="Source">dcterms:source</property>
 					<property label="Start Date" constraint="crm:E4_Period">begin</property>
@@ -259,7 +259,7 @@
 					<property id="P269">http://www.idref.fr/</property>
 					<!--<property id="P646">https://www.freebase.com</property>-->
 					<property id="P1014">http://vocab.getty.edu/aat/</property>
-					<property id="P1566">http://www.geonames.org/</property>
+					<property id="P1566">https://sws.geonames.org/</property>
 					<property id="P1667">http://vocab.getty.edu/tgn/</property>
 					<property id="P1900">http://www.eagle-network.eu/voc/</property>
 				</properties>
@@ -465,7 +465,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 								origin="xforms:element('mapping', (xforms:attribute('from', $heading), xforms:attribute('to', '')))"/>
 						</xforms:action>
 						<!-- insert an element to test whether the role has been assigned for foaf:Person or foaf:Organization when dates are used or whether the role exists if org:organization is used -->
-						<xforms:action if="instance('control-instance')/type='foaf:Person' or instance('control-instance')/type='foaf:Organization' or  or instance('control-instance')/type='foaf:Group'">
+						<xforms:action if="instance('control-instance')/type='foaf:Person' or instance('control-instance')/type='foaf:Organization' or instance('control-instance')/type='foaf:Group'">
 							<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]" origin="xforms:element('role-invalid', 'false')"/>
 						</xforms:action>
 						<!-- insert an element to test whether the coordinates are valid -->
@@ -1745,12 +1745,5 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				</div>
 			</div>
 		</div>
-		<!-- *********** DIALOGS *********** -->
-		<!--<xxforms:dialog id="progress-dialog" appearance="full" level="modal" close="false" draggable="true" visible="false">
-			<xforms:label>Import Progress</xforms:label>
-			<div style="width:400px">Processing record <xforms:output ref="instance('control-instance')/position"></xforms:output> of <xforms:output ref="instance('control-instance')/count"></xforms:output>:
-					<xforms:output ref="instance('control-instance')/id"></xforms:output>.</div>
-					
-		</xxforms:dialog>-->
 	</body>
 </html>
