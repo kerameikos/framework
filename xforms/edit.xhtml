@@ -117,6 +117,10 @@
 						<type>crm:E78_Collection</type>
 					</class>
 					<class>
+						<label>Group (loose classification)</label>
+						<type>foaf:Group</type>
+					</class>
+					<class>
 						<label>Institution</label>
 						<type>crm:E40_Legal_Body</type>
 					</class>
@@ -125,7 +129,7 @@
 						<type>crm:E57_Material</type>
 					</class>
 					<class>
-						<label>Organization (Workshop)</label>
+						<label>Organization (Formal)</label>
 						<type>foaf:Organization</type>
 					</class>
 					<class>
@@ -714,7 +718,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 									</li>
 								</xforms:group>
 							</xforms:group>
-							<xforms:group ref=".[$type='foaf:Person' or $type='foaf:Organization']">
+							<xforms:group ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type = 'foaf:Group']">
 								<li>
 									<h4>Roles</h4>
 								</li>
@@ -1399,14 +1403,24 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											<xforms:group ref=".[count(org:organization) = 0]">
 												<xforms:trigger appearance="minimal">
 													<xforms:label>
-														<span class="glyphicon glyphicon-plus"></span>Workshop</xforms:label>
+														<span class="glyphicon glyphicon-plus"></span>Artist Group</xforms:label>
+													<xforms:action ev:event="DOMActivate">
+														<xforms:setvalue ref="instance('control-instance')/membership-position" value="$position"/>
+														<xforms:setvalue ref="instance('control-instance')/atom-type"
+															>&#x022;foaf:Group&#x022;</xforms:setvalue>
+														<xxforms:show dialog="organization-dialog"/>
+													</xforms:action>
+												</xforms:trigger>
+												<xforms:trigger appearance="minimal">
+													<xforms:label>
+														<span class="glyphicon glyphicon-plus"></span>Organization (workshop)</xforms:label>
 													<xforms:action ev:event="DOMActivate">
 														<xforms:setvalue ref="instance('control-instance')/membership-position" value="$position"/>
 														<xforms:setvalue ref="instance('control-instance')/atom-type"
 															>&#x022;foaf:Organization&#x022;</xforms:setvalue>
 														<xxforms:show dialog="organization-dialog"/>
 													</xforms:action>
-												</xforms:trigger>
+												</xforms:trigger>												
 											</xforms:group>
 										</div>
 										<!-- role -->
@@ -1591,7 +1605,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</xforms:group>
 						</xforms:group>
 						<!-- query VIAF to add associated URIs -->
-						<xforms:group ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type='crm:E40_Legal_Body']">
+						<xforms:group ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type='crm:E40_Legal_Body' or $type='foaf:Group']">
 							<kerameikos:viaf/>
 						</xforms:group>
 					</xforms:group>
