@@ -211,6 +211,7 @@
 					<property label="Longitude" constraint="kon:ProductionPlace">geo:long</property>
 					<property label="Organization" constraint="foaf:Person|foaf:Organization|foaf:Group">org:organization</property>
 					<property label="Other Link">rdfs:seeAlso</property>
+					<property label="Related Entity">skos:related</property>
 					<property label="Role" constraint="foaf:Person|foaf:Organization|foaf:Group">org:role</property>
 					<property label="Scope Note">skos:scopeNote</property>
 					<property label="Source">dcterms:source</property>
@@ -1204,7 +1205,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																</xforms:action>
 															</xforms:action>
 														</xforms:action>
-														<xforms:action if="$mapping='skos:broader'">
+														<xforms:action if="$mapping='skos:broader' or $mapping = 'skos:related'">
 															<xforms:action if="string-length($value) &gt; 0">
 																<!-- these are properties that must be linked internally to other Kerameikos IDs -->
 																<xforms:insert if="not(contains($value, 'http://kerameikos.org/id/'))"
@@ -1400,7 +1401,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 
 													<!-- create URIs for the following simple mappings that go into the skos:Concept object -->
 													<xforms:action
-														if="$mapping = 'skos:exactMatch' or $mapping='skos:closeMatch' or $mapping='foaf:homepage' or $mapping='dcterms:isPartOf' or $mapping='dcterms:source' or $mapping='org:memberOf' or $mapping='skos:broader' or $mapping='prov:alternateOf'">
+														if="$mapping = 'skos:exactMatch' or $mapping='skos:closeMatch' or $mapping = 'skos:related' or $mapping='foaf:homepage' or $mapping='dcterms:isPartOf' or $mapping='dcterms:source' or $mapping='org:memberOf' or $mapping='skos:broader' or $mapping='prov:alternateOf'">
 														<!-- clear wiki control instance values -->
 														<xforms:setvalue ref="instance('control-instance')/wiki-id"/>
 														<xforms:setvalue ref="instance('control-instance')/wiki-title"/>
