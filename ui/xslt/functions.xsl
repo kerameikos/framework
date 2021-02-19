@@ -143,6 +143,28 @@
 		</xsl:choose>		
 	</xsl:function>
 	
+	<!-- turn rdf properties into human-readable labels -->
+	<xsl:function name="kerameikos:normalizeCurie">
+		<xsl:param name="curie"/>
+		
+		<xsl:choose>
+			<!-- classes -->
+			<xsl:when test="$curie = 'foaf:Person'">Person</xsl:when>
+			
+			<!-- properties -->
+			<xsl:when test="$curie = 'lexinfo:plural'">Plural Form</xsl:when>
+			<xsl:when test="$curie = 'skos:prefLabel'">Preferred Label</xsl:when>
+			<xsl:when test="$curie = 'skos:altLabel'">Alternate Label</xsl:when>
+			
+			<xsl:otherwise>
+				<xsl:variable name="localName" select="substring-after($curie, ':')"/>
+				
+				<xsl:value-of select="concat(upper-case(substring($localName, 1, 1)), substring($localName, 2))"/>
+			</xsl:otherwise>
+		</xsl:choose>
+				
+	</xsl:function>
+	
 	
 	<!-- ********************************** TEMPLATES ************************************ -->
 	<xsl:template name="kerameikos:evaluateDatatype">
