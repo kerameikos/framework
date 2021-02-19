@@ -1,0 +1,235 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:xhtml="http://www.w3.org/1999/xhtml" xmlns:xforms="http://www.w3.org/2002/xforms"
+	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:ev="http://www.w3.org/2001/xml-events"
+	xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:fr="http://orbeon.org/oxf/xml/form-runner" xmlns:xi="http://www.w3.org/2001/XInclude"
+	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:org="http://www.w3.org/ns/org#"
+	 xmlns:prov="http://www.w3.org/ns/prov#">
+	<head>
+		<title>Kerameikos: editors</title>
+		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css" />
+		<link rel="stylesheet" href="/fr/style/form-runner-bootstrap-override.css" type="text/css" />
+
+		<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" />
+		<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
+		<link rel="shortcut icon" href="/ops/images/orbeon-icon-16.ico" />
+		<link rel="icon" href="/ops/images/orbeon-icon-16.png" type="image/png" />
+		<link rel="stylesheet" href="/apps/kerameikos/xforms/css/style.css" />
+
+		<!-- model -->
+		<xforms:model>
+			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="#all">
+				<rdf:RDF/>
+			</xforms:instance>
+
+			<xforms:instance id="config" xxforms:exclude-result-prefixes="#all">
+				<xi:include href="../config.xml"/>
+			</xforms:instance>
+
+			<xforms:instance id="control-instance" xxforms:exclude-result-prefixes="#all">
+				<controls xmlns="">
+					<id></id>
+					<uri></uri>
+					<doi></doi>
+					<username></username>
+					<status></status>
+					<conceptScheme>editor</conceptScheme>
+					<conceptScheme_uri>http://kerameikos.org/editor/</conceptScheme_uri>
+					<concept_path></concept_path>
+				</controls>
+			</xforms:instance>
+
+			<xforms:instance id="dump">
+				<dump xmlns=""></dump>
+			</xforms:instance>
+
+			<xforms:instance id="save-config">
+				<config xmlns="">
+					<url></url>
+					<content-type>text/plain</content-type>
+					<make-directories>false</make-directories>
+					<append>false</append>
+				</config>
+			</xforms:instance>
+
+			<!-- ********** REST RESPONSES ********** -->
+			<!-- sparql queries -->
+			<xforms:instance id="sparqlQuery">
+				<query><![CDATA[PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+SELECT ?editor ?name ?orcid ?doi WHERE {
+  ?editor a foaf:Person ;
+            skos:inScheme <http://kerameikos.org/editor/> ;
+            skos:prefLabel ?name . FILTER (langMatches(lang(?name), "en"))
+  OPTIONAL {?editor skos:exactMatch ?orcid FILTER contains(str(?orcid), "orcid.org")}
+  OPTIONAL {?editor dcterms:identifier ?doi}
+} ORDER BY ?name]]></query>
+			</xforms:instance>
+
+			<!-- preloaded instances -->
+			<xforms:instance id="sparqlResponse">
+				<sparql xmlns="http://www.w3.org/2005/sparql-results#"/>
+			</xforms:instance>
+
+			<!-- sparql update -->
+			<xforms:instance id="sparqlUpdate-template">
+				<query><![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
+PREFIX org:	<http://www.w3.org/ns/org#>
+PREFIX prov:	<http://www.w3.org/ns/prov#>
+PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
+DELETE {?s ?p ?o} WHERE {
+BIND (<URI> as ?concept)
+?concept ?p ?o . ?s ?p ?o . FILTER (?s = ?concept)
+}]]></query>
+			</xforms:instance>
+
+			<xforms:instance id="sparqlUpdate">
+				<query></query>
+			</xforms:instance>
+
+			<!-- ************* SPARQL SUBMISSIONS **********************-->
+			<!-- SPARQL queries -->
+			<xforms:submission id="submit-sparqlQuery" action="{instance('config')/sparql/query}?query={encode-for-uri(instance('sparqlQuery'))}&amp;output=xml"
+				ref="instance('sparqlResponse')" replace="instance" method="get">
+				<xforms:message ev:event="xforms-submit-error" level="modal">SPARQL query failed.</xforms:message>
+			</xforms:submission>
+
+			<xforms:submission id="delete-graph" action="{instance('config')/sparql/update}" ref="instance('sparqlUpdate')" serialization="text/plain"
+				replace="none" method="post" mediatype="application/sparql-update">
+				<xforms:action ev:event="xforms-submit-error">
+					<xforms:message level="modal">SPARQL update failed.</xforms:message>
+				</xforms:action>
+			</xforms:submission>
+
+			<xforms:submission id="post-new" action="{instance('config')/sparql_store}?default" ref="instance('rdf')" replace="none" method="post"
+				mediatype="application/rdf+xml">
+				<xforms:setvalue ev:event="xforms-submit-done" ref="instance('control-instance')/status">Successfully posted to endpoint.</xforms:setvalue>
+				<xforms:message ev:event="xforms-submit-error" level="modal">Post to endpoint failed.</xforms:message>
+			</xforms:submission>
+
+			<!-- ************************* LOAD RDF/XML ************************** -->
+			<xforms:submission id="load-rdf" serialization="none" method="get"
+				action="/kerameikos/{instance('control-instance')/conceptScheme}/{instance('control-instance')/id}.rdf" replace="instance" instance="rdf">
+				<!-- ************ RDF PROCESSING TO CREATE A NEW ID ************** -->
+				<xforms:action ev:event="xforms-submit-error">
+					<xforms:message level="modal">Unable to load editor RDF file from filesystem.</xforms:message>
+				</xforms:action>
+
+				<!-- ************ INSERT NEW DOI ************** -->
+				<xforms:action ev:event="xforms-submit-done">
+					<!-- insert DOI if it doesn't exist. -->
+					<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
+						origin="xforms:element('dcterms:identifier', data(instance('control-instance')/doi))"
+						if="not(instance('rdf')/*[1]/dcterms:identifier = instance('control-instance')/doi)"/>
+
+					<!-- save file to the filesystem -->
+					<xforms:setvalue ref="instance('save-config')/url"
+						value="concat(instance('control-instance')/concept_path,  instance('control-instance')/id, '.rdf')"/>
+					<xforms:insert nodeset="instance('dump')"
+						origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('rdf'), instance('save-config')), 'data')"/>
+
+					<!-- delete graph from triplestore, then repost updates -->
+					<xforms:setvalue ref="instance('sparqlUpdate')" value="replace(instance('sparqlUpdate-template'), 'URI', instance('rdf')/*[1]/@rdf:about)"/>
+					<xforms:send submission="delete-graph"/>
+					<xforms:send submission="post-new"/>
+				</xforms:action>
+			</xforms:submission>
+
+			
+
+			<!-- **************** MODEL-CONSTRUCT-DONE ********************** -->
+			<xforms:action ev:event="xforms-model-construct-done">
+				<!-- set the concept_path based on conceptScheme -->
+				<xforms:setvalue ref="instance('control-instance')/concept_path"
+					value="concat(instance('config')/data_path, '/', instance('control-instance')/conceptScheme, '/')"/>
+				
+				<xforms:send submission="submit-sparqlQuery"/>
+			</xforms:action>
+		</xforms:model>
+	</head>
+
+	<body>
+		<div class="container-fluid">
+			<div class="row">
+				<div class="col-md-12">
+					<p><a href="../"><span class="glyphicon glyphicon-arrow-left"></span>Return to Admin</a></p>
+					<xforms:group ref=".[string-length(instance('control-instance')/status) &gt; 0]">
+						<div class="alert-success alert-box alert">
+							<span class="glyphicon glyphicon-info-sign"></span>
+							<strong>Status:</strong>
+							<xforms:output ref="instance('control-instance')/status"/>
+						</div>
+					</xforms:group>
+
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-12">
+					<h1>Kerameikos.org Editors</h1>
+					<p><a href="edit"><span class="glyphicon glyphicon-file"></span> Create New Editor</a></p>					
+					<xforms:group ref="instance('sparqlResponse')">
+						<xforms:group ref=".[count(descendant::res:result) = 0]">
+							<p>If this list is blank, the Kerameikos.org SPARQL endpoint needs to be reloaded with a newly-generated RDF dump in the Admin
+								panel.</p>
+						</xforms:group>
+						<xforms:group ref=".[count(descendant::res:result) &gt; 0]">
+							<table class="table">
+								<thead>
+									<tr>
+										<th style="width:90%">Editor</th>
+										<th style="width:10%">View</th>
+									</tr>
+								</thead>
+								<tbody>
+									<xforms:repeat nodeset="descendant::res:result">
+										<xforms:var name="id" select="tokenize(res:binding[@name='editor']/res:uri, '/')[last()]"/>
+										<tr>
+											<td>
+												<h4>
+													<xforms:trigger appearance="minimal">
+														<xforms:label ref="res:binding[@name='name']/res:literal"/>
+														<xforms:action ev:event="DOMActivate">
+															<xforms:load show="replace" resource="edit?id={$id}"/>
+														</xforms:action>
+													</xforms:trigger>
+												</h4>
+												<xforms:group ref=".[res:binding[@name = 'orcid'] or res:binding[@name = 'doi']]">
+													<dl class="dl-horizontal">
+														<xforms:group ref=".[res:binding[@name = 'orcid']]">
+															<dt>ORCID</dt>
+															<dd>
+																<xforms:output ref="res:binding[@name = 'orcid']/res:uri"/>
+															</dd>
+														</xforms:group>
+														<xforms:group ref=".[res:binding[@name = 'doi']]">
+															<dt>DOI</dt>
+															<dd>
+																<xforms:output ref="res:binding[@name = 'doi']/res:literal"/>
+															</dd>
+														</xforms:group>
+													</dl>
+												</xforms:group>
+											</td>
+											<td class="text-center">
+												<a href="{instance('config')/url}id/{$id}" target="_blank">html</a>
+											</td>
+										</tr>
+									</xforms:repeat>
+								</tbody>
+							</table>
+						</xforms:group>
+					</xforms:group>
+
+
+				</div>
+			</div>
+		</div>
+		<!--<fr:xforms-inspector/>-->
+	</body>
+</html>

@@ -482,6 +482,14 @@ SELECT * WHERE {
 						</ul>
 					</div>
 					<div>
+						<h3>Editors</h3>
+						<ul>
+							<li>
+								<a href="editors/">Manage Kerameikos Editors</a>
+							</li>
+						</ul>
+					</div>
+					<div>
 						<h3>Kerameikos Data</h3>
 						<ul>
 							<li>
@@ -489,6 +497,14 @@ SELECT * WHERE {
 									<xforms:label>Refresh Triplestore</xforms:label>
 									<xforms:action ev:event="DOMActivate">
 										<xforms:dispatch target="refresh-triplestore-dialog" name="fr-show"/>
+									</xforms:action>
+								</xforms:trigger>
+							</li>
+							<li>
+								<xforms:trigger appearance="minimal">
+									<xforms:label>Flush and Reload Index</xforms:label>
+									<xforms:action ev:event="DOMActivate">
+										<xforms:dispatch target="solr-dialog" name="fr-show"/>
 									</xforms:action>
 								</xforms:trigger>
 							</li>
@@ -501,20 +517,7 @@ SELECT * WHERE {
 								</xforms:trigger>
 							</li>-->
 						</ul>
-					</div>
-					<div>
-						<h3>Solr</h3>
-						<ul>
-							<li>
-								<xforms:trigger appearance="minimal">
-									<xforms:label>Flush and Reload Index</xforms:label>
-									<xforms:action ev:event="DOMActivate">
-										<xforms:dispatch target="solr-dialog" name="fr-show"/>
-									</xforms:action>
-								</xforms:trigger>
-							</li>
-						</ul>
-					</div>
+					</div>					
 				</div>
 			</div>
 		</div>
