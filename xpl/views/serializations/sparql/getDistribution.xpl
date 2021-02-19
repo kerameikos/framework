@@ -39,6 +39,7 @@
 			<p:processor name="oxf:unsafe-xslt">
 				<p:input name="request" href="#request"/>
 				<p:input name="data" href="#data"/>
+				<p:input name="config-xml" href="../../../../config.xml"/>
 				<p:input name="config" href="../../../../ui/xslt/serializations/sparql/distribution-csv.xsl"/>
 				<p:output name="data" id="model"/>
 			</p:processor>
@@ -58,6 +59,7 @@
 			<p:processor name="oxf:unsafe-xslt">
 				<p:input name="request" href="#request"/>
 				<p:input name="data" href="#data"/>
+				<p:input name="config-xml" href="../../../../config.xml"/>
 				<p:input name="config" href="../../../../ui/xslt/serializations/sparql/d3plus-json.xsl"/>
 				<p:output name="data" id="model"/>
 			</p:processor>

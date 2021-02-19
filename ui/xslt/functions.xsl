@@ -7,9 +7,9 @@
 	<xsl:function name="kerameikos:normalizeDate">
 		<xsl:param name="date"/>
 		
-		<xsl:if test="substring($date, 1, 1) != '-' and number(substring($date, 1, 4)) &lt; 500">
+		<!--<xsl:if test="substring($date, 1, 1) != '-' and number(substring($date, 1, 4)) &lt; 500">
 			<xsl:text>A.D. </xsl:text>
-		</xsl:if>
+		</xsl:if>-->
 		
 		<xsl:choose>
 			<xsl:when test="$date castable as xs:date">
@@ -24,8 +24,10 @@
 			</xsl:when>
 		</xsl:choose>
 		
+		
+		
 		<xsl:if test="substring($date, 1, 1) = '-'">
-			<xsl:text> B.C.</xsl:text>
+			<xsl:text> BCE</xsl:text>
 		</xsl:if>
 	</xsl:function>
 	
@@ -55,27 +57,29 @@
 		<xsl:choose>
 			<xsl:when test="number($year) &lt;= 0">
 				<xsl:value-of select="abs(number($year) - 1)"/>
-				<xsl:text> B.C.</xsl:text>
+				<xsl:text> BCE</xsl:text>
 			</xsl:when>
-			<xsl:otherwise>
-				<xsl:if test="number($year) &lt;=400">
-					<xsl:text>A.D. </xsl:text>
-				</xsl:if>
+			<xsl:otherwise>				
 				<xsl:value-of select="number($year)"/>
+				<xsl:if test="number($year) &lt;=400">
+					<xsl:text> CE</xsl:text>
+				</xsl:if>
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:function>
 	
 	<xsl:function name="kerameikos:getLabel">
 		<xsl:param name="uri"/>
+		<xsl:param name="service"/>
 		
-		<xsl:variable name="service" select="concat('http://localhost:8080/orbeon/kerameikos/apis/getLabel?uri=', $uri)"/>
+		<xsl:variable name="service" select="concat($service, 'apis/getLabel?uri=', $uri)"/>
 		
 		<xsl:value-of select="document($service)/response"/>
 	</xsl:function>
 	
 	<xsl:function name="kerameikos:parseFilter">
 		<xsl:param name="query"/>
+		<xsl:param name="service"/>
 		
 		<xsl:variable name="pieces" select="tokenize(normalize-space($query), ';')"/>
 		<xsl:for-each select="$pieces">
@@ -101,7 +105,7 @@
 						<xsl:matching-substring>
 							<xsl:value-of select="normalize-space(regex-group(1))"/>
 							<xsl:text>: </xsl:text>
-							<xsl:value-of select="kerameikos:getLabel(regex-group(2))"/>
+							<xsl:value-of select="kerameikos:getLabel(regex-group(2), $service)"/>
 						</xsl:matching-substring>
 					</xsl:analyze-string>
 				</xsl:otherwise>

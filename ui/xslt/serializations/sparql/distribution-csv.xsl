@@ -17,13 +17,13 @@
 		<queries>
 			<xsl:if test="string($filter)">
 				<query>
-					<xsl:attribute name="label" select="kerameikos:parseFilter(normalize-space($filter))"/>
+					<xsl:attribute name="label" select="kerameikos:parseFilter(normalize-space($filter), doc('input:config-xml')/config/url)"/>
 					<xsl:value-of select="normalize-space($filter)"/>
 				</query>
 			</xsl:if>
 			<xsl:for-each select="$compare">
 				<query>
-					<xsl:attribute name="label" select="kerameikos:parseFilter(normalize-space(.))"/>
+					<xsl:attribute name="label" select="kerameikos:parseFilter(normalize-space(.), doc('input:config-xml')/config/url)"/>
 					<xsl:value-of select="."/>
 				</query>
 			</xsl:for-each>
@@ -69,7 +69,7 @@
 		<xsl:variable name="object" as="element()*">
 			<row>
 				<xsl:element name="subset">
-					<xsl:value-of select="kerameikos:parseFilter($query)"/>
+					<xsl:value-of select="kerameikos:parseFilter($query, doc('input:config-xml')/config/url)"/>
 				</xsl:element>
 				<xsl:element name="{$dist}">
 					<xsl:value-of select="res:binding[@name = 'label']/res:literal"/>
