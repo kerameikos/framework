@@ -149,12 +149,21 @@
 		
 		<xsl:choose>
 			<!-- classes -->
-			<xsl:when test="$curie = 'foaf:Person'">Person</xsl:when>
+			<xsl:when test="$curie = 'kon:ProductionPlace'">Production Place</xsl:when>
 			
 			<!-- properties -->
+			<xsl:when test="$curie = 'geo:lat'">Latitude</xsl:when>
+			<xsl:when test="$curie = 'geo:long'">Longitude</xsl:when>
+			<xsl:when test="$curie = 'dcterms:isPartOf'">Part Of</xsl:when>
+			<xsl:when test="$curie = 'dcterms:source'">Reference</xsl:when>
 			<xsl:when test="$curie = 'lexinfo:plural'">Plural Form</xsl:when>
 			<xsl:when test="$curie = 'skos:prefLabel'">Preferred Label</xsl:when>
 			<xsl:when test="$curie = 'skos:altLabel'">Alternate Label</xsl:when>
+			<xsl:when test="$curie = 'skos:broader'">Broader Concept</xsl:when>
+			<xsl:when test="$curie = 'skos:changeNote'">Change Note</xsl:when>
+			<xsl:when test="$curie = 'skos:closeMatch'">Close Match</xsl:when>
+			<xsl:when test="$curie = 'skos:exactMatch'">Exact Match</xsl:when>
+			<xsl:when test="$curie = 'skos:related'">Related Entity</xsl:when>
 			
 			<xsl:otherwise>
 				<xsl:variable name="localName" select="substring-after($curie, ':')"/>

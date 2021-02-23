@@ -337,7 +337,7 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="type">
+				<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="human-readable">
 					<xsl:with-param name="mode">record</xsl:with-param>
 				</xsl:apply-templates>
 

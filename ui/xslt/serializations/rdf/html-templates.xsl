@@ -5,7 +5,123 @@
 	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 	xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:kerameikos="http://kerameikos.org/" xmlns:res="http://www.w3.org/2005/sparql-results#"
 	xmlns:prov="http://www.w3.org/ns/prov#" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" exclude-result-prefixes="#all" version="2.0">
-
+	
+	<!-- human readable templates for ID or other concept scheme RDF serializations. mode="type" is for general output from SPARQL CONSTRUCT or DESCRIBE -->
+	<xsl:template match="*" mode="human-readable">
+		<xsl:param name="mode"/>
+		
+		<div>
+			<xsl:if test="@rdf:about">
+				<xsl:attribute name="about" select="@rdf:about"/>
+				<xsl:attribute name="typeof" select="name()"/>
+				<xsl:if test="contains(@rdf:about, '#this')">
+					<xsl:attribute name="id">#this</xsl:attribute>
+				</xsl:if>
+			</xsl:if>
+			
+			<xsl:element
+				name="{if (name()='prov:Activity') then 'h4' else if (name() = 'dcterms:ProvenanceStatement') then 'h3' else if (not(parent::rdf:RDF)) then 'h3' else if(position()=1) then 'h2' else 'h3'}">
+				<!-- display a label based on the URI if there is an @rdf:about, otherwise formulate a blank node label -->
+				
+				<xsl:choose>
+					<xsl:when test="@rdf:about">
+						<xsl:choose>
+							<xsl:when test="contains(@rdf:about, '#')">
+								<xsl:value-of select="concat('#', substring-after(@rdf:about, '#'))"/>
+							</xsl:when>					
+							<xsl:otherwise>
+								<xsl:value-of select="skos:prefLabel[@xml:lang = 'en']"/>
+							</xsl:otherwise>
+						</xsl:choose>
+					</xsl:when>
+					<xsl:otherwise>[blank node]</xsl:otherwise>
+				</xsl:choose>
+				
+				
+				<small>
+					<xsl:text> (</xsl:text>
+					<a href="{concat(namespace-uri(.), local-name())}">
+						<xsl:value-of select="kerameikos:normalizeCurie(name())"/>
+					</a>
+					<xsl:if test="rdf:type">
+						<xsl:text>, </xsl:text>
+						<xsl:apply-templates select="rdf:type" mode="normalize-class"/>
+					</xsl:if>
+					<xsl:text>)</xsl:text>
+				</small>
+			</xsl:element>
+			
+			
+			
+			<xsl:if test="skos:prefLabel">
+				<div class="section">
+					<h4>Labels</h4>
+					<dl class="dl-horizontal">
+						<dt>
+							<a href="{concat($namespaces//namespace[@prefix='skos']/@uri, 'prefLabel')}" title="skos:prefLabel">
+								<xsl:value-of select="kerameikos:normalizeCurie('skos:prefLabel')"/>
+							</a>
+						</dt>
+						<dd>
+							<xsl:apply-templates select="skos:prefLabel[lang('en') or lang('fr') or lang('de') or lang('el') or lang('it')]" mode="prefLabel"/>
+							<!--<xsl:if test="skos:prefLabel[not(lang('en') or lang('fr') or lang('de') or lang('el') or lang('it'))]">
+						<xsl:apply-templates select="skos:prefLabel[not(lang('en') or lang('fr') or lang('de') or lang('el') or lang('it'))]" mode="prefLabel">
+							<xsl:sort select="@xml:lang"/>
+						</xsl:apply-templates>
+					</xsl:if>-->
+							
+						</dd>
+						
+						<xsl:apply-templates select="skos:altLabel" mode="human-readable">
+							<xsl:sort select="@xml:lang"/>
+						</xsl:apply-templates>
+						
+						
+						<xsl:if test="ontolex:otherForm">
+							<dt>
+								<a href="{concat($namespaces//namespace[@prefix='lexinfo']/@uri, 'plural')}" title="lexinfo:plural">
+									<xsl:value-of select="kerameikos:normalizeCurie('lexinfo:plural')"/></a>
+							</dt>
+							<dd>
+								<xsl:apply-templates select="ontolex:otherForm/ontolex:Form/ontolex:writtenRep" mode="prefLabel">
+									<xsl:sort select="@xml:lang"/>
+								</xsl:apply-templates>
+							</dd>
+						</xsl:if>
+					</dl>	
+				</div>
+							
+			</xsl:if>
+			
+			<xsl:if test="skos:definition">
+				<div class="section">
+					<h4>Definitions</h4>
+					
+					<dl class="dl-horizontal">
+						<xsl:apply-templates select="skos:definition" mode="human-readable"/>
+						
+					</dl>
+					
+				</div>
+			</xsl:if>
+			
+			<xsl:if test="skos:exactMatch or skos:closeMatch or skos:related or skos:broader">
+				<div class="section">
+					<h4>Relations</h4>
+					
+					<dl class="dl-horizontal">
+						<xsl:apply-templates select="skos:exactMatch|skos:broader|skos:closeMatch|skos:related|dcterms:isPartOf|dcterms:source" mode="human-readable">
+							<xsl:sort select="local-name()"/>
+							<xsl:sort select="@rdf:resource"/>
+						</xsl:apply-templates>
+					</dl>
+				</div>
+			</xsl:if>
+			
+			<!-- TODO: location, miscellaneous -->
+		</div>
+	</xsl:template>
+	
 	<xsl:template match="skos:prefLabel | ontolex:writtenRep" mode="prefLabel">
 		<span property="{name()}" xml:lang="{@xml:lang}">
 			<xsl:value-of select="."/>
@@ -18,6 +134,44 @@
 		<xsl:if test="not(position() = last())">
 			<xsl:text>, </xsl:text>
 		</xsl:if>
+	</xsl:template>	
+		
+	<xsl:template match="skos:definition" mode="human-readable">
+		<dt>
+			<xsl:value-of select="@xml:lang"/>
+		</dt>
+		<dd property="{name()}" lang="{@xml:lang}">
+			<xsl:value-of select="."/>
+		</dd>
+	</xsl:template>
+	
+	<xsl:template match="skos:* | dcterms:source | dcterms:isPartOf" mode="human-readable">
+		<dt>
+			<a href="{concat(namespace-uri(), local-name())}" title="{name()}">
+				<xsl:value-of select="kerameikos:normalizeCurie(name())"/></a>
+		</dt>
+		<dd property="{name()}">
+			<xsl:if test="@xml:lang">
+				<xsl:attribute name="lang" select="@xml:lang"/>
+			</xsl:if>
+			
+			<xsl:choose>
+				<xsl:when test="@rdf:resource">
+					<a href="{@rdf:resource}">
+						<xsl:value-of select="@rdf:resource"/>
+					</a>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="."/>
+				</xsl:otherwise>
+			</xsl:choose>
+			
+			<xsl:if test="string(@xml:lang)">
+				<span class="lang">
+					<xsl:value-of select="concat(' (', @xml:lang, ')')"/>
+				</span>
+			</xsl:if>
+		</dd>
 	</xsl:template>
 
 	<xsl:template match="*" mode="type">
@@ -38,27 +192,9 @@
 				<xsl:choose>
 					<xsl:when test="@rdf:about">
 						<!-- display the full URI if the template is called from the SPARQL HTML results page -->
-						<xsl:choose>
-							<xsl:when test="$mode = 'sparql'">
-								<a href="{@rdf:about}">
-									<xsl:value-of select="@rdf:about"/>
-								</a>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:choose>
-									<xsl:when test="contains(@rdf:about, '#')">
-										<xsl:value-of select="concat('#', substring-after(@rdf:about, '#'))"/>
-									</xsl:when>
-									<xsl:when test="contains(@rdf:about, 'geonames.org')">
-										<xsl:value-of select="@rdf:about"/>
-									</xsl:when>
-									<xsl:otherwise>
-										<xsl:value-of select="skos:prefLabel[@xml:lang = 'en']"/>
-									</xsl:otherwise>
-								</xsl:choose>
-							</xsl:otherwise>
-						</xsl:choose>
-
+						<a href="{@rdf:about}">
+							<xsl:value-of select="@rdf:about"/>
+						</a>
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:text>[blank node]</xsl:text>
@@ -70,6 +206,10 @@
 					<a href="{concat(namespace-uri(.), local-name())}">
 						<xsl:value-of select="kerameikos:normalizeCurie(name())"/>
 					</a>
+					<xsl:if test="rdf:type">
+						<xsl:text>, </xsl:text>
+						<xsl:apply-templates select="rdf:type" mode="normalize-class"/>
+					</xsl:if>
 					<xsl:text>)</xsl:text>
 				</small>
 			</xsl:element>
@@ -80,46 +220,7 @@
 			
 
 			<dl class="dl-horizontal">
-				<xsl:if test="not($mode = 'sparql')">
-					<xsl:if test="skos:prefLabel">
-						<dt>
-							<a href="{concat($namespaces//namespace[@prefix='skos']/@uri, 'prefLabel')}">
-								<xsl:value-of select="kerameikos:normalizeCurie('skos:prefLabel')"/>
-							</a>
-						</dt>
-						<dd>
-							<xsl:apply-templates select="skos:prefLabel[lang('en') or lang('fr') or lang('de') or lang('el') or lang('it')]" mode="prefLabel">
-								<xsl:sort select="@xml:lang"/>
-							</xsl:apply-templates>
-						</dd>
-					</xsl:if>
-					
-					<!--<xsl:if test="skos:prefLabel[not(lang('en') or lang('fr') or lang('de') or lang('el') or lang('it'))]">
-						<xsl:apply-templates select="skos:prefLabel[not(lang('en') or lang('fr') or lang('de') or lang('el') or lang('it'))]" mode="prefLabel">
-							<xsl:sort select="@xml:lang"/>
-						</xsl:apply-templates>
-					</xsl:if>-->
-					
-					
-					
-					<xsl:if test="ontolex:otherForm">
-						<dt>
-							<a href="{concat($namespaces//namespace[@prefix='lexinfo']/@uri, 'plural')}">
-								<xsl:value-of select="kerameikos:normalizeCurie('lexinfo:plural')"/></a>
-						</dt>
-						<dd>
-							<xsl:apply-templates select="ontolex:otherForm/ontolex:Form/ontolex:writtenRep" mode="prefLabel">
-								<xsl:sort select="@xml:lang"/>
-							</xsl:apply-templates>
-						</dd>
-					</xsl:if>
-					
-					
-					
-					<xsl:apply-templates select="skos:definition" mode="list-item">
-						<xsl:sort select="@xml:lang"/>
-					</xsl:apply-templates>
-				</xsl:if>
+				
 
 				<!-- choose the method of sorting -->
 				<xsl:choose>
@@ -130,22 +231,11 @@
 					</xsl:when>
 					<xsl:otherwise>
 						<!-- display all properties sorted in order in the SPARQL HTML page, otherwise display other properties after the prefLabels and definitions -->
-						<xsl:choose>
-							<xsl:when test="$mode = 'sparql'">
-								<xsl:apply-templates mode="list-item">
-									<xsl:sort select="name()"/>
-									<xsl:sort select="@rdf:resource"/>
-									<xsl:sort select="@xml:lang"/>
-								</xsl:apply-templates>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:apply-templates select="*[not(name() = 'skos:prefLabel') and not(name() = 'skos:definition')]" mode="list-item">
-									<xsl:sort select="name()"/>
-									<xsl:sort select="@rdf:resource"/>
-									<xsl:sort select="@xml:lang"/>
-								</xsl:apply-templates>
-							</xsl:otherwise>
-						</xsl:choose>
+						<xsl:apply-templates mode="list-item">
+							<xsl:sort select="name()"/>
+							<xsl:sort select="@rdf:resource"/>
+							<xsl:sort select="@xml:lang"/>
+						</xsl:apply-templates>
 					</xsl:otherwise>
 				</xsl:choose>
 			</dl>
@@ -154,6 +244,20 @@
 	
 	<!-- additional RDF types do not need to be displayed -->
 	<xsl:template match="rdf:type" mode="list-item"/>
+	
+	<xsl:template match="rdf:type" mode="normalize-class">
+		<xsl:variable name="uri" select="@rdf:resource"/>
+		
+		<a href="{@rdf:resource}">
+			<xsl:value-of
+				select="kerameikos:normalizeCurie(replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':')))"
+			/>
+		</a>
+		
+		<xsl:if test="not(position() = last())">
+			<xsl:text>, </xsl:text>
+		</xsl:if>
+	</xsl:template>
 
 	<xsl:template match="*" mode="list-item">
 		<xsl:variable name="name" select="name()"/>
@@ -200,17 +304,7 @@
 						<xsl:when test="string(@rdf:resource)">
 							<span>
 								<a href="{@rdf:resource}" rel="{name()}" title="{@rdf:resource}">
-									<xsl:choose>
-										<xsl:when test="name() = 'rdf:type'">
-											<xsl:variable name="uri" select="@rdf:resource"/>
-											<xsl:value-of
-												select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"
-											/>
-										</xsl:when>
-										<xsl:otherwise>
-											<xsl:value-of select="@rdf:resource"/>
-										</xsl:otherwise>
-									</xsl:choose>
+									<xsl:value-of select="@rdf:resource"/>
 								</a>
 							</span>
 						</xsl:when>
@@ -221,6 +315,6 @@
 	</xsl:template>
 
 	<!-- hide the ontolex:otherFrom from the HTML output: plural displayed after prefLabel -->
-	<xsl:template match="ontolex:otherForm" mode="list-item"/>
+	<!--<xsl:template match="ontolex:otherForm" mode="list-item"/>-->
 
 </xsl:stylesheet>
