@@ -669,17 +669,18 @@ WHERE {
 								origin="xforms:element('kon:hasStyle', (xforms:attribute('rdf:resource', $match)))"/>
 						</xforms:action>
 
-						<!-- create material and technique properties -->
-						<xforms:action xxforms:iterate="context()/made_of/_|context()/technique/_">
+						<!-- create material property -->
+						<xforms:action xxforms:iterate="context()/made_of/_">
 							<xforms:var name="uri" select="context()/id"/>
-							<xforms:var name="element"
-								select="if (ancestor::node()/name() = 'made_of') then 'crm:P45_consists_of' else 'crm:P32_used_general_technique'"/>
+							
 							<xforms:var name="match"
 								select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
 
 							<xforms:insert context="instance('object')" nodeset="./child::node()[last()]"
-								origin="xforms:element($element, (xforms:attribute('rdf:resource', $match)))"/>
+								origin="xforms:element('crm:P45_consists_of', (xforms:attribute('rdf:resource', $match)))"/>
 						</xforms:action>
+						
+						
 
 						<!-- begin processing production event, if applicable -->
 						<xforms:action if="context()/produced_by">
@@ -700,6 +701,19 @@ WHERE {
 											origin="xforms:element('crm:P14_carried_out_by', (xforms:attribute('rdf:resource', $match)))"/>
 									</xforms:action>
 								</xforms:action>
+								
+								<xforms:action xxforms:iterate="$property = 'technique'">
+									<xforms:action xxforms:iterate="context()/_">
+										<xforms:var name="uri" select="context()/id"/>
+										<xforms:var name="match"
+											select="if (instance('mappings')/mapping[@from = $uri]/@to) then instance('mappings')/mapping[@from = $uri]/@to else $uri"/>
+										
+										<xforms:insert context="instance('object')/crm:P108i_was_produced_by/crm:E12_Production"
+											nodeset="./child::node()[last()]"
+											origin="xforms:element('crm:P32_used_general_technique', (xforms:attribute('rdf:resource', $match)))"/>
+									</xforms:action>
+								</xforms:action>	
+								
 								<xforms:action if="$property = 'took_place_at'">
 									<xforms:action xxforms:iterate="context()/_">
 										<xforms:var name="uri" select="context()/id"/>

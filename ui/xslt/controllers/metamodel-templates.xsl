@@ -83,7 +83,9 @@
                     <select variables="?{$id}">
                         <triple s="{$object}" p="skos:exactMatch" o="?{$id}"/>
                     </select>
-                    <triple s="{$subject}" p="crm:P32_used_general_technique" o="?{$id}"/>
+                    
+                    <triple s="{$subject}" p="crm:P108i_was_produced_by" o="?prod"/>
+                    <triple s="?prod" p="crm:P32_used_general_technique" o="?{$id}"/>
                 </xsl:when>
                 <!--<xsl:when test="$property = 'from'">
 										<xsl:if test="$object castable as xs:integer">
@@ -140,7 +142,7 @@
                 <triple s="?object" p="kon:hasShape" o="{$object}"/>
             </xsl:when>
             <xsl:when test="$dist='technique'">
-                <triple s="?object" p="crm:P32_used_general_technique" o="{$object}"/>
+                <triple s="?prod" p="crm:P32_used_general_technique" o="{$object}"/>
             </xsl:when>
         </xsl:choose>
     </xsl:template>
@@ -204,7 +206,9 @@
                         <xsl:with-param name="type" select="$type"/>
                     </xsl:call-template>
                     
-                    <triple s="?object" p="crm:P32_used_general_technique" o="?m"/>
+                    
+                    <triple s="?object" p="crm:P108i_was_produced_by" o="?prod"/>
+                    <triple s="?prod" p="crm:P32_used_general_technique" o="?m"/>
                     
                     <xsl:call-template name="kerameikos:findspotLocations"/>
                 </xsl:when>
@@ -307,10 +311,10 @@
                     <xsl:call-template name="kerameikos:matchingConcepts">
                         <xsl:with-param name="id" select="$id"/>
                         <xsl:with-param name="type" select="$type"/>
-                    </xsl:call-template>
+                    </xsl:call-template>                    
                     
-                    <triple s="?object" p="crm:P32_used_general_technique" o="?m"/>
                     <triple s="?object" p="crm:P108i_was_produced_by" o="?prod"/>
+                    <triple s="?prod" p="crm:P32_used_general_technique" o="?m"/>
                     
                     <xsl:call-template name="kerameikos:matchingPlaces"/>
                     
@@ -395,7 +399,8 @@
                         <xsl:with-param name="type" select="$type"/>
                     </xsl:call-template>
                     
-                    <triple s="?object" p="crm:P32_used_general_technique" o="?m"/>
+                    <triple s="?object" p="crm:P108i_was_produced_by" o="?prod"/>
+                    <triple s="?prod" p="crm:P32_used_general_technique" o="?m"/>
                 </xsl:when>
                 
                 <xsl:when test="$type = 'foaf:Person'">
