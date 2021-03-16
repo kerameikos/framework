@@ -283,6 +283,9 @@
 				<span id="type">
 					<xsl:value-of select="$type"/>
 				</span>
+				<span id="id">
+					<xsl:value-of select="$id"/>
+				</span>
 				<span id="page">
 					<xsl:value-of select="$mode"/>
 				</span>

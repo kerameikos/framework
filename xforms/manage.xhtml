@@ -236,7 +236,11 @@ DELETE {?s ?p ?o} WHERE {
     crm:P7_took_place_at ?s . ?s ?p ?o }
 UNION { ?object void:inDataset <DATASET> ;
     crm:P108i_was_produced_by ?prod .
-  ?prod crm:P4_has_time-span ?s . ?s ?p ?o }
+  ?prod crm:P9_consists_of/crm:P14_carried_out_by ?s .
+  ?s crm:P15_was_influenced_by ?artist . ?s ?p ?o }
+UNION { ?object void:inDataset <DATASET> ;
+    crm:P108i_was_produced_by ?prod .
+  ?prod crm:P4_has_time-span|crm:P9_consists_of ?s . ?s ?p ?o }
 UNION { ?object void:inDataset <DATASET> ;
     crm:P108i_was_produced_by|crm:P1_is_identified_by|crm:P43_has_dimension|crm:P138i_has_representation|crm:P129i_is_subject_of|crmsci:O19i_was_object_found_by ?s . ?s ?p ?o }
 UNION { ?s void:inDataset <DATASET> . ?s ?p ?o}
@@ -965,7 +969,7 @@ WHERE {
 					<xforms:switch>
 						<xforms:case id="default">
 							<xforms:group ref="instance('datasets')">
-								<xforms:group ref=".[count(void:Dataset) &gt; 0]">
+								<xforms:group ref=".[count(rdf:Description) &gt; 0]">
 									<table class="table">
 										<thead>
 											<tr>
@@ -976,7 +980,7 @@ WHERE {
 											</tr>
 										</thead>
 										<tbody>
-											<xforms:repeat nodeset="descendant::void:Dataset">
+											<xforms:repeat nodeset="descendant::rdf:Description">
 												<tr>
 													<td>
 														<xforms:trigger appearance="minimal">
@@ -1474,7 +1478,7 @@ WHERE {
 							</xforms:group>
 						</xforms:case>
 					</xforms:switch>
-					<fr:xforms-inspector/>
+					<!--<fr:xforms-inspector/>-->
 				</div>
 			</div>
 		</div>

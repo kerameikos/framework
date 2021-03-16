@@ -1,0 +1,17 @@
+PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX dcterms:	<http://purl.org/dc/terms/>
+PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX kid:	<http://kerameikos.org/id/>
+PREFIX kon:	<http://kerameikos.org/ontology#>
+
+SELECT (count(?object) as ?count) WHERE {
+%STATEMENTS%
+?object crm:P1_is_identified_by ?id1 ;
+    crm:P1_is_identified_by ?id2 .
+?id1 a crm:E33_E41_Linguistic_Appellation ;
+    crm:P190_has_symbolic_content ?title .
+?id2 a crm:E42_Identifier ;
+    crm:P190_has_symbolic_content ?id .
+?object crm:P138i_has_representation ?representation
+}

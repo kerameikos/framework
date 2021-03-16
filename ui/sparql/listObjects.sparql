@@ -9,8 +9,8 @@ CONSTRUCT {?object a crm:E22_Man-Made_Object ;
             dcterms:title ?title ;
             dcterms:identifier ?id ;
             dcterms:publisher ?keeper; 
-            crm:P138i_has_representation ?representation ;
-            crm:P129i_is_subject_of ?manifest .
+            crm:P129i_is_subject_of ?manifest ;            
+            crm:P138i_has_representation ?representation .
           ?representation dcterms:format ?format ;
             dcterms:conformsTo ?conformsTo} WHERE {
 %STATEMENTS%
@@ -21,8 +21,8 @@ CONSTRUCT {?object a crm:E22_Man-Made_Object ;
 ?id2 a crm:E42_Identifier ;
     crm:P190_has_symbolic_content ?id .
 OPTIONAL {?object crm:P50_has_current_keeper/skos:prefLabel ?keeper FILTER (langMatches(lang(?keeper), "en"))} 
-OPTIONAL {?object crm:P138i_has_representation ?representation
+?object crm:P138i_has_representation ?representation
 	OPTIONAL {?representation dcterms:format ?format}
-	OPTIONAL {?representation dcterms:conformsTo ?conformsTo}}
+	OPTIONAL {?representation dcterms:conformsTo ?conformsTo}
 OPTIONAL {?object crm:P129i_is_subject_of ?manifest}
 }

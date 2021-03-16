@@ -1,4 +1,5 @@
 PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs:    <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX dcterms:	<http://purl.org/dc/terms/>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 PREFIX owl:	<http://www.w3.org/2002/07/owl#>
@@ -12,9 +13,11 @@ PREFIX kon:	<http://kerameikos.org/ontology#>
 PREFIX osgeo:	<http://data.ordnancesurvey.co.uk/ontology/geometry/>
 PREFIX edm:	<http://www.europeana.eu/schemas/edm/>
 
-SELECT DISTINCT ?place ?label ?lat ?long WHERE {
+SELECT DISTINCT ?place ?label ?lat ?long (count(?place) as ?count) WHERE {
 %STATEMENTS%
+?place a crm:E53_Place ;
+    rdfs:label ?label ;
+    geo:location ?loc .
 ?loc geo:lat ?lat ;
        geo:long ?long
-  OPTIONAL {?place skos:prefLabel ?label FILTER (langMatches(lang(?label), "en"))}
-} 
+} GROUP BY ?place ?label ?lat ?long

@@ -85,16 +85,33 @@ $(document).ready(function () {
     //if there is a div with a id=listObjects, then initiate ajax call
     if ($('#listObjects').length > 0) {
         var path = '../';
-        var id = $('title').attr('id');
+        var id = $('#id').text();
         var type = $('#type').text();
+        var page = 1;
         
         $.get(path + 'ajax/listObjects', {
-            id: id, type: type
+            id: id, type: type, page: page
         },
         function (data) {
             $('#listObjects').html(data);
         });
     }
+    
+    $('#listObjects').on('click', '.paging_div .page-nos .btn-toolbar .btn-group a.btn', function (event) {        
+        var path = '../';
+        var id = $('#id').text();
+        var type = $('#type').text();        
+        var page = $(this).attr('href').split('=')[1];
+        
+        
+        $.get(path + 'ajax/listObjects', {
+            id: id, type: type, page: page
+        },
+        function (data) {
+            $('#listObjects').html(data);
+        });
+        return false;
+    });
     
     function render_image(manifest) {
         
@@ -107,7 +124,7 @@ $(document).ready(function () {
         // Grab a IIIF manifest
         $.getJSON(manifest, function (data) {
             //determine where it is a collection or image manifest
-            if (data[ '@context'] == 'http://iiif.io/api/image/2/context.json') {
+            if (data[ '@context'] == 'http://iiif.io/api/image/2/context.json' || data[ '@context'] == 'http://library.stanford.edu/iiif/image-api/1.1/context.json') {
                 L.tileLayer.iiif(manifest).addTo(iiifImage);
             } else if (data[ '@context'] == 'http://iiif.io/api/presentation/2/context.json') {
                 var iiifLayers = {
