@@ -75,7 +75,7 @@
 					<xsl:value-of select="res:binding[@name = 'label']/res:literal"/>
 				</xsl:element>
 				<xsl:element name="uri">
-					<xsl:value-of select="res:binding[@name = 'concept']/res:uri"/>
+					<xsl:value-of select="res:binding[@name = 'dist']/res:uri"/>
 				</xsl:element>
 				<xsl:if test="$dist = 'kon:ProductionPlace'">
 					<xsl:element name="lat">

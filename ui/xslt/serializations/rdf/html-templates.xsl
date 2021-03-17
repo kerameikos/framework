@@ -41,7 +41,7 @@
 
 				<small>
 					<xsl:text> (</xsl:text>
-					<a href="{concat(namespace-uri(.), local-name())}">
+					<a href="{concat(namespace-uri(.), local-name())}" title="{name()}">
 						<xsl:value-of select="kerameikos:normalizeCurie(name())"/>
 					</a>
 					<xsl:if test="rdf:type">
@@ -126,6 +126,16 @@
 				</div>
 			</xsl:if>
 			
+			<xsl:if test="crm:P4_has_time-span">
+				<div class="section">
+					<h4>Time Span</h4>
+					
+					<dl class="dl-horizontal">
+						<xsl:apply-templates select="crm:P4_has_time-span" mode="human-readable"/>
+					</dl>					
+				</div>
+			</xsl:if>
+			
 			<xsl:apply-templates select="geo:location" mode="human-readable"/>
 
 			<xsl:if test="org:hasMembership">
@@ -155,6 +165,26 @@
 
 			<!-- TODO: location, miscellaneous -->
 		</div>
+	</xsl:template>
+	
+	<xsl:template match="crm:P4_has_time-span" mode="human-readable">
+		<dt>
+			<a href="{concat(namespace-uri(), local-name())}" title="{name()}">Date</a>
+		</dt>
+		<dd>
+			<span property="crm:E52_Time-Span">
+				<xsl:apply-templates select="crm:E52_Time-Span/crm:P82a_begin_of_the_begin" mode="human-readable"/>
+				<xsl:text> - </xsl:text>
+				<xsl:apply-templates select="crm:E52_Time-Span/crm:P82b_end_of_the_end" mode="human-readable"/>
+			</span>
+		</dd>		
+	</xsl:template>
+	
+	<!-- date rendering -->
+	<xsl:template match="edm:begin | edm:end | crm:P82a_begin_of_the_begin | crm:P82b_end_of_the_end" mode="human-readable">
+		<span property="{name()}" content="{.}" datatype="xsd:gYear">
+			<xsl:value-of select="kerameikos:normalizeYear(.)"/>
+		</span>
 	</xsl:template>
 	
 	<xsl:template match="geo:location" mode="human-readable">
@@ -326,10 +356,11 @@
 
 	<xsl:template match="rdf:type" mode="normalize-class">
 		<xsl:variable name="uri" select="@rdf:resource"/>
+		<xsl:variable name="curie" select="replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':'))"/>
 
-		<a href="{@rdf:resource}">
+		<a href="{@rdf:resource}" title="{$curie}">
 			<xsl:value-of
-				select="kerameikos:normalizeCurie(replace($uri, $namespaces//namespace[contains($uri, @uri)]/@uri, concat($namespaces//namespace[contains($uri, @uri)]/@prefix, ':')))"
+				select="kerameikos:normalizeCurie($curie)"
 			/>
 		</a>
 

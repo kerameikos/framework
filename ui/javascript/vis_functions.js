@@ -50,7 +50,8 @@ $(document).ready(function () {
             };
             urlParams[ 'dist'] = $('select[name=dist]').val();
             urlParams[ 'filter'] = $('input[name=filter]').val();
-            urlParams[ 'type'] = $('input[name=type]').val();
+            urlParams[ 'type'] = $('input[name=type]:checked').val();
+            
             //if there are compare queries
             if ($('input[name=compare]').length > 0) {
                 compare = new Array();

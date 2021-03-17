@@ -177,12 +177,12 @@
 				<properties>
 					<prop value="keeper" class="crm:E40_Legal_Body">Collection</prop>
 					<prop value="material" class="crm:E57_Material">Material</prop>
+					<prop value="painter" class="foaf:Person|foaf:Group">Painter</prop>
 					<prop value="period" class="crm:E4_Period">Period</prop>
-					<prop value="person" class="foaf:Person">Person</prop>
+					<prop value="pottery" class="foaf:Person|foaf:Group">Potter</prop>					
 					<prop value="productionPlace" class="kon:ProductionPlace">Production Place</prop>
 					<prop value="shape" class="kon:Shape">Shape</prop>
-					<prop value="technique" class="kon:Technique">Technique</prop>
-					<prop value="workshop" class="foaf:Group|foaf:Person">Workshop</prop>					
+					<prop value="technique" class="kon:Technique">Technique</prop>										
 				</properties>
 			</xsl:variable>
 
@@ -370,12 +370,12 @@
 			<!--	<prop value="from">Date, From</prop>
 				<prop value="to">Date, To</prop>-->
 				<prop value="material" class="crm:E57_Material">Material</prop>
+				<prop value="painter" class="foaf:Group|foaf:Person">Painter</prop>
 				<prop value="period" class="crm:E4_Period">Period</prop>
-				<prop value="person" class="foaf:Person">Person</prop>
+				<prop value="potter" class="foaf:Group|foaf:Person">Potter</prop>
 				<prop value="productionPlace" class="kon:ProductionPlace">Production Place</prop>
 				<prop value="shape" class="kon:Shape">Shape</prop>
-				<prop value="technique" class="kon:Technique">Technique</prop>
-				<prop value="workshop" class="foaf:Group|foaf:Person">Workshop</prop>					
+				<prop value="technique" class="kon:Technique">Technique</prop>									
 			</properties>			
 		</xsl:variable>
 

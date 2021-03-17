@@ -6,6 +6,7 @@ PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
 PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX org: <http://www.w3.org/ns/org#>
 PREFIX xsd:	<http://www.w3.org/2001/XMLSchema#>
 
 SELECT DISTINCT ?dist ?label ?lat ?long (count(?dist) as ?count)  WHERE {

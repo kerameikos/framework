@@ -27,12 +27,20 @@
                     <triple s="{$subject}" p="crm:P108i_was_produced_by" o="?prod"/>
                     <triple s="?prod" p="crm:P10_falls_within" o="{$object}"/>
                 </xsl:when>
-                <xsl:when test="$property = 'person' or $property = 'workshop'">
+                <xsl:when test="$property = 'painter' or $property = 'potter'">
                     <triple s="{$subject}" p="crm:P108i_was_produced_by" o="?prod"/>
                     <union>
                         <triple s="?prod" p="crm:P14_carried_out_by" o="{$object}"/>
-                        <triple s="?prod" p="crm:P9_consists_of/crm:P14_carried_out_by" o="{$object}"/>
+                        <triple s="?prod" p="crm:P9_consists_of/crm:P14_carried_out_by" o="{$object}"/>                        
                     </union>
+                    <xsl:choose>
+                        <xsl:when test="$property = 'painter'">
+                            <triple s="{$object}" p="org:hasMembership/org:role" o="kid:painter"/>
+                        </xsl:when>
+                        <xsl:when test="$property = 'potter'">
+                            <triple s="{$object}" p="org:hasMembership/org:role" o="kid:potter"/>
+                        </xsl:when>
+                    </xsl:choose>
                 </xsl:when>
                 <xsl:when test="$property = 'productionPlace'">
 
@@ -99,11 +107,19 @@
             <xsl:when test="$dist = 'period'">
                 <triple s="?prod" p="crm:P10_falls_within" o="{$object}"/>
             </xsl:when>
-            <xsl:when test="$dist = 'person' or $dist = 'workshop'">
+            <xsl:when test="$dist = 'painter' or $dist = 'potter'">
                 <union>
                     <triple s="?prod" p="crm:P14_carried_out_by" o="{$object}"/>
                     <triple s="?prod" p="crm:P9_consists_of/crm:P14_carried_out_by" o="{$object}"/>
                 </union>
+                <xsl:choose>
+                    <xsl:when test="$dist = 'painter'">
+                        <triple s="{$object}" p="org:hasMembership/org:role" o="kid:painter"/>
+                    </xsl:when>
+                    <xsl:when test="$dist = 'potter'">
+                        <triple s="{$object}" p="org:hasMembership/org:role" o="kid:potter"/>
+                    </xsl:when>
+                </xsl:choose>
             </xsl:when>
             <xsl:when test="$dist = 'productionPlace'">
                 <triple s="?prod" p="crm:P7_took_place_at" o="{$object}"/>

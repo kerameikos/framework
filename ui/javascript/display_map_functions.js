@@ -106,7 +106,7 @@ function initialize_map(id) {
     });
     
     //zoom to groups on AJAX complete
-    productionLayer.on('data:loaded', function () {
+    productionLayer.on('data:loaded', function (data) {
         var group = new L.featureGroup([productionLayer, findLayer]);
         map.fitBounds(group.getBounds());
     }.bind(this));    

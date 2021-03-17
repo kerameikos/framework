@@ -56,7 +56,7 @@
 
 		<xsl:choose>
 			<xsl:when test="number($year) &lt;= 0">
-				<xsl:value-of select="abs(number($year) - 1)"/>
+				<xsl:value-of select="abs(number($year))"/>
 				<xsl:text> BCE</xsl:text>
 			</xsl:when>
 			<xsl:otherwise>				
@@ -152,6 +152,7 @@
 			<xsl:when test="$curie = 'kon:ProductionPlace'">Production Place</xsl:when>
 			
 			<!-- properties -->
+			<xsl:when test="$curie = 'crm:P4_has_time-span'">Time Span</xsl:when>
 			<xsl:when test="$curie = 'edm:begin'">Begin</xsl:when>
 			<xsl:when test="$curie = 'edm:end'">End</xsl:when>
 			<xsl:when test="$curie = 'geo:lat'">Latitude</xsl:when>
