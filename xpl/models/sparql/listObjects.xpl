@@ -2,7 +2,7 @@
 <!--
 	Author: Ethan Gruber
 	Date: March 2021
-	Function: Generate an XML metamodel to execute the SPARQL query for the object list of vases associated with a particular SKOS concept.
+	Function: Generate an XML metamodel to execute the SPARQL query for the object list of vases associated with a particular SKOS concept, with pagination (48 per page)
 -->
 <p:config xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 

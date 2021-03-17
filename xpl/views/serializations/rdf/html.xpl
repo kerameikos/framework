@@ -181,7 +181,7 @@
 								<class>crm:E4_Period</class>
 								<class>crm:E57_Material</class>
 								<class>crm:E40_Legal_Body</class>
-								<class>foaf:Organization</class>
+								<class>foaf:Group</class>
 								<class>foaf:Person</class>
 								<class>kon:ProductionPlace</class>
 								<class>kon:Shape</class>
@@ -196,7 +196,7 @@
 								<class>crm:E4_Period</class>
 								<class>crm:E57_Material</class>
 								<class>crm:E40_Legal_Body</class>
-								<class>foaf:Organization</class>
+								<class>foaf:Group</class>
 								<class>foaf:Person</class>
 								<class>kon:ProductionPlace</class>
 								<class>kon:Shape</class>
@@ -211,7 +211,7 @@
 								<class>crm:E4_Period</class>
 								<class>crm:E57_Material</class>
 								<class>crm:E40_Legal_Body</class>
-								<class>foaf:Organization</class>
+								<class>foaf:Group</class>
 								<class>foaf:Person</class>
 								<class>kon:ProductionPlace</class>
 								<class>kon:Shape</class>

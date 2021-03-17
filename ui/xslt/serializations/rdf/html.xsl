@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
-	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/" xmlns:org="http://www.w3.org/ns/org#"
 	xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 	xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/"
 	xmlns:prov="http://www.w3.org/ns/prov#" exclude-result-prefixes="#all" version="2.0">
@@ -59,6 +59,10 @@
 			<class>
 				<label>Institution</label>
 				<type>crm:E40_Legal_Body</type>
+			</class>
+			<class>
+				<label>Group</label>
+				<type>foaf:Group</type>
 			</class>
 			<class>
 				<label>Material</label>
@@ -224,7 +228,7 @@
 										</a>
 									</small>
 								</h2>
-
+								<p>These objects are associated by artist signature or scholarly attribution by analyzing artistic similarities.</p>
 								<div id="listObjects"/>
 							</div>
 						</div>
@@ -340,7 +344,7 @@
 
 		<div class="row">
 			<div class="col-md-12">
-				<xsl:apply-templates select="/content/rdf:RDF/*[not(name() = 'dcterms:ProvenanceStatement')]" mode="human-readable">
+				<xsl:apply-templates select="/content/rdf:RDF/*[1]" mode="human-readable">
 					<xsl:with-param name="mode">record</xsl:with-param>
 				</xsl:apply-templates>
 
@@ -349,7 +353,7 @@
 					<h3>
 						<xsl:text>Data Provenance</xsl:text>
 						<small>
-							<a href="#" class="toggle-button" id="toggle-provenance" title="Click to hide or show the analysis form">
+							<a href="#" class="toggle-button" id="toggle-provenance" title="Click to hide or show the provenance">
 								<span class="glyphicon glyphicon-triangle-right"/>
 							</a>
 						</small>

@@ -29,7 +29,10 @@
                 </xsl:when>
                 <xsl:when test="$property = 'person' or $property = 'workshop'">
                     <triple s="{$subject}" p="crm:P108i_was_produced_by" o="?prod"/>
-                    <triple s="?prod" p="crm:P14_carried_out_by" o="{$object}"/>
+                    <union>
+                        <triple s="?prod" p="crm:P14_carried_out_by" o="{$object}"/>
+                        <triple s="?prod" p="crm:P9_consists_of/crm:P14_carried_out_by" o="{$object}"/>
+                    </union>
                 </xsl:when>
                 <xsl:when test="$property = 'productionPlace'">
 
@@ -97,7 +100,10 @@
                 <triple s="?prod" p="crm:P10_falls_within" o="{$object}"/>
             </xsl:when>
             <xsl:when test="$dist = 'person' or $dist = 'workshop'">
-                <triple s="?prod" p="crm:P14_carried_out_by" o="{$object}"/>
+                <union>
+                    <triple s="?prod" p="crm:P14_carried_out_by" o="{$object}"/>
+                    <triple s="?prod" p="crm:P9_consists_of/crm:P14_carried_out_by" o="{$object}"/>
+                </union>
             </xsl:when>
             <xsl:when test="$dist = 'productionPlace'">
                 <triple s="?prod" p="crm:P7_took_place_at" o="{$object}"/>
@@ -177,14 +183,17 @@
                     <xsl:call-template name="kerameikos:findspotLocations"/>
                 </xsl:when>
 
-                <xsl:when test="$type = 'foaf:Person'">
+                <xsl:when test="$type = 'foaf:Person' or $type = 'foaf:Group'">
                     <xsl:call-template name="kerameikos:matchingConcepts">
                         <xsl:with-param name="id" select="$id"/>
                         <xsl:with-param name="type" select="$type"/>
                     </xsl:call-template>
 
                     <triple s="?object" p="crm:P108i_was_produced_by" o="?prod"/>
-                    <triple s="?prod" p="crm:P14_carried_out_by" o="?m"/>
+                    <union>
+                        <triple s="?prod" p="crm:P14_carried_out_by" o="?m"/>
+                        <triple s="?prod" p="crm:P9_consists_of/crm:P14_carried_out_by" o="?m"/>
+                    </union>
 
                     <xsl:call-template name="kerameikos:findspotLocations"/>
                 </xsl:when>
@@ -276,14 +285,17 @@
                     <triple s="?place" p="geo:location" o="?loc"/>
                 </xsl:when>
 
-                <xsl:when test="$type = 'foaf:Person'">
+                <xsl:when test="$type = 'foaf:Person' or $type = 'foaf:Group'">
                     <xsl:call-template name="kerameikos:matchingConcepts">
                         <xsl:with-param name="id" select="$id"/>
                         <xsl:with-param name="type" select="$type"/>
                     </xsl:call-template>
 
                     <triple s="?object" p="crm:P108i_was_produced_by" o="?prod"/>
-                    <triple s="?prod" p="crm:P14_carried_out_by" o="?m"/>
+                    <union>
+                        <triple s="?prod" p="crm:P14_carried_out_by" o="?m"/>
+                        <triple s="?prod" p="crm:P9_consists_of/crm:P14_carried_out_by" o="?m"/>
+                    </union>
 
                     <xsl:call-template name="kerameikos:matchingPlaces"/>
 
@@ -358,14 +370,18 @@
                     <triple s="?prod" p="crm:P32_used_general_technique" o="?m"/>
                 </xsl:when>
 
-                <xsl:when test="$type = 'foaf:Person'">
+                <xsl:when test="$type = 'foaf:Person' or $type = 'foaf:Group'">
                     <xsl:call-template name="kerameikos:matchingConcepts">
                         <xsl:with-param name="id" select="$id"/>
                         <xsl:with-param name="type" select="$type"/>
                     </xsl:call-template>
 
                     <triple s="?object" p="crm:P108i_was_produced_by" o="?prod"/>
-                    <triple s="?prod" p="crm:P14_carried_out_by" o="?m"/>
+                    <union>
+                        <triple s="?prod" p="crm:P14_carried_out_by" o="?m"/>
+                        <triple s="?prod" p="crm:P9_consists_of/crm:P14_carried_out_by" o="?m"/>
+                    </union>
+                    
                 </xsl:when>
             </xsl:choose>
         </statements>

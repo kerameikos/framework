@@ -152,11 +152,16 @@
 			<xsl:when test="$curie = 'kon:ProductionPlace'">Production Place</xsl:when>
 			
 			<!-- properties -->
+			<xsl:when test="$curie = 'edm:begin'">Begin</xsl:when>
+			<xsl:when test="$curie = 'edm:end'">End</xsl:when>
 			<xsl:when test="$curie = 'geo:lat'">Latitude</xsl:when>
 			<xsl:when test="$curie = 'geo:long'">Longitude</xsl:when>
 			<xsl:when test="$curie = 'dcterms:isPartOf'">Part Of</xsl:when>
 			<xsl:when test="$curie = 'dcterms:source'">Reference</xsl:when>
 			<xsl:when test="$curie = 'lexinfo:plural'">Plural Form</xsl:when>
+			<xsl:when test="$curie = 'org:role'">Role</xsl:when>
+			<xsl:when test="$curie = 'osgeo:asGeoJSON'">GeoJSON</xsl:when>
+			<xsl:when test="$curie = 'org:organization'">Organization</xsl:when>
 			<xsl:when test="$curie = 'skos:prefLabel'">Preferred Label</xsl:when>
 			<xsl:when test="$curie = 'skos:altLabel'">Alternate Label</xsl:when>
 			<xsl:when test="$curie = 'skos:broader'">Broader Concept</xsl:when>

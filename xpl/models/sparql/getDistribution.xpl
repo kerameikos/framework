@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
-	XPL handling SPARQL queries from Fuseki	
+	Author: Ethan Gruber
+	Function: parse compare and filter HTTP parameters and structure them into nested SPARQL queries that are later serialized from XML into JSON for d3plus	
 -->
 <p:config xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors">
 

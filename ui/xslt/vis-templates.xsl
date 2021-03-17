@@ -182,7 +182,7 @@
 					<prop value="productionPlace" class="kon:ProductionPlace">Production Place</prop>
 					<prop value="shape" class="kon:Shape">Shape</prop>
 					<prop value="technique" class="kon:Technique">Technique</prop>
-					<prop value="workshop" class="foaf:Organization|foaf:Person">Workshop</prop>					
+					<prop value="workshop" class="foaf:Group|foaf:Person">Workshop</prop>					
 				</properties>
 			</xsl:variable>
 
@@ -375,7 +375,7 @@
 				<prop value="productionPlace" class="kon:ProductionPlace">Production Place</prop>
 				<prop value="shape" class="kon:Shape">Shape</prop>
 				<prop value="technique" class="kon:Technique">Technique</prop>
-				<prop value="workshop" class="foaf:Organization|foaf:Person">Workshop</prop>					
+				<prop value="workshop" class="foaf:Group|foaf:Person">Workshop</prop>					
 			</properties>			
 		</xsl:variable>
 
