@@ -52,7 +52,7 @@
 		<xsl:variable name="images">
 			<images>
 				<xsl:choose>
-					<xsl:when test="res:binding[@name = 'iiif_images']/res:literal">
+					<xsl:when test="res:binding[@name = 'iiif_images']">
 						<xsl:variable name="iiif" select="tokenize(res:binding[@name = 'iiif_images']/res:literal, '\|')"/>
 						
 						<xsl:for-each select="$iiif">
@@ -62,7 +62,7 @@
 						</xsl:for-each>
 						
 					</xsl:when>
-					<xsl:when test="res:binding[@name = 'static_images']/res:literal">
+					<xsl:when test="res:binding[@name = 'static_images']">
 						<xsl:variable name="static" select="tokenize(res:binding[@name = 'static_images']/res:literal, '\|')"/>
 						
 						<xsl:for-each select="$static">
@@ -76,7 +76,18 @@
 			</images>
 		</xsl:variable>
 		
-		<div style="background-image: url('{$images//image[1]}')">
+		<xsl:variable name="display-image">
+			<xsl:choose>
+				<xsl:when test="$images//image[@type = 'iiif']">
+					<xsl:value-of select="concat($images//image[@type = 'iiif'][1], '/full/!800,/0/default.jpg')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$images//image[1]"/>
+				</xsl:otherwise>
+			</xsl:choose>
+		</xsl:variable>
+		
+		<div style="background-image: url('{$display-image}')">
 			<xsl:choose>					
 					<!-- when there's a IIIF manifest, display IIIF Leaflet viewer -->
 					<xsl:when test="res:binding[@name='manfiest']">
@@ -101,7 +112,7 @@
 						<xsl:choose>
 							<xsl:when test="$images//image[@type = 'iiif']">
 								<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container</xsl:attribute>
-								<a href="{$images//image[@type = 'iiif'][1]}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>
+								<a href="{$display-image}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>
 								
 								<!-- uncomment this when the BM fixes CORS -->
 								<!--<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container iiif-image</xsl:attribute>
@@ -113,17 +124,17 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container</xsl:attribute>
-								<a href="{$images//image[@type = 'static'][1]}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>
+								<a href="{$display-image}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>
 							</xsl:otherwise>
 						</xsl:choose>
 						
 						
 						
 						<!-- create gallery for multiple images per vase -->
-						<xsl:if test="count($images//image) &gt; 1">
+						<xsl:if test="count($images//image[@type = 'static']) &gt; 1">
 							<div class="hidden">
 								<xsl:apply-templates
-									select="$images//image[position() &gt; 1]">
+									select="$images//image[@type = 'static'][position() &gt; 1]">
 									<xsl:with-param name="rel" select="$rel"/>
 									<xsl:with-param name="uri" select="$uri"/>
 									<xsl:with-param name="title" select="$title"/>
@@ -144,7 +155,7 @@
 		</div>
 	</xsl:template>
 
-	<xsl:template match="images">
+	<xsl:template match="image">
 		<xsl:param name="uri"/>
 		<xsl:param name="title"/>
 		<xsl:param name="rel"/>
