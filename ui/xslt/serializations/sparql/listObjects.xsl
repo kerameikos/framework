@@ -90,10 +90,10 @@
 		<div style="background-image: url('{$display-image}')">
 			<xsl:choose>					
 					<!-- when there's a IIIF manifest, display IIIF Leaflet viewer -->
-					<xsl:when test="res:binding[@name='manfiest']">
+					<xsl:when test="res:binding[@name='manifest']">
 						<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container iiif-image</xsl:attribute>
 						<xsl:attribute name="href">#iiif-window</xsl:attribute>
-						<xsl:attribute name="manifest" select="res:binding[@name='manfiest']/res:uri"/>
+						<xsl:attribute name="manifest" select="res:binding[@name='manifest']/res:uri"/>
 						<xsl:attribute name="uri" select="$uri"/>
 						<xsl:attribute name="title" select="$title"/>
 						<span class="glyphicon glyphicon-zoom-in iiif-zoom-glyph" title="Click image(s) to zoom" style="display:none"/>
