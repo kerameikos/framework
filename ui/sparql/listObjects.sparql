@@ -5,14 +5,7 @@ PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX kon:	<http://kerameikos.org/ontology#>
 
-CONSTRUCT {?object a crm:E22_Man-Made_Object ;
-            dcterms:title ?title ;
-            dcterms:identifier ?id ;
-            dcterms:publisher ?keeper; 
-            crm:P129i_is_subject_of ?manifest ;            
-            crm:P138i_has_representation ?representation .
-          ?representation dcterms:format ?format ;
-            dcterms:conformsTo ?conformsTo} WHERE {
+SELECT DISTINCT ?object ?title ?id ?keeper ?manifest (group_concat(?static; separator = "|") as ?static_images) (group_concat(?iiif; separator = "|") as ?iiif_images) WHERE {
 %STATEMENTS%
 ?object crm:P1_is_identified_by ?id1 ;
     crm:P1_is_identified_by ?id2 .
@@ -21,8 +14,12 @@ CONSTRUCT {?object a crm:E22_Man-Made_Object ;
 ?id2 a crm:E42_Identifier ;
     crm:P190_has_symbolic_content ?id .
 OPTIONAL {?object crm:P50_has_current_keeper/skos:prefLabel ?keeper FILTER (langMatches(lang(?keeper), "en"))} 
-?object crm:P138i_has_representation ?representation
-	OPTIONAL {?representation dcterms:format ?format}
-	OPTIONAL {?representation dcterms:conformsTo ?conformsTo}
-OPTIONAL {?object crm:P129i_is_subject_of ?manifest}
+?object crm:P138i_has_representation ?image .
+OPTIONAL {?object crm:P138i_has_representation ?static .
+	?static dcterms:format "image/jpeg"
 }
+OPTIONAL {?object crm:P138i_has_representation ?iiif .
+	?iiif dcterms:conformsTo ?conformsTo
+}
+OPTIONAL {?object crm:P129i_is_subject_of ?manifest}
+} GROUP BY ?object ?title ?id ?keeper ?manifest

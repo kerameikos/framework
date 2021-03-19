@@ -39,78 +39,70 @@
 			</xsl:call-template>
 		</xsl:if>
 
-		<xsl:apply-templates
-			select="descendant::crm:E22_Man-Made_Object | descendant::*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object']"
-			mode="hmo"/>
+		<xsl:apply-templates select="descendant::res:result"/>
 	</xsl:template>
 
+	<xsl:template match="res:result">
+		<xsl:variable name="uri" select="res:binding[@name = 'object']/res:uri"/>
+		<xsl:variable name="title"
+			select="concat(res:binding[@name = 'keeper']/res:literal, ': ', res:binding[@name = 'title']/res:literal, ' (', res:binding[@name = 'id']/res:literal, ')')"/>
 
-	<!-- SPARQL templates -->
-	<xsl:template match="*" mode="hmo">
-		<xsl:variable name="uri" select="@rdf:about"/>
-		<xsl:variable name="title" select="concat(dcterms:publisher, ': ', dcterms:title, ' (', dcterms:identifier, ')')"/>
 
-		<xsl:variable name="images" as="element()*">
-			<rdf:Description>
-				<xsl:for-each select="crm:P138i_has_representation">
-					<xsl:variable name="digital-url" select="@rdf:resource"/>
 
-					<crm:P138i_has_representation>
-						<xsl:choose>
-							<xsl:when test="child::*">
-								<xsl:copy-of select="child::*"/>
-							</xsl:when>
-							<xsl:otherwise>
-								<xsl:copy-of select="//*[@rdf:about = $digital-url]"/>
-							</xsl:otherwise>
-						</xsl:choose>
-					</crm:P138i_has_representation>
-				</xsl:for-each>
-			</rdf:Description>
-		</xsl:variable>
-
-		<xsl:if test="count($images//crm:P138i_has_representation) &gt; 0">
-			<xsl:variable name="image">
+		<xsl:variable name="images">
+			<images>
 				<xsl:choose>
-					<xsl:when test="$images//crm:P138i_has_representation[descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']">
-						<xsl:value-of
-							select="concat($images//crm:P138i_has_representation[descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image'][1]/*/@rdf:about, '/full/800,/0/default.jpg')"
-						/>
+					<xsl:when test="res:binding[@name = 'iiif_images']/res:literal">
+						<xsl:variable name="iiif" select="tokenize(res:binding[@name = 'iiif_images']/res:literal, '\|')"/>
+						
+						<xsl:for-each select="$iiif">
+							<image type="iiif">
+								<xsl:value-of select="."/>
+							</image>
+						</xsl:for-each>
+						
 					</xsl:when>
-					<xsl:otherwise>
-						<xsl:value-of select="$images//crm:P138i_has_representation[descendant::dcterms:format = 'image/jpeg'][1]/*/@rdf:about"/>
-					</xsl:otherwise>
+					<xsl:when test="res:binding[@name = 'static_images']/res:literal">
+						<xsl:variable name="static" select="tokenize(res:binding[@name = 'static_images']/res:literal, '\|')"/>
+						
+						<xsl:for-each select="$static">
+							<image type="static">
+								<xsl:value-of select="."/>
+							</image>
+						</xsl:for-each>
+						
+					</xsl:when>
 				</xsl:choose>
-			</xsl:variable>
-
-			<div style="background-image: url('{$image}')">
-				<xsl:choose>
-
+			</images>
+		</xsl:variable>
+		
+		<div style="background-image: url('{$images//image[1]}')">
+			<xsl:choose>					
 					<!-- when there's a IIIF manifest, display IIIF Leaflet viewer -->
-					<xsl:when test="crm:P129i_is_subject_of">
+					<xsl:when test="res:binding[@name='manfiest']">
 						<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container iiif-image</xsl:attribute>
 						<xsl:attribute name="href">#iiif-window</xsl:attribute>
-						<xsl:attribute name="manifest" select="crm:P129i_is_subject_of/@rdf:resource"/>
+						<xsl:attribute name="manifest" select="res:binding[@name='manfiest']/res:uri"/>
 						<xsl:attribute name="uri" select="$uri"/>
 						<xsl:attribute name="title" select="$title"/>
 						<span class="glyphicon glyphicon-zoom-in iiif-zoom-glyph" title="Click image(s) to zoom" style="display:none"/>
-
+						
 						<!-- include 3D model link -->
-						<xsl:apply-templates
+						<!--<xsl:apply-templates
 							select="$images//crm:P138i_has_representation[descendant::dcterms:format = 'application/octet-stream' or descendant::dcterms:format/@rdf:resource = 'http://vocab.getty.edu/aat/300379693']">
 							<xsl:with-param name="uri" select="$uri"/>
 							<xsl:with-param name="title" select="$title"/>
-						</xsl:apply-templates>
-
+						</xsl:apply-templates>-->
+						
 					</xsl:when>
 					<xsl:otherwise>
 						<xsl:variable name="rel" select="concat(digest:md5Hex(string($uri)), '-gallery')"/>
-
+						
 						<xsl:choose>
-							<xsl:when test="$images//crm:P138i_has_representation[descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']">
+							<xsl:when test="$images//image[@type = 'iiif']">
 								<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container</xsl:attribute>
-								<a href="{$image}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>
-
+								<a href="{$images//image[@type = 'iiif'][1]}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>
+								
 								<!-- uncomment this when the BM fixes CORS -->
 								<!--<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container iiif-image</xsl:attribute>
 								<xsl:attribute name="href">#iiif-window</xsl:attribute>
@@ -121,53 +113,54 @@
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container</xsl:attribute>
-								<a href="{$image}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>
+								<a href="{$images//image[@type = 'static'][1]}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>
 							</xsl:otherwise>
 						</xsl:choose>
-
-
-
+						
+						
+						
 						<!-- create gallery for multiple images per vase -->
-						<xsl:if test="count($images//crm:P138i_has_representation[descendant::dcterms:format = 'image/jpeg']) &gt; 1">
+						<xsl:if test="count($images//image) &gt; 1">
 							<div class="hidden">
 								<xsl:apply-templates
-									select="$images//crm:P138i_has_representation[descendant::dcterms:format = 'image/jpeg'][position() &gt; 1]">
+									select="$images//image[position() &gt; 1]">
 									<xsl:with-param name="rel" select="$rel"/>
 									<xsl:with-param name="uri" select="$uri"/>
 									<xsl:with-param name="title" select="$title"/>
 								</xsl:apply-templates>
 							</div>
 						</xsl:if>
-
+						
 						<!-- include 3D model link -->
-						<xsl:apply-templates
+						
+						<!-- redo -->
+						<!--<xsl:apply-templates
 							select="$images//crm:P138i_has_representation[descendant::dcterms:format = 'application/octet-stream' or descendant::dcterms:format/@rdf:resource = 'http://vocab.getty.edu/aat/300379693']">
 							<xsl:with-param name="uri" select="$uri"/>
 							<xsl:with-param name="title" select="$title"/>
-						</xsl:apply-templates>
-					</xsl:otherwise>
-				</xsl:choose>
-			</div>
-		</xsl:if>
+						</xsl:apply-templates>-->
+					</xsl:otherwise>				
+			</xsl:choose>
+		</div>
 	</xsl:template>
 
-	<xsl:template match="crm:P138i_has_representation">
+	<xsl:template match="images">
 		<xsl:param name="uri"/>
 		<xsl:param name="title"/>
 		<xsl:param name="rel"/>
 
 		<xsl:choose>
-			<xsl:when test="descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image'">
-				<a href="{concat(*/@rdf:about, '/full/800,/0/default.jpg')}" rel="{$rel}" uri="{$uri}" title="{$title}" class="fancybox">
-					<img src="{concat(*/@rdf:about, '/full/800,/0/default.jpg')}"/>
+			<xsl:when test="@type = 'iiif'">
+				<a href="{concat(., '/full/800,/0/default.jpg')}" rel="{$rel}" uri="{$uri}" title="{$title}" class="fancybox">
+					<img src="{concat(., '/full/800,/0/default.jpg')}"/>
 				</a>
 			</xsl:when>
-			<xsl:when test="descendant::dcterms:format = 'image/jpeg'">
-				<a href="{*/@rdf:about}" rel="{$rel}" uri="{$uri}" title="{$title}" class="fancybox">
-					<img src="{*/@rdf:about}"/>
+			<xsl:when test="@type = 'static'">
+				<a href="{.}" rel="{$rel}" uri="{$uri}" title="{$title}" class="fancybox">
+					<img src="{.}"/>
 				</a>
 			</xsl:when>
-			<xsl:when
+			<!--<xsl:when
 				test="descendant::dcterms:format = 'application/octet-stream' or descendant::dcterms:format/@rdf:resource = 'http://vocab.getty.edu/aat/300379693'">
 				<xsl:variable name="modelURI" select="*/@rdf:about"/>
 
@@ -184,7 +177,7 @@
 					</xsl:if>
 					<xsl:text> 3D Model</xsl:text>
 				</span>
-			</xsl:when>
+			</xsl:when>-->
 		</xsl:choose>
 	</xsl:template>
 
