@@ -7,7 +7,9 @@ $(document).ready(function () {
         return false;
     });
     
-    initialize_map(id);
+    if ($('#mapcontainer').length > 0) {
+        initialize_map(id);
+    };
 });
 
 function initialize_map(id) {
@@ -109,7 +111,7 @@ function initialize_map(id) {
     productionLayer.on('data:loaded', function (data) {
         var group = new L.featureGroup([productionLayer, findLayer]);
         map.fitBounds(group.getBounds());
-    }.bind(this));    
+    }.bind(this));
     
     
     /*****
