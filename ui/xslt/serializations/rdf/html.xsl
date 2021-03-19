@@ -228,7 +228,8 @@
 										</a>
 									</small>
 								</h2>
-								<p>These objects are associated by artist signature or scholarly attribution by analyzing artistic similarities.</p>
+								<p>These objects are associated by artist signature or scholarly attribution by analyzing artistic similarities. Only those with
+									images are shown below, but all objects related to this concept are queried for other visualizations and data downloads.</p>
 								<div id="listObjects"/>
 							</div>
 						</div>

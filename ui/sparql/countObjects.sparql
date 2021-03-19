@@ -5,7 +5,7 @@ PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX kid:	<http://kerameikos.org/id/>
 PREFIX kon:	<http://kerameikos.org/ontology#>
 
-SELECT (count(?object) as ?count) WHERE {
+SELECT (count(DISTINCT ?object) as ?count) WHERE {
 %STATEMENTS%
 ?object crm:P1_is_identified_by ?id1 ;
     crm:P1_is_identified_by ?id2 .
