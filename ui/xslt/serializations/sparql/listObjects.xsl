@@ -79,7 +79,7 @@
 		<xsl:variable name="display-image">
 			<xsl:choose>
 				<xsl:when test="$images//image[@type = 'iiif']">
-					<xsl:value-of select="concat($images//image[@type = 'iiif'][1], '/full/!800,/0/default.jpg')"/>
+					<xsl:value-of select="concat($images//image[@type = 'iiif'][1], '/full/800,/0/default.jpg')"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="$images//image[1]"/>
