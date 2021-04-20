@@ -111,16 +111,16 @@
 						
 						<xsl:choose>
 							<xsl:when test="$images//image[@type = 'iiif']">
-								<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container</xsl:attribute>
-								<a href="{$display-image}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>
+								<!--<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container</xsl:attribute>
+								<a href="{$display-image}" class="fancybox" title="{$title}" uri="{$uri}" rel="{$rel}"/>-->
 								
 								<!-- uncomment this when the BM fixes CORS -->
-								<!--<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container iiif-image</xsl:attribute>
+								<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container iiif-image</xsl:attribute>
 								<xsl:attribute name="href">#iiif-window</xsl:attribute>
-								<xsl:attribute name="manifest" select="$images//crm:P138i_has_representation[descendant::dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image'][1]/*/@rdf:about"/>
+								<xsl:attribute name="manifest" select="concat($images//image[@type = 'iiif'][1], '/info.json')"/>
 								<xsl:attribute name="uri" select="$uri"/>
 								<xsl:attribute name="title" select="$title"/>
-								<span class="glyphicon glyphicon-zoom-in iiif-zoom-glyph" title="Click image(s) to zoom" style="display:none"/>-->
+								<span class="glyphicon glyphicon-zoom-in iiif-zoom-glyph" title="Click image(s) to zoom" style="display:none"/>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:attribute name="class">col-lg-2 col-md-3 col-sm-6 col-xs-12 obj-container</xsl:attribute>
