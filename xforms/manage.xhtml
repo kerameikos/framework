@@ -231,7 +231,7 @@ PREFIX crmgeo:	<http://www.ics.forth.gr/isl/CRMgeo/>
 PREFIX void:	<http://rdfs.org/ns/void#>
 DELETE {?s ?p ?o} WHERE { 
 { ?object void:inDataset <DATASET> ;
-    crmsci:O19i_was_object_found_by ?enounter .
+    crmsci:O19i_was_object_found_by ?encounter .
   ?encounter a crmsci:S19_Encounter_Event ;
     crm:P7_took_place_at ?s . ?s ?p ?o }
 UNION { ?object void:inDataset <DATASET> ;
