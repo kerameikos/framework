@@ -124,7 +124,7 @@
 					<b>Url</b> : kerameikos.org/getRdf?<br/>
 					<b>Parameters</b> : identifiers (Kerameikos ids divided by a pipe '|'), format ('xml', 'ttl', 'json', default 'xml')<br/>
 					<b>Result</b> : RDF/XML, RDF/TTL, JSON-LD.<br/>
-					<b>Examples</b>: <a href="api/getRdf?identifiers=attica|black_figure|exekias">api/getRdf?identifiers=attica|black_figure|exekias</a>
+					<b>Examples</b>: <a href="apis/getRdf?identifiers=attica|black_figure|exekias">api/getRdf?identifiers=attica|black_figure|exekias</a>
 				</p>
 			</div>
 		</div>

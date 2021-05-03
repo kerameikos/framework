@@ -42,7 +42,7 @@
 				<small>
 					<xsl:text> (</xsl:text>
 					<a href="{concat(namespace-uri(.), local-name())}" title="{name()}">
-						<xsl:value-of select="kerameikos:normalizeCurie(name())"/>
+						<xsl:value-of select="kerameikos:normalizeCurie(name(), 'en')"/>
 					</a>
 					<xsl:if test="rdf:type">
 						<xsl:text>, </xsl:text>
@@ -70,7 +70,7 @@
 					<dl class="dl-horizontal">
 						<dt>
 							<a href="{concat($namespaces//namespace[@prefix='skos']/@uri, 'prefLabel')}" title="skos:prefLabel">
-								<xsl:value-of select="kerameikos:normalizeCurie('skos:prefLabel')"/>
+								<xsl:value-of select="kerameikos:normalizeCurie('skos:prefLabel', 'en')"/>
 							</a>
 						</dt>
 						<dd>
@@ -100,7 +100,7 @@
 						<xsl:if test="ontolex:otherForm">
 							<dt>
 								<a href="{concat($namespaces//namespace[@prefix='lexinfo']/@uri, 'plural')}" title="lexinfo:plural">
-									<xsl:value-of select="kerameikos:normalizeCurie('lexinfo:plural')"/>
+									<xsl:value-of select="kerameikos:normalizeCurie('lexinfo:plural', 'en')"/>
 								</a>
 							</dt>
 							<dd>
@@ -234,7 +234,7 @@
 	<xsl:template match="osgeo:asGeoJSON" mode="human-readable">
 		<dt>
 			<a href="{concat(namespace-uri(), local-name())}" title="{name()}">
-				<xsl:value-of select="kerameikos:normalizeCurie(name())"/>
+				<xsl:value-of select="kerameikos:normalizeCurie(name(), 'en')"/>
 			</a>
 		</dt>
 		<dd>
@@ -249,7 +249,7 @@
 	<xsl:template match="skos:* | dcterms:source | dcterms:isPartOf | org:role | org:organization | geo:lat | geo:long" mode="human-readable">
 		<dt>
 			<a href="{concat(namespace-uri(), local-name())}" title="{name()}">
-				<xsl:value-of select="kerameikos:normalizeCurie(name())"/>
+				<xsl:value-of select="kerameikos:normalizeCurie(name(), 'en')"/>
 			</a>
 		</dt>
 		<dd property="{name()}">
@@ -306,7 +306,7 @@
 				<small>
 					<xsl:text> (</xsl:text>
 					<a href="{concat(namespace-uri(.), local-name())}">
-						<xsl:value-of select="kerameikos:normalizeCurie(name())"/>
+						<xsl:value-of select="kerameikos:normalizeCurie(name(), 'en')"/>
 					</a>
 					<xsl:if test="rdf:type">
 						<xsl:text>, </xsl:text>
@@ -360,7 +360,7 @@
 
 		<a href="{@rdf:resource}" title="{$curie}">
 			<xsl:value-of
-				select="kerameikos:normalizeCurie($curie)"
+				select="kerameikos:normalizeCurie($curie, 'en')"
 			/>
 		</a>
 

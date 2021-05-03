@@ -242,7 +242,17 @@ UNION { ?object void:inDataset <DATASET> ;
     crm:P108i_was_produced_by ?prod .
   ?prod crm:P4_has_time-span|crm:P9_consists_of ?s . ?s ?p ?o }
 UNION { ?object void:inDataset <DATASET> ;
-    crm:P108i_was_produced_by|crm:P1_is_identified_by|crm:P43_has_dimension|crm:P138i_has_representation|crm:P129i_is_subject_of|crmsci:O19i_was_object_found_by ?s . ?s ?p ?o }
+    crm:P108i_was_produced_by ?s . ?s ?p ?o }
+UNION { ?object void:inDataset <DATASET> ;
+    crm:P1_is_identified_by ?s . ?s ?p ?o }
+UNION { ?object void:inDataset <DATASET> ;
+    crm:P43_has_dimension ?s . ?s ?p ?o }
+UNION { ?object void:inDataset <DATASET> ;
+    crm:P138i_has_representation ?s . ?s ?p ?o }
+UNION { ?object void:inDataset <DATASET> ;
+    crm:P129i_is_subject_of ?s . ?s ?p ?o }
+UNION { ?object void:inDataset <DATASET> ;
+    crmsci:O19i_was_object_found_by ?s . ?s ?p ?o }
 UNION { ?s void:inDataset <DATASET> . ?s ?p ?o}
 }]]></query>
 					<query id="delete-places">

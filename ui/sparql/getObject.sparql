@@ -1,0 +1,31 @@
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX crmgeo: <http://www.ics.forth.gr/isl/CRMgeo/>
+PREFIX crmsci: <http://www.ics.forth.gr/isl/CRMsci/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX kid: <http://kerameikos.org/id/>
+PREFIX kon: <http://kerameikos.org/ontology#>
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+
+CONSTRUCT {?s ?p ?o .
+          ?s crm:P1_is_identified_by ?id . ?id ?idP ?idO .
+          ?s crm:P138i_has_representation ?image . ?image ?imageP ?imageO .
+          ?s crm:P108i_was_produced_by ?prod . ?prod ?prodP ?prodO .
+          ?prod crm:P4_has_time-span ?timespan . ?timespan ?timespanP ?timespanO .
+          ?s crm:P43_has_dimension ?dim . ?dim ?dimP ?dimO .
+          ?s crmsci:O19i_was_object_found_by ?findspot .
+            ?findspot ?findspotP ?findspotO}
+WHERE {
+  ?s ?p ?o FILTER (?s = <%URI%>)
+  ?s crm:P1_is_identified_by ?id . ?id ?idP ?idO .
+  OPTIONAL {?s crm:P138i_has_representation ?image . ?image ?imageP ?imageO }
+  OPTIONAL {?s crm:P108i_was_produced_by ?prod . ?prod ?prodP ?prodO .
+           OPTIONAL {?prod crm:P4_has_time-span ?timespan . ?timespan ?timespanP ?timespanO}}
+  OPTIONAL {?s crm:P43_has_dimension ?dim . ?dim ?dimP ?dimO}
+  OPTIONAL {?s crmsci:O19i_was_object_found_by ?findspot .
+    ?findspot ?findspotP ?findspotO}
+  }
