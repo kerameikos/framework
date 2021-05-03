@@ -71,11 +71,11 @@ a:hover{
 .banner-background h3{
     margin-top: 0;
 }
-.page-section {
-    margin-bottom:40px;
+.page-section{
+    margin-bottom: 40px;
 }
-.subsection {
-    margin-bottom:20px;
+.subsection{
+    margin-bottom: 20px;
 }
 /*
   ***************************************
@@ -214,23 +214,23 @@ a:hover{
   ***************************************
  */
 .result-doc{
-	margin:10px 0;
-	padding:10px 0;
-	border-bottom:1px solid silver;
+    margin: 10px 0;
+    padding: 10px 0;
+    border-bottom: 1px solid silver;
 }
 .doc-label{
-	font-size:120%;
+    font-size: 120%;
 }
 .paging_div{
-	padding:10px 0;
-	vertical-align:top
+    padding: 10px 0;
+    vertical-align: top
 }
 .page-nos{
-	text-align:right;
+    text-align: right;
 }
 #filter-form .form-control{
-	width:20em;
-	display:inline;
+    width: 20em;
+    display: inline;
 }
 /*
   ***************************************
@@ -239,6 +239,7 @@ a:hover{
  */
 #sparqlForm{
     margin: 20px 0;
+    font-size: 14px;
 }
 #sparqlForm select{
     width: 20em;
@@ -299,10 +300,10 @@ a:hover{
     /*cursor:pointer;*/
     color: #c94f2a;
 }
-a.fancybox {
-    height:100%;
-    width:100%;
-    display:block;
+a.fancybox{
+    height: 100%;
+    width: 100%;
+    display: block;
 }
 @media (min-width : 992px){
     .obj-container{
