@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Author: Ethan Gruber
-	Date: March 2021
+	Date: May 2021
 	Function: serialize RDF or SPARQL queries into GeoJSON with the JSON metamodel -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:res="http://www.w3.org/2005/sparql-results#"
 	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
@@ -90,6 +90,10 @@
 												</xsl:apply-templates>
 											</xsl:if>
 										</xsl:when>
+										<xsl:when test="$api = 'geoJSON'">
+											<!-- coordinates for object geoJSON serialization -->
+											<xsl:apply-templates select="descendant::res:result" mode="object"/>
+										</xsl:when>
 									</xsl:choose>
 								</xsl:if>
 							</xsl:when>
@@ -176,6 +180,105 @@
 				</_object>
 			</properties>
 		</_object>
+	</xsl:template>
+	
+	<!-- GeoJSON point(s) for production place and/or findspot for an object -->
+	<xsl:template match="res:result" mode="object">
+		
+		<xsl:if test="res:binding[@name = 'place']">
+			<_object>
+				<type>Feature</type>
+				<label>
+					<xsl:value-of select="res:binding[@name = 'placeLabel']/res:literal"/>
+				</label>
+				<id>
+					<xsl:value-of select="res:binding[@name = 'place']/res:uri"/>
+				</id>
+				
+				<!-- include point coordinates or GeoJSON polygon -->
+				<xsl:choose>
+					<xsl:when test="res:binding[@name = 'long'] and res:binding[@name = 'lat']">
+						<geometry>
+							<_object>
+								<type>Point</type>
+								<coordinates>
+									<_array>
+										<_>
+											<xsl:value-of select="res:binding[@name = 'long']/res:literal"/>
+										</_>
+										<_>
+											<xsl:value-of select="res:binding[@name = 'lat']/res:literal"/>
+										</_>
+									</_array>
+								</coordinates>
+							</_object>
+						</geometry>
+					</xsl:when>
+					<xsl:when test="res:binding[@name = 'poly']">
+						<geometry datatype="osgeo:asGeoJSON">
+							<xsl:value-of select="res:binding[@name = 'poly']/res:literal"/>
+						</geometry>
+					</xsl:when>
+				</xsl:choose>
+				
+				<properties>
+					<_object>
+						<toponym>
+							<xsl:value-of select="res:binding[@name = 'placeLabel']/res:literal"/>
+						</toponym>
+						<gazetteer_label>
+							<xsl:value-of select="res:binding[@name = 'placeLabel']/res:literal"/>
+						</gazetteer_label>
+						<gazetteer_uri>
+							<xsl:value-of select="res:binding[@name = 'place']/res:uri"/>
+						</gazetteer_uri>
+						<type>productionPlace</type>
+					</_object>
+				</properties>
+			</_object>
+		</xsl:if>
+		
+		<xsl:if test="res:binding[@name = 'findspot']">
+			<_object>
+				<type>Feature</type>
+				<label>
+					<xsl:value-of select="res:binding[@name = 'findspotLabel']/res:literal"/>
+				</label>
+				<id>
+					<xsl:value-of select="res:binding[@name = 'findspot']/res:uri"/>
+				</id>
+				<geometry>
+					<_object>
+						<type>Point</type>
+						<coordinates>
+							<_array>
+								<_>
+									<xsl:value-of select="res:binding[@name = 'findspotLong']/res:literal"/>
+								</_>
+								<_>
+									<xsl:value-of select="res:binding[@name = 'findspotLat']/res:literal"/>
+								</_>
+							</_array>
+						</coordinates>
+					</_object>
+				</geometry>
+				<properties>
+					<_object>
+						<toponym>
+							<xsl:value-of select="res:binding[@name = 'findspotLabel']/res:literal"/>
+						</toponym>
+						<gazetteer_label>
+							<xsl:value-of select="res:binding[@name = 'findspotLabel']/res:literal"/>
+						</gazetteer_label>
+						<gazetteer_uri>
+							<xsl:value-of select="res:binding[@name = 'findspot']/res:uri"/>
+						</gazetteer_uri>
+						<type>find</type>
+					</_object>
+				</properties>
+			</_object>
+		</xsl:if>
+		
 	</xsl:template>
 
 	<!-- GeoJSON result for general SELECT SPARQL query lat/long -->

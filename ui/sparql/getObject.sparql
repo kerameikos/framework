@@ -8,6 +8,7 @@ PREFIX kid: <http://kerameikos.org/id/>
 PREFIX kon: <http://kerameikos.org/ontology#>
 PREFIX org: <http://www.w3.org/ns/org#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX rdfs: <http://www.w3.org/2000/01/rdf-schema#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
@@ -17,8 +18,13 @@ CONSTRUCT {?s ?p ?o .
           ?s crm:P108i_was_produced_by ?prod . ?prod ?prodP ?prodO .
           ?prod crm:P4_has_time-span ?timespan . ?timespan ?timespanP ?timespanO .
           ?s crm:P43_has_dimension ?dim . ?dim ?dimP ?dimO .
-          ?s crmsci:O19i_was_object_found_by ?findspot .
-            ?findspot ?findspotP ?findspotO}
+          ?s crmsci:O19i_was_object_found_by ?encounter.              
+          ?encounter crm:P7_took_place_at ?place ;
+                 ?encounterP ?encounterO .
+          ?place crm:P89_falls_within ?gaz ;
+                 ?placeP ?placeO.
+          ?gaz ?gazP ?gazO
+         }
 WHERE {
   ?s ?p ?o FILTER (?s = <%URI%>)
   ?s crm:P1_is_identified_by ?id . ?id ?idP ?idO .
@@ -26,6 +32,10 @@ WHERE {
   OPTIONAL {?s crm:P108i_was_produced_by ?prod . ?prod ?prodP ?prodO .
            OPTIONAL {?prod crm:P4_has_time-span ?timespan . ?timespan ?timespanP ?timespanO}}
   OPTIONAL {?s crm:P43_has_dimension ?dim . ?dim ?dimP ?dimO}
-  OPTIONAL {?s crmsci:O19i_was_object_found_by ?findspot .
-    ?findspot ?findspotP ?findspotO}
+  OPTIONAL {?s crmsci:O19i_was_object_found_by ?encounter .
+    ?encounter crm:P7_took_place_at ?place ;
+               ?encounterP ?encounterO .
+            ?place crm:P89_falls_within ?gaz ;
+                   ?placeP ?placeO .
+            ?gaz ?gazP ?gazO }
   }

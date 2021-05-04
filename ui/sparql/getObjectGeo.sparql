@@ -1,0 +1,30 @@
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
+PREFIX crmgeo: <http://www.ics.forth.gr/isl/CRMgeo/>
+PREFIX crmsci: <http://www.ics.forth.gr/isl/CRMsci/>
+PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX foaf: <http://xmlns.com/foaf/0.1/>
+PREFIX geo: <http://www.w3.org/2003/01/geo/wgs84_pos#>
+PREFIX kid: <http://kerameikos.org/id/>
+PREFIX kon: <http://kerameikos.org/ontology#>
+PREFIX org: <http://www.w3.org/ns/org#>
+PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
+PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX osgeo:	<http://data.ordnancesurvey.co.uk/ontology/geometry/>
+PREFIX rdfs:	<http://www.w3.org/2000/01/rdf-schema#>
+
+SELECT ?object ?place ?placeLabel ?lat ?long ?poly ?findspot ?findspotLabel ?findspotLat ?findspotLong WHERE {
+  BIND (<%URI%> as ?object)
+  
+  OPTIONAL {?object crm:P108i_was_produced_by/crm:P7_took_place_at ?place .
+           ?place skos:prefLabel ?placeLabel FILTER (langMatches(lang(?placeLabel), "en")) .
+           ?place geo:location ?loc .
+           	{?loc geo:lat ?lat .
+			?loc geo:long ?long }
+			UNION {?loc osgeo:asGeoJSON ?poly }}
+  OPTIONAL {?object crmsci:O19i_was_object_found_by/crm:P7_took_place_at/crm:P89_falls_within ?findspot .
+           ?findspot rdfs:label ?findspotLabel ;
+                     geo:location ?findspotLoc .
+           ?findspotLoc geo:lat ?findspotLat .
+		   ?findspotLoc geo:long ?findspotLong }                                                            
+}

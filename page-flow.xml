@@ -56,6 +56,8 @@
 	
 	<!-- Object viewer -->
 	<page path="/kerameikos/object/" model="xpl/models/sparql/getObject.xpl" view="xpl/views/serializations/sparql/object.xpl"/>
+	<page path="/kerameikos/object/geoJSON" model="xpl/models/sparql/getObjectGeo.xpl" view="xpl/views/serializations/sparql/geojson.xpl"/>
+	<page path="/kerameikos/manifest" model="xpl/models/sparql/getObject.xpl" view="xpl/views/serializations/sparql/object-iiif-manifest.xpl"/>
 	
 	<!-- ONTOLOGY -->
 	<page path="/kerameikos/ontology" model="xpl/models/ontology/get-ontology.xpl" view="xpl/views/pages/ontology.xpl"/>
