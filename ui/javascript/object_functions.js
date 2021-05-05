@@ -130,6 +130,12 @@ function initialize_map(uri) {
         pointToLayer: renderPoints
     }).addTo(map);
     
+    layer.on('data:loaded', function (data) {
+        map.fitBounds(layer.getBounds());
+    }.bind(this));
+    
+    
+    
     //add controls
     var baseMaps = {
         "Terrain and Streets": mb_physical,
@@ -141,7 +147,7 @@ function initialize_map(uri) {
         "Distribution": layer
     };
     
-    //var controls = L.control.layers(baseMaps, overlayMaps).addTo(map);
+    var controls = L.control.layers(baseMaps, overlayMaps).addTo(map);
     
     /*****
      * Features for manipulating layers
@@ -176,9 +182,8 @@ function initialize_map(uri) {
     }
     
     function onEachFeature (feature, layer) {
-        var str;
         //individual finds
-        str += '<a href="' + feature.id + '">' + feature.label + '</a><br/>';
+        var str = '<a href="' + feature.id + '">' + feature.label + '</a>';
         layer.bindPopup(str);
     }
 }

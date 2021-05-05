@@ -29,8 +29,9 @@
 
 	<!-- hasGeo variable evaluates whether there is a place in the production event or a mappable findspot -->
 	<xsl:variable name="hasGeo" as="xs:boolean"
-		select="(//crm:E12_Production[child::crm:P7_took_place_at] or //*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E12_Production'][child::crm:P7_took_place_at]) or
-		//crmsci:O19i_was_object_found_by"/>
+		select="
+			(//crm:E12_Production[child::crm:P7_took_place_at] or //*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E12_Production'][child::crm:P7_took_place_at]) or
+			//crmsci:O19i_was_object_found_by"/>
 
 	<xsl:variable name="namespaces" as="node()*">
 		<xsl:copy-of select="//config/namespaces"/>
@@ -47,7 +48,7 @@
 				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
 				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
-				
+
 				<!-- leaflet -->
 				<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.css"/>
 				<script src="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.js"/>
@@ -57,16 +58,14 @@
 				<xsl:if test="descendant::crm:P129i_is_subject_of">
 					<script type="text/javascript" src="http://kerameikos.org/mirador/build/mirador/mirador.min.js"/>
 				</xsl:if>
-				
+
 				<!-- leaflet IIIF -->
 				<xsl:if
 					test="
-					//crm:E36_Visual_Item[dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']
-					or //*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E36_Visual_Item'][dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']">
+						//crm:E36_Visual_Item[dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']
+						or //*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E36_Visual_Item'][dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']">
 					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>
 				</xsl:if>
-
-
 
 				<script type="text/javascript" src="{$display_path}ui/javascript/object_functions.js"/>
 			</head>
@@ -101,7 +100,8 @@
 								or //*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E36_Visual_Item'][dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']">
 							<span id="iiif-image">
 								<xsl:value-of
-									select="string-join(//crm:E36_Visual_Item[dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']/@rdf:about | 
+									select="
+										string-join(//crm:E36_Visual_Item[dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']/@rdf:about |
 										//*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E36_Visual_Item'][dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']/@rdf:about, '|')"
 								/>
 							</span>
@@ -195,16 +195,20 @@
 							test="
 								//crm:E36_Visual_Item[dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']
 								or //*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E36_Visual_Item'][dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']">
-							<!--<div id="iiif-container" style="width:100%;height:600px"/>-->
+							<div id="iiif-container" style="width:100%;height:600px"/>
 						</xsl:when>
-						<xsl:when test="//crm:E36_Visual_Item[dcterms:format = 'image/jpeg']
-							or //*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E36_Visual_Item'][dcterms:format = 'image/jpeg']">
-							
-							<xsl:variable name="images" select="//crm:E36_Visual_Item[dcterms:format = 'image/jpeg']/@rdf:about |
+						<xsl:when
+							test="
+								//crm:E36_Visual_Item[dcterms:format = 'image/jpeg']
+								or //*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E36_Visual_Item'][dcterms:format = 'image/jpeg']">
+
+							<xsl:variable name="images"
+								select="
+									//crm:E36_Visual_Item[dcterms:format = 'image/jpeg']/@rdf:about |
 									//*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E36_Visual_Item'][dcterms:format = 'image/jpeg']/@rdf:about"/>
-							
+
 							<img src="{$images[1]}" alt="Primary Image"/>
-							
+
 						</xsl:when>
 					</xsl:choose>
 
@@ -218,15 +222,37 @@
 				<xsl:choose>
 					<xsl:when test="$hasGeo = true()">
 						<div class="col-md-6">
-							<xsl:call-template name="metadata-container"/>
+							<div class="content">
+								<xsl:call-template name="metadata-container"/>
+							</div>
 						</div>
 						<div class="col-md-6">
-							<div id="mapcontainer"/>
+							<div class="content">
+								<div id="mapcontainer" class="map-normal"/>
+							</div>
+							<div style="margin:10px 0">
+								<table>
+									<tbody>
+										<tr>
+											<td style="background-color:#6992fd;border:2px solid black;width:50px;"/>
+											<td style="width:100px;padding-left:6px;">
+												<xsl:value-of select="kerameikos:normalizeCurie('kon:ProductionPlace', $lang)"/>
+											</td>
+											<td style="background-color:#d86458;border:2px solid black;width:50px;"/>
+											<td style="width:100px;padding-left:6px;">
+												<xsl:value-of select="kerameikos:normalizeField('findspot', $lang)"/>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
 						</div>
 					</xsl:when>
 					<xsl:otherwise>
 						<div class="col-md-12">
-							<xsl:call-template name="metadata-container"/>
+							<div class="content">
+								<xsl:call-template name="metadata-container"/>
+							</div>
 						</div>
 					</xsl:otherwise>
 				</xsl:choose>

@@ -9,6 +9,19 @@
 	<xsl:include href="../../functions.xsl"/>
 	<xsl:include href="../../vis-templates.xsl"/>
 	<xsl:include href="html-templates.xsl"/>
+	
+	<!-- request parameters -->
+	<xsl:param name="langParam" select="doc('input:request')/request/parameters/parameter[name = 'lang']/value"/>
+	<xsl:param name="lang">
+		<xsl:choose>
+			<xsl:when test="string($langParam)">
+				<xsl:value-of select="$langParam"/>
+			</xsl:when>
+			<xsl:when test="string(doc('input:request')/request//header[name[. = 'accept-language']]/value)">
+				<xsl:value-of select="kerameikos:parseAcceptLanguage(doc('input:request')/request//header[name[. = 'accept-language']]/value)[1]"/>
+			</xsl:when>
+		</xsl:choose>
+	</xsl:param>
 
 	<!-- config and global variables -->
 	<xsl:variable name="display_path">../</xsl:variable>
@@ -210,6 +223,22 @@
 							<div class="col-md-12 page-section">
 								<div id="mapcontainer" class="map-normal">
 									<div id="info"/>
+								</div>
+								<div style="margin:10px 0">
+									<table>
+										<tbody>
+											<tr>
+												<td style="background-color:#6992fd;border:2px solid black;width:50px;"/>
+												<td style="width:100px;padding-left:6px;">
+													<xsl:value-of select="kerameikos:normalizeCurie('kon:ProductionPlace', $lang)"/>
+												</td>
+												<td style="background-color:#d86458;border:2px solid black;width:50px;"/>
+												<td style="width:100px;padding-left:6px;">
+													<xsl:value-of select="kerameikos:normalizeField('findspot', $lang)"/>
+												</td>
+											</tr>
+										</tbody>
+									</table>
 								</div>
 							</div>
 						</div>

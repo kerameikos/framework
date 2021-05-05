@@ -11,6 +11,7 @@ body{
     margin-bottom: 0;
 }
 .content{
+    padding-top: 10px;
     padding-bottom: 10px;
     background-color: #F8F8F8;
 }
