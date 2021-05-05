@@ -18,6 +18,26 @@
 		<p:output name="data" id="request"/>
 	</p:processor>
 	
+	<!-- get query from a text file on disk -->
+	<p:processor name="oxf:url-generator">
+		<p:input name="config">
+			<config>
+				<url>oxf:/apps/kerameikos/ui/sparql/getObject.sparql</url>
+				<content-type>text/plain</content-type>
+				<encoding>utf-8</encoding>
+			</config>
+		</p:input>
+		<p:output name="data" id="query"/>
+	</p:processor>
+	
+	<p:processor name="oxf:text-converter">
+		<p:input name="data" href="#query"/>
+		<p:input name="config">
+			<config/>
+		</p:input>
+		<p:output name="data" id="query-document"/>
+	</p:processor>
+	
 	<!-- read the LOD vocab URIs from the RDF/XML and execute API calls in order to generate one large RDF block -->
 	<p:processor name="oxf:unsafe-xslt">
 		<p:input name="data" href="#data"/>		
@@ -62,6 +82,7 @@
 	<!-- serialize into HTML -->
 	<p:processor name="oxf:unsafe-xslt">
 		<p:input name="request" href="#request"/>
+		<p:input name="query" href="#query-document"/>
 		<p:input name="data" href="aggregate('content', #data, ../../../../config.xml)"/>		
 		<p:input name="rdf" href="#rdf"/>
 		<p:input name="config" href="../../../../ui/xslt/serializations/sparql/object-html.xsl"/>

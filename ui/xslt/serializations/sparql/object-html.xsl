@@ -26,6 +26,7 @@
 			</xsl:when>
 		</xsl:choose>
 	</xsl:param>
+	<xsl:param name="query" select="replace(doc('input:query'), '%URI%', $uri)"/>
 
 	<!-- hasGeo variable evaluates whether there is a place in the production event or a mappable findspot -->
 	<xsl:variable name="hasGeo" as="xs:boolean"
@@ -83,6 +84,27 @@
 				<div class="col-md-12">
 					<xsl:apply-templates select="descendant::rdf:RDF"/>
 
+					<!-- display links to download -->
+					<ul class="list-inline text-right">
+						<li>
+							<strong>Download: </strong>
+						</li>
+						<li>
+							<a href="../query?query={encode-for-uri($query)}&amp;output=xml">RDF/XML</a>
+						</li>
+						<li>
+							<a href="../query?query={encode-for-uri($query)}&amp;output=text">Turtle</a>
+						</li>
+						<!--<li>
+				<a href="../query?query={encode-for-uri($query)}&amp;output=json">JSON-LD</a>
+			</li>-->
+						<xsl:if test="$hasGeo = true()">
+							<li>
+								<a href="./geoJSON?uri={encode-for-uri($uri)}">GeoJSON</a>
+							</li>				
+						</xsl:if>
+					</ul>
+
 					<div class="hidden">
 						<span id="mapboxKey">
 							<xsl:value-of select="/content/config/mapboxKey"/>
@@ -115,32 +137,7 @@
 
 	<!-- SPARQL DESCRIBE/CONSTRUCT response -->
 	<xsl:template match="rdf:RDF">
-
 		<xsl:apply-templates select="crm:E22_Man-Made_Object | *[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E22_Man-Made_Object']"/>
-
-		<!-- display links to download -->
-		<!--<ul class="list-inline">
-			<li>
-				<strong>Download: </strong>
-			</li>
-			<li>
-				<a href="./query?query={encode-for-uri($query)}&amp;output=xml">RDF/XML</a>
-			</li>
-			<li>
-				<a href="./query?query={encode-for-uri($query)}&amp;output=text">Turtle</a>
-			</li>
-			<li>
-				<a href="./query?query={encode-for-uri($query)}&amp;output=json">JSON-LD</a>
-			</li>
-			<xsl:if test="$hasGeo = true()">
-				<li>
-					<a href="./apis/query.json?query={encode-for-uri($query)}">GeoJSON</a>
-				</li>
-				<li>
-					<a href="./apis/query.kml?query={encode-for-uri($query)}">KML</a>
-				</li>
-			</xsl:if>
-		</ul>-->
 	</xsl:template>
 
 	<!-- render the HMO into HTML -->
