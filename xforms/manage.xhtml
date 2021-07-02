@@ -1433,6 +1433,13 @@ WHERE {
 											</xforms:output>
 										</div>
 									</xforms:group>
+									<xforms:group ref="dcterms:rights">
+										<div>
+											<xforms:output value="if (@rdf:resource) then @rdf:resource else .">
+												<xforms:label>License</xforms:label>
+											</xforms:output>
+										</div>
+									</xforms:group>
 									<!-- the validate trigger is only enabled when the VoID RDF metadata conforms to basic requirements -->
 									<xforms:trigger bind="validate-trigger">
 										<xforms:label><span class="glyphicon glyphicon-check"></span>Validate</xforms:label>
