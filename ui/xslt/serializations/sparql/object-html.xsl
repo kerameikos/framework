@@ -363,7 +363,7 @@
 	</xsl:template>
 
 	<!-- parsing properties that point to a more complex node -->
-	<xsl:template match="crm:P108i_was_produced_by | crm:P4_has_time-span | crm:P43_has_dimension | crmsci:O19i_was_object_found_by | crm:P89_falls_within">
+	<xsl:template match="crm:P108i_was_produced_by | crm:P4_has_time-span | crm:P43_has_dimension | crmsci:O19i_was_object_found_by | crm:P89_falls_within | crm:P9_consists_of">
 		<xsl:choose>
 			<xsl:when test="child::*">
 				<xsl:apply-templates select="child::*" mode="node"/>
@@ -386,12 +386,13 @@
 
 		<xsl:choose>
 			<xsl:when test="self::crm:E12_Production or rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E12_Production'">
+				<xsl:apply-templates select="crm:P9_consists_of"/>
 				<xsl:apply-templates select="crm:P14_carried_out_by"/>
 				<xsl:apply-templates select="crm:P10_falls_within"/>
 				<xsl:apply-templates select="crm:P7_took_place_at"/>
 				<xsl:apply-templates select="crm:P32_used_general_technique"/>
-				<xsl:apply-templates select="crm:P4_has_time-span"/>
-			</xsl:when>
+				<xsl:apply-templates select="crm:P4_has_time-span"/>				
+			</xsl:when>			
 			<xsl:when test="self::crm:E52_Time-Span or rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E52_Time-Span'">
 				<dt>
 					<xsl:value-of select="kerameikos:normalizeCurie('crm:E52_Time-Span', $lang)"/>

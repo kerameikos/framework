@@ -17,6 +17,7 @@ CONSTRUCT {?s ?p ?o .
           ?s crm:P138i_has_representation ?image . ?image ?imageP ?imageO .
           ?s crm:P108i_was_produced_by ?prod . ?prod ?prodP ?prodO .
           ?prod crm:P4_has_time-span ?timespan . ?timespan ?timespanP ?timespanO .
+          ?prod crm:P9_consists_of ?part . ?part ?partP ?partO .
           ?s crm:P43_has_dimension ?dim . ?dim ?dimP ?dimO .
           ?s crmsci:O19i_was_object_found_by ?encounter.              
           ?encounter crm:P7_took_place_at ?place ;
@@ -30,7 +31,8 @@ WHERE {
   ?s crm:P1_is_identified_by ?id . ?id ?idP ?idO .
   OPTIONAL {?s crm:P138i_has_representation ?image . ?image ?imageP ?imageO }
   OPTIONAL {?s crm:P108i_was_produced_by ?prod . ?prod ?prodP ?prodO .
-           OPTIONAL {?prod crm:P4_has_time-span ?timespan . ?timespan ?timespanP ?timespanO}}
+           OPTIONAL {?prod crm:P4_has_time-span ?timespan . ?timespan ?timespanP ?timespanO}
+           OPTIONAL {?prod crm:P9_consists_of ?part . ?part ?partP ?partO}}
   OPTIONAL {?s crm:P43_has_dimension ?dim . ?dim ?dimP ?dimO}
   OPTIONAL {?s crmsci:O19i_was_object_found_by ?encounter .
     ?encounter crm:P7_took_place_at ?place ;
