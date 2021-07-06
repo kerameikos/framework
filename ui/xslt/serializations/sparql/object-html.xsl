@@ -69,6 +69,9 @@
 				</xsl:if>
 
 				<script type="text/javascript" src="{$display_path}ui/javascript/object_functions.js"/>
+				
+				<!-- include metadata -->
+				
 			</head>
 			<body>
 				<xsl:call-template name="header"/>
