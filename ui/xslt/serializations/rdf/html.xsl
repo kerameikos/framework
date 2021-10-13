@@ -151,8 +151,8 @@
 				<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
 
 				<!-- distribution visualization -->
-				<script type="text/javascript" src="https://d3plus.org/js/d3.js"/>
-				<script type="text/javascript" src="https://d3plus.org/js/d3plus.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/d3.min.js"/>
+				<script type="text/javascript" src="{$display_path}ui/javascript/d3plus.min.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>
 				<!--<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>-->
