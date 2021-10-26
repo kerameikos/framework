@@ -31,6 +31,9 @@
 			<xsl:when test="$type = 'crm:E40_Legal_Body'">
 				<xsl:value-of select="concat('keeper kid:', $id)"/>
 			</xsl:when>
+			<xsl:when test="$type = 'foaf:Person' or $type = 'foaf:Group'">
+				<xsl:value-of select="concat('artist kid:', $id)"/>
+			</xsl:when>
 			<xsl:otherwise>
 				<xsl:value-of
 					select="concat(concat(lower-case(substring(substring-after($type, ':'), 1, 1)), substring(substring-after($type, ':'), 2)), ' kid:', $id)"/>

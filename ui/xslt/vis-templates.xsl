@@ -366,6 +366,7 @@
 
 		<xsl:variable name="properties" as="element()*">
 			<properties>
+				<prop value="artist" class="foaf:Group|foaf:Person">Artist</prop>
 				<prop value="keeper" class="crm:E40_Legal_Body">Collection</prop>
 			<!--	<prop value="from">Date, From</prop>
 				<prop value="to">Date, To</prop>-->

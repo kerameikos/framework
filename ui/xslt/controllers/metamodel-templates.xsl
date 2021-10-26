@@ -27,7 +27,7 @@
                     <triple s="{$subject}" p="crm:P108i_was_produced_by" o="?prod"/>
                     <triple s="?prod" p="crm:P10_falls_within" o="{$object}"/>
                 </xsl:when>
-                <xsl:when test="$property = 'person'">
+                <xsl:when test="$property = 'artist'">
                     <triple s="{$subject}" p="crm:P108i_was_produced_by" o="?prod"/>
                     <union>
                         <triple s="?prod" p="crm:P14_carried_out_by" o="{$object}"/>
