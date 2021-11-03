@@ -51,6 +51,8 @@
 					<delete-success></delete-success>
 					<status></status>
 					<type></type>
+					<conceptScheme></conceptScheme>
+					<conceptScheme_uri></conceptScheme_uri>
 					<atom-type></atom-type>
 					<atom-search></atom-search>
 					<atom-id></atom-id>
@@ -404,14 +406,18 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				</xforms:bind>
 				<xforms:bind id="save-trigger" nodeset="save-trigger" type="xs:boolean" readonly=". != true()"/>
 			</xforms:bind>
+			
+			<xforms:bind id="deprecate-trigger" readonly="instance('doc')/*[1]/dcterms:isReplacedBy"/>
 
 			<!-- **************** DYNAMIC VALIDATION CONTROLS ********************** -->
 			<xforms:action ev:event="xxforms-invalid" ev:observer="doc">
 				<xforms:setvalue ref="instance('control-instance')/save-trigger" value="false()"/>
 			</xforms:action>
-
+			
 			<xforms:action ev:event="xxforms-valid" ev:observer="doc">
-				<xforms:setvalue ref="instance('control-instance')/save-trigger" value="true()"/>
+				<!-- force the trigger to be readonly if the ID is deprecated -->
+				<xforms:setvalue ref="instance('control-instance')/save-trigger" value="false()" if="instance('doc')/*[1]/dcterms:isReplacedBy"/>
+				<xforms:setvalue ref="instance('control-instance')/save-trigger" value="true()" if="not(instance('doc')/*[1]/dcterms:isReplacedBy)"/>
 			</xforms:action>
 
 			<!-- ************* QUERY ATOM **********************-->
@@ -960,6 +966,16 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 											<xforms:setvalue ref="instance('control-instance')/content_before_hash"
 												value="digest(normalize-space(saxon:serialize(instance('doc'), 'xml')), 'MD5', 'hex')"/>
 										</xforms:action>
+									</xforms:action>
+								</xforms:trigger>
+								
+								<xforms:trigger bind="deprecate-trigger">
+									<xforms:label><span class="glyphicon glyphicon-remove-sign"></span>Deprecate</xforms:label>
+									<xforms:action ev:event="DOMActivate">
+										<!-- show deprecate window -->
+										<xforms:var name="type" select="instance('doc')/*[1]/name()"/>
+										<xforms:setvalue ref="instance('control-instance')/atom-type" value="concat('&#x022;', $type, '&#x022;')"/>
+										<xxforms:show dialog="deprecate-dialog"/>
 									</xforms:action>
 								</xforms:trigger>
 							</div>
@@ -1749,6 +1765,110 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 				</xforms:group>
 			</div>
 		</xxforms:dialog>
+		
+		<xxforms:dialog id="deprecate-dialog" appearance="full" level="modal" close="true" draggable="true" visible="false">
+			<xforms:label>Deprecate ID</xforms:label>
+			<div>
+				<p>Search for an existing ID to forward. By default, this ID is usually the same RDF class.</p>
+				
+				<div>
+					<xforms:select1 ref="instance('control-instance')/atom-type">
+						<xforms:label>Type</xforms:label>
+						<xforms:itemset nodeset="instance('classes')/class">
+							<xforms:label ref="label"/>
+							<xforms:value ref="concat('&#x022;', type, '&#x022;')"/>
+						</xforms:itemset>
+					</xforms:select1>
+				</div>
+				
+				<div>
+					<xforms:input ref="instance('control-instance')/atom-search">
+						<xforms:label>Keyword</xforms:label>
+					</xforms:input>
+					
+					<xforms:trigger>
+						<xforms:label>Search</xforms:label>
+						<!-- delete current options in the instance and initiate new query -->
+						<xforms:action ev:event="DOMActivate">
+							<xforms:send submission="query-feed"/>
+						</xforms:action>
+					</xforms:trigger>
+				</div>
+				
+			</div>
+			<div style="width:400px;">
+				<xforms:group ref=".[count(instance('feed')//atom:entry) &gt; 0]">
+					<h4>Results</h4>
+					<div>
+						<xforms:select1 ref="instance('control-instance')/atom-id" appearance="compact">
+							<xforms:itemset nodeset="instance('feed')//atom:entry[not(atom:id = instance('control-instance')/id)]">
+								<xforms:label ref="atom:title"/>
+								<xforms:value ref="atom:id"/>
+							</xforms:itemset>
+							<xforms:action ev:event="xforms-value-changed">
+								<xforms:setvalue ref="instance('control-instance')/atom-summary"
+									value="instance('feed')//atom:entry[atom:id = instance('control-instance')/atom-id]/atom:summary"/>
+							</xforms:action>
+						</xforms:select1>
+						<xforms:trigger>
+							<xforms:label>Select</xforms:label>
+							<xforms:action ev:event="DOMActivate">
+								<!-- delete all triples which are not skos:prefLabel and skos:definition -->
+								<xforms:delete nodeset="instance('doc')/*[not(position() = 1)]"/>
+								<xforms:delete nodeset="instance('doc')/*[1]/*[not(name()='skos:prefLabel') and not(name()='skos:definition')]"/>
+								
+								<!-- insert dcterms:isReplacedBy -->
+								<xforms:insert context="instance('doc')/*[1]" nodeset="./child::node()[last()]"
+									origin="xforms:element('dcterms:isReplacedBy', (xforms:attribute('rdf:resource', concat('http://kerameikos.org/id/', instance('control-instance')/atom-id)), ''))"/>
+								
+								<!-- blank atom search nodes and atom feed -->
+								<xforms:delete nodeset="instance('feed')/*"/>
+								<xforms:setvalue ref="instance('control-instance')/atom-search"/>
+								<xforms:setvalue ref="instance('control-instance')/atom-id"/>
+								<xforms:setvalue ref="instance('control-instance')/atom-summary"/>
+								
+								<!-- save file to the filesystem -->
+								<xforms:setvalue ref="instance('save-config')/url"
+									value="concat(instance('config')/data_path, '/id/',  instance('control-instance')/id, '.rdf')"/>
+								<xforms:insert nodeset="instance('dump')"
+									origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('doc'), instance('save-config')), 'data')"/>
+								
+								<!-- delete graph from triplestore, then repost updates -->
+								<xforms:setvalue ref="instance('sparqlUpdate')"
+									value="replace(instance('sparqlUpdate-template'), 'URI', instance('doc')/*[1]/@rdf:about)"/>
+								<xforms:send submission="delete-graph"/>
+								<xforms:send submission="post-new"/>
+								
+								<!-- delete from Solr -->
+								<xforms:setvalue ref="instance('deleteId')/id" value="instance('control-instance')/id"/>
+								<xforms:send submission="delete-id-from-solr"/>
+								<xxforms:hide dialog="deprecate-dialog"/>
+							</xforms:action>
+						</xforms:trigger>
+					</div>
+					<xforms:group ref=".[string-length(instance('control-instance')/atom-summary) &gt; 0]">
+						<div>
+							<xforms:output ref="instance('control-instance')/atom-summary">
+								<xforms:label>Definition</xforms:label>
+							</xforms:output>
+							<xforms:trigger appearance="minimal">
+								<xforms:label>
+									<span class="glyphicon glyphicon-new-window"></span>
+								</xforms:label>
+								<xforms:action ev:event="DOMActivate">
+									<xforms:load show="new"
+										resource="{concat('http://kerameikos.org/id/', instance('control-instance')/atom-id)}"/>
+								</xforms:action>
+							</xforms:trigger>
+						</div>
+					</xforms:group>
+				</xforms:group>
+				<xforms:group ref=".[count(instance('feed')//atom:entry) = 0 and string(instance('feed')/atom:title)]">
+					<h4>No results found.</h4>
+				</xforms:group>
+			</div>
+		</xxforms:dialog>		
+		
 		<!-- hidden values -->
 		<div style="display:none">
 			<xforms:input ref="instance('control-instance')/geo/hasFeature" id="geo-hasFeature"/>
