@@ -7,7 +7,7 @@
 	xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:edm="http://www.europeana.eu/schemas/edm/"
 	xmlns:atom="http://www.w3.org/2005/Atom" xmlns:org="http://www.w3.org/ns/org#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
 	xmlns:kerameikos="https://github.com/kerameikos/" xmlns:prov="http://www.w3.org/ns/prov#" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
-	xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#">
+	xmlns:crmgeo="http://www.ics.forth.gr/isl/CRMgeo/" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#">
 	<head>
 		<title>Kerameikos: Import Concepts from Google Spreadsheets</title>
 		<link rel="stylesheet" href="/fr/style/bootstrap/css/bootstrap.css" type="text/css" />
@@ -57,9 +57,10 @@
 			<xforms:instance id="rdf" xxforms:exclude-result-prefixes="xhtml xforms xs ev xxforms fr res xi kerameikos atom">
 				<rdf:RDF xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:prov="http://www.w3.org/ns/prov#"
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
-					xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-					xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-					xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
+					xmlns:crmgeo="http://www.ics.forth.gr/isl/CRMgeo/" xmlns:edm="http://www.europeana.eu/schemas/edm/"
+					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
+					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
+					xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
 					xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
 					xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#" xmlns=""/>
 			</xforms:instance>
@@ -99,7 +100,7 @@
 					</ontolex:Form>
 				</ontolex:otherForm>
 			</xforms:instance>
-			
+
 			<xforms:instance id="time-span-template" xxforms:exclude-result-prefixes="#all">
 				<crm:P4_has_time-span>
 					<crm:E52_Time-Span/>
@@ -242,7 +243,7 @@
 			<xforms:instance id="api" xxforms:exclude-result-prefixes="#all">
 				<json xmlns=""></json>
 			</xforms:instance>
-			
+
 			<!-- refactor the API response into a processable model -->
 			<xforms:instance id="sheet" xxforms:exclude-result-prefixes="#all">
 				<sheet xmlns=""></sheet>
@@ -444,24 +445,24 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				instance="api" replace="instance">
 				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to receive JSON Response from Google Sheets API for the key
 					provided.</xforms:message>
-				
+
 				<!-- query the API gain to load the first sheet JSON -->
 				<xforms:action ev:event="xforms-submit-done">
 					<xforms:setvalue ref="instance('control-instance')/spreadsheet_uri"
 						value="concat('https://docs.google.com/spreadsheets/d/', instance('control-instance')/spreadsheet_key, '/pubhtml')"/>
-					
+
 					<xforms:setvalue ref="instance('control-instance')/sheets_api_url"
 						value="concat('https://sheets.googleapis.com/v4/spreadsheets/', instance('control-instance')/spreadsheet_key, '/values/', encode-for-uri(instance('api')/sheets/_[1]/properties/title), '?key=', instance('config')/googleKey)"/>
-					
+
 					<xforms:send submission="query-sheet"/>
 				</xforms:action>
 			</xforms:submission>
-			
+
 			<xforms:submission id="query-sheet" serialization="application/json" method="get" action="{instance('control-instance')/sheets_api_url}"
 				instance="api" replace="instance">
 				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to receive JSON Response from Google Sheets API for the key
 					provided.</xforms:message>
-				
+
 				<!-- process the sheet JSON response and create the mappings -->
 				<xforms:action ev:event="xforms-submit-done">
 					<xforms:action if="count(instance('api')/values/_) &gt; 0">
@@ -480,7 +481,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 							<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]"
 								origin="xforms:element('coordinates-invalid', 'false')"/>
 						</xforms:action>
-						
+
 						<!-- read whether or not the spreadsheet already exists in the system -->
 						<xforms:action if="not(instance('spreadsheet-rdf')/prov:Entity[@rdf:about = instance('control-instance')/spreadsheet_uri])">
 							<!-- if there is no matching URI for the spreadsheet (prov:Entity), then insert the spreadsheet template into the spreadsheet RDF -->
@@ -488,12 +489,12 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 							<xforms:setvalue ref="instance('spreadsheet-rdf')/prov:Entity[last()]/@rdf:about"
 								value="instance('control-instance')/spreadsheet_uri"/>
 						</xforms:action>
-						
+
 						<!-- process the remaining rows into a sheet -->
 						<xforms:action xxforms:iterate="instance('api')/values/_[@type = 'array'][position() &gt; 1]">
-							
+
 							<xforms:insert context="instance('sheet')" nodeset="./child::node()[last()]" origin="xforms:element('row')"/>
-							
+
 							<xforms:action xxforms:iterate="context()/_">
 								<xforms:var name="val" select="normalize-space(.)"/>
 								<xforms:var name="position" select="position()"/>
@@ -502,7 +503,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 									origin="xforms:element('cell', (xforms:attribute('name', $heading), $val))"/>
 							</xforms:action>
 						</xforms:action>
-						
+
 						<xforms:toggle case="mapping-interface"/>
 					</xforms:action>
 					<!-- if there are no entries in the Atom feed, set the error interface -->
@@ -699,11 +700,11 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 									<xforms:trigger bind="load-trigger">
 										<xforms:label>Load Spreadsheet</xforms:label>
 										<xforms:action ev:event="DOMActivate">
-											
+
 											<!-- load spreadsheet JSON metadata -->
 											<xforms:setvalue ref="instance('control-instance')/sheets_api_url"
 												value="concat('https://sheets.googleapis.com/v4/spreadsheets/', instance('control-instance')/spreadsheet_key, '?includeGridData=false&amp;key=', instance('config')/googleKey)"/>
-											
+
 											<xforms:send submission="query-spreadsheet"/>
 										</xforms:action>
 									</xforms:trigger>
@@ -1098,7 +1099,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																origin="xforms:element('error', concat('End Date is not a number: ', $value))"/>
 														</xforms:action>
-														
+
 														<!-- start and end dates for an E4_Period -->
 														<xforms:action if="$mapping = 'begin' and string-length($value) &gt; 0">
 															<xforms:insert if="not($value castable as xs:integer)"
@@ -1120,7 +1121,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																origin="xforms:element('error', concat('End Date is not a number: ', $value))"/>
 														</xforms:action>
-														
+
 														<!-- validate birth and death dates -->
 														<xforms:action if="$mapping = 'bio:birth' and string-length($value) &gt; 0">
 															<xforms:insert
@@ -1379,8 +1380,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 											<xforms:send submission="load-rdf"/>
 
 											<!-- *** BEGIN SPREADSHEET TO RDF IMPORT *** -->
-											<xforms:action
-												xxforms:iterate="context()/cell">
+											<xforms:action xxforms:iterate="context()/cell">
 												<xforms:var name="from" select="@name"/>
 												<xforms:var name="value" select="normalize-space(data(context()))"/>
 												<!-- only process those fields which have been mapped in the user interface -->
@@ -1509,9 +1509,14 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $value), ''))"
 																if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource = $value])"/>
-															<!-- if the type is crm:E53_Place and the $mapping is skos:broader, then insert dcterms:isPartOf within the geo:SpatialThing, if applicable -->
-															<xforms:action
-																if="(instance('control-instance')/type='crm:E53_Place') and $mapping='skos:broader'">
+															
+															<!-- if the type is crm:E53_Place and the $mapping is skos:broader, then insert dcterms:isPartOf within the geo:SpatialThing, if applicable, 
+															and also insert crm:P89_falls_within within the concept-->
+															<xforms:action if="(instance('control-instance')/type='crm:E53_Place') and $mapping='skos:broader'">
+																<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
+																	origin="xforms:element('crm:P89_falls_within', (xforms:attribute('rdf:resource', $value), ''))"
+																	if="not(instance('rdf')/*[1]/crm:P89_falls_within[@rdf:resource = $value])"/>
+																
 																<xforms:var name="locationUri" select="concat($uri, '#this')"/>
 																<!-- if there is a valid latitude number and no geo:SpatialThing (the geo:lat and geo:long have not yet been processed), insert geo:SpatialThing -->
 																<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
@@ -1529,14 +1534,24 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 													<!-- create geo:location and geo:SpatialThing if there a geo:lat -->
 													<xforms:action if="$mapping = 'geo:lat' or $mapping='geo:long'">
 														<xforms:var name="locationUri" select="concat($uri, '#this')"/>
-														<!-- insert geo:location if it doesn't exist -->
+														<!-- insert geo:location and crm:P168_place_is_defined_by if they don't exist -->
 														<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 															origin="xforms:element('geo:location', (xforms:attribute('rdf:resource', $locationUri), ''))"
 															if="not(instance('rdf')/*[1]/geo:location)"/>
+														<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
+															origin="xforms:element('crm:P168_place_is_defined_by', (xforms:attribute('rdf:resource', $locationUri), ''))"
+															if="not(instance('rdf')/*[1]/crm:P168_place_is_defined_by)"/>
+
 														<!-- if there is no existing SpatialThing, then create one -->
 														<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
 															origin="xforms:element('geo:SpatialThing', (xforms:attribute('rdf:about', $locationUri), ''))"
 															if="not(instance('rdf')/geo:SpatialThing)"/>
+
+														<!-- insert additional class for CIDOC-CRM -->
+														<xforms:insert context="instance('rdf')/geo:SpatialThing" nodeset="./child::node()[last()]"
+															origin="xforms:element('rdf:type', (xforms:attribute('rdf:resource', 'http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression')))"
+															if="not(instance('rdf')/geo:SpatialThing/rdf:type[@rdf:resource = 'http://www.ics.forth.gr/isl/CRMgeo/SP5_Geometric_Place_Expression'])"/>
+
 														<!-- insert coordinates if they don't exist -->
 														<xforms:insert context="instance('rdf')/geo:SpatialThing" nodeset="./child::node()[last()]"
 															origin="xforms:element($mapping, (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#decimal'), $value))"
@@ -1544,8 +1559,18 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 														<xforms:insert context="instance('rdf')/geo:SpatialThing" nodeset="./child::node()[last()]"
 															origin="xforms:element($mapping, (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#decimal'), $value))"
 															if="not(instance('rdf')/geo:SpatialThing/*[name()=$mapping])"/>
+
+														<!-- insert WKT for CIDOC-CRM compliance -->
+
+														<xforms:var name="wkt"
+															select="concat('Point(', normalize-space(data(context()/cell[@name=instance('mappings')/mapping[@to='geo:long']/@from])), ' ', 
+															normalize-space(data(context()/cell[@name=instance('mappings')/mapping[@to='geo:lat']/@from])), ')')"/>
+
+														<xforms:insert context="instance('rdf')/geo:SpatialThing" nodeset="./child::node()[last()]"
+															origin="xforms:element('crmgeo:asWKT', (xforms:attribute('rdf:datatype', 'http://www.opengis.net/ont/geosparql#wktLiteral'), $wkt))"
+															if="not(instance('rdf')/geo:SpatialThing/crmgeo:asWKT)"/>
 													</xforms:action>
-													
+
 													<!-- write start and end dates for non-E4_Period concepts -->
 													<xforms:action if="$mapping = 'edm:begin' or $mapping='edm:end'">
 														<xforms:var name="membershipUri"
@@ -1574,34 +1599,40 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																if="not(instance('rdf')/*[1]/*[name()=$mapping])"/>
 														</xforms:action>
 													</xforms:action>
-													
+
 													<!-- insert time-span for E4_Period -->
 													<xforms:action if="$mapping = 'begin' or $mapping = 'end'">
 														<!-- insert the time-span if it doesn't already exist -->
-														<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]" origin="instance('time-span-template')" 
-															if="not(instance('rdf')/*[1]/crm:P4_has_time-span)"/>
-														
+														<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
+															origin="instance('time-span-template')" if="not(instance('rdf')/*[1]/crm:P4_has_time-span)"/>
+
 														<xforms:action if="$mapping = 'begin'">
 															<!-- insert the begin property if it doesn't exist -->
-															<xforms:insert context="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span" nodeset="./child::node()[last()]"
+															<xforms:insert context="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span"
+																nodeset="./child::node()[last()]"
 																origin="xforms:element('crm:P82a_begin_of_the_begin', (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#gYear')))"
 																if="not(instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span/crm:P82a_begin_of_the_begin)"/>
-															
+
 															<!-- always set/reset value of the property -->
-															<xforms:setvalue ref="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span/crm:P82a_begin_of_the_begin" value="format-number(number($value), '0000')"/>
+															<xforms:setvalue
+																ref="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span/crm:P82a_begin_of_the_begin"
+																value="format-number(number($value), '0000')"/>
 														</xforms:action>
-														
+
 														<xforms:action if="$mapping = 'end'">
 															<!-- insert the begin property if it doesn't exist -->
-															<xforms:insert context="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span" nodeset="./child::node()[last()]"
+															<xforms:insert context="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span"
+																nodeset="./child::node()[last()]"
 																origin="xforms:element('crm:P82b_end_of_the_end', (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#gYear')))"
 																if="not(instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span/crm:P82b_end_of_the_end)"/>
-															
+
 															<!-- always set/reset value of the property -->
-															<xforms:setvalue ref="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span/crm:P82b_end_of_the_end" value="format-number(number($value), '0000')"/>
+															<xforms:setvalue
+																ref="instance('rdf')/*[1]/crm:P4_has_time-span/crm:E52_Time-Span/crm:P82b_end_of_the_end"
+																value="format-number(number($value), '0000')"/>
 														</xforms:action>
 													</xforms:action>
-													
+
 													<!-- write org ontology properties into the org:Membership -->
 													<xforms:action if="$mapping='org:role' or $mapping='org:organization'">
 														<xforms:var name="membershipUri"
@@ -1631,7 +1662,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 												<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 													origin="instance('changeNote-template')"/>
 												<xforms:setvalue ref="instance('rdf')/*[1]/skos:changeNote/@rdf:resource" value="concat($uri, '#provenance')"/>
-												
+
 												<!-- *** Insert ProvenanceStatement *** -->
 												<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
 													origin="instance('provenance-template')"/>
@@ -1663,10 +1694,10 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 													value="concat(instance('config')/data_path, '/id/',  instance('control-instance')/id, '.rdf')"/>
 												<xforms:insert nodeset="instance('dump')"
 													origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/save-id.xpl', ('doc', 'configuration'), (instance('rdf'), instance('save-config')), 'data')"/>
-												
-												<!-- Post RDF (no deletion necessary ) -->												
+
+												<!-- Post RDF (no deletion necessary ) -->
 												<xforms:send submission="post-rdf"/>
-												
+
 												<!-- post to Solr -->
 												<xforms:insert nodeset="instance('addIndex')"
 													origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/views/serializations/rdf/solr.xpl', 'data', instance('rdf'), 'data')"/>
@@ -1753,8 +1784,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 								</thead>
 								<tbody>
 									<xforms:repeat nodeset="instance('sheet')/row">
-										<xforms:var name="id"
-											select="cell[@name=instance('mappings')/mapping[@to='id']/@from]"/>
+										<xforms:var name="id" select="cell[@name=instance('mappings')/mapping[@to='id']/@from]"/>
 										<tr>
 											<td>
 												<xforms:trigger appearance="minimal">
@@ -1765,9 +1795,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 												</xforms:trigger>
 											</td>
 											<td>
-												<xforms:output
-													ref="cell[@name=instance('mappings')/mapping[@to='skos:prefLabel' and @lang='en']/@from]"
-												/>
+												<xforms:output ref="cell[@name=instance('mappings')/mapping[@to='skos:prefLabel' and @lang='en']/@from]"/>
 											</td>
 										</tr>
 									</xforms:repeat>
