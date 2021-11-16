@@ -86,7 +86,7 @@
 								<facet type="crm:E4_Period">http://collection.britishmuseum.org/id/thesauri/matcult</facet>
 								<facet type="foaf:Person">http://collection.britishmuseum.org/id/person-institution</facet>
 								<facet type="foaf:Organization">http://collection.britishmuseum.org/id/person-institution</facet>
-								<facet type="kon:ProductionPlace">http://collection.britishmuseum.org/id/place</facet>
+								<facet type="crm:E53_Place">http://collection.britishmuseum.org/id/place</facet>
 								<facet type="kon:Shape">http://collection.britishmuseum.org/id/thesauri/object</facet>
 								<facet type="kon:Style">http://collection.britishmuseum.org/id/thesauri/series-type</facet>
 								<facet type="kon:Technique">http://collection.britishmuseum.org/id/thesauri/ware</facet>

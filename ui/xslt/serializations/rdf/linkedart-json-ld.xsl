@@ -58,7 +58,7 @@
 				<xsl:when test="$type = 'foaf:Group' or $type = 'foaf:Organization'">Group</xsl:when>
 				<xsl:when test="$type = 'crm:E4_Period'">Period</xsl:when>
 				<xsl:when test="$type = 'crm:E57_Material'">Material</xsl:when>
-				<xsl:when test="$type = 'kon:ProductionPlace'">Place</xsl:when>
+				<xsl:when test="$type = 'crm:E53_Place'">Place</xsl:when>
 				<xsl:when test="$type = 'skos:ConceptScheme'">AuthorityDocument</xsl:when>
 				<xsl:otherwise>Type</xsl:otherwise>
 			</xsl:choose>
@@ -314,7 +314,7 @@
 			</_label>
 			<type>
 				<xsl:choose>
-					<xsl:when test="self::kon:ProductionPlace">Place</xsl:when>
+					<xsl:when test="self::crm:E53_Place">Place</xsl:when>
 					<xsl:otherwise>Type</xsl:otherwise>
 				</xsl:choose>
 			</type>

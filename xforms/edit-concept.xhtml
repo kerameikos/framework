@@ -144,7 +144,7 @@
 					</class>
 					<class>
 						<label>Production Place</label>
-						<type>kon:ProductionPlace</type>
+						<type>crm:E53_Place</type>
 					</class>
 					<class>
 						<label>Role</label>
@@ -673,7 +673,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
 											<span class="glyphicon glyphicon-plus"></span><xforms:output
-												value="if ($type='kon:ProductionPlace') then 'Parent Region' else 'Broader Concept'"/>
+												value="if ($type='crm:E53_Place') then 'Parent Region' else 'Broader Concept'"/>
 										</xforms:label>
 										<xforms:action ev:event="DOMActivate">
 											<xforms:setvalue ref="instance('control-instance')/atom-type"
@@ -690,7 +690,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 									<xforms:insert ev:event="DOMActivate" origin="instance('seeAlso-template')" context="." nodeset="./child::node()[last()]"/>
 								</xforms:trigger>
 							</li>
-							<xforms:group ref=".[$type='kon:ProductionPlace'][not(instance('doc')/geo:SpatialThing)]">
+							<xforms:group ref=".[$type='crm:E53_Place'][not(instance('doc')/geo:SpatialThing)]">
 								<li>
 									<h4>Geography</h4>
 								</li>
@@ -1619,7 +1619,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							<kerameikos:getty/>
 						</xforms:group>
 						<!-- extract coordinates from Pleiades if there is a Pleiades URI in skos:exactMatch, but no geo:lat and geo:long -->
-						<xforms:group ref=".[$type='kon:ProductionPlace']">
+						<xforms:group ref=".[$type='crm:E53_Place']">
 							<xforms:group ref=".[not(skos:exactMatch[contains(@rdf:resource, 'pleiades.stoa.org')])]">
 								<kerameikos:pleiades/>
 							</xforms:group>
@@ -1679,7 +1679,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							<xforms:action ev:event="DOMActivate">
 								<xforms:insert context="instance('doc')/*[1]" nodeset="./child::node()[last()]"
 									origin="xforms:element('skos:broader', (xforms:attribute('rdf:resource', concat('http://kerameikos.org/id/', instance('control-instance')/atom-id)), ''))"/>
-								<!-- insert dcterms:isPartOf if there is a kon:ProductionPlace -->
+								<!-- insert dcterms:isPartOf if there is a crm:E53_Place -->
 								<xforms:insert context="instance('doc')/geo:SpatialThing" nodeset="./child::node()[last()]"
 									origin="xforms:element('dcterms:isPartOf, (xforms:attribute('rdf:resource', concat('http://kerameikos.org/id/', instance('control-instance')/atom-id, '#this')), ''))"/>
 								<!-- blank atom search nodes and atom feed -->

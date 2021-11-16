@@ -180,7 +180,7 @@
 					<prop value="painter" class="foaf:Person|foaf:Group">Painter</prop>
 					<prop value="period" class="crm:E4_Period">Period</prop>
 					<prop value="pottery" class="foaf:Person|foaf:Group">Potter</prop>					
-					<prop value="productionPlace" class="kon:ProductionPlace">Production Place</prop>
+					<prop value="productionPlace" class="crm:E53_Place">Production Place</prop>
 					<prop value="shape" class="kon:Shape">Shape</prop>
 					<prop value="technique" class="kon:Technique">Technique</prop>										
 				</properties>
@@ -374,7 +374,7 @@
 				<prop value="painter" class="foaf:Group|foaf:Person">Painter</prop>
 				<prop value="period" class="crm:E4_Period">Period</prop>
 				<prop value="potter" class="foaf:Group|foaf:Person">Potter</prop>
-				<prop value="productionPlace" class="kon:ProductionPlace">Production Place</prop>
+				<prop value="productionPlace" class="crm:E53_Place">Production Place</prop>
 				<prop value="shape" class="kon:Shape">Shape</prop>
 				<prop value="technique" class="kon:Technique">Technique</prop>									
 			</properties>			

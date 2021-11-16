@@ -183,7 +183,7 @@
 								<class>crm:E40_Legal_Body</class>
 								<class>foaf:Group</class>
 								<class>foaf:Person</class>
-								<class>kon:ProductionPlace</class>
+								<class>crm:E53_Place</class>
 								<class>kon:Shape</class>
 								<!--<class>kon:Style</class>-->
 								<class>kon:Technique</class>
@@ -198,7 +198,7 @@
 								<class>crm:E40_Legal_Body</class>
 								<class>foaf:Group</class>
 								<class>foaf:Person</class>
-								<class>kon:ProductionPlace</class>
+								<class>crm:E53_Place</class>
 								<class>kon:Shape</class>
 								<!--<class>kon:Style</class>-->
 								<class>kon:Technique</class>
@@ -213,7 +213,7 @@
 								<class>crm:E40_Legal_Body</class>
 								<class>foaf:Group</class>
 								<class>foaf:Person</class>
-								<class>kon:ProductionPlace</class>
+								<class>crm:E53_Place</class>
 								<class>kon:Shape</class>
 								<!--<class>kon:Style</class>-->
 								<class>kon:Technique</class>

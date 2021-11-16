@@ -13,7 +13,7 @@
 			<xsl:choose>
 				<xsl:when test="$mode='places'">
 					<xsl:choose>
-						<xsl:when test="$type='kon:ProductionPlace'">
+						<xsl:when test="$type='crm:E53_Place'">
 							<xsl:apply-templates select="descendant::geo:SpatialThing"/>
 						</xsl:when>
 						<xsl:otherwise>
@@ -213,7 +213,7 @@ SELECT DISTINCT ?object ?place ?label ?title ?fromDate ?toDate ?thumb ?id ?keepe
 		</xsl:variable>
 		<xsl:variable name="metadata">
 			<xsl:choose>
-				<xsl:when test="$type='kon:ProductionPlace'"><![CDATA[?object crm:P1_is_identified_by ?id1 ;
+				<xsl:when test="$type='crm:E53_Place'"><![CDATA[?object crm:P1_is_identified_by ?id1 ;
     crm:P1_is_identified_by ?id2 .
 ?id1 a crm:E33_E41_Linguistic_Appellation ;
     crm:P190_has_symbolic_content ?title .
@@ -276,7 +276,7 @@ OPTIONAL {?prod crm:P4_has_time-span ?dates .
 UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
-				<xsl:when test="$type='kon:ProductionPlace'">
+				<xsl:when test="$type='crm:E53_Place'">
 					<![CDATA[{?object crm:P108i_was_produced_by ?prod .
 ?prod crm:P7_took_place_at kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
@@ -434,7 +434,7 @@ UNION {?prod crm:P7_took_place_at ?relPlace .
 								<b>Keeper: </b>
 								<a href="{res:binding[@name='kuri']/res:uri}"><xsl:value-of select="res:binding[@name='keeper']/res:literal"/></a>
 							</li>
-							<xsl:if test="not($type='kon:ProductionPlace')">
+							<xsl:if test="not($type='crm:E53_Place')">
 								<li>
 									<b>Production Place: </b>
 									<a href="{res:binding[@name='place']/res:uri}"><xsl:value-of select="res:binding[@name='label']/res:literal"/></a>

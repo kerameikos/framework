@@ -416,7 +416,7 @@
 				<xsl:text> ?type</xsl:text>
 			</xsl:if>
 			<!-- display lat and long if applicable -->
-			<xsl:if test="$frags[. = 'type:&#x022;kon:ProductionPlace&#x022;']">
+			<xsl:if test="$frags[. = 'type:&#x022;crm:E53_Place&#x022;']">
 				<xsl:text> ?lat ?long</xsl:text>
 			</xsl:if>
 			
@@ -449,7 +449,7 @@
 			</xsl:if>
 			
 			<!-- get lat and long when filtering for mints -->
-			<xsl:if test="$frags[. = 'type:&#x022;kon:ProductionPlace&#x022;']"> .&#x000a;<![CDATA[OPTIONAL {?uri geo:location ?loc . 
+			<xsl:if test="$frags[. = 'type:&#x022;crm:E53_Place&#x022;']"> .&#x000a;<![CDATA[OPTIONAL {?uri geo:location ?loc . 
 	?loc geo:lat ?lat ; geo:long ?long}]]></xsl:if>
 			<!-- suppress deprecated IDs -->
 			<xsl:text>&#x000a;FILTER NOT EXISTS {?uri dcterms:isReplacedBy ?replaced}</xsl:text>

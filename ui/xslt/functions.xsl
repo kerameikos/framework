@@ -170,7 +170,7 @@
 				<xsl:choose>
 					<!-- classes -->
 					<xsl:when test="$curie = 'crm:E52_Time-Span'">Time Span</xsl:when>
-					<xsl:when test="$curie = 'kon:ProductionPlace'">Production Place</xsl:when>
+					<xsl:when test="$curie = 'crm:E53_Place'">Production Place</xsl:when>
 
 					<!-- properties -->
 					<xsl:when test="$curie = 'crm:P4_has_time-span'">Time Span</xsl:when>

@@ -62,7 +62,7 @@ function initialize_map(id) {
     };
     
     //add baselayers
-    if (type == 'kon:ProductionPlace') {
+    if (type == 'crm:E53_Place') {
         overlayMaps[prefLabel] = productionLayer;
     } else {
         overlayMaps[ 'Production Places'] = productionLayer;

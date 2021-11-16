@@ -2,7 +2,7 @@
 <!--
 	Author: Ethan Gruber
 	Date: June 2019
-	Function: Either perform identity processor for a kon:ProductionPlace or execute a SPARQL query for other types of concepts
+	Function: Either perform identity processor for a crm:E53_Place or execute a SPARQL query for other types of concepts
 -->
 <p:config xmlns:p="http://www.orbeon.com/oxf/pipeline" xmlns:oxf="http://www.orbeon.com/oxf/processors" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
 
@@ -36,7 +36,7 @@
 						<class>crm:E40_Legal_Body</class>
 						<class>foaf:Group</class>						
 						<class>foaf:Person</class>
-						<class>kon:ProductionPlace</class>
+						<class>crm:E53_Place</class>
 						<class>kon:Shape</class>
 						<class>kon:Style</class>
 						<class>kon:Technique</class>

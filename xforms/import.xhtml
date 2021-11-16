@@ -168,7 +168,7 @@
 					</class>
 					<class>
 						<label>Production Place</label>
-						<type>kon:ProductionPlace</type>
+						<type>crm:E53_Place</type>
 					</class>
 					<class>
 						<label>Role</label>
@@ -209,8 +209,8 @@
 					<property label="End Date" constraint="crm:E4_Period">end</property>
 					<property label="End Date" exclude="crm:E4_Period">edm:end</property>
 					<property label="Exact Match">skos:exactMatch</property>
-					<property label="Latitude" constraint="kon:ProductionPlace">geo:lat</property>
-					<property label="Longitude" constraint="kon:ProductionPlace">geo:long</property>
+					<property label="Latitude" constraint="crm:E53_Place">geo:lat</property>
+					<property label="Longitude" constraint="crm:E53_Place">geo:long</property>
 					<property label="Organization" constraint="foaf:Person|foaf:Organization|foaf:Group">org:organization</property>
 					<property label="Other Link">rdfs:seeAlso</property>
 					<property label="Related Entity">skos:related</property>
@@ -973,7 +973,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																	<xforms:setvalue ref="instance('mappings')/role-invalid">false</xforms:setvalue>
 																</xforms:action>
 															</xforms:action>
-															<xforms:action if="instance('control-instance')/type='kon:ProductionPlace'">
+															<xforms:action if="instance('control-instance')/type='crm:E53_Place'">
 																<!-- set coordinates-invald to false if there is a count mismatch between lat and long -->
 																<xforms:action
 																	if="(count(//mapping[@to='geo:lat']) = 1 or count(//mapping[@to='geo:long']) = 1) and (count(//mapping[@to='geo:lat']) != count(//mapping[@to='geo:long']))">
@@ -1509,9 +1509,9 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																origin="xforms:element($mapping, (xforms:attribute('rdf:resource', $value), ''))"
 																if="not(instance('rdf')/*[1]/*[name()=$mapping][@rdf:resource = $value])"/>
-															<!-- if the type is kon:ProductionPlace and the $mapping is skos:broader, then insert dcterms:isPartOf within the geo:SpatialThing, if applicable -->
+															<!-- if the type is crm:E53_Place and the $mapping is skos:broader, then insert dcterms:isPartOf within the geo:SpatialThing, if applicable -->
 															<xforms:action
-																if="(instance('control-instance')/type='kon:ProductionPlace') and $mapping='skos:broader'">
+																if="(instance('control-instance')/type='crm:E53_Place') and $mapping='skos:broader'">
 																<xforms:var name="locationUri" select="concat($uri, '#this')"/>
 																<!-- if there is a valid latitude number and no geo:SpatialThing (the geo:lat and geo:long have not yet been processed), insert geo:SpatialThing -->
 																<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"

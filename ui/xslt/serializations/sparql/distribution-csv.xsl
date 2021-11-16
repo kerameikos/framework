@@ -32,7 +32,7 @@
 
 	<xsl:template match="/">
 		<xsl:text>"group","value","uri",</xsl:text>
-		<xsl:if test="$dist = 'kon:ProductionPlace'">
+		<xsl:if test="$dist = 'crm:E53_Place'">
 			<xsl:text>"lat","long",</xsl:text>
 		</xsl:if>
 		<xsl:text>"</xsl:text>
@@ -77,7 +77,7 @@
 				<xsl:element name="uri">
 					<xsl:value-of select="res:binding[@name = 'dist']/res:uri"/>
 				</xsl:element>
-				<xsl:if test="$dist = 'kon:ProductionPlace'">
+				<xsl:if test="$dist = 'crm:E53_Place'">
 					<xsl:element name="lat">
 						<xsl:value-of select="res:binding[@name = 'lat']/res:literal"/>
 					</xsl:element>

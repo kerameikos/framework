@@ -236,7 +236,7 @@
 										<tr>
 											<td style="background-color:#6992fd;border:2px solid black;width:50px;"/>
 											<td style="width:100px;padding-left:6px;">
-												<xsl:value-of select="kerameikos:normalizeCurie('kon:ProductionPlace', $lang)"/>
+												<xsl:value-of select="kerameikos:normalizeCurie('crm:E53_Place', $lang)"/>
 											</td>
 											<td style="background-color:#d86458;border:2px solid black;width:50px;"/>
 											<td style="width:100px;padding-left:6px;">

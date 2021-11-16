@@ -167,7 +167,7 @@
 
                     <xsl:call-template name="kerameikos:findspotLocations"/>
                 </xsl:when>
-                <xsl:when test="$type = 'kon:ProductionPlace'">
+                <xsl:when test="$type = 'crm:E53_Place'">
                     <xsl:call-template name="kerameikos:matchingConcepts">
                         <xsl:with-param name="id" select="$id"/>
                         <xsl:with-param name="type" select="$type"/>
@@ -262,7 +262,7 @@
 
                     <triple s="?place" p="geo:location" o="?loc"/>
                 </xsl:when>
-                <xsl:when test="$type = 'kon:ProductionPlace'">
+                <xsl:when test="$type = 'crm:E53_Place'">
                     <union>
                         <group>
                             <triple s="kid:{$id}" p="geo:location" o="?loc"/>
@@ -363,7 +363,7 @@
 
                     <triple s="?object" p="crm:P45_consists_of" o="?m"/>
                 </xsl:when>
-                <xsl:when test="$type = 'kon:ProductionPlace'">
+                <xsl:when test="$type = 'crm:E53_Place'">
                     <xsl:call-template name="kerameikos:matchingConcepts">
                         <xsl:with-param name="id" select="$id"/>
                         <xsl:with-param name="type" select="$type"/>
