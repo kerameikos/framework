@@ -211,6 +211,34 @@ a:hover{
 }
 /*
   ***************************************
+  ONTOLOGY PAGE
+  ***************************************
+ */
+.entity{
+    border: 1px solid navy;
+    padding: 5px;
+    margin: 5px 0;
+}
+
+.entity h1,
+.entity h2,
+.entity h3,
+.entity h4,
+.entity h5{
+    border-bottom: 1px solid navy;
+}
+.description{
+    border-top: 1px dashed gray;
+    border-bottom: 1px dashed gray;
+    background-color: rgb(242, 243, 244);
+    margin-top: 5px;
+    padding-bottom: 5px;
+}
+.description dl dd{
+    margin-left: 1em;
+}
+/*
+  ***************************************
   PAGINATION/SEARCH RESULTS
   ***************************************
  */

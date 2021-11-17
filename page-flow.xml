@@ -60,9 +60,8 @@
 	<page path="/kerameikos/manifest" model="xpl/models/sparql/getObject.xpl" view="xpl/views/serializations/sparql/object-iiif-manifest.xpl"/>
 	
 	<!-- ONTOLOGY -->
-	<page path="/kerameikos/ontology" model="xpl/models/ontology/get-ontology.xpl" view="xpl/views/pages/ontology.xpl"/>
-	<page path="/kerameikos/ontology.rdf" model="xpl/models/ontology/get-ontology.xpl" view="xpl/controllers/serialize-rdfxml.xpl"/>
-	<page path="/kerameikos/ontology.ttl" model="xpl/models/ontology/get-ontology.xpl" view="xpl/views/serializations/rdf/ttl.xpl"/>
+	<page path="/kerameikos/ontology" model="xpl/models/rdf/get-rdf-ontology-current.xpl" view="xpl/controllers/conneg-ontology.xpl"/>
+	<page path="/kerameikos/ontology/(\d+)$" model="xpl/models/rdf/get-rdf-ontology.xpl" view="xpl/controllers/conneg-ontology.xpl"/>
 	
 	<!-- Solr -->
 	<page path="/kerameikos/browse" model="xpl/models/solr/query.xpl" view="xpl/controllers/conneg-results.xpl"/>	
@@ -104,6 +103,12 @@
 	<page path="/kerameikos/kerameikos.org.ttl"  view="xpl/controllers/call-rdflib.xpl"/>
 	<page path="/kerameikos/pelagios-objects.void.rdf" model="xpl/models/sparql/pelagiosObjectsVoid.xpl" view="xpl/views/serializations/sparql/pelagiosObjectsVoid.xpl"/>
 	<page path="/kerameikos/pelagios-objects\.([0-9]+)\.rdf" model="xpl/models/sparql/pelagiosObjects.xpl" view="xpl/views/serializations/sparql/pelagiosObjects.xpl"/>
+
+	<!-- **** ONTOLOGY FILES **** -->
+	<page path="/kerameikos/ontology.rdf" model="xpl/models/rdf/get-rdf-ontology-current.xpl" view="xpl/controllers/serialize-rdfxml.xpl"/>
+	<page path="/kerameikos/ontology/(.*)\.rdf" model="xpl/models/rdf/get-rdf-ontology.xpl" view="xpl/controllers/serialize-rdfxml.xpl"/>
+	<page path="/kerameikos/ontology.ttl" view="xpl/models/rdf/get-ttl-ontology-current.xpl"/>
+	<page path="/kerameikos/ontology/(.*)\.ttl" view="xpl/models/rdf/get-ttl-ontology.xpl"/>
 
 	<!-- **** CONCEPT SCHEMES **** -->
 	<page path="/kerameikos/(id|editor)/" model="xpl/models/rdf/get-id.xpl" view="xpl/controllers/conneg-id.xpl"/>	
