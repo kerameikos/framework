@@ -120,8 +120,8 @@
 						<type>crm:E78_Collection</type>
 					</class>
 					<class>
-						<label>Group (loose classification)</label>
-						<type>foaf:Group</type>
+						<label>Group/Organization</label>
+						<type>crm:E74_Group</type>
 					</class>
 					<class>
 						<label>Institution</label>
@@ -130,18 +130,14 @@
 					<class>
 						<label>Material</label>
 						<type>crm:E57_Material</type>
-					</class>
-					<class>
-						<label>Organization (Formal)</label>
-						<type>foaf:Organization</type>
-					</class>
+					</class>					
 					<class>
 						<label>Period</label>
 						<type>crm:E4_Period</type>
 					</class>
 					<class>
 						<label>Person</label>
-						<type>foaf:Person</type>
+						<type>crm:E21_Person</type>
 					</class>
 					<class>
 						<label>Production Place</label>
@@ -669,7 +665,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 									/>
 								</xforms:trigger>
 							</li>
-							<xforms:group ref=".[not($type='foaf:Person')]">
+							<xforms:group ref=".[not($type='crm:E21_Person')]">
 								<li>
 									<xforms:trigger appearance="minimal">
 										<xforms:label>
@@ -731,7 +727,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 									</li>
 								</xforms:group>
 							</xforms:group>
-							<xforms:group ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type = 'foaf:Group']">
+							<xforms:group ref=".[$type='crm:E21_Person' or $type = 'crm:E74_Group']">
 								<li>
 									<h4>Roles</h4>
 								</li>
@@ -1431,7 +1427,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 														<span class="glyphicon glyphicon-plus"></span>Artist Group</xforms:label>
 													<xforms:action ev:event="DOMActivate">
 														<xforms:setvalue ref="instance('control-instance')/membership-position" value="$position"/>
-														<xforms:setvalue ref="instance('control-instance')/atom-type">&#x022;foaf:Group&#x022;</xforms:setvalue>
+														<xforms:setvalue ref="instance('control-instance')/atom-type">&#x022;crm:E74_Group&#x022;</xforms:setvalue>
 														<xxforms:show dialog="organization-dialog"/>
 													</xforms:action>
 												</xforms:trigger>
@@ -1441,7 +1437,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 													<xforms:action ev:event="DOMActivate">
 														<xforms:setvalue ref="instance('control-instance')/membership-position" value="$position"/>
 														<xforms:setvalue ref="instance('control-instance')/atom-type"
-															>&#x022;foaf:Organization&#x022;</xforms:setvalue>
+															>&#x022;crm:E74_Group&#x022;</xforms:setvalue>
 														<xxforms:show dialog="organization-dialog"/>
 													</xforms:action>
 												</xforms:trigger>
@@ -1620,7 +1616,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</xforms:group>
 						</xforms:group>
 						<!-- import AAT URIs from Getty -->
-						<xforms:group ref=".[contains($type, 'kon:') or $type='crm:E4_Period' or $type='crm:E57_Material' or $type='foaf:Person']">
+						<xforms:group ref=".[contains($type, 'kon:') or $type='crm:E4_Period' or $type='crm:E57_Material' or $type='crm:E21_Person']">
 							<kerameikos:getty/>
 						</xforms:group>
 						<!-- extract coordinates from Pleiades if there is a Pleiades URI in skos:exactMatch, but no geo:lat and geo:long -->
@@ -1630,7 +1626,7 @@ PREFIX un:	<http://www.owl-ontologies.com/Ontology1181490123.owl#>]]></prefix>
 							</xforms:group>
 						</xforms:group>
 						<!-- query VIAF to add associated URIs -->
-						<xforms:group ref=".[$type='foaf:Person' or $type='foaf:Organization' or $type='crm:E40_Legal_Body' or $type='foaf:Group']">
+						<xforms:group ref=".[$type='crm:E21_Person' or $type='crm:E40_Legal_Body' or $type='crm:E74_Group']">
 							<kerameikos:viaf/>
 						</xforms:group>
 					</xforms:group>

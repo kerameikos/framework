@@ -96,7 +96,7 @@ $(document).ready(function () {
     $('#add-filter').click(function () {
         var type = $('#type').text();
         if (type.indexOf('foaf') >= 0) {
-            type = 'foaf:Person|foaf:Group';
+            type = 'crm:E21_Person|crm:E74_Group';
         }
         $('#field-template').clone().removeAttr('id').appendTo('#filter-container');
         //work on removing the option for the current class

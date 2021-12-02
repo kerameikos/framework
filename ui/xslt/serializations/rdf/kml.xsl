@@ -33,7 +33,7 @@
 				<xsl:if test="$type='crm:E53_Place'">
 					<xsl:apply-templates select="descendant::geo:SpatialThing"/>
 				</xsl:if>
-				<xsl:if test="$type='foaf:Person' and descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
+				<xsl:if test="$type='crm:E21_Person' and descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]">
 					<xsl:call-template name="lgpn-birthplace">
 						<xsl:with-param name="uri" select="descendant::skos:exactMatch[contains(@rdf:resource, 'lgpn.ox.ac.uk')]/@rdf:resource"/>
 					</xsl:call-template>

@@ -8,11 +8,11 @@
 	<xsl:template match="/">
 		<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://datacite.org/schema/kernel-4"
 			xsi:schemaLocation="http://datacite.org/schema/kernel-4 http://schema.datacite.org/meta/kernel-4/metadata.xsd">
-			<xsl:apply-templates select="/content/rdf:RDF/foaf:Person"/>
+			<xsl:apply-templates select="/content/rdf:RDF/crm:E21_Person"/>
 		</resource>
 	</xsl:template>
 
-	<xsl:template match="foaf:Person">
+	<xsl:template match="crm:E21_Person">
 		<identifier identifierType="DOI">
 			<xsl:value-of select="concat(/content/config/datacite/id, '/', tokenize(@rdf:about, '/')[last()])"/>
 		</identifier>

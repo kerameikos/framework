@@ -79,7 +79,7 @@
 						<p:output name="data" id="model"/>
 					</p:processor>
 				</p:when>
-				<p:when test="/type = 'foaf:Person'">
+				<p:when test="/type = 'crm:E21_Person'">
 					<!-- execute SPARQL query to get total count of contributed IDs -->
 					<p:processor name="oxf:pipeline">
 						<p:input name="data" href="#data"/>
@@ -181,8 +181,8 @@
 								<class>crm:E4_Period</class>
 								<class>crm:E57_Material</class>
 								<class>crm:E40_Legal_Body</class>
-								<class>foaf:Group</class>
-								<class>foaf:Person</class>
+								<class>crm:E74_Group</class>
+								<class>crm:E21_Person</class>
 								<class>crm:E53_Place</class>
 								<class>kon:Shape</class>
 								<!--<class>kon:Style</class>-->
@@ -196,8 +196,8 @@
 								<class>crm:E4_Period</class>
 								<class>crm:E57_Material</class>
 								<class>crm:E40_Legal_Body</class>
-								<class>foaf:Group</class>
-								<class>foaf:Person</class>
+								<class>crm:E74_Group</class>
+								<class>crm:E21_Person</class>
 								<class>crm:E53_Place</class>
 								<class>kon:Shape</class>
 								<!--<class>kon:Style</class>-->
@@ -211,8 +211,8 @@
 								<class>crm:E4_Period</class>
 								<class>crm:E57_Material</class>
 								<class>crm:E40_Legal_Body</class>
-								<class>foaf:Group</class>
-								<class>foaf:Person</class>
+								<class>crm:E74_Group</class>
+								<class>crm:E21_Person</class>
 								<class>crm:E53_Place</class>
 								<class>kon:Shape</class>
 								<!--<class>kon:Style</class>-->

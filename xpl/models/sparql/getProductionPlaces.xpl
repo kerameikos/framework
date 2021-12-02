@@ -34,8 +34,8 @@
 						<class>crm:E4_Period</class>
 						<class>crm:E57_Material</class>
 						<class>crm:E40_Legal_Body</class>
-						<class>foaf:Group</class>						
-						<class>foaf:Person</class>
+						<class>crm:E74_Group</class>						
+						<class>crm:E21_Person</class>
 						<class>crm:E53_Place</class>
 						<class>kon:Shape</class>
 						<class>kon:Style</class>

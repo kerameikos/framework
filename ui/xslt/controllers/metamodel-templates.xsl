@@ -206,7 +206,7 @@
                     <xsl:call-template name="kerameikos:findspotLocations"/>
                 </xsl:when>
 
-                <xsl:when test="$type = 'foaf:Person' or $type = 'foaf:Group'">
+                <xsl:when test="$type = 'crm:E21_Person' or $type = 'crm:E74_Group'">
                     <xsl:call-template name="kerameikos:matchingConcepts">
                         <xsl:with-param name="id" select="$id"/>
                         <xsl:with-param name="type" select="$type"/>
@@ -308,7 +308,7 @@
                     <triple s="?place" p="geo:location" o="?loc"/>
                 </xsl:when>
 
-                <xsl:when test="$type = 'foaf:Person' or $type = 'foaf:Group'">
+                <xsl:when test="$type = 'crm:E21_Person' or $type = 'crm:E74_Group'">
                     <xsl:call-template name="kerameikos:matchingConcepts">
                         <xsl:with-param name="id" select="$id"/>
                         <xsl:with-param name="type" select="$type"/>
@@ -393,7 +393,7 @@
                     <triple s="?prod" p="crm:P32_used_general_technique" o="?m"/>
                 </xsl:when>
 
-                <xsl:when test="$type = 'foaf:Person' or $type = 'foaf:Group'">
+                <xsl:when test="$type = 'crm:E21_Person' or $type = 'crm:E74_Group'">
                     <xsl:call-template name="kerameikos:matchingConcepts">
                         <xsl:with-param name="id" select="$id"/>
                         <xsl:with-param name="type" select="$type"/>
@@ -424,7 +424,7 @@
                     <triple s="?m" p="rdf:type" o="skos:Concept" filter="(?m = kid:{$id})"/>
                 </group>
                 <!-- don't look for narrower concepts for people -->
-                <xsl:if test="not($type = 'foaf:Person')">
+                <xsl:if test="not($type = 'crm:E21_Person')">
                     <group>
                         <triple s="kid:{$id}" p="^skos:broader+" o="?m"/>
                     </group>

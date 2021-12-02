@@ -6,7 +6,7 @@ PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 SELECT ?editor ?name ?orcid ?org ?wikidata WHERE {
-  ?editor a foaf:Person ;
+  ?editor a crm:E21_Person ;
             skos:inScheme <http://kerameikos.org/editor/> ;
             skos:prefLabel ?name FILTER langMatches(lang(?name), "en")
   OPTIONAL {?editor org:hasMembership ?membership .

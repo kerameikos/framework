@@ -144,8 +144,8 @@
 						<type>crm:E78_Collection</type>
 					</class>
 					<class>
-						<label>Group (loose classification)</label>
-						<type>foaf:Group</type>
+						<label>Group/Organization</label>
+						<type>crm:E74_Group</type>
 					</class>
 					<class>
 						<label>Institution</label>
@@ -154,18 +154,14 @@
 					<class>
 						<label>Material</label>
 						<type>crm:E57_Material</type>
-					</class>
-					<class>
-						<label>Organization (Formal)</label>
-						<type>foaf:Organization</type>
-					</class>
+					</class>					
 					<class>
 						<label>Period</label>
 						<type>crm:E4_Period</type>
 					</class>
 					<class>
 						<label>Person</label>
-						<type>foaf:Person</type>
+						<type>crm:E21_Person</type>
 					</class>
 					<class>
 						<label>Production Place</label>
@@ -205,17 +201,17 @@
 					<property label="Definition">skos:definition</property>
 					<property label="Alternative Label">skos:altLabel</property>
 					<property label="Plural Label" constraint="kon:Shape">ontolex:otherForm</property>
-					<property label="Broader Concept" exclude="foaf:Person">skos:broader</property>
+					<property label="Broader Concept" exclude="crm:E21_Person">skos:broader</property>
 					<property label="Close Match">skos:closeMatch</property>
 					<property label="End Date" constraint="crm:E4_Period">end</property>
 					<property label="End Date" exclude="crm:E4_Period">edm:end</property>
 					<property label="Exact Match">skos:exactMatch</property>
 					<property label="Latitude" constraint="crm:E53_Place">geo:lat</property>
 					<property label="Longitude" constraint="crm:E53_Place">geo:long</property>
-					<property label="Organization" constraint="foaf:Person|foaf:Organization|foaf:Group">org:organization</property>
+					<property label="Organization" constraint="crm:E21_Person|crm:E74_Group">org:organization</property>
 					<property label="Other Link">rdfs:seeAlso</property>
 					<property label="Related Entity">skos:related</property>
-					<property label="Role" constraint="foaf:Person|foaf:Organization|foaf:Group">org:role</property>
+					<property label="Role" constraint="crm:E21_Person|crm:E74_Group">org:role</property>
 					<property label="Scope Note">skos:scopeNote</property>
 					<property label="Source">dcterms:source</property>
 					<property label="Start Date" constraint="crm:E4_Period">begin</property>
@@ -318,8 +314,8 @@ PREFIX kon:	<http://kerameikos.org/ontology#>
 PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 					<query id="ask">ASK {&lt;URI&gt; rdf:type CLASS}</query>
-					<query id="ask-person">ASK {&lt;URI&gt; rdf:type ?type . FILTER (?type = foaf:Organization || ?type = foaf:Group)} </query>
-					<query id="editor">SELECT ?uri ?label WHERE {?uri a foaf:Person ; skos:inScheme &lt;http://kerameikos.org/editor/&gt; ; skos:prefLabel
+					<query id="ask-person">ASK {&lt;URI&gt; rdf:type ?type . FILTER (?type = crm:E74_Group)} </query>
+					<query id="editor">SELECT ?uri ?label WHERE {?uri a crm:E21_Person ; skos:inScheme &lt;http://kerameikos.org/editor/&gt; ; skos:prefLabel
 						?label FILTER langMatches(lang(?label), "en")} ORDER BY ?label</query>
 				</templates>
 			</xforms:instance>
@@ -472,8 +468,8 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 								origin="xforms:element('mapping', (xforms:attribute('from', $heading), xforms:attribute('to', '')))"
 								if="not(instance('mappings')/mapping/@from = $heading)"/>
 						</xforms:action>
-						<!-- insert an element to test whether the role has been assigned for foaf:Person or foaf:Organization when dates are used or whether the role exists if org:organization is used -->
-						<xforms:action if="instance('control-instance')/type='foaf:Person' or instance('control-instance')/type='foaf:Organization'">
+						<!-- insert an element to test whether the role has been assigned for crm:E21_Person when dates are used or whether the role exists if org:organization is used -->
+						<xforms:action if="instance('control-instance')/type='crm:E21_Person'">
 							<xforms:insert context="instance('mappings')" nodeset="./child::node()[last()]" origin="xforms:element('role-invalid', 'false')"/>
 						</xforms:action>
 						<!-- insert an element to test whether the coordinates are valid -->
@@ -890,7 +886,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 											<strong>Alert:</strong> There can not be more than one end date.</div>
 									</xforms:group>
 									<xforms:group
-										ref=".[(instance('control-instance')/type='foaf:Person' or instance('control-instance')/type='foaf:Organization' or instance('control-instance')/type='foaf:Group') and (count(mapping[@to='edm:begin']) &gt; 0 or count(mapping[@to='edm:end']) &gt; 0) and count(mapping[@to='org:role']) = 0]">
+										ref=".[(instance('control-instance')/type='crm:E21_Person' or instance('control-instance')/type='crm:E74_Group') and (count(mapping[@to='edm:begin']) &gt; 0 or count(mapping[@to='edm:end']) &gt; 0) and count(mapping[@to='org:role']) = 0]">
 										<div class="alert-danger alert-box alert">
 											<span class="glyphicon glyphicon-exclamation-sign"></span>
 											<strong>Alert:</strong> A person or organization must have a role if there is a start or end date.</div>
@@ -960,7 +956,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 															</xforms:action>
 															<!-- special actions for Person and Organization and validation of org:role -->
 															<xforms:action
-																if="instance('control-instance')/type='foaf:Person' or instance('control-instance')/type='foaf:Organization' or or instance('control-instance')/type='foaf:Group'">
+																if="instance('control-instance')/type='crm:E21_Person' or instance('control-instance')/type='crm:E74_Group'">
 																<xforms:action
 																	if="(count(//mapping[@to='edm:begin']) = 1 or count(//mapping[@to='edm:end']) = 1 or count(//mapping[@to='org:organization']) = 1) and count(//mapping[@to='org:role']) = 0">
 																	<xforms:setvalue ref="instance('mappings')/role-invalid">true</xforms:setvalue>
@@ -1216,10 +1212,10 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 																		<!-- if not, execute SPARQL query -->
 																		<xforms:action
 																			if="not(instance('sheet')/row[cell[@name=instance('mappings')/mapping[@to='id']/@from] = $id])">
-																			<!--if the $mapping is an org:organization and class is a foaf:Person, then the target entity must be an organization (foaf:Organization);
-																	if the $mapping is an org:role, the class must be either a foaf:Person or foaf:Organization, and the target must be a foaf:Organization -->
+																			<!--if the $mapping is an org:organization and class is a crm:E21_Person, then the target entity must be an organization (crm:E74_Group);
+																	if the $mapping is an org:role, the class must be either a crm:E21_Person or crm:E74_Group, and the target must be a crm:E74_Group -->
 																			<xforms:var name="class"
-																				select="if ((instance('control-instance')/type = 'foaf:Person' or instance('control-instance')/type = 'foaf:Organization' or instance('control-instance')/type = 'foaf:Group') and $mapping='org:role') then 'org:Role' else if ((instance('control-instance')/type = 'foaf:Person' or instance('control-instance')/type = 'foaf:Organization' or instance('control-instance')/type = 'foaf:Group') and $mapping='org:organization') then 'foaf:Organization' else instance('control-instance')/type"/>
+																				select="if ((instance('control-instance')/type = 'crm:E21_Person' or instance('control-instance')/type = 'crm:E74_Group') and $mapping='org:role') then 'org:Role' else if ((instance('control-instance')/type = 'crm:E21_Person' or instance('control-instance')/type = 'crm:E74_Group') and $mapping='org:organization') then 'crm:E74_Group' else instance('control-instance')/type"/>
 																			<xforms:setvalue ref="instance('sparqlQuery')"
 																				value="concat(instance('sparql-templates')/prefix, ' ', replace(replace(instance('sparql-templates')/query[@id='ask'], 'URI', $value), 'CLASS', $class))"/>
 																			<xforms:send submission="submit-sparqlQuery"/>
@@ -1577,7 +1573,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 															select="concat($uri, '#', substring-after(data(instance('sheet')/row[position()=$position]/cell[@name=instance('mappings')/mapping[@to='org:role']/@from]), 'id/'))"/>
 														<!-- if the type is a Person or Organization, insert the date into the org:Membership -->
 														<xforms:action
-															if="instance('control-instance')/type = 'foaf:Person' or instance('control-instance')/type = 'foaf:Organization' or instance('control-instance')/type = 'foaf:Group'">
+															if="instance('control-instance')/type = 'crm:E21_Person' or instance('control-instance')/type = 'crm:E74_Group'">
 															<xforms:action if="not(instance('rdf')/org:Membership[@rdf:about=$membershipUri])">
 																<xforms:insert context="instance('rdf')" nodeset="./child::node()[last()]"
 																	origin="xforms:element('org:Membership', (xforms:attribute('rdf:about', $membershipUri), ''))"/>
@@ -1593,7 +1589,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 														</xforms:action>
 														<!-- if the type is not a Person or Organization, insert into the skos:Concept object -->
 														<xforms:action
-															if="not(instance('control-instance')/type = 'foaf:Person') and not(instance('control-instance')/type = 'foaf:Organization') and not(instance('control-instance')/type = 'foaf:Group')">
+															if="not(instance('control-instance')/type = 'crm:E21_Person') and not(instance('control-instance')/type = 'crm:E74_Group')">
 															<xforms:insert context="instance('rdf')/*[1]" nodeset="./child::node()[last()]"
 																origin="xforms:element($mapping, (xforms:attribute('rdf:datatype', 'http://www.w3.org/2001/XMLSchema#gYear'), format-number(number($value), '0000')))"
 																if="not(instance('rdf')/*[1]/*[name()=$mapping])"/>

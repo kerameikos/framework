@@ -31,7 +31,7 @@
 			<xsl:when test="$type = 'crm:E40_Legal_Body'">
 				<xsl:value-of select="concat('keeper kid:', $id)"/>
 			</xsl:when>
-			<xsl:when test="$type = 'foaf:Person' or $type = 'foaf:Group'">
+			<xsl:when test="$type = 'crm:E21_Person' or $type = 'crm:E74_Group'">
 				<xsl:value-of select="concat('artist kid:', $id)"/>
 			</xsl:when>
 			<xsl:otherwise>
@@ -77,24 +77,20 @@
 				<type>crm:E40_Legal_Body</type>
 			</class>
 			<class>
-				<label>Group</label>
-				<type>foaf:Group</type>
+				<label>Group/Organization</label>
+				<type>crm:E74_Group</type>
 			</class>
 			<class>
 				<label>Material</label>
 				<type>crm:E57_Material</type>
-			</class>
-			<class>
-				<label>Organization</label>
-				<type>foaf:Organization</type>
-			</class>
+			</class>			
 			<class>
 				<label>Period</label>
 				<type>crm:E4_Period</type>
 			</class>
 			<class>
 				<label>Person</label>
-				<type>foaf:Person</type>
+				<type>crm:E21_Person</type>
 			</class>
 			<class>
 				<label>Place</label>

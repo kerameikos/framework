@@ -12,7 +12,7 @@
 					<xforms:trigger appearance="minimal">
 						<xforms:label>
 							<span class="glyphicon glyphicon-search"/>
-							<xforms:output value="if ($binding/name() = 'crm:E53_Place') then 'Getty TGN' else if ($binding/name() = 'foaf:Person') then 'Getty ULAN' else 'Getty AAT'"/>
+							<xforms:output value="if ($binding/name() = 'crm:E53_Place') then 'Getty TGN' else if ($binding/name() = 'crm:E21_Person') then 'Getty ULAN' else 'Getty AAT'"/>
 						</xforms:label>
 						<xforms:action ev:event="DOMActivate">
 							<!-- if there is a skos:prefLabel and no Getty URIs, automatically submit the label -->
@@ -20,7 +20,7 @@
 								<xforms:setvalue ref="instance('control-instance')/getty-search" value="$binding/skos:prefLabel[@xml:lang='en']"/>
 								<xforms:var name="search_text" select="string-join(tokenize(instance('control-instance')/getty-search, ' '), ' AND ')"/>
 								<xforms:var name="type" select="$binding/name()"/>
-								<xforms:var name="scheme" select="if ($type='crm:E53_Place') then 'tgn' else if ($type = 'foaf:Person') then 'ulan' else 'aat'"/>
+								<xforms:var name="scheme" select="if ($type='crm:E53_Place') then 'tgn' else if ($type = 'crm:E21_Person') then 'ulan' else 'aat'"/>
 								<xforms:action if="$scheme = 'aat'">
 									<xforms:setvalue ref="instance('sparqlQuery')" value="normalize-space(replace(replace(instance('getty-aat-template'), 'SEARCH_QUERY', $search_text), 'FACET',
 										instance('getty-facets')//facet[@type=$type]/text()))"/>
@@ -53,7 +53,7 @@
 									<xxforms:hide dialog="getty-search-dialog"/>
 									<xforms:var name="search_text" select="string-join(tokenize(instance('control-instance')/getty-search, ' '), ' AND ')"/>
 									<xforms:var name="type" select="$binding/name()"/>
-									<xforms:var name="scheme" select="if ($type='crm:E53_Place') then 'tgn' else if ($type = 'foaf:Person') then 'ulan' else 'aat'"/>
+									<xforms:var name="scheme" select="if ($type='crm:E53_Place') then 'tgn' else if ($type = 'crm:E21_Person') then 'ulan' else 'aat'"/>
 									<xforms:action if="$scheme = 'aat'">
 										<xforms:setvalue ref="instance('sparqlQuery')" value="normalize-space(replace(replace(instance('getty-aat-template'), 'SEARCH_QUERY', $search_text), 'FACET',
 											instance('getty-facets')//facet[@type=$type]/text()))"/>
@@ -81,7 +81,7 @@
 								<xforms:action ev:event="DOMActivate">
 									<xforms:var name="search_text" select="string-join(tokenize(instance('control-instance')/getty-search, ' '), ' AND ')"/>
 									<xforms:var name="type" select="$binding/name()"/>
-									<xforms:var name="scheme" select="if ($type='crm:E53_Place') then 'tgn' else if ($type = 'foaf:Person') then 'ulan' else 'aat'"/>
+									<xforms:var name="scheme" select="if ($type='crm:E53_Place') then 'tgn' else if ($type = 'crm:E21_Person') then 'ulan' else 'aat'"/>
 									<xforms:action if="$scheme = 'aat'">
 										<xforms:setvalue ref="instance('sparqlQuery')" value="normalize-space(replace(replace(instance('getty-aat-template'), 'SEARCH_QUERY', $search_text), 'FACET',
 											instance('getty-facets')//facet[@type=$type]/text()))"/>

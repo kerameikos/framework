@@ -84,8 +84,8 @@
 							<facets xmlns="">
 								<facet type="crm:E57_Material">http://collection.britishmuseum.org/id/thesauri/material</facet>
 								<facet type="crm:E4_Period">http://collection.britishmuseum.org/id/thesauri/matcult</facet>
-								<facet type="foaf:Person">http://collection.britishmuseum.org/id/person-institution</facet>
-								<facet type="foaf:Organization">http://collection.britishmuseum.org/id/person-institution</facet>
+								<facet type="crm:E21_Person">http://collection.britishmuseum.org/id/person-institution</facet>
+								<facet type="crm:E74_Group">http://collection.britishmuseum.org/id/person-institution</facet>
 								<facet type="crm:E53_Place">http://collection.britishmuseum.org/id/place</facet>
 								<facet type="kon:Shape">http://collection.britishmuseum.org/id/thesauri/object</facet>
 								<facet type="kon:Style">http://collection.britishmuseum.org/id/thesauri/series-type</facet>

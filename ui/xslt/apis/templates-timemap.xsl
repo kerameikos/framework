@@ -163,7 +163,7 @@ UNION {?prod crm:P7_took_place_at ?relPlace .
 					UNION {?prod crm:P7_took_place_at ?relPlace .
 					?place skos:exactMatch ?relPlace }]]>
 					</xsl:when>-->
-				<xsl:when test="$type='foaf:Person'">
+				<xsl:when test="$type='crm:E21_Person'">
 					<![CDATA[{?object crm:P108i_was_produced_by ?prod .
 ?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
@@ -174,7 +174,7 @@ UNION {kid:RDFID skos:exactMatch ?matches .
 UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
-				<xsl:when test="$type='foaf:Organization'">
+				<xsl:when test="$type='crm:E74_Group'">
 					<![CDATA[{?object crm:P108i_was_produced_by ?prod .
 ?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
@@ -346,7 +346,7 @@ UNION {?prod crm:P7_took_place_at ?relPlace .
 					UNION {?prod crm:P7_took_place_at ?relPlace .
 					?place skos:exactMatch ?relPlace }]]>
 					</xsl:when>-->
-				<xsl:when test="$type='foaf:Person'">
+				<xsl:when test="$type='crm:E21_Person'">
 					<![CDATA[{?object crm:P108i_was_produced_by ?prod .
 ?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .
@@ -359,7 +359,7 @@ OPTIONAL {?prod crm:P4_has_time-span ?dates .
 UNION {?prod crm:P7_took_place_at ?relPlace .
 ?place skos:exactMatch ?relPlace }]]>
 				</xsl:when>
-				<xsl:when test="$type='foaf:Organization'">
+				<xsl:when test="$type='crm:E74_Group'">
 					<![CDATA[{?object crm:P108i_was_produced_by ?prod .
 ?prod crm:P14_carried_out_by kid:RDFID}
 UNION {kid:RDFID skos:exactMatch ?matches .

@@ -14,7 +14,7 @@
 					<xforms:trigger appearance="minimal">
 						<xforms:label><span class="glyphicon glyphicon-search"/>VIAF URIs</xforms:label>
 						<xforms:action ev:event="DOMActivate">
-							<xforms:setvalue ref="instance('control-instance')/viaf-field" value="if ($type='foaf:Person') then 'local.personalNames' else 'local.corporateNames'"/>
+							<xforms:setvalue ref="instance('control-instance')/viaf-field" value="if ($type='crm:E21_Person') then 'local.personalNames' else 'local.corporateNames'"/>
 							<xxforms:show dialog="viaf-dialog"/>
 						</xforms:action>
 					</xforms:trigger>

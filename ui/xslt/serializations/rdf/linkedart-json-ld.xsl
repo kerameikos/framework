@@ -54,8 +54,8 @@
 		</id>
 		<type>
 			<xsl:choose>
-				<xsl:when test="$type = 'foaf:Person'">Person</xsl:when>
-				<xsl:when test="$type = 'foaf:Group' or $type = 'foaf:Organization'">Group</xsl:when>
+				<xsl:when test="$type = 'crm:E21_Person'">Person</xsl:when>
+				<xsl:when test="$type = 'crm:E74_Group'">Group</xsl:when>
 				<xsl:when test="$type = 'crm:E4_Period'">Period</xsl:when>
 				<xsl:when test="$type = 'crm:E57_Material'">Material</xsl:when>
 				<xsl:when test="$type = 'crm:E53_Place'">Place</xsl:when>
@@ -114,7 +114,7 @@
 			</_array>
 		</identified_by>
 		<!-- creation and dissolution for Groups -->
-		<xsl:if test="$type = 'foaf:Organization' or $type = 'foaf:Group'">
+		<xsl:if test="$type = 'crm:E74_Group'">
 			<xsl:if test="/content/rdf:RDF/org:Membership[edm:begin]">
 				<xsl:variable name="dates">
 					<xsl:for-each select="//edm:begin">
@@ -238,11 +238,7 @@
 					<_object>
 						<type>Type</type>
 						<xsl:choose>
-							<xsl:when test="self::foaf:Organization">
-								<id>http://vocab.getty.edu/aat/300387047</id>
-								<_label>political entities</_label>
-							</xsl:when>
-							<xsl:when test="self::foaf:Group">
+							<xsl:when test="self::crm:E74_Group">
 								<id>http://vocab.getty.edu/aat/300387353</id>
 								<_label>groups of political entities</_label>
 							</xsl:when>							
@@ -265,7 +261,7 @@
 					<_object>
 						<type>Type</type>
 						<xsl:choose>
-							<xsl:when test="$type = 'foaf:Person'">
+							<xsl:when test="$type = 'crm:E21_Person'">
 								<id>http://vocab.getty.edu/aat/300435422</id>
 								<_label>Biography Statement</_label>
 							</xsl:when>
