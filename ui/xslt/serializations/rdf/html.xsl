@@ -4,12 +4,13 @@
 	xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="http://kerameikos.org/id/"
 	xmlns:org="http://www.w3.org/ns/org#" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:kon="http://kerameikos.org/ontology#"
 	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:res="http://www.w3.org/2005/sparql-results#"
-	xmlns:kerameikos="http://kerameikos.org/" xmlns:prov="http://www.w3.org/ns/prov#" exclude-result-prefixes="#all" version="2.0">
+	xmlns:kerameikos="http://kerameikos.org/" xmlns:prov="http://www.w3.org/ns/prov#" xmlns:crmgeo="http://www.ics.forth.gr/isl/CRMgeo/"
+	exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:include href="../../functions.xsl"/>
 	<xsl:include href="../../vis-templates.xsl"/>
 	<xsl:include href="html-templates.xsl"/>
-	
+
 	<!-- request parameters -->
 	<xsl:param name="langParam" select="doc('input:request')/request/parameters/parameter[name = 'lang']/value"/>
 	<xsl:param name="lang">
@@ -83,7 +84,7 @@
 			<class>
 				<label>Material</label>
 				<type>crm:E57_Material</type>
-			</class>			
+			</class>
 			<class>
 				<label>Period</label>
 				<type>crm:E4_Period</type>

@@ -180,6 +180,7 @@
 					<xsl:when test="$curie = 'crm:P32_used_general_technique'">Technique</xsl:when>
 					<xsl:when test="$curie = 'crm:P45_consists_of'">Material</xsl:when>
 					<xsl:when test="$curie = 'crm:P50_has_current_keeper'">Current Keeper</xsl:when>
+					<xsl:when test="$curie = 'crmgeo:asWKT'">WKT</xsl:when>
 					<xsl:when test="$curie = 'edm:begin'">Begin</xsl:when>
 					<xsl:when test="$curie = 'edm:end'">End</xsl:when>
 					<xsl:when test="$curie = 'geo:lat'">Latitude</xsl:when>
