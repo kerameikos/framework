@@ -95,7 +95,7 @@ $(document).ready(function () {
     //when clicking the add-filter link, insert a new filter template into the filter container
     $('#add-filter').click(function () {
         var type = $('#type').text();
-        if (type.indexOf('foaf') >= 0) {
+        if (type == 'crm:E21_Person' || type == 'crm:E74_Group') {
             type = 'crm:E21_Person|crm:E74_Group';
         }
         $('#field-template').clone().removeAttr('id').appendTo('#filter-container');
