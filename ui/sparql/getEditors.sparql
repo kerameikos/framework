@@ -4,6 +4,7 @@ PREFIX org: <http://www.w3.org/ns/org#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
+PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
 SELECT ?editor ?name ?orcid ?org ?wikidata WHERE {
   ?editor a crm:E21_Person ;
