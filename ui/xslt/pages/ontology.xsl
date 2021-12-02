@@ -232,7 +232,7 @@
 				else
 					@rdf:about"/>
 
-		<a href="#{substring-after($uri, '#')}">
+		<a href="{$uri}">
 			<xsl:value-of
 				select="
 					if ($namespaces//namespace[starts-with($uri, @uri)]) then
