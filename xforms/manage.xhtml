@@ -161,10 +161,6 @@
 				<findspots xmlns=""></findspots>
 			</xforms:instance>
 
-			<xforms:instance id="parent-places" xxforms:exclude-result-prefixes="#all">
-				<parents xmlns=""></parents>
-			</xforms:instance>
-
 			<!-- Linked Art JSON-LD instance -->
 			<xforms:instance id="json" xxforms:exclude-result-prefixes="#all">
 				<json></json>
@@ -353,11 +349,6 @@ WHERE {
 	bd:serviceParam wikibase:language "en"
   }
 }]]></query>
-					<query id="query-wikidata-hierarchy"><![CDATA[SELECT ?parent ?parentLabel WHERE {
-  wd:ID wdt:P131+ ?parent.
-  SERVICE wikibase:label {
-	bd:serviceParam wikibase:language "en"
-  }}]]></query>
 				</templates>
 			</xforms:instance>
 
