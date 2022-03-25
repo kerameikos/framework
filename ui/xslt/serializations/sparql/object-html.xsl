@@ -51,8 +51,8 @@
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 
 				<!-- leaflet -->
-				<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.css"/>
-				<script src="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.js"/>
+				<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css"/>
+				<script src="https://unpkg.com/leaflet@1.0.0/dist/leaflet.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet.ajax.min.js"/>
 
 				<!-- mirador -->

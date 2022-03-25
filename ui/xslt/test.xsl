@@ -15,8 +15,8 @@
 				<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 				<!--<script type="text/javascript" src="{$display_path}ui/javascript/openseadragon.min.js"/>-->
-				<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.css"/>
-				<script type="text/javascript" src="http://cdn.leafletjs.com/leaflet/v1.0.3/leaflet.js"/>
+				<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css"/>
+				<script type="text/javascript" src="https://unpkg.com/leaflet@1.0.0/dist/leaflet.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet.ajax.min.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>				
 				<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>
