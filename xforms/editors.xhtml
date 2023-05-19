@@ -55,6 +55,7 @@
 			<!-- sparql queries -->
 			<xforms:instance id="sparqlQuery">
 				<query><![CDATA[PREFIX dcterms: <http://purl.org/dc/terms/>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX foaf: <http://xmlns.com/foaf/0.1/>
 PREFIX org: <http://www.w3.org/ns/org#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
@@ -199,6 +200,7 @@ BIND (<URI> as ?concept)
 														</xforms:action>
 													</xforms:trigger>
 												</h4>
+																									
 												<xforms:group ref=".[res:binding[@name = 'orcid'] or res:binding[@name = 'doi']]">
 													<dl class="dl-horizontal">
 														<xforms:group ref=".[res:binding[@name = 'orcid']]">
