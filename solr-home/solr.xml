@@ -1,9 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<!-- folder name corresponds to lucene version; configuration files may vary from version to version, so copy conf from the example folder in the appropriate version solr zip file
-remember to create a data folder and set tomcat write permissions -->
-<solr persistent="false">
-	<cores adminPath="/admin/cores">
-		<core name="kerameikos" instanceDir="1.5/main"/>
-		<core name="kerameikos-fuseki" instanceDir="1.5/fuseki"/>
-	</cores>
-</solr>
