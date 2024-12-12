@@ -22,10 +22,10 @@
 				<title>Kerameikos.org: Typological Distribution</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
-				<script type="text/javascript" src="http://code.jquery.com/jquery-2.1.4.min.js"/>
+				<script type="text/javascript" src="//code.jquery.com/jquery-2.1.4.min.js"/>
 				<!-- bootstrap -->
-				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
-				<script src="http://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"/>
+				<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
+				<script src="//netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/d3.min.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/d3plus.min.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>

@@ -9,10 +9,10 @@
 				<title>Kerameikos.org</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
 				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
-				<script type="text/javascript" src="http://code.jquery.com/jquery-latest.min.js"/>
+				<script type="text/javascript" src="//code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
-				<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
-				<script type="text/javascript" src="http://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
+				<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
+				<script type="text/javascript" src="//netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
 			</head>
 			<body>
