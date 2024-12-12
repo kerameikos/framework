@@ -15,12 +15,10 @@
 		<h3>Scientific Committee</h3>
 		<p>The scientific committee includes both pottery and cultural heritage informatics experts.</p>
 		<ul>
-			<li>Vladimir Alexiev, Ontotext</li>
 			<li>Renee Gondek, University of Mary Washington</li>
 			<li>Ethan Gruber, American Numismatic Society</li>
 			<li>Thomas Mannack, Oxford University</li>
 			<li>Tyler Jo Smith, University of Virginia</li>
-			<li>Anne-Violaine Szabados, Lexicon Iconographicum Mythologiae Classicae (LIMC-France)</li>
 		</ul>
 
 		<p>The list of contributors (curators, authors, and translators) to Kerameikos is available at <a href="http://kerameikos.org/editor/"
@@ -29,6 +27,10 @@
 
 		<h3>Papers and Presentations</h3>
 		<ul>
+			<li><b>2024: </b> Smith, Tyler Jo. "Kerameikos.org: A Digital Future for Greek Painted Pottery", <i>Object, Text, and Image in the Digital Age</i>, Calouste Gulbenkian Museum
+				16 October 2024</li>
+			<li><b>2023: </b> Smith, Tyler Jo, Ethan Gruber and Nicholas Harokopos. “Kerameikos.org and Digital Accessibility for Ancient Greek Vases”,
+				A.G.A.T.H.O.C.L.E.S. Webinar Series, <i>Past, Present and Future of Red-figure Pottery Studies: Thematic and Methodological Approaches</i>, University of Turin and University of Arizona, March 2023.</li>
 			<li><b>2021: </b> Bradford, Abigail, Renee Gondek, Tyler Jo Smith, and Ethan Gruber. "Linked Open Data Vocabularies and Recognizing Intellectual Contributions via ORCID", 
 				Computer Applications in Archaeology, Cyprus (virtual).</li>
 			<li><b>2021: </b> Gruber, Ethan, Renee Gondek, and Tyler Jo Smith. "Linked Art for Archaeological Data Exchange", Computer Applications
