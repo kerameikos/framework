@@ -25,6 +25,7 @@
 						<rdf:type rdf:resource="http://www.w3.org/ns/prov#Agent"/>
 						<rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
 						<skos:prefLabel xml:lang=""/>
+						<org:memberOf/>
 						<skos:inScheme rdf:resource="http://kerameikos.org/editor/"/>
 					</crm:E21_Person>
 				</rdf:RDF>
@@ -104,7 +105,7 @@
 			</xforms:instance>
 
 			<xforms:instance id="memberOf-template" xxforms:exclude-result-prefixes="#all">
-				<org:memberOf rdf:resource=""/>
+				<org:memberOf/>
 			</xforms:instance>
 
 			<!-- provenance -->
@@ -166,6 +167,7 @@ BIND (<URI> as ?concept)
 							constraint="string-length(.) &gt; 0 and count(parent::node()/parent::node()/skos:prefLabel[@xml:lang='en']) = 1 and count(parent::node()/parent::node()/skos:prefLabel/@xml:lang) = count(distinct-values(parent::node()/parent::node()/skos:prefLabel/@xml:lang))"
 						/>
 					</xforms:bind>
+					<xforms:bind nodeset="org:memberOf" required="true()"/>
 					<!-- @rdf:resource -->
 					<xforms:bind nodeset="//@rdf:resource" required="true()" type="xs:anyURI"
 						constraint="matches(., 'https?://(-\.)?([^\s/?\.#]+\.?)+(/[^\s]*)?$')"/>
@@ -300,6 +302,17 @@ BIND (<URI> as ?concept)
 										position="after"/>
 								</xforms:trigger>
 							</li>
+							<xforms:group ref=".[count(org:memberOf) &lt; 1]">
+								<li>
+									<xforms:trigger appearance="minimal">
+										<xforms:label>
+											<span class="glyphicon glyphicon-plus"></span>Affiliation</xforms:label>
+										<xforms:insert ev:event="DOMActivate" origin="instance('memberOf-template')" context="." nodeset="./child::node()[last()]"
+										/>
+									</xforms:trigger>
+								</li>
+							</xforms:group>
+							
 							<li>
 								<xforms:trigger appearance="minimal">
 									<xforms:label>
@@ -457,6 +470,23 @@ BIND (<URI> as ?concept)
 												</xforms:group>
 											</div>
 										</xforms:repeat>
+										
+										<xforms:group ref="org:memberOf">
+											<div>
+												<xforms:input ref=".">
+													<xforms:label>Affiliation</xforms:label>
+													<xforms:alert>Required</xforms:alert>
+												</xforms:input>	
+												<xforms:trigger appearance="minimal">
+													<xforms:delete ev:event="DOMActivate" context="."/>
+													<xforms:label>
+														<span class="glyphicon glyphicon-remove"></span>
+													</xforms:label>
+												</xforms:trigger>
+											</div>
+										</xforms:group>
+										
+										
 
 										<xforms:repeat nodeset="skos:exactMatch">
 											<div>
