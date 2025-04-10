@@ -522,9 +522,7 @@
 									</a>
 								</td>
 								<td>
-									<a href="{res:binding[@name='wikidata']/res:uri}">
-										<xsl:value-of select="res:binding[@name = 'org']/res:literal"/>
-									</a>
+									<xsl:value-of select="res:binding[@name = 'org']/res:literal"/>
 								</td>
 								<td>
 									<xsl:if test="res:binding[@name = 'orcid']">
