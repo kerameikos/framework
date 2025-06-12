@@ -132,6 +132,7 @@ SELECT * WHERE {
   ?uri a skos:Concept ;
   		 skos:inScheme kid: ;
          skos:prefLabel ?label FILTER langMatches(lang(?label), "en") .
+  ?uri skos:definition ?definition FILTER langMatches(lang(?definition), "en") 
   ?uri rdf:type ?type FILTER (str(?type) != 'http://www.w3.org/2004/02/skos/core#Concept')
 } ORDER BY ?label LIMIT 25 OFFSET %OFFSET%]]></query>
 				</queries>
@@ -419,6 +420,11 @@ SELECT * WHERE {
 																</xforms:action>
 															</xforms:trigger>
 														</h4>
+														<p>
+															<xforms:output ref="res:binding[@name='definition']">
+																<xforms:label>Definition</xforms:label>
+															</xforms:output>
+														</p>
 														<xforms:output ref="res:binding[@name='type']/res:uri">
 															<xforms:label>Class</xforms:label>
 														</xforms:output>

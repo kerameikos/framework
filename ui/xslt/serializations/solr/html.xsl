@@ -100,12 +100,12 @@
 					<xsl:value-of select="if(string(str[@name='prefLabel'])) then str[@name='prefLabel'] else str[@name='id']"/>
 				</a>
 			</h4>
-			<xsl:if test="string(str[@name='definition']) or not(contains($q, 'type'))">
+			<xsl:if test="string(arr[@name='definition']/str) or not(contains($q, 'type'))">
 				<dl class="dl-horizontal">
-					<xsl:if test="string(str[@name='definition'])">
+					<xsl:if test="string(arr[@name='definition']/str)">
 						<dt>Definition</dt>
 						<dd>
-							<xsl:value-of select="str[@name='definition']"/>
+							<xsl:value-of select="arr[@name='definition']/str"/>
 						</dd>
 					</xsl:if>
 					<xsl:if test="not(contains($q, 'type'))">

@@ -309,6 +309,7 @@ UNION {<URI> ?p ?o . ?s ?p ?o . FILTER (?s = <URI>) }
 			<xforms:instance id="sparql-templates">
 				<templates xmlns="">
 					<prefix><![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
+PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX kon:	<http://kerameikos.org/ontology#>
 PREFIX org:	<http://www.w3.org/ns/org#>
@@ -439,8 +440,10 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 			<!-- ************* GOOGLE DRIVE **********************-->
 			<xforms:submission id="query-spreadsheet" serialization="application/json" method="get" action="{instance('control-instance')/sheets_api_url}"
 				instance="api" replace="instance">
-				<xforms:message ev:event="xforms-submit-error" level="modal">Unable to receive JSON Response from Google Sheets API for the key
-					provided.</xforms:message>
+				<xforms:action ev:event="xforms-submit-error">					
+					<xforms:message level="modal">Unable to receive JSON Response from Google Sheets API for the key
+						provided.</xforms:message>
+				</xforms:action>				
 
 				<!-- query the API gain to load the first sheet JSON -->
 				<xforms:action ev:event="xforms-submit-done">
