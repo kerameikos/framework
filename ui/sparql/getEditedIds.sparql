@@ -1,7 +1,7 @@
 PREFIX dcterms: <http://purl.org/dc/terms/>
 PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
-PREFIX kid: <http://kerameikos.org/id/>
-PREFIX kon: <http://kerameikos.org/ontology#>
+PREFIX kid: <https://kerameikos.org/id/>
+PREFIX kon: <https://kerameikos.org/ontology#>
 PREFIX rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX skos: <http://www.w3.org/2004/02/skos/core#>
 PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>

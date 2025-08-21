@@ -5,8 +5,8 @@ PREFIX owl:	<http://www.w3.org/2002/07/owl#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kid:	<https://kerameikos.org/id/>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX org: <http://www.w3.org/ns/org#>
 PREFIX spatial: <http://jena.apache.org/spatial#>
 

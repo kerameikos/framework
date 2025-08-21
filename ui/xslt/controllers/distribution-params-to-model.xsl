@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Author: Ethan Gruber
 	Function: structure the filter and distribution params into the SPARQL XML meta-model prior to submission to the endpoint -->
-<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:kerameikos="http://kerameikos.org/"
+<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:kerameikos="https://kerameikos.org/"
 	exclude-result-prefixes="#all">
 	<xsl:include href="metamodel-templates.xsl"/>
 	<xsl:include href="sparql-metamodel.xsl"/>

@@ -2,8 +2,8 @@ PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX dcterms:	<http://purl.org/dc/terms/>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
-PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kid:	<https://kerameikos.org/id/>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 
 SELECT (count(DISTINCT ?object) as ?count) WHERE {
 %STATEMENTS%

@@ -40,13 +40,13 @@
 							<xsl:text>&gt;; rel="canonical"; type="text/html", </xsl:text>
 							<xsl:text>&lt;</xsl:text>
 							<xsl:value-of select="$objectURI"/>
-							<xsl:text>&gt;; rel="alternate"; type="text/turtle"; profile="http://kerameikos.org/ontology#", </xsl:text>
+							<xsl:text>&gt;; rel="alternate"; type="text/turtle"; profile="https://kerameikos.org/ontology#", </xsl:text>
 							<xsl:text>&lt;</xsl:text>
 							<xsl:value-of select="$objectURI"/>
-							<xsl:text>&gt;; rel="alternate"; type="application/rdf+xml"; profile="http://kerameikos.org/ontology#", </xsl:text>
+							<xsl:text>&gt;; rel="alternate"; type="application/rdf+xml"; profile="https://kerameikos.org/ontology#", </xsl:text>
 							<xsl:text>&lt;</xsl:text>
 							<xsl:value-of select="$objectURI"/>
-							<xsl:text>&gt;; rel="alternate"; type="application/ld+json"; profile="http://kerameikos.org/ontology#"</xsl:text>
+							<xsl:text>&gt;; rel="alternate"; type="application/ld+json"; profile="https://kerameikos.org/ontology#"</xsl:text>
 							<xsl:text>&lt;</xsl:text>
 							<xsl:value-of select="$objectURI"/>
 							<xsl:text>&gt;; rel="alternate"; type="application/ld+json"; profile="https://linked.art/ns/v1/linked-art.json", </xsl:text>

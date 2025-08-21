@@ -13,8 +13,8 @@
 	<xsl:template match="res:result">		
 		<xsl:variable name="curie">
 			<xsl:choose>
-				<xsl:when test="contains(res:binding[@name='uri']/res:uri, 'http://kerameikos.org/id/')">
-					<xsl:value-of select="replace(res:binding[@name='uri']/res:uri, 'http://kerameikos.org/id/', 'kid:')"/>
+				<xsl:when test="contains(res:binding[@name='uri']/res:uri, 'https://kerameikos.org/id/')">
+					<xsl:value-of select="replace(res:binding[@name='uri']/res:uri, 'https://kerameikos.org/id/', 'kid:')"/>
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="concat('&lt;', res:binding[@name='uri']/res:uri, '&gt;')"/>

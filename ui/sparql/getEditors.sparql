@@ -8,7 +8,7 @@ PREFIX crm: <http://www.cidoc-crm.org/cidoc-crm/>
 
 SELECT ?editor ?name ?orcid ?org WHERE {
   ?editor a crm:E21_Person ;
-            skos:inScheme <http://kerameikos.org/editor/> ;
+            skos:inScheme <https://kerameikos.org/editor/> ;
             skos:prefLabel ?name FILTER langMatches(lang(?name), "en")
   OPTIONAL {?editor org:memberOf ?org }
   OPTIONAL {?editor skos:exactMatch ?orcid FILTER contains(str(?orcid), "orcid.org")}

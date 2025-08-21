@@ -3,7 +3,7 @@
 	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:foaf="http://xmlns.com/foaf/0.1/"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
 	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+	xmlns:kid="https://kerameikos.org/id/" xmlns:kon="https://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:atom="http://www.w3.org/2005/Atom">
 	<head>
 		<title>Kerameikos: Administration</title>
@@ -68,7 +68,7 @@
 						<![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX ontolex:	<http://www.w3.org/ns/lemon/ontolex#>
 PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX prov:	<http://www.w3.org/ns/prov#>
@@ -89,7 +89,7 @@ UNION {<URI> ?p ?o . ?s ?p ?o . FILTER (?s = <URI>) }
 PREFIX dcterms:	<http://purl.org/dc/terms/>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX prov:	<http://www.w3.org/ns/prov#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
@@ -99,8 +99,8 @@ UNION {?person rdf:type skos:Concept ; org:hasMembership ?s . ?s ?p ?o }
 UNION {?s rdf:type prov:Activity . ?s ?p ?o}
 UNION {?s rdf:type dcterms:ProvenanceStatement . ?s ?p ?o}
 UNION {?s rdf:type prov:Entity . ?s ?p ?o}
-UNION {?s rdf:type skos:Concept FILTER strStarts(str(?s), "http://kerameikos.org/id/") . ?s ?p ?o}
-UNION {?s rdf:type skos:Concept FILTER strStarts(str(?s), "http://kerameikos.org/editor/") . ?s ?p ?o}}]]>
+UNION {?s rdf:type skos:Concept FILTER strStarts(str(?s), "https://kerameikos.org/id/") . ?s ?p ?o}
+UNION {?s rdf:type skos:Concept FILTER strStarts(str(?s), "https://kerameikos.org/editor/") . ?s ?p ?o}}]]>
 					</query>
 				</queries>
 			</xforms:instance>
@@ -115,8 +115,8 @@ UNION {?s rdf:type skos:Concept FILTER strStarts(str(?s), "http://kerameikos.org
 					<query id="count-concepts">
 						<![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kid:	<https://kerameikos.org/id/>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 SELECT (count(?uri) as ?count) WHERE {
@@ -124,8 +124,8 @@ SELECT (count(?uri) as ?count) WHERE {
   skos:inScheme kid:}]]></query>
 					<query id="query-all"><![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kid:	<https://kerameikos.org/id/>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>
 SELECT * WHERE {
@@ -592,7 +592,7 @@ SELECT * WHERE {
 					<xforms:setvalue ref="instance('control-instance')/solr-core" value="instance('config')/solr_published"/>
 					<!-- purge from the triplestore -->
 					<xforms:setvalue ref="instance('sparqlUpdate')"
-						value="replace(instance('sparqlUpdate-templates')/query[@id='delete-id'], 'URI', concat('http://kerameikos.org/id/', instance('control-instance')/id))"/>
+						value="replace(instance('sparqlUpdate-templates')/query[@id='delete-id'], 'URI', concat('https://kerameikos.org/id/', instance('control-instance')/id))"/>
 					<xforms:send submission="delete-graph"/>
 					<!-- delete from Solr -->
 					<xforms:setvalue ref="instance('deleteId')/id" value="instance('control-instance')/id"/>

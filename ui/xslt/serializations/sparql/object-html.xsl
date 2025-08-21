@@ -5,9 +5,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 	xmlns:crmsci="http://www.ics.forth.gr/isl/CRMsci/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
-	xmlns:kid="http://kerameikos.org/id/" xmlns:org="http://www.w3.org/ns/org#" xmlns:edm="http://www.europeana.eu/schemas/edm/"
-	xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
-	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="http://kerameikos.org/" xmlns:prov="http://www.w3.org/ns/prov#"
+	xmlns:kid="https://kerameikos.org/id/" xmlns:org="http://www.w3.org/ns/org#" xmlns:edm="http://www.europeana.eu/schemas/edm/"
+	xmlns:kon="https://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:tei="http://www.tei-c.org/ns/1.0"
+	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:kerameikos="https://kerameikos.org/" xmlns:prov="http://www.w3.org/ns/prov#"
 	xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../templates.xsl"/>
 	<xsl:include href="../../functions.xsl"/>
@@ -57,7 +57,7 @@
 
 				<!-- mirador -->
 				<xsl:if test="descendant::crm:P129i_is_subject_of">
-					<script type="text/javascript" src="http://kerameikos.org/mirador/build/mirador/mirador.min.js"/>
+					<script type="text/javascript" src="https://kerameikos.org/mirador/build/mirador/mirador.min.js"/>
 				</xsl:if>
 
 				<!-- leaflet IIIF -->

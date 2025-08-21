@@ -26,7 +26,7 @@
 						<rdf:type rdf:resource="http://www.w3.org/2004/02/skos/core#Concept"/>
 						<skos:prefLabel xml:lang=""/>
 						<org:memberOf/>
-						<skos:inScheme rdf:resource="http://kerameikos.org/editor/"/>
+						<skos:inScheme rdf:resource="https://kerameikos.org/editor/"/>
 					</crm:E21_Person>
 				</rdf:RDF>
 			</xforms:instance>
@@ -49,7 +49,7 @@
 					<status></status>
 					<type></type>
 					<conceptScheme>editor</conceptScheme>
-					<conceptScheme_uri>http://kerameikos.org/editor/</conceptScheme_uri>
+					<conceptScheme_uri>https://kerameikos.org/editor/</conceptScheme_uri>
 					<concept_path></concept_path>
 					<dump></dump>
 					<membership-position></membership-position>
@@ -236,7 +236,7 @@ BIND (<URI> as ?concept)
 						value="digest(normalize-space(saxon:serialize(instance('doc'), 'xml')), 'MD5', 'hex')"/>
 
 					<xforms:setvalue ref="instance('control-instance')/conceptScheme_uri"
-						value="concat('http://kerameikos.org/', instance('control-instance')/conceptScheme, '/')"/>
+						value="concat('https://kerameikos.org/', instance('control-instance')/conceptScheme, '/')"/>
 
 					<!-- set the concept_path based on conceptScheme -->
 					<xforms:setvalue ref="instance('control-instance')/concept_path"

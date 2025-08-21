@@ -70,7 +70,7 @@
 				<div class="col-md-12">
 					<h1>Kerameikos Ontology</h1>
 
-					<p>The namespace for all terms is <code>http://kerameikos.org/ontology#</code></p>
+					<p>The namespace for all terms is <code>https://kerameikos.org/ontology#</code></p>
 
 					<p>Download OWL ontology for this version: <a href="{concat($url, $path, '.rdf')}">RDF/XML</a>
 						<xsl:text>, </xsl:text>
@@ -84,9 +84,9 @@
 					<div>
 						<h2>Cross reference for Kerameikos classes and properties</h2>
 						<h3>Classes</h3>
-						<xsl:apply-templates select="descendant::owl:Class[starts-with(@rdf:about, 'http://kerameikos.org/')]"/>
+						<xsl:apply-templates select="descendant::owl:Class[starts-with(@rdf:about, 'https://kerameikos.org/')]"/>
 						<h3>Properties</h3>
-						<xsl:apply-templates select="descendant::owl:ObjectProperty[starts-with(@rdf:about, 'http://kerameikos.org/')]"/>
+						<xsl:apply-templates select="descendant::owl:ObjectProperty[starts-with(@rdf:about, 'https://kerameikos.org/')]"/>
 					</div>
 				</div>
 			</div>

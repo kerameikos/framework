@@ -50,7 +50,7 @@
 						xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 						xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 						xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#"
-						xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
+						xmlns:kid="https://kerameikos.org/id/" xmlns:kon="https://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
 						xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
 						xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#">
 						
@@ -66,7 +66,7 @@
 							</xsl:for-each>
 						</xsl:variable>
 						
-						<xsl:variable name="id-url" select="concat('http://kerameikos.org/apis/getRdf?identifiers=', encode-for-uri($id-param))"/>
+						<xsl:variable name="id-url" select="concat('https://kerameikos.org/apis/getRdf?identifiers=', encode-for-uri($id-param))"/>
 						
 						<xsl:if test="doc-available($id-url)">
 							<xsl:copy-of select="document($id-url)/rdf:RDF/*"/>

@@ -4,7 +4,7 @@
     Function: XSLT templates that construct the XML metamodel used in various contexts for SPARQL queries. 
     The sparql-metamodel.xsl stylesheet converts this XML model into text for the SPARQL endpoint
 -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:kerameikos="http://kerameikos.org/"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:kerameikos="https://kerameikos.org/"
     exclude-result-prefixes="#all" version="2.0">
 
     <!-- convert the $filter params (simple, semi-colon separated fragments) for the metrical and distribution analysis interfaces 

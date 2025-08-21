@@ -19,7 +19,7 @@
 	<p:processor name="oxf:unsafe-xslt">
 		<p:input name="data" href="#request"/>
 		<p:input name="config">
-			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:kerameikos="http://kerameikos.org/">
+			<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:kerameikos="https://kerameikos.org/">
 				<xsl:output indent="yes"/>
 				
 				<xsl:variable name="content-type" select="//header[name[.='accept']]/value"/>

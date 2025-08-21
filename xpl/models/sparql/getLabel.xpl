@@ -32,8 +32,8 @@
 
 				<xsl:variable name="query"><![CDATA[
 PREFIX rdf:      <http://www.w3.org/1999/02/22-rdf-syntax-ns#>
-PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kid:	<https://kerameikos.org/id/>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX skos:      <http://www.w3.org/2004/02/skos/core#>						
 SELECT ?label WHERE {
 %URI% skos:prefLabel ?label FILTER(langMatches(lang(?label), "LANG"))}]]></xsl:variable>

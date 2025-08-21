@@ -33,7 +33,7 @@
 					<username></username>
 					<status></status>
 					<conceptScheme>editor</conceptScheme>
-					<conceptScheme_uri>http://kerameikos.org/editor/</conceptScheme_uri>
+					<conceptScheme_uri>https://kerameikos.org/editor/</conceptScheme_uri>
 					<concept_path></concept_path>
 				</controls>
 			</xforms:instance>
@@ -64,7 +64,7 @@ PREFIX xsd: <http://www.w3.org/2001/XMLSchema#>
 
 SELECT ?editor ?name ?orcid ?doi WHERE {
   ?editor a crm:E21_Person ;
-            skos:inScheme <http://kerameikos.org/editor/> ;
+            skos:inScheme <https://kerameikos.org/editor/> ;
             skos:prefLabel ?name . FILTER (langMatches(lang(?name), "en"))
   OPTIONAL {?editor skos:exactMatch ?orcid FILTER contains(str(?orcid), "orcid.org")}
   OPTIONAL {?editor dcterms:identifier ?doi}

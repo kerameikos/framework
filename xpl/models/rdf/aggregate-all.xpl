@@ -43,8 +43,8 @@
 				xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:prov="http://www.w3.org/ns/prov#"
 				xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:owl="http://www.w3.org/2002/07/owl#"
 				xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
-				xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
-				xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#" xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#"
+				xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="https://kerameikos.org/id/"
+				xmlns:kon="https://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#" xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#"
 				xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
 				xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#" version="2.0">
 

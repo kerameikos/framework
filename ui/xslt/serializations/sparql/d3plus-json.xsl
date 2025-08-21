@@ -3,7 +3,7 @@
 	Modified: June 2019
 	Function: Serialize SPARQL results for the distribution API into JSON for d3plus -->
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:res="http://www.w3.org/2005/sparql-results#"
-	xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
+	xmlns:kerameikos="https://kerameikos.org/" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../../functions.xsl"/>
 
 	<!-- URL parameters -->

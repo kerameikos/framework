@@ -3,8 +3,8 @@
 	xmlns:ev="http://www.w3.org/2001/xml-events" xmlns:xxforms="http://orbeon.org/oxf/xml/xforms" xmlns:fr="http://orbeon.org/oxf/xml/form-runner"
 	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:foaf="http://xmlns.com/foaf/0.1/"
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
-	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:kid="http://kerameikos.org/id/"
-	xmlns:kon="http://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:edm="http://www.europeana.eu/schemas/edm/"
+	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:kid="https://kerameikos.org/id/"
+	xmlns:kon="https://kerameikos.org/ontology#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:edm="http://www.europeana.eu/schemas/edm/"
 	xmlns:atom="http://www.w3.org/2005/Atom" xmlns:org="http://www.w3.org/ns/org#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
 	xmlns:kerameikos="https://github.com/kerameikos/" xmlns:prov="http://www.w3.org/ns/prov#" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
 	xmlns:crmgeo="http://www.ics.forth.gr/isl/CRMgeo/" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#">
@@ -59,8 +59,8 @@
 					xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 					xmlns:crmgeo="http://www.ics.forth.gr/isl/CRMgeo/" xmlns:edm="http://www.europeana.eu/schemas/edm/"
 					xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:dcterms="http://purl.org/dc/terms/"
-					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="http://kerameikos.org/id/"
-					xmlns:kon="http://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
+					xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:xsd="http://www.w3.org/2001/XMLSchema#" xmlns:kid="https://kerameikos.org/id/"
+					xmlns:kon="https://kerameikos.org/ontology#" xmlns:org="http://www.w3.org/ns/org#"
 					xmlns:un="http://www.owl-ontologies.com/Ontology1181490123.owl#" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
 					xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#" xmlns:lexinfo="http://www.lexinfo.net/ontology/2.0/lexinfo#" xmlns=""/>
 			</xforms:instance>
@@ -286,7 +286,7 @@
 						<![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX ontolex:	<http://www.w3.org/ns/lemon/ontolex#>
 PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX prov:	<http://www.w3.org/ns/prov#>
@@ -311,12 +311,12 @@ UNION {<URI> ?p ?o . ?s ?p ?o . FILTER (?s = <URI>) }
 					<prefix><![CDATA[PREFIX rdf:	<http://www.w3.org/1999/02/22-rdf-syntax-ns#>
 PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX org:	<http://www.w3.org/ns/org#>
 PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 					<query id="ask">ASK {&lt;URI&gt; rdf:type CLASS}</query>
 					<query id="ask-person">ASK {&lt;URI&gt; rdf:type ?type . FILTER (?type = crm:E74_Group)} </query>
-					<query id="editor">SELECT ?uri ?label WHERE {?uri a crm:E21_Person ; skos:inScheme &lt;http://kerameikos.org/editor/&gt; ; skos:prefLabel
+					<query id="editor">SELECT ?uri ?label WHERE {?uri a crm:E21_Person ; skos:inScheme &lt;https://kerameikos.org/editor/&gt; ; skos:prefLabel
 						?label FILTER langMatches(lang(?label), "en")} ORDER BY ?label</query>
 				</templates>
 			</xforms:instance>
@@ -602,14 +602,14 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 					<xforms:setvalue ref="instance('control-instance')/new_id" value="true()"/>
 
 					<!-- create the Concept object -->
-					<xforms:var name="uri" select="concat('http://kerameikos.org/id/', instance('control-instance')/id)"/>
+					<xforms:var name="uri" select="concat('https://kerameikos.org/id/', instance('control-instance')/id)"/>
 					<xforms:insert context="instance('rdf')" origin="xforms:element(instance('control-instance')/type, xforms:attribute('rdf:about', $uri))"/>
 					<!-- insert rdf:type as skos:Concept -->
 					<xforms:insert context="instance('rdf')/*[last()]"
 						origin="xforms:element('rdf:type', xforms:attribute('rdf:resource', 'http://www.w3.org/2004/02/skos/core#Concept'))"/>
 					<!-- insert skos:inScheme -->
 					<xforms:insert context="instance('rdf')/*[last()]" nodeset="./child::node()[last()]"
-						origin="xforms:element('skos:inScheme', xforms:attribute('rdf:resource', 'http://kerameikos.org/id/'))"/>
+						origin="xforms:element('skos:inScheme', xforms:attribute('rdf:resource', 'https://kerameikos.org/id/'))"/>
 				</xforms:action>
 
 				<!-- ************ RDF PROCESSING TO ADD SUPPLEMENTAL INFORMATION ************** -->
@@ -1182,7 +1182,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 														<xforms:action if="$mapping='prov:alternateOf'">
 															<!-- verify that the prov:alternateOf is a Kerameikos URI, but not validate its existence (as this ID may be in the same spreadsheet -->
 															<xforms:action if="string-length($value) &gt; 0">
-																<xforms:insert if="not(contains($value, 'http://kerameikos.org/id/'))"
+																<xforms:insert if="not(contains($value, 'https://kerameikos.org/id/'))"
 																	context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																	origin="xforms:element('error', concat($mapping, ' does not link to a Kerameikos URI: ', $value))"
 																/>
@@ -1191,10 +1191,10 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 														<xforms:action if="$mapping='org:role' or $mapping='org:organization'">
 															<xforms:action if="string-length($value) &gt; 0">
 																<!-- these are properties that must be linked internally to other Kerameikos IDs -->
-																<xforms:insert if="not(contains($value, 'http://kerameikos.org/id/'))"
+																<xforms:insert if="not(contains($value, 'https://kerameikos.org/id/'))"
 																	context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																	origin="xforms:element('error', concat($mapping, ' does not link to a Kerameikos URI: ', $value))"/>
-																<xforms:action if="contains($value, 'http://kerameikos.org/id/')">
+																<xforms:action if="contains($value, 'https://kerameikos.org/id/')">
 																	<!-- if the URI space is kid:, then test whether the URI has already been validated via SPARQL. If not, then submit a SPARQL query -->
 																	<xforms:action
 																		if="instance('kerameikos-ids')/id[@uri=$value and @mapping=$mapping] = false()"
@@ -1241,10 +1241,10 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 														<xforms:action if="$mapping='skos:broader' or $mapping = 'skos:related'">
 															<xforms:action if="string-length($value) &gt; 0">
 																<!-- these are properties that must be linked internally to other Kerameikos IDs -->
-																<xforms:insert if="not(contains($value, 'http://kerameikos.org/id/'))"
+																<xforms:insert if="not(contains($value, 'https://kerameikos.org/id/'))"
 																	context="instance('validation-model')/record[last()]" nodeset="./child::node()[last()]"
 																	origin="xforms:element('error', concat($mapping, ' does not link to a Kerameikos URI: ', $value))"/>
-																<xforms:action if="contains($value, 'http://kerameikos.org/id/')">
+																<xforms:action if="contains($value, 'https://kerameikos.org/id/')">
 																	<!-- if the URI space is kid:, then test whether the URI has already been validated via SPARQL. If not, then submit a SPARQL query -->
 																	<xforms:action
 																		if="instance('kerameikos-ids')/id[@uri=$value and @mapping=$mapping] = false()"
@@ -1370,7 +1370,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 											<!--<xforms:setvalue ref="instance('control-instance')/position" value="context()/position()"></xforms:setvalue>-->
 											<xforms:var name="id"
 												select="normalize-space(data(context()/cell[@name=instance('mappings')/mapping[@to='id']/@from]))"/>
-											<xforms:var name="uri" select="concat('http://kerameikos.org/id/', $id)"/>
+											<xforms:var name="uri" select="concat('https://kerameikos.org/id/', $id)"/>
 											<xforms:var name="position" select="position()"/>
 											<!-- set the id in the control-instance and then attempt to load the RDF/XML from disc. If it fails to load, this means the ID does not exist, and a new one will be created. If the ID does exist and the RDF is loaded, then add supplementary information. -->
 											<xforms:setvalue ref="instance('control-instance')/id" value="$id"/>
@@ -1681,7 +1681,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 													>spreadsheet</xforms:setvalue>
 												<xforms:setvalue
 													ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
-													value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
+													value="concat('https://kerameikos.org/editor/', instance('control-instance')/username)"/>
 												<xforms:setvalue ref="instance('rdf')/dcterms:ProvenanceStatement/prov:wasGeneratedBy/prov:Activity/prov:atTime"
 													value="$dateTime"/>
 												<xforms:setvalue
@@ -1722,7 +1722,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 														>spreadsheet</xforms:setvalue>
 													<xforms:setvalue
 														ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:wasAssociatedWith/@rdf:resource"
-														value="concat('http://kerameikos.org/editor/', instance('control-instance')/username)"/>
+														value="concat('https://kerameikos.org/editor/', instance('control-instance')/username)"/>
 													<xforms:setvalue
 														ref="instance('rdf')/dcterms:ProvenanceStatement/prov:activity[last()]/prov:Activity/prov:atTime"
 														value="$dateTime"/>

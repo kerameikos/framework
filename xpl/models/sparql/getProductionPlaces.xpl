@@ -110,7 +110,7 @@
 				<p:input name="config-xml" href=" ../../../config.xml"/>
 				<p:input name="config">
 					<xsl:stylesheet version="2.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-						xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all">
+						xmlns:kerameikos="https://kerameikos.org/" exclude-result-prefixes="#all">
 						<xsl:include href="../../../ui/xslt/controllers/metamodel-templates.xsl"/>
 						<xsl:include href="../../../ui/xslt/controllers/sparql-metamodel.xsl"/>
 						

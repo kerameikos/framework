@@ -2,9 +2,9 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
 	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
-	xmlns:kid="http://kerameikos.org/id/" xmlns:kon="http://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	xmlns:kid="https://kerameikos.org/id/" xmlns:kon="https://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
 	xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:org="http://www.w3.org/ns/org#" xmlns:tei="http://www.tei-c.org/ns/1.0"
-	xmlns:kerameikos="http://kerameikos.org/" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
+	xmlns:kerameikos="https://kerameikos.org/" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
 	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:prov="http://www.w3.org/ns/prov#" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
 	xmlns:crmgeo="http://www.ics.forth.gr/isl/CRMgeo/" exclude-result-prefixes="#all" version="2.0">
 

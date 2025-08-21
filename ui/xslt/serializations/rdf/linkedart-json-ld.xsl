@@ -2,10 +2,10 @@
 <!-- Author: Ethan Gruber
 	Date: August 2020
 	Function: Transform Kerameikos RDF into Linked Art JSON-LD. Query broader concepts -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:kerameikos="http://kerameikos.org/"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:kerameikos="https://kerameikos.org/"
 	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
 	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:foaf="http://xmlns.com/foaf/0.1/"
-	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:org="http://www.w3.org/ns/org#" xmlns:kon="http://kerameikos.org/ontology#"
+	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:org="http://www.w3.org/ns/org#" xmlns:kon="https://kerameikos.org/ontology#"
 	xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:prov="http://www.w3.org/ns/prov#"
 	xmlns:crmdig="http://www.ics.forth.gr/isl/CRMdig/" exclude-result-prefixes="#all" version="2.0">
 	<xsl:include href="../json/json-metamodel.xsl"/>
@@ -20,7 +20,7 @@
 		<rdf:RDF xmlns:dcterms="http://purl.org/dc/terms/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 			xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#" xmlns:skos="http://www.w3.org/2004/02/skos/core#"
 			xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:org="http://www.w3.org/ns/org#"
-			xmlns:kon="http://kerameikos.org/ontology#" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
+			xmlns:kon="https://kerameikos.org/ontology#" xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/"
 			xmlns:crmdig="http://www.ics.forth.gr/isl/CRMdig/">
 			<xsl:variable name="id-param">
 				<xsl:for-each select="
@@ -32,7 +32,7 @@
 				</xsl:for-each>
 			</xsl:variable>
 
-			<xsl:variable name="rdf_url" select="concat('http://kerameikos.org/apis/getRdf?identifiers=', encode-for-uri($id-param))"/>
+			<xsl:variable name="rdf_url" select="concat('https://kerameikos.org/apis/getRdf?identifiers=', encode-for-uri($id-param))"/>
 			<xsl:copy-of select="document($rdf_url)/rdf:RDF/*"/>
 		</rdf:RDF>
 	</xsl:variable>

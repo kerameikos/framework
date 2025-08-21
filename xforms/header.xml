@@ -8,18 +8,18 @@
 				<span class="icon-bar"/>
 				<span class="icon-bar"/>
 			</button>
-			<a class="navbar-brand" href="http://kerameikos.org/">Kerameikos.org</a>
+			<a class="navbar-brand" href="https://kerameikos.org/">Kerameikos.org</a>
 		</div>
 		<div class="navbar-collapse collapse">
 			<ul class="nav navbar-nav">
 				<li>
-					<a href="http://kerameikos.org/id/">Browse</a>
+					<a href="https://kerameikos.org/id/">Browse</a>
 				</li>
 				<li>
-					<a href="http://kerameikos.org/ontology">Ontology</a>
+					<a href="https://kerameikos.org/ontology">Ontology</a>
 				</li>
 				<li>
-					<a href="http://kerameikos.org/sparql">SPARQL</a>
+					<a href="https://kerameikos.org/sparql">SPARQL</a>
 				</li>
 			</ul>
 			<ul class="nav navbar-nav navbar-right">

@@ -53,7 +53,7 @@ $(document).ready(function () {
     
     $('.iiif-image').fancybox({
         beforeShow: function () {
-            this.title = '<a href="' + this.element.attr('uri') + '">' + this.element.attr('title') + '</a><br/><a href="http://kerameikos.org/object/?uri=' + encodeURI(this.element.attr('uri')) + '">Display in Kerameikos</a>';
+            this.title = '<a href="' + this.element.attr('uri') + '">' + this.element.attr('title') + '</a><br/><a href="https://kerameikos.org/object/?uri=' + encodeURI(this.element.attr('uri')) + '">Display in Kerameikos</a>';
             var manifest = this.element.attr('manifest');
             //remove and replace #iiif-container, if different or new
             if (manifest != $('#manifest').text()) {
@@ -73,7 +73,7 @@ $(document).ready(function () {
     $('a.fancybox').fancybox({
         type: 'image',
         beforeShow: function () {
-            this.title = '<a href="' + this.element.attr('uri') + '">' + this.element.attr('title') + '</a><br/><a href="http://kerameikos.org/object/?uri=' + encodeURI(this.element.attr('uri')) + '">Display in Kerameikos</a>';
+            this.title = '<a href="' + this.element.attr('uri') + '">' + this.element.attr('title') + '</a><br/><a href="https://kerameikos.org/object/?uri=' + encodeURI(this.element.attr('uri')) + '">Display in Kerameikos</a>';
         },
         helpers: {
             title: {

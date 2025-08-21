@@ -8,7 +8,7 @@
 	<xsl:variable name="perPage" select="5000"/>
 
 	<xsl:template match="/">
-		<rdf:RDF xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:kid="http://kerameikos.org/id/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+		<rdf:RDF xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:kid="https://kerameikos.org/id/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
 			xmlns:dcterms="http://purl.org/dc/terms/" xmlns:void="http://rdfs.org/ns/void#" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:oac="http://www.openannotation.org/ns/"
 			xmlns:owl="http://www.w3.org/2002/07/owl#">
 			<void:Dataset rdf:about="{$url}#objects">

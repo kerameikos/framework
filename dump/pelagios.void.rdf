@@ -7,6 +7,6 @@
 		<dcterms:description>Pleiades annotations for pottery concepts defined by Kerameikos.org</dcterms:description>
 		<dcterms:license rdf:resource="http://opendatacommons.org/licenses/odbl/1.0/"/>
 		<dcterms:subject rdf:resource="http://dbpedia.org/resource/Annotation"/>
-		<void:dataDump rdf:resource="http://kerameikos.org/pelagios.rdf"/>
+		<void:dataDump rdf:resource="https://kerameikos.org/pelagios.rdf"/>
 	</void:Dataset>
 </rdf:RDF>

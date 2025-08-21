@@ -2,7 +2,7 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:skos="http://www.w3.org/2004/02/skos/core#" 
 	xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#" xmlns:eac="urn:isbn:1-931666-33-4" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:res="http://www.w3.org/2005/sparql-results#"
 	xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#" xmlns:xs="http://www.w3.org/2001/XMLSchema"
-	xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:kml="http://earth.google.com/kml/2.0" xmlns:saxon="http://saxon.sf.net/" xmlns:kerameikos="http://kerameikos.org/" exclude-result-prefixes="#all"
+	xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:kml="http://earth.google.com/kml/2.0" xmlns:saxon="http://saxon.sf.net/" xmlns:kerameikos="https://kerameikos.org/" exclude-result-prefixes="#all"
 	version="2.0">
 	<xsl:output method="text" encoding="UTF-8"/>
 	<xsl:variable name="type" select="descendant::rdf:RDF/*[1]/name()"/>
@@ -67,8 +67,8 @@ PREFIX owl:	<http://www.w3.org/2002/07/owl#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kid:	<https://kerameikos.org/id/>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX osgeo:	<http://data.ordnancesurvey.co.uk/ontology/geometry/>
 SELECT DISTINCT ?place ?label ?definition ?lat ?long ?json WHERE {]]>
 		</xsl:variable>
@@ -206,8 +206,8 @@ PREFIX owl:	<http://www.w3.org/2002/07/owl#>
 PREFIX foaf:	<http://xmlns.com/foaf/0.1/>
 PREFIX crm:	<http://www.cidoc-crm.org/cidoc-crm/>
 PREFIX geo:	<http://www.w3.org/2003/01/geo/wgs84_pos#>
-PREFIX kid:	<http://kerameikos.org/id/>
-PREFIX kon:	<http://kerameikos.org/ontology#>
+PREFIX kid:	<https://kerameikos.org/id/>
+PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX osgeo:	<http://data.ordnancesurvey.co.uk/ontology/geometry/>
 SELECT DISTINCT ?object ?place ?label ?title ?fromDate ?toDate ?thumb ?id ?keeper ?kuri WHERE {]]>
 		</xsl:variable>

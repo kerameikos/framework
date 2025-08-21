@@ -2,7 +2,7 @@
 <!-- Author: Ethan Gruber
     Date: August 2020
     Function: Transform the JSON metamodel into text that is then serialized by Orbeon into JSON -->
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:kerameikos="http://kerameikos.org/"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:kerameikos="https://kerameikos.org/"
     exclude-result-prefixes="xs" version="2.0">
 
     <xsl:output method="text" encoding="UTF-8"/>

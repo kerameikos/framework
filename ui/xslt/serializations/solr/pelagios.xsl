@@ -12,14 +12,14 @@
 	</xsl:template>
 
 	<xsl:template match="doc">
-		<lawd:Place rdf:about="http://kerameikos.org/id/{str[@name='id']}">
+		<lawd:Place rdf:about="https://kerameikos.org/id/{str[@name='id']}">
 			<rdfs:label>
 				<xsl:value-of select="str[@name='prefLabel']"/>
 			</rdfs:label>
 			<xsl:for-each select="distinct-values(arr[@name='pleiades_uri']/str)">
 				<skos:closeMatch rdf:resource="{.}#this"/>
 			</xsl:for-each>
-			<void:inDataset rdf:resource="http://kerameikos.org/"/>
+			<void:inDataset rdf:resource="https://kerameikos.org/"/>
 		</lawd:Place>
 	</xsl:template>
 </xsl:stylesheet>

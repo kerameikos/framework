@@ -72,7 +72,7 @@
 				<identifierSpace>
 					<xsl:value-of select="concat($url, 'id/')"/>
 				</identifierSpace>
-				<schemaSpace>http://kerameikos.org/ontology</schemaSpace>
+				<schemaSpace>https://kerameikos.org/ontology</schemaSpace>
 				<defaultTypes>
 					<xsl:apply-templates select="/content/descendant::lst[@name = 'type']"/>
 				</defaultTypes>
