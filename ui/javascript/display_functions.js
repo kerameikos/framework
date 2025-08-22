@@ -144,6 +144,24 @@ $(document).ready(function () {
                 
                 // Access the first Iiif object and add it to the map
                 iiifLayers[Object.keys(iiifLayers)[0]].addTo(iiifImage);
+            } else if (data[ '@context'] == 'http://iiif.io/api/presentation/3/context.json') {
+                var iiifLayers = {
+                };
+                
+                // For each image create a L.TileLayer.Iiif object and add that to an object literal for the layer control
+                $.each(data.items, function (_, val) { 
+                    if (val.hasOwnProperty('label')) {
+                        var label = val.label;
+                    } else {
+                        var label = _;
+                    }
+                    iiifLayers[label] = L.tileLayer.iiif(val.thumbnail[0].service[0].id + '/info.json');
+                });
+                // Add layers control to the map
+                L.control.layers(iiifLayers).addTo(iiifImage);
+                
+                // Access the first Iiif object and add it to the map
+                iiifLayers[Object.keys(iiifLayers)[0]].addTo(iiifImage);
             }
         });
     }

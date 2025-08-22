@@ -627,7 +627,7 @@ PREFIX skos:	<http://www.w3.org/2004/02/skos/core#>]]></prefix>
 				<xforms:setvalue ref="instance('control-instance')/username" value="xxforms:get-remote-user()"/>
 
 				<!-- load the spreadsheet RDF -->
-				<xforms:setvalue ref="instance('load-config')/url" value="concat('file:', instance('config')/absolute_data_path, '/spreadsheets/spreadsheets.rdf')"/>
+				<xforms:setvalue ref="instance('load-config')/url" value="concat(instance('config')/data_path, '/spreadsheets/spreadsheets.rdf')"/>
 				<xforms:insert nodeset="instance('spreadsheet-rdf')"
 					origin="xxforms:call-xpl('oxf:/apps/kerameikos/xpl/xforms/load-id.xpl', 'file', instance('load-config'), 'data')"/>
 
