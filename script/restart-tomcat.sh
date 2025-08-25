@@ -1,0 +1,54 @@
+#!/bin/sh
+#restarts tomcat (and other services) after a timeout. the script should be run in cron as root
+SOLR_URL="http://localhost:8983/solr/"
+KERAMEIKOS_URL="http://localhost:8080/orbeon/kerameikos/"
+SERVICE="tomcat10"
+
+#check Solr
+curl -m 5 $SOLR_URL
+
+if [ $? -eq 0 ]; then
+    echo "Solr is up"
+else
+    echo $(date --utc +%FT%T.%3NZ) "Restarted Solr" >> /var/log/$SERVICE/restart.log
+    service solr stop
+    service solr start
+fi
+
+#check Tomcat and Apache
+
+curl -m 10 $KERAMEIKOS_URL
+
+if [ $? -eq 0 ]; then
+    echo "Tomcat request was successful"
+    
+    #read HTTP code to ensure the HTTP response is correct, not just a timeout
+    HTTP_STATUS=$(curl -s -o /dev/null -w "%{http_code}" $KERAMEIKOS_URL)    
+    
+    if [ $HTTP_STATUS != "200" ]; then
+        echo "Tomcat is not hanging, but Orbeon is non-responsive"
+        echo $(date --utc +%FT%T.%3NZ) "Restarted Tomcat due to Orbeon Forms error" >> /var/log/$SERVICE/restart.log
+        service $SERVICE stop
+        service $SERVICE start
+        service apache2 stop
+        service apache2 start
+    else   
+        #if Tomcat is successful, try Apache
+        curl -m 10 http://localhost/
+        if [ $? -eq 0 ]; then
+            echo "Apache request was successful"
+        else
+            echo "Restarting Apache"
+            echo $(date --utc +%FT%T.%3NZ) "Restarted Apache" >> /var/log/$SERVICE/restart.log
+            service apache2 stop
+            service apache2 start
+        fi    
+    fi
+else
+    echo "Restarting Apache"
+    service apache2 restart
+    echo "Restarting Tomcat"
+    echo $(date --utc +%FT%T.%3NZ) "Restarted Tomcat" >> /var/log/$SERVICE/restart.log
+    service $SERVICE stop
+    service $SERVICE start
+fi
