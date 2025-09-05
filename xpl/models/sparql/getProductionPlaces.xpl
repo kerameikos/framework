@@ -114,7 +114,23 @@
 						<xsl:include href="../../../ui/xslt/controllers/metamodel-templates.xsl"/>
 						<xsl:include href="../../../ui/xslt/controllers/sparql-metamodel.xsl"/>
 						
-						<xsl:param name="id" select="doc('input:request')/request/parameters/parameter[name='id']/value"/>
+						<xsl:param name="id">
+							<xsl:choose>
+								<xsl:when test="doc('input:request')/request/parameters/parameter[name='id']/value">
+									<xsl:value-of select="doc('input:request')/request/parameters/parameter[name='id']/value"/>
+								</xsl:when>
+								<xsl:otherwise>
+									<xsl:choose>
+										<xsl:when test="ends-with(doc('input:request')/request/request-url, '.geojson')">
+											<xsl:value-of select="replace(tokenize(doc('input:request')/request/request-url, '/')[last()], '.geojson', '')"/>
+										</xsl:when>
+										<xsl:when test="ends-with(doc('input:request')/request/request-url, '.kml')">
+											<xsl:value-of select="replace(tokenize(doc('input:request')/request/request-url, '/')[last()], '.kml', '')"/>
+										</xsl:when>
+									</xsl:choose>
+								</xsl:otherwise>
+							</xsl:choose>
+						</xsl:param>
 						<xsl:variable name="sparql_endpoint" select="doc('input:config-xml')/config/sparql/query"/>
 						<xsl:variable name="type" select="/type"/>
 

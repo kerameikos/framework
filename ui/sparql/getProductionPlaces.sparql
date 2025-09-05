@@ -10,11 +10,11 @@ PREFIX kon:	<https://kerameikos.org/ontology#>
 PREFIX osgeo:	<http://data.ordnancesurvey.co.uk/ontology/geometry/>
 PREFIX edm:	<http://www.europeana.eu/schemas/edm/>
 
-SELECT DISTINCT ?place ?label ?definition ?lat ?long ?poly WHERE {
+SELECT DISTINCT ?place ?label ?definition ?lat ?long ?poly (count(?place) as ?count) WHERE {
 %STATEMENTS%
 {?loc geo:lat ?lat .
 ?loc geo:long ?long }
 UNION {?loc osgeo:asGeoJSON ?poly }
 ?place skos:prefLabel ?label FILTER (langMatches(lang(?label), "en" ))
 ?place skos:definition ?definition FILTER (langMatches(lang(?label), "en" ))
-} ORDER BY ?name
+} GROUP BY ?place ?label ?definition ?lat ?long ?poly ORDER BY ?name
