@@ -45,12 +45,6 @@ function initialize_map(id) {
         layers:[mb_physical]
     });
     
-    //add productionLayer from AJAX
-    var productionLayer = L.geoJson.ajax('../apis/getProductionPlaces?id=' + id, {
-        onEachFeature: onEachFeature,
-        pointToLayer: renderPoints
-    }).addTo(map);
-    
     //add controls
     var baseMaps = {
         "Terrain and Streets": mb_physical,
@@ -58,32 +52,35 @@ function initialize_map(id) {
         "Imperium": imperium
     };
     
-    var overlayMaps = {
-    };
+    //add controls
+    var layerControl = L.control.layers(baseMaps).addTo(map);
     
-    //add baselayers
-    if (type == 'crm:E53_Place') {
-        overlayMaps[prefLabel] = productionLayer;
-    } else {
-        overlayMaps[ 'Production Places'] = productionLayer;
-    }
-    
-    var controls = L.control.layers(baseMaps, overlayMaps).addTo(map);
-    
-    //add individual finds layer, but don't make visible
-    var findLayer = $.getJSON('../apis/getFindspots?id=' + id, function (data) {
-        var maxDensity = 0;
+    //add GeoJSON from AJAX
+    $.getJSON(id + '.geojson', function (data) {
+        
+        //split features into separate objects
+        var productionPlaces = {
+            "type": "FeatureCollection",
+            "features":[]
+        };
+        var findspots = {
+            "type": "FeatureCollection",
+            "features":[]
+        };
+        
         $.each(data.features, function (key, value) {
-            if (value.properties.hasOwnProperty('count') == true) {
-                if (value.properties.count !== undefined) {
-                    if (value.properties.count > maxDensity) {
-                        maxDensity = value.properties.count;
-                    }
-                }
+            
+            //populate objects
+            if (value.properties.type == 'productionPlace') {
+                productionPlaces.features.push(value);
+            }
+            if (value.properties.type == 'find') {
+                findspots.features.push(value);
             }
         });
         
-        var findLayer = L.geoJson(data, {
+        //create overlays for the three types of features
+        var productionPlacesLayer = L.geoJson(productionPlaces, {
             onEachFeature: onEachFeature,
             style: function (feature) {
                 if (feature.geometry.type == 'Polygon') {
@@ -95,23 +92,33 @@ function initialize_map(id) {
                 }
             },
             pointToLayer: function (feature, latlng) {
-                return renderFindspotPoints(feature, latlng, maxDensity);
+                return renderPoints(feature, latlng);
             }
         }).addTo(map);
         
-        controls.addOverlay(findLayer, 'Finds');
+        var findLayer = L.geoJson(findspots, {
+            onEachFeature: onEachFeature,
+            style: function (feature) {
+                if (feature.geometry.type == 'Polygon') {
+                    var fillColor = getFillColor(feature.properties.type);
+                    
+                    return {
+                        color: fillColor
+                    }
+                }
+            },
+            pointToLayer: function (feature, latlng) {
+                return renderPoints(feature, latlng);
+            }
+        }).addTo(map);
         
-        var group = new L.featureGroup([productionLayer, findLayer]);
+        //add layers to controls
+        layerControl.addOverlay(productionPlacesLayer, 'Production Places');
+        layerControl.addOverlay(findLayer, 'Finds');
+        
+        var group = new L.featureGroup([findLayer, productionPlacesLayer]);
         map.fitBounds(group.getBounds());
-        
-        return findLayer;
     });
-    
-    //zoom to groups on AJAX complete
-    productionLayer.on('data:loaded', function (data) {
-        var group = new L.featureGroup([productionLayer, findLayer]);
-        map.fitBounds(group.getBounds());
-    }.bind(this));
     
     
     /*****
@@ -120,55 +127,20 @@ function initialize_map(id) {
     function renderPoints(feature, latlng) {
         var fillColor = getFillColor(feature.properties.type);
         
+        if (feature.properties.hasOwnProperty('radius')) {
+            var radius = feature.properties.radius;
+        } else {
+            var radius = 5;
+        }
+        
         return new L.CircleMarker(latlng, {
-            radius: 5,
+            radius: radius,
             fillColor: fillColor,
             color: "#000",
             weight: 1,
             opacity: 1,
             fillOpacity: 0.6
         });
-    }
-    
-    function renderFindspotPoints(feature, latlng, maxDensity) {
-        var fillColor = getFillColor(feature.properties.type);
-        
-        if (feature.properties.hasOwnProperty('count')) {
-            grade = maxDensity / 5;
-            
-            var radius = 5;
-            if (feature.properties.count < Math.round(grade)) {
-                radius = 5;
-            } else if (feature.properties.count >= Math.round(grade) && feature.properties.count < Math.round(grade * 2)) {
-                radius = 10;
-            } else if (feature.properties.count >= Math.round(grade * 2) && feature.properties.count < Math.round(grade * 3)) {
-                radius = 15;
-            } else if (feature.properties.count >= Math.round(grade * 3) && feature.properties.count < Math.round(grade * 4)) {
-                radius = 20;
-            } else if (feature.properties.count >= Math.round(grade * 4)) {
-                radius = 25;
-            } else {
-                radius = 5;
-            }
-            
-            return new L.CircleMarker(latlng, {
-                radius: radius,
-                fillColor: fillColor,
-                color: "#000",
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.6
-            });
-        } else {
-            return new L.CircleMarker(latlng, {
-                radius: 5,
-                fillColor: fillColor,
-                color: "#000",
-                weight: 1,
-                opacity: 1,
-                fillOpacity: 0.6
-            });
-        }
     }
     
     function getFillColor (type) {
