@@ -386,6 +386,11 @@
 							<gazetteer_uri>
 								<xsl:value-of select="res:binding[@name = 'place']/res:uri"/>
 							</gazetteer_uri>
+							<xsl:if test="res:binding[@name = 'count']">
+								<count>
+									<xsl:value-of select="res:binding[@name = 'count']/res:literal"/>
+								</count>								
+							</xsl:if>
 							<type>
 								<xsl:value-of select="$pointType"/>
 							</type>
