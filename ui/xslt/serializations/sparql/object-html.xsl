@@ -57,7 +57,7 @@
 
 				<!-- mirador -->
 				<xsl:if test="descendant::crm:P129i_is_subject_of">
-					<script type="text/javascript" src="https://kerameikos.org/mirador/build/mirador/mirador.min.js"/>
+					<script src="https://unpkg.com/mirador@latest/dist/mirador.min.js"/>
 				</xsl:if>
 
 				<!-- leaflet IIIF -->
