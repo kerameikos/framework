@@ -275,7 +275,7 @@
 					</li>
 				</ul>
 			</div>
-			<div>
+			<!--<div>
 				<h3>Pelagios RDF Dump: Kerameikos Geographic Concepts as Gazetteer Places</h3>
 				<p>Data dumps conforming to the <a href="http://commons.pelagios.org/">Pelagios 3</a> model are linked on the index page. At present, these
 					files are only available in RDF/XML.</p>
@@ -287,7 +287,7 @@
 						<a href="pelagios.rdf">Dump RDF</a>
 					</li>
 				</ul>
-			</div>
+			</div>-->
 		</div>
 	</apis>
 </content>
