@@ -243,7 +243,7 @@
 						<tr>
 							<td>Atom</td>
 							<td>
-								<a href="https://kerameikos.org/feed">https://kerameikos.org/feed</a>
+								<a href="https://kerameikos.org/feed/">https://kerameikos.org/feed/</a>
 							</td>
 							<td>
 								<code>application/atom+xml</code>
@@ -265,7 +265,13 @@
 					are available as RDF/XML.</p>
 				<ul>
 					<li>
-						<a href="kerameikos.rdf">Dump RDF</a>
+						<a href="kerameikos.org.rdf">RDF/XML</a>
+					</li>
+					<li>
+						<a href="kerameikos.org.ttl">Turtle</a>
+					</li>
+					<li>
+						<a href="kerameikos.org.jsonld">JSON-LD</a>
 					</li>
 				</ul>
 			</div>

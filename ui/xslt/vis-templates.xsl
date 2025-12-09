@@ -179,7 +179,7 @@
 					<prop value="material" class="crm:E57_Material">Material</prop>
 					<prop value="painter" class="crm:E21_Person|crm:E74_Group">Painter</prop>
 					<prop value="period" class="crm:E4_Period">Period</prop>
-					<prop value="pottery" class="crm:E21_Person|crm:E74_Group">Potter</prop>					
+					<prop value="potter" class="crm:E21_Person|crm:E74_Group">Potter</prop>					
 					<prop value="productionPlace" class="crm:E53_Place">Production Place</prop>
 					<prop value="shape" class="kon:Shape">Shape</prop>
 					<prop value="technique" class="kon:Technique">Technique</prop>										
