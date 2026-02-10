@@ -15,6 +15,7 @@
 				<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
 				<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
+				<xsl:call-template name="wordpress-css"/>
 			</head>
 			<body>
 				<xsl:call-template name="header"/>

@@ -54,6 +54,7 @@
 				<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/result_functions.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
+				<xsl:call-template name="wordpress-css"/>
 				<link rel="alternate" type="application/atom+xml" href="feed/{if ($q = '*:*') then '' else concat('?q=', $q)}"/>
 				<!-- opensearch compliance -->
 				<!--<link rel="search" type="application/opensearchdescription+xml" href="http://nomisma.org/opensearch.xml" title="Example Search"/>-->

@@ -176,6 +176,7 @@
 				<script type="text/javascript" src="{$display_path}ui/javascript/init.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
+				<xsl:call-template name="wordpress-css"/>
 			</head>
 			<body>
 				<xsl:call-template name="header"/>

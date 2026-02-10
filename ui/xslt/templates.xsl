@@ -2,19 +2,332 @@
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:xs="http://www.w3.org/2001/XMLSchema" exclude-result-prefixes="#all" version="2.0">
 
 	<xsl:template name="header">
-
 		<xsl:variable name="json1">
 			<xsl:text>{"overlayOpenedBy":{"click":false,"hover":false,"focus":false},"type":"overlay","roleAttribute":"","ariaLabel":"Menu"}</xsl:text>
 		</xsl:variable>
-
+		
 		<xsl:variable name="json2">
 			<xsl:text>{ &quot;submenuOpenedBy&quot;: { &quot;click&quot;: false, &quot;hover&quot;: false, &quot;focus&quot;: false }, &quot;type&quot;: &quot;submenu&quot;, &quot;modal&quot;: null, &quot;previousFocus&quot;: null }</xsl:text>
 		</xsl:variable>
 
+		<header class="wp-block-template-part">
+			<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
+				<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
+					<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
+						<div class="wp-block-group alignfull is-layout-flow wp-block-group-is-layout-flow">
+							<div
+								class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
+								<div
+									class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
+									<div
+										class="wp-block-group alignfull has-background-color has-custom-eggshell-color has-text-color has-background has-link-color wp-elements-05d43b6fd045381f4e5b4258cb5dfd2c is-layout-flow wp-container-core-group-is-layout-ddaf840a wp-block-group-is-layout-flow"
+										style="background-color:#1d1c22;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--40)">
+										<div
+											class="wp-block-group alignwide has-base-color has-text-color has-link-color wp-elements-96bba6e487e230c38aa87bfb36176316 is-content-justification-space-between is-nowrap is-layout-flex wp-container-core-group-is-layout-78c6040a wp-block-group-is-layout-flex"
+											style="margin-top:0;margin-bottom:0">
+											<div
+												class="wp-block-group has-custom-pearl-color has-text-color has-link-color wp-elements-2465b3b57bdb399e093928f6e7c43f21 is-layout-flex wp-block-group-is-layout-flex">
+												<div class="wp-block-site-logo">
+													<a href="https://kerameikos.org/" class="custom-logo-link" rel="home">
+														<img width="74" height="74" src="https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-scaled.png" class="custom-logo"
+															alt="kerameikos.org" decoding="async"
+															srcset="https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-scaled.png 2560w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-300x300.png 300w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-1024x1024.png 1024w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-150x150.png 150w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-768x768.png 768w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-1536x1536.png 1536w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-2048x2048.png 2048w"
+															sizes="(max-width: 74px) 100vw, 74px"/>
+													</a>
+												</div>
+
+												<h1 style="font-size:clamp(24.034px, 1.502rem + ((1vw - 3.2px) * 1.565), 40px);"
+													class="has-link-color wp-elements-2e19baad4cc787ca0f3b34e82b7a7aa3 wp-block-site-title has-text-color has-base-color">
+													<a href="https://kerameikos.org" target="_self" rel="home">kerameikos.org</a>
+												</h1>
+											</div>
+
+
+
+											<div
+												class="wp-block-group has-custom-pearl-color has-text-color has-link-color wp-elements-63170f6cfc92695cd7d38d2317310ce1 is-layout-flex wp-block-group-is-layout-flex">
+												<nav
+													class="has-text-color has-base-color is-responsive items-justified-right wp-block-navigation is-horizontal is-content-justification-right is-layout-flex wp-container-core-navigation-is-layout-64619e5e wp-block-navigation-is-layout-flex"
+													aria-label="Navigation" data-wp-interactive="core/navigation" data-wp-context="{$json1}">
+													<button aria-haspopup="dialog" aria-label="Open menu" class="wp-block-navigation__responsive-container-open"
+														data-wp-on--click="actions.openMenuOnClick" data-wp-on--keydown="actions.handleMenuKeydown">
+														<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+															<path d="M4 7.5h16v1.5H4z"/>
+															<path d="M4 15h16v1.5H4z"/>
+														</svg>
+													</button>
+													<div
+														class="wp-block-navigation__responsive-container  has-text-color has-base-color has-background has-custom-basalt-background-color"
+														id="modal-1" data-wp-class--has-modal-open="state.isMenuOpen" data-wp-class--is-menu-open="state.isMenuOpen"
+														data-wp-watch="callbacks.initMenu" data-wp-on--keydown="actions.handleMenuKeydown"
+														data-wp-on--focusout="actions.handleMenuFocusout" tabindex="-1">
+														<div class="wp-block-navigation__responsive-close" tabindex="-1">
+															<div class="wp-block-navigation__responsive-dialog" data-wp-bind--aria-modal="state.ariaModal"
+																data-wp-bind--aria-label="state.ariaLabel" data-wp-bind--role="state.roleAttribute">
+																<button aria-label="Close menu" class="wp-block-navigation__responsive-container-close"
+																	data-wp-on--click="actions.closeMenuOnClick">
+																	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"
+																		focusable="false">
+																		<path
+																			d="m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z"
+																		/>
+																	</svg>
+																</button>
+																<div class="wp-block-navigation__responsive-container-content" data-wp-watch="callbacks.focusFirstElement"
+																	id="modal-1-content">
+																	<ul
+																		class="wp-block-navigation__container has-text-color has-base-color is-responsive items-justified-right wp-block-navigation">
+																		<li class=" wp-block-navigation-item wp-block-navigation-link has-medium-font-size">
+																			<a class="wp-block-navigation-item__content" href="https://kerameikos.org/browse">
+																				<span class="wp-block-navigation-item__label">Search</span>
+																			</a>
+																		</li>
+																		<li data-wp-context="{$json2}" data-wp-interactive="core/navigation"
+																			data-wp-on--focusout="actions.handleMenuFocusout" data-wp-on--keydown="actions.handleMenuKeydown"
+																			data-wp-on--mouseenter="actions.openMenuOnHover" data-wp-on--mouseleave="actions.closeMenuOnHover"
+																			data-wp-watch="callbacks.initMenu" tabindex="-1"
+																			class="wp-block-navigation-item has-child open-on-hover-click wp-block-navigation-submenu has-medium-font-size">
+																			<a class="wp-block-navigation-item__content" href="https://kerameikos.org/?page_id=116">
+																				<span class="wp-block-navigation-item__label">How to Use</span>
+																			</a>
+																			<button data-wp-bind--aria-expanded="state.isMenuOpen" data-wp-on--click="actions.toggleMenuOnClick"
+																				aria-label="How to Use submenu"
+																				class="wp-block-navigation__submenu-icon wp-block-navigation-submenu__toggle">
+																				<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"
+																					aria-hidden="true" focusable="false">
+																					<path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"/>
+																				</svg>
+																			</button>
+																			<ul data-wp-on--focus="actions.openMenuOnFocus"
+																				class="wp-block-navigation__submenu-container has-text-color has-base-color has-background has-custom-basalt-background-color wp-block-navigation-submenu has-medium-font-size">
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/using-our-search/">
+																						<span class="wp-block-navigation-item__label">Using Our Search</span>
+																					</a>
+																				</li>
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/our-terminology/">
+																						<span class="wp-block-navigation-item__label">Our Terminology</span>
+																					</a>
+																				</li>
+																			</ul>
+																		</li>
+																		<li data-wp-context="{$json2}" data-wp-interactive="core/navigation"
+																			data-wp-on--focusout="actions.handleMenuFocusout" data-wp-on--keydown="actions.handleMenuKeydown"
+																			data-wp-on--mouseenter="actions.openMenuOnHover" data-wp-on--mouseleave="actions.closeMenuOnHover"
+																			data-wp-watch="callbacks.initMenu" tabindex="-1"
+																			class="wp-block-navigation-item has-child open-on-hover-click wp-block-navigation-submenu">
+																			<a class="wp-block-navigation-item__content">
+																				<span class="wp-block-navigation-item__label">Resources</span>
+																			</a>
+																			<button data-wp-bind--aria-expanded="state.isMenuOpen" data-wp-on--click="actions.toggleMenuOnClick"
+																				aria-label="Resources submenu"
+																				class="wp-block-navigation__submenu-icon wp-block-navigation-submenu__toggle">
+																				<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"
+																					aria-hidden="true" focusable="false">
+																					<path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"/>
+																				</svg>
+																			</button>
+																			<ul data-wp-on--focus="actions.openMenuOnFocus"
+																				class="wp-block-navigation__submenu-container has-text-color has-base-color has-background has-custom-basalt-background-color wp-block-navigation-submenu">
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/greek-vases/">
+																						<span class="wp-block-navigation-item__label">What is a Greek Vase?</span>
+																					</a>
+																				</li>
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/lod/">
+																						<span class="wp-block-navigation-item__label">What is LOD?</span>
+																					</a>
+																				</li>
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content"
+																						href="https://kerameikos.org/publications-presentations/">
+																						<span class="wp-block-navigation-item__label">Publications &amp; Presentations</span>
+																					</a>
+																				</li>
+																			</ul>
+																		</li>
+																		<li class=" wp-block-navigation-item wp-block-navigation-link has-medium-font-size">
+																			<a class="wp-block-navigation-item__content" href="https://kerameikos.org/?page_id=120">
+																				<span class="wp-block-navigation-item__label">Blog</span>
+																			</a>
+																		</li>
+																		<li data-wp-context="{$json2}" data-wp-interactive="core/navigation"
+																			data-wp-on--focusout="actions.handleMenuFocusout" data-wp-on--keydown="actions.handleMenuKeydown"
+																			data-wp-on--mouseenter="actions.openMenuOnHover" data-wp-on--mouseleave="actions.closeMenuOnHover"
+																			data-wp-watch="callbacks.initMenu" tabindex="-1"
+																			class="wp-block-navigation-item has-child open-on-hover-click wp-block-navigation-submenu has-text-color has-base-color has-background has-custom-baltic-background-color">
+																			<a class="wp-block-navigation-item__content">
+																				<span class="wp-block-navigation-item__label">Data</span>
+																			</a>
+																			<button data-wp-bind--aria-expanded="state.isMenuOpen" data-wp-on--click="actions.toggleMenuOnClick"
+																				aria-label="Data submenu"
+																				class="wp-block-navigation__submenu-icon wp-block-navigation-submenu__toggle">
+																				<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"
+																					aria-hidden="true" focusable="false">
+																					<path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"/>
+																				</svg>
+																			</button>
+																			<ul data-wp-on--focus="actions.openMenuOnFocus"
+																				class="wp-block-navigation__submenu-container has-text-color has-base-color has-background has-custom-basalt-background-color wp-block-navigation-submenu has-text-color has-base-color has-background has-custom-baltic-background-color">
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/datasets">
+																						<span class="wp-block-navigation-item__label">Datasets</span>
+																					</a>
+																				</li>
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/ontology">
+																						<span class="wp-block-navigation-item__label">Ontology</span>
+																					</a>
+																				</li>
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/apis/">
+																						<span class="wp-block-navigation-item__label">APIs</span>
+																					</a>
+																				</li>
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/sparql">
+																						<span class="wp-block-navigation-item__label">SPARQL</span>
+																					</a>
+																				</li>
+																			</ul>
+																		</li>
+																		<li data-wp-context="{$json2}" data-wp-interactive="core/navigation"
+																			data-wp-on--focusout="actions.handleMenuFocusout" data-wp-on--keydown="actions.handleMenuKeydown"
+																			data-wp-on--mouseenter="actions.openMenuOnHover" data-wp-on--mouseleave="actions.closeMenuOnHover"
+																			data-wp-watch="callbacks.initMenu" tabindex="-1"
+																			class="wp-block-navigation-item has-child open-on-hover-click wp-block-navigation-submenu current-menu-ancestor">
+																			<a class="wp-block-navigation-item__content">
+																				<span class="wp-block-navigation-item__label">About</span>
+																			</a>
+																			<button data-wp-bind--aria-expanded="state.isMenuOpen" data-wp-on--click="actions.toggleMenuOnClick"
+																				aria-label="About submenu"
+																				class="wp-block-navigation__submenu-icon wp-block-navigation-submenu__toggle">
+																				<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"
+																					aria-hidden="true" focusable="false">
+																					<path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"/>
+																				</svg>
+																			</button>
+																			<ul data-wp-on--focus="actions.openMenuOnFocus"
+																				class="wp-block-navigation__submenu-container has-text-color has-base-color has-background has-custom-basalt-background-color wp-block-navigation-submenu">
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/our-history/">
+																						<span class="wp-block-navigation-item__label">Our History</span>
+																					</a>
+																				</li>
+																				<li class=" wp-block-navigation-item current-menu-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/meet-the-team/"
+																						aria-current="page">
+																						<span class="wp-block-navigation-item__label">Meet the Team</span>
+																					</a>
+																				</li>
+																				<li class=" wp-block-navigation-item wp-block-navigation-link">
+																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/contact-us/">
+																						<span class="wp-block-navigation-item__label">Contact Us</span>
+																					</a>
+																				</li>
+																			</ul>
+																		</li>
+																	</ul>
+																</div>
+															</div>
+														</div>
+													</div>
+												</nav>
+											</div>
+										</div>
+									</div>
+
+
+
+									<figure class="wp-block-image alignfull size-full">
+										<img fetchpriority="high" decoding="async" width="2560" height="79"
+											src="https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-scaled.png" alt="" class="wp-image-623"
+											srcset="https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-scaled.png 2560w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-300x9.png 300w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-1024x32.png 1024w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-768x24.png 768w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-1536x48.png 1536w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-2048x63.png 2048w"
+											sizes="(max-width: 2560px) 100vw, 2560px"/>
+									</figure>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</header>
+
+	</xsl:template>
+
+	<xsl:template name="footer">
+		<footer class="wp-block-template-part">
+			<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
+				<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
+					<figure class="wp-block-image alignfull size-full">
+						<img loading="lazy" decoding="async" width="2560" height="79" src="https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-scaled.png" alt=""
+							class="wp-image-623"
+							srcset="https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-scaled.png 2560w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-300x9.png 300w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-1024x32.png 1024w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-768x24.png 768w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-1536x48.png 1536w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-2048x63.png 2048w"
+							sizes="auto, (max-width: 2560px) 100vw, 2560px"/>
+					</figure>
+
+
+
+					<div
+						class="wp-block-group alignfull has-background-color has-base-color has-custom-baltic-background-color has-text-color has-background is-layout-flow wp-block-group-is-layout-flow"
+						style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--50);padding-left:var(--wp--preset--spacing--50)">
+						<div style="height:8px" aria-hidden="true" class="wp-block-spacer"/>
+
+
+						<h1
+							class="has-text-align-center has-link-color wp-elements-c274abde050f7aac1c729484c8424fe2 wp-block-site-title has-text-color has-custom-eggshell-color has-large-font-size wp-container-content-b0223bd5">
+							<a href="https://kerameikos.org" target="_self" rel="home">kerameikos.org</a>
+						</h1>
+
+
+						<div
+							class="wp-block-group has-base-color has-text-color has-link-color wp-elements-53866209a0a6fcae0356d149a44ff039 is-vertical is-content-justification-center is-layout-flex wp-container-core-group-is-layout-3d16a5d4 wp-block-group-is-layout-flex">
+							<ul
+								class="wp-block-social-links has-normal-icon-size has-visible-labels has-icon-color is-style-logos-only wp-container-content-b0223bd5 is-horizontal is-content-justification-center is-layout-flex wp-container-core-social-links-is-layout-845a9879 wp-block-social-links-is-layout-flex">
+
+								<li style="color:#e9e5e4;" class="wp-social-link wp-social-link-github has-custom-eggshell-color wp-block-social-link">
+									<a href="https://github.com/kerameikos" class="wp-block-social-link-anchor">
+										<svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+											<path
+												d="M12,2C6.477,2,2,6.477,2,12c0,4.419,2.865,8.166,6.839,9.489c0.5,0.09,0.682-0.218,0.682-0.484 c0-0.236-0.009-0.866-0.014-1.699c-2.782,0.602-3.369-1.34-3.369-1.34c-0.455-1.157-1.11-1.465-1.11-1.465 c-0.909-0.62,0.069-0.608,0.069-0.608c1.004,0.071,1.532,1.03,1.532,1.03c0.891,1.529,2.341,1.089,2.91,0.833 c0.091-0.647,0.349-1.086,0.635-1.337c-2.22-0.251-4.555-1.111-4.555-4.943c0-1.091,0.39-1.984,1.03-2.682 C6.546,8.54,6.202,7.524,6.746,6.148c0,0,0.84-0.269,2.75,1.025C10.295,6.95,11.15,6.84,12,6.836 c0.85,0.004,1.705,0.114,2.504,0.336c1.909-1.294,2.748-1.025,2.748-1.025c0.546,1.376,0.202,2.394,0.1,2.646 c0.64,0.699,1.026,1.591,1.026,2.682c0,3.841-2.337,4.687-4.565,4.935c0.359,0.307,0.679,0.917,0.679,1.852 c0,1.335-0.012,2.415-0.012,2.741c0,0.269,0.18,0.579,0.688,0.481C19.138,20.161,22,16.416,22,12C22,6.477,17.523,2,12,2z"
+											/>
+										</svg>
+										<span class="wp-block-social-link-label">GitHub</span>
+									</a>
+								</li>
+
+								<li style="color:#e9e5e4;" class="wp-social-link wp-social-link-mail has-custom-eggshell-color wp-block-social-link">
+									<a href="mailto:#&#107;era&#109;&#101;&#105;k&#111;&#115;.&#111;rg&#064;g&#109;ail.&#099;o&#109;" class="wp-block-social-link-anchor">
+										<svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+											<path
+												d="M19,5H5c-1.1,0-2,.9-2,2v10c0,1.1.9,2,2,2h14c1.1,0,2-.9,2-2V7c0-1.1-.9-2-2-2zm.5,12c0,.3-.2.5-.5.5H5c-.3,0-.5-.2-.5-.5V9.8l7.5,5.6,7.5-5.6V17zm0-9.1L12,13.6,4.5,7.9V7c0-.3.2-.5.5-.5h14c.3,0,.5.2.5.5v.9z"
+											/>
+										</svg>
+										<span class="wp-block-social-link-label">Mail</span>
+									</a>
+								</li>
+							</ul>
+						</div>
+
+						<div
+							class="wp-block-group has-base-color has-text-color has-link-color wp-elements-b6cd64af30ee757b05b6f212daaaffa6 wp-container-content-9cfa9a5a is-vertical is-content-justification-center is-layout-flex wp-container-core-group-is-layout-ce155fab wp-block-group-is-layout-flex">
+							<p class="has-text-align-center has-small-font-size"> Kerameikos.org data are made available under the <a
+									href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License</a>. See <a href="datasets">datasets</a> for image rights, respective
+								to individual institution.</p>
+						</div>
+					</div>
+				</div>
+			</div>
+		</footer>
+	</xsl:template>
+
+	<xsl:template name="wordpress-css">
 		<xsl:variable name="json3">
 			<xsl:text>{&quot;loadOnClientNavigation&quot;:true}</xsl:text>
 		</xsl:variable>
-
+		
 		<style id="admin-bar-inline-css">
 			@media screen {
 			    html {
@@ -321,388 +634,11 @@
 		<script type="importmap" id="wp-importmap">
 			{"imports":{"@wordpress/interactivity":"https://kerameikos.org/wp-includes/js/dist/script-modules/interactivity/index.min.js?ver=66c613f68580994bb00a"}}
 		</script>
-		<!--<link rel="modulepreload" href="https://kerameikos.org/wp-includes/js/dist/script-modules/interactivity/index.min.js?ver=66c613f68580994bb00a" id="@wordpress/interactivity-js-modulepreload" fetchpriority="low"/>
-		
-		<script type="module" src="https://kerameikos.org/wp-includes/js/dist/script-modules/block-library/navigation/view.min.js?ver=b0f909c3ec791c383210" id="@wordpress/block-library/navigation/view-js-module" fetchpriority="low" data-wp-router-options="{$json3}"></script>
-		<script src="https://kerameikos.org/wp-includes/js/hoverintent-js.min.js?ver=2.2.1" id="hoverintent-js-js"></script>-->
+		<link rel="modulepreload" href="https://kerameikos.org/wp-includes/js/dist/script-modules/interactivity/index.min.js?ver=66c613f68580994bb00a"
+			id="@wordpress/interactivity-js-modulepreload" fetchpriority="low"/>
 
-		<header class="wp-block-template-part">
-			<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-block-group-is-layout-constrained">
-				<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
-					<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
-						<div class="wp-block-group alignfull is-layout-flow wp-block-group-is-layout-flow">
-							<div
-								class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
-								<div
-									class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
-									<div
-										class="wp-block-group alignfull has-background-color has-custom-eggshell-color has-text-color has-background has-link-color wp-elements-05d43b6fd045381f4e5b4258cb5dfd2c is-layout-flow wp-container-core-group-is-layout-ddaf840a wp-block-group-is-layout-flow"
-										style="background-color:#1d1c22;padding-top:var(--wp--preset--spacing--40);padding-right:var(--wp--preset--spacing--40);padding-bottom:var(--wp--preset--spacing--20);padding-left:var(--wp--preset--spacing--40)">
-										<div
-											class="wp-block-group alignwide has-base-color has-text-color has-link-color wp-elements-96bba6e487e230c38aa87bfb36176316 is-content-justification-space-between is-nowrap is-layout-flex wp-container-core-group-is-layout-78c6040a wp-block-group-is-layout-flex"
-											style="margin-top:0;margin-bottom:0">
-											<div
-												class="wp-block-group has-custom-pearl-color has-text-color has-link-color wp-elements-2465b3b57bdb399e093928f6e7c43f21 is-layout-flex wp-block-group-is-layout-flex">
-												<div class="wp-block-site-logo">
-													<a href="https://kerameikos.org/" class="custom-logo-link" rel="home">
-														<img width="74" height="74" src="https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-scaled.png" class="custom-logo"
-															alt="kerameikos.org" decoding="async"
-															srcset="https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-scaled.png 2560w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-300x300.png 300w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-1024x1024.png 1024w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-150x150.png 150w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-768x768.png 768w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-1536x1536.png 1536w, https://kerameikos.org/wp-content/uploads/2025/10/logo-bf-1-2048x2048.png 2048w"
-															sizes="(max-width: 74px) 100vw, 74px"/>
-													</a>
-												</div>
-
-												<h1 style="font-size:clamp(24.034px, 1.502rem + ((1vw - 3.2px) * 1.565), 40px);"
-													class="has-link-color wp-elements-2e19baad4cc787ca0f3b34e82b7a7aa3 wp-block-site-title has-text-color has-base-color">
-													<a href="https://kerameikos.org" target="_self" rel="home">kerameikos.org</a>
-												</h1>
-											</div>
-
-
-
-											<div
-												class="wp-block-group has-custom-pearl-color has-text-color has-link-color wp-elements-63170f6cfc92695cd7d38d2317310ce1 is-layout-flex wp-block-group-is-layout-flex">
-												<nav
-													class="has-text-color has-base-color is-responsive items-justified-right wp-block-navigation is-horizontal is-content-justification-right is-layout-flex wp-container-core-navigation-is-layout-64619e5e wp-block-navigation-is-layout-flex"
-													aria-label="Navigation" data-wp-interactive="core/navigation" data-wp-context="{$json1}">
-													<button aria-haspopup="dialog" aria-label="Open menu" class="wp-block-navigation__responsive-container-open"
-														data-wp-on--click="actions.openMenuOnClick" data-wp-on--keydown="actions.handleMenuKeydown">
-														<svg width="24" height="24" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-															<path d="M4 7.5h16v1.5H4z"/>
-															<path d="M4 15h16v1.5H4z"/>
-														</svg>
-													</button>
-													<div
-														class="wp-block-navigation__responsive-container  has-text-color has-base-color has-background has-custom-basalt-background-color"
-														id="modal-1" data-wp-class--has-modal-open="state.isMenuOpen" data-wp-class--is-menu-open="state.isMenuOpen"
-														data-wp-watch="callbacks.initMenu" data-wp-on--keydown="actions.handleMenuKeydown"
-														data-wp-on--focusout="actions.handleMenuFocusout" tabindex="-1">
-														<div class="wp-block-navigation__responsive-close" tabindex="-1">
-															<div class="wp-block-navigation__responsive-dialog" data-wp-bind--aria-modal="state.ariaModal"
-																data-wp-bind--aria-label="state.ariaLabel" data-wp-bind--role="state.roleAttribute">
-																<button aria-label="Close menu" class="wp-block-navigation__responsive-container-close"
-																	data-wp-on--click="actions.closeMenuOnClick">
-																	<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"
-																		focusable="false">
-																		<path
-																			d="m13.06 12 6.47-6.47-1.06-1.06L12 10.94 5.53 4.47 4.47 5.53 10.94 12l-6.47 6.47 1.06 1.06L12 13.06l6.47 6.47 1.06-1.06L13.06 12Z"
-																		/>
-																	</svg>
-																</button>
-																<div class="wp-block-navigation__responsive-container-content" data-wp-watch="callbacks.focusFirstElement"
-																	id="modal-1-content">
-																	<ul
-																		class="wp-block-navigation__container has-text-color has-base-color is-responsive items-justified-right wp-block-navigation">
-																		<li class=" wp-block-navigation-item wp-block-navigation-link has-medium-font-size">
-																			<a class="wp-block-navigation-item__content" href="https://kerameikos.org/browse">
-																				<span class="wp-block-navigation-item__label">Search</span>
-																			</a>
-																		</li>
-																		<li data-wp-context="{$json2}" data-wp-interactive="core/navigation"
-																			data-wp-on--focusout="actions.handleMenuFocusout" data-wp-on--keydown="actions.handleMenuKeydown"
-																			data-wp-on--mouseenter="actions.openMenuOnHover" data-wp-on--mouseleave="actions.closeMenuOnHover"
-																			data-wp-watch="callbacks.initMenu" tabindex="-1"
-																			class="wp-block-navigation-item has-child open-on-hover-click wp-block-navigation-submenu has-medium-font-size">
-																			<a class="wp-block-navigation-item__content" href="https://kerameikos.org/?page_id=116">
-																				<span class="wp-block-navigation-item__label">How to Use</span>
-																			</a>
-																			<button data-wp-bind--aria-expanded="state.isMenuOpen" data-wp-on--click="actions.toggleMenuOnClick"
-																				aria-label="How to Use submenu"
-																				class="wp-block-navigation__submenu-icon wp-block-navigation-submenu__toggle">
-																				<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"
-																					aria-hidden="true" focusable="false">
-																					<path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"/>
-																				</svg>
-																			</button>
-																			<ul data-wp-on--focus="actions.openMenuOnFocus"
-																				class="wp-block-navigation__submenu-container has-text-color has-base-color has-background has-custom-basalt-background-color wp-block-navigation-submenu has-medium-font-size">
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/using-our-search/">
-																						<span class="wp-block-navigation-item__label">Using Our Search</span>
-																					</a>
-																				</li>
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/our-terminology/">
-																						<span class="wp-block-navigation-item__label">Our Terminology</span>
-																					</a>
-																				</li>
-																			</ul>
-																		</li>
-																		<li data-wp-context="{$json2}" data-wp-interactive="core/navigation"
-																			data-wp-on--focusout="actions.handleMenuFocusout" data-wp-on--keydown="actions.handleMenuKeydown"
-																			data-wp-on--mouseenter="actions.openMenuOnHover" data-wp-on--mouseleave="actions.closeMenuOnHover"
-																			data-wp-watch="callbacks.initMenu" tabindex="-1"
-																			class="wp-block-navigation-item has-child open-on-hover-click wp-block-navigation-submenu">
-																			<a class="wp-block-navigation-item__content">
-																				<span class="wp-block-navigation-item__label">Resources</span>
-																			</a>
-																			<button data-wp-bind--aria-expanded="state.isMenuOpen" data-wp-on--click="actions.toggleMenuOnClick"
-																				aria-label="Resources submenu"
-																				class="wp-block-navigation__submenu-icon wp-block-navigation-submenu__toggle">
-																				<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"
-																					aria-hidden="true" focusable="false">
-																					<path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"/>
-																				</svg>
-																			</button>
-																			<ul data-wp-on--focus="actions.openMenuOnFocus"
-																				class="wp-block-navigation__submenu-container has-text-color has-base-color has-background has-custom-basalt-background-color wp-block-navigation-submenu">
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/greek-vases/">
-																						<span class="wp-block-navigation-item__label">What is a Greek Vase?</span>
-																					</a>
-																				</li>
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/lod/">
-																						<span class="wp-block-navigation-item__label">What is LOD?</span>
-																					</a>
-																				</li>
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content"
-																						href="https://kerameikos.org/publications-presentations/">
-																						<span class="wp-block-navigation-item__label">Publications &amp; Presentations</span>
-																					</a>
-																				</li>
-																			</ul>
-																		</li>
-																		<li class=" wp-block-navigation-item wp-block-navigation-link has-medium-font-size">
-																			<a class="wp-block-navigation-item__content" href="https://kerameikos.org/?page_id=120">
-																				<span class="wp-block-navigation-item__label">Blog</span>
-																			</a>
-																		</li>
-																		<li data-wp-context="{$json2}" data-wp-interactive="core/navigation"
-																			data-wp-on--focusout="actions.handleMenuFocusout" data-wp-on--keydown="actions.handleMenuKeydown"
-																			data-wp-on--mouseenter="actions.openMenuOnHover" data-wp-on--mouseleave="actions.closeMenuOnHover"
-																			data-wp-watch="callbacks.initMenu" tabindex="-1"
-																			class="wp-block-navigation-item has-child open-on-hover-click wp-block-navigation-submenu has-text-color has-base-color has-background has-custom-baltic-background-color">
-																			<a class="wp-block-navigation-item__content">
-																				<span class="wp-block-navigation-item__label">Data</span>
-																			</a>
-																			<button data-wp-bind--aria-expanded="state.isMenuOpen" data-wp-on--click="actions.toggleMenuOnClick"
-																				aria-label="Data submenu"
-																				class="wp-block-navigation__submenu-icon wp-block-navigation-submenu__toggle">
-																				<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"
-																					aria-hidden="true" focusable="false">
-																					<path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"/>
-																				</svg>
-																			</button>
-																			<ul data-wp-on--focus="actions.openMenuOnFocus"
-																				class="wp-block-navigation__submenu-container has-text-color has-base-color has-background has-custom-basalt-background-color wp-block-navigation-submenu has-text-color has-base-color has-background has-custom-baltic-background-color">
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/datasets">
-																						<span class="wp-block-navigation-item__label">Datasets</span>
-																					</a>
-																				</li>
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/ontology">
-																						<span class="wp-block-navigation-item__label">Ontology</span>
-																					</a>
-																				</li>
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/apis/">
-																						<span class="wp-block-navigation-item__label">APIs</span>
-																					</a>
-																				</li>
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/sparql">
-																						<span class="wp-block-navigation-item__label">SPARQL</span>
-																					</a>
-																				</li>
-																			</ul>
-																		</li>
-																		<li data-wp-context="{$json2}" data-wp-interactive="core/navigation"
-																			data-wp-on--focusout="actions.handleMenuFocusout" data-wp-on--keydown="actions.handleMenuKeydown"
-																			data-wp-on--mouseenter="actions.openMenuOnHover" data-wp-on--mouseleave="actions.closeMenuOnHover"
-																			data-wp-watch="callbacks.initMenu" tabindex="-1"
-																			class="wp-block-navigation-item has-child open-on-hover-click wp-block-navigation-submenu current-menu-ancestor">
-																			<a class="wp-block-navigation-item__content">
-																				<span class="wp-block-navigation-item__label">About</span>
-																			</a>
-																			<button data-wp-bind--aria-expanded="state.isMenuOpen" data-wp-on--click="actions.toggleMenuOnClick"
-																				aria-label="About submenu"
-																				class="wp-block-navigation__submenu-icon wp-block-navigation-submenu__toggle">
-																				<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none"
-																					aria-hidden="true" focusable="false">
-																					<path d="M1.50002 4L6.00002 8L10.5 4" stroke-width="1.5"/>
-																				</svg>
-																			</button>
-																			<ul data-wp-on--focus="actions.openMenuOnFocus"
-																				class="wp-block-navigation__submenu-container has-text-color has-base-color has-background has-custom-basalt-background-color wp-block-navigation-submenu">
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/our-history/">
-																						<span class="wp-block-navigation-item__label">Our History</span>
-																					</a>
-																				</li>
-																				<li class=" wp-block-navigation-item current-menu-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/meet-the-team/"
-																						aria-current="page">
-																						<span class="wp-block-navigation-item__label">Meet the Team</span>
-																					</a>
-																				</li>
-																				<li class=" wp-block-navigation-item wp-block-navigation-link">
-																					<a class="wp-block-navigation-item__content" href="https://kerameikos.org/contact-us/">
-																						<span class="wp-block-navigation-item__label">Contact Us</span>
-																					</a>
-																				</li>
-																			</ul>
-																		</li>
-																	</ul>
-																</div>
-															</div>
-														</div>
-													</div>
-												</nav>
-											</div>
-										</div>
-									</div>
-
-
-
-									<figure class="wp-block-image alignfull size-full">
-										<img fetchpriority="high" decoding="async" width="2560" height="79"
-											src="https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-scaled.png" alt="" class="wp-image-623"
-											srcset="https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-scaled.png 2560w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-300x9.png 300w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-1024x32.png 1024w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-768x24.png 768w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-1536x48.png 1536w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-2048x63.png 2048w"
-											sizes="(max-width: 2560px) 100vw, 2560px"/>
-									</figure>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</header>
-
-		<!-- Static navbar -->
-		<!--<div class="navbar navbar-default navbar-custom navbar-static-top" role="navigation">
-			<div class="container-fluid">
-				<div class="navbar-header">
-					<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-						<span class="sr-only">Toggle navigation</span>
-						<span class="icon-bar"/>
-						<span class="icon-bar"/>
-						<span class="icon-bar"/>
-					</button>
-					<a class="navbar-brand" href="{$display_path}./">Kerameikos.org</a>
-				</div>
-				<div class="navbar-collapse collapse">
-					<ul class="nav navbar-nav">
-						<li>
-							<a href="{$display_path}browse">Browse</a>
-						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Research Tools <b class="caret"/></a>
-							<ul class="dropdown-menu">
-								<li>
-									<a href="{$display_path}research/distribution">Typological Distribution</a>
-								</li>
-							</ul>
-						</li>
-						<li>
-							<a href="{$display_path}ontology">Ontology</a>
-						</li>
-						<li>
-							<a href="{$display_path}apis">APIs</a>
-						</li>
-						<li class="dropdown">
-							<a href="#" class="dropdown-toggle" data-toggle="dropdown">Documentation <b class="caret"/></a>
-							<ul class="dropdown-menu">
-								<xsl:for-each select="//config/documentation/page">
-									<li>
-										<a href="{$display_path}documentation/{@stub}">
-											<xsl:value-of select="@label"/>
-										</a>
-									</li>
-								</xsl:for-each>
-							</ul>
-						</li>
-						<li>
-							<a href="{$display_path}sparql">SPARQL</a>
-						</li>
-						<li>
-							<a href="{$display_path}datasets">Datasets</a>
-						</li>
-					</ul>
-					<div class="col-sm-3 col-md-3 pull-right">
-						<form class="navbar-form" role="search" action="{$display_path}browse" method="get">
-							<div class="input-group">
-								<input type="text" class="form-control" placeholder="Search" name="q" id="srch-term"/>
-								<div class="input-group-btn">
-									<button class="btn btn-default" type="submit">
-										<i class="glyphicon glyphicon-search"/>
-									</button>
-								</div>
-							</div>
-						</form>
-					</div>
-				</div>
-				<!-\-/.nav-collapse -\->
-			</div>
-		</div>-->
-	</xsl:template>
-
-	<xsl:template name="footer">
-		<footer class="wp-block-template-part">
-			<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
-				<div class="wp-block-group alignfull has-global-padding is-layout-constrained wp-container-core-group-is-layout-19e250f3 wp-block-group-is-layout-constrained">
-					<figure class="wp-block-image alignfull size-full">
-						<img loading="lazy" decoding="async" width="2560" height="79" src="https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-scaled.png" alt=""
-							class="wp-image-623"
-							srcset="https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-scaled.png 2560w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-300x9.png 300w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-1024x32.png 1024w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-768x24.png 768w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-1536x48.png 1536w, https://kerameikos.org/wp-content/uploads/2025/10/meander-banner-crop-2048x63.png 2048w"
-							sizes="auto, (max-width: 2560px) 100vw, 2560px"/>
-					</figure>
-
-
-
-					<div
-						class="wp-block-group alignfull has-background-color has-base-color has-custom-baltic-background-color has-text-color has-background is-layout-flow wp-block-group-is-layout-flow"
-						style="margin-top:0;margin-bottom:0;padding-top:var(--wp--preset--spacing--20);padding-right:var(--wp--preset--spacing--50);padding-bottom:var(--wp--preset--spacing--50);padding-left:var(--wp--preset--spacing--50)">
-						<div style="height:8px" aria-hidden="true" class="wp-block-spacer"/>
-
-
-						<h1
-							class="has-text-align-center has-link-color wp-elements-c274abde050f7aac1c729484c8424fe2 wp-block-site-title has-text-color has-custom-eggshell-color has-large-font-size wp-container-content-b0223bd5">
-							<a href="https://kerameikos.org" target="_self" rel="home">kerameikos.org</a>
-						</h1>
-
-
-						<div
-							class="wp-block-group has-base-color has-text-color has-link-color wp-elements-53866209a0a6fcae0356d149a44ff039 is-vertical is-content-justification-center is-layout-flex wp-container-core-group-is-layout-3d16a5d4 wp-block-group-is-layout-flex">
-							<ul
-								class="wp-block-social-links has-normal-icon-size has-visible-labels has-icon-color is-style-logos-only wp-container-content-b0223bd5 is-horizontal is-content-justification-center is-layout-flex wp-container-core-social-links-is-layout-845a9879 wp-block-social-links-is-layout-flex">
-
-								<li style="color:#e9e5e4;" class="wp-social-link wp-social-link-github has-custom-eggshell-color wp-block-social-link">
-									<a href="https://github.com/kerameikos" class="wp-block-social-link-anchor">
-										<svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-											<path
-												d="M12,2C6.477,2,2,6.477,2,12c0,4.419,2.865,8.166,6.839,9.489c0.5,0.09,0.682-0.218,0.682-0.484 c0-0.236-0.009-0.866-0.014-1.699c-2.782,0.602-3.369-1.34-3.369-1.34c-0.455-1.157-1.11-1.465-1.11-1.465 c-0.909-0.62,0.069-0.608,0.069-0.608c1.004,0.071,1.532,1.03,1.532,1.03c0.891,1.529,2.341,1.089,2.91,0.833 c0.091-0.647,0.349-1.086,0.635-1.337c-2.22-0.251-4.555-1.111-4.555-4.943c0-1.091,0.39-1.984,1.03-2.682 C6.546,8.54,6.202,7.524,6.746,6.148c0,0,0.84-0.269,2.75,1.025C10.295,6.95,11.15,6.84,12,6.836 c0.85,0.004,1.705,0.114,2.504,0.336c1.909-1.294,2.748-1.025,2.748-1.025c0.546,1.376,0.202,2.394,0.1,2.646 c0.64,0.699,1.026,1.591,1.026,2.682c0,3.841-2.337,4.687-4.565,4.935c0.359,0.307,0.679,0.917,0.679,1.852 c0,1.335-0.012,2.415-0.012,2.741c0,0.269,0.18,0.579,0.688,0.481C19.138,20.161,22,16.416,22,12C22,6.477,17.523,2,12,2z"
-											/>
-										</svg>
-										<span class="wp-block-social-link-label">GitHub</span>
-									</a>
-								</li>
-
-								<li style="color:#e9e5e4;" class="wp-social-link wp-social-link-mail has-custom-eggshell-color wp-block-social-link">
-									<a href="mailto:#&#107;era&#109;&#101;&#105;k&#111;&#115;.&#111;rg&#064;g&#109;ail.&#099;o&#109;" class="wp-block-social-link-anchor">
-										<svg width="24" height="24" viewBox="0 0 24 24" version="1.1" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
-											<path
-												d="M19,5H5c-1.1,0-2,.9-2,2v10c0,1.1.9,2,2,2h14c1.1,0,2-.9,2-2V7c0-1.1-.9-2-2-2zm.5,12c0,.3-.2.5-.5.5H5c-.3,0-.5-.2-.5-.5V9.8l7.5,5.6,7.5-5.6V17zm0-9.1L12,13.6,4.5,7.9V7c0-.3.2-.5.5-.5h14c.3,0,.5.2.5.5v.9z"
-											/>
-										</svg>
-										<span class="wp-block-social-link-label">Mail</span>
-									</a>
-								</li>
-							</ul>
-						</div>
-
-						<div
-							class="wp-block-group has-base-color has-text-color has-link-color wp-elements-b6cd64af30ee757b05b6f212daaaffa6 wp-container-content-9cfa9a5a is-vertical is-content-justification-center is-layout-flex wp-container-core-group-is-layout-ce155fab wp-block-group-is-layout-flex">
-							<p class="has-text-align-center has-small-font-size"> Kerameikos.org data are made available under the <a
-									href="http://opendatacommons.org/licenses/odbl/1.0/">Open Database License</a>. See <a href="datasets">datasets</a> for image rights, respective
-								to individual institution.</p>
-						</div>
-					</div>
-				</div>
-			</div>
-		</footer>
+		<script type="module" src="https://kerameikos.org/wp-includes/js/dist/script-modules/block-library/navigation/view.min.js?ver=b0f909c3ec791c383210" id="@wordpress/block-library/navigation/view-js-module" fetchpriority="low" data-wp-router-options="{$json3}"/>
+		<script src="https://kerameikos.org/wp-includes/js/hoverintent-js.min.js?ver=2.2.1" id="hoverintent-js-js"/>
 	</xsl:template>
 
 </xsl:stylesheet>

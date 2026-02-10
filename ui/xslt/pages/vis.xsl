@@ -30,6 +30,7 @@
 				<script type="text/javascript" src="{$display_path}ui/javascript/d3plus.min.js"/>
 				<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
 				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
+				<xsl:call-template name="wordpress-css"/>
 				<!-- google analytics -->
 				<xsl:if test="string(//config/google_analytics)">
 					<script type="text/javascript">
