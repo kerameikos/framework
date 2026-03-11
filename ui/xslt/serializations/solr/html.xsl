@@ -47,13 +47,13 @@
 			<head>
 				<title>Kerameikos.org: Browse</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
-				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
+				<link rel="icon" type="image/png" href="{$display_path}kerameikos-assets/images/favicon.png"/>
 				<!-- bootstrap -->
 				<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"/>
 				<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
 				<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/result_functions.js"/>
-				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/result_functions.js"/>
+				<link rel="stylesheet" href="{$display_path}kerameikos-assets/css/style.css"/>
 				<xsl:call-template name="wordpress-css"/>
 				<link rel="alternate" type="application/atom+xml" href="feed/{if ($q = '*:*') then '' else concat('?q=', $q)}"/>
 				<!-- opensearch compliance -->

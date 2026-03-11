@@ -132,50 +132,50 @@
 								$id"
 					/></title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
-				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
+				<link rel="icon" type="image/png" href="{$display_path}kerameikos-assets/images/favicon.png"/>
 				<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
 				<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"/>
 				<!-- fancybox -->
-				<script type="text/javascript" src="{$display_path}ui/javascript/jquery.fancybox.pack.js"/>
-				<link type="text/css" href="{$display_path}ui/css/jquery.fancybox.css" rel="stylesheet"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/jquery.fancybox.pack.js"/>
+				<link type="text/css" href="{$display_path}kerameikos-assets/css/jquery.fancybox.css" rel="stylesheet"/>
 
 				<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css"/>
 				<script src="https://unpkg.com/leaflet@1.0.0/dist/leaflet.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet.ajax.min.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/leaflet.ajax.min.js"/>
 
 				<!-- mapping -->
-				<!--<script type="text/javascript" src="{$display_path}ui/javascript/heatmap.min.js"/>
-					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-heatmap.js"/>-->
-				<script type="text/javascript" src="{$display_path}ui/javascript/display_map_functions.js"/>
+				<!--<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/heatmap.min.js"/>
+					<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/leaflet-heatmap.js"/>-->
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/display_map_functions.js"/>
 
 				<!-- distribution visualization -->
-				<script type="text/javascript" src="{$display_path}ui/javascript/d3.min.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/d3plus.min.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/vis_functions.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>
-				<!--<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>-->
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/d3.min.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/d3plus.min.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/vis_functions.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/leaflet-iiif.js"/>
+				<!--<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/image_functions.js"/>-->
 
 				<!-- 3D hop -->
 				<!--STYLESHEET-->
-				<link type="text/css" rel="stylesheet" href="{$display_path}ui/css/3dhop.css"/>
+				<link type="text/css" rel="stylesheet" href="{$display_path}kerameikos-assets/css/3dhop.css"/>
 				<!--SPIDERGL-->
-				<script type="text/javascript" src="{$display_path}ui/javascript/spidergl.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/spidergl.js"/>
 				<!--PRESENTER-->
-				<script type="text/javascript" src="{$display_path}ui/javascript/presenter.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/presenter.js"/>
 				<!--3D MODELS LOADING AND RENDERING-->
-				<script type="text/javascript" src="{$display_path}ui/javascript/nexus.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/ply.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/nexus.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/ply.js"/>
 				<!--TRACKBALLS-->
-				<script type="text/javascript" src="{$display_path}ui/javascript/trackball_sphere.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/trackball_turntable.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/trackball_turntable_pan.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/trackball_pantilt.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/trackball_sphere.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/trackball_turntable.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/trackball_turntable_pan.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/trackball_pantilt.js"/>
 				<!--UTILITY-->
-				<script type="text/javascript" src="{$display_path}ui/javascript/init.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/display_functions.js"/>
-				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/init.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/display_functions.js"/>
+				<link rel="stylesheet" href="{$display_path}kerameikos-assets/css/style.css"/>
 				<xsl:call-template name="wordpress-css"/>
 			</head>
 			<body>
@@ -350,21 +350,21 @@
 				<div id="3dhop-window" style="display:none;width:650px;height:490px;">
 					<div id="3dhop-template" class="tdhop" onmousedown="if (event.preventDefault) event.preventDefault()">
 						<div id="toolbar">
-							<img id="home" title="Home" src="{$display_path}ui/images/skins/dark/home.png"/>
+							<img id="home" title="Home" src="{$display_path}kerameikos-assets/images/skins/dark/home.png"/>
 							<br/>
-							<img id="zoomin" title="Zoom In" src="{$display_path}ui/images/skins/dark/zoomin.png"/>
+							<img id="zoomin" title="Zoom In" src="{$display_path}kerameikos-assets/images/skins/dark/zoomin.png"/>
 							<br/>
-							<img id="zoomout" title="Zoom Out" src="{$display_path}ui/images/skins/dark/zoomout.png"/>
+							<img id="zoomout" title="Zoom Out" src="{$display_path}kerameikos-assets/images/skins/dark/zoomout.png"/>
 							<br/>
-							<img id="light_on" title="Disable Light Control" src="{$display_path}ui/images/skins/dark/light_on.png"
+							<img id="light_on" title="Disable Light Control" src="{$display_path}kerameikos-assets/images/skins/dark/light_on.png"
 								style="position:absolute; visibility:hidden;"/>
-							<img id="light" title="Enable Light Control" src="{$display_path}ui/images/skins/dark/light.png"/>
+							<img id="light" title="Enable Light Control" src="{$display_path}kerameikos-assets/images/skins/dark/light.png"/>
 							<br/>
-							<img id="full_on" title="Exit Full Screen" src="{$display_path}ui/images/skins/dark/full_on.png"
+							<img id="full_on" title="Exit Full Screen" src="{$display_path}kerameikos-assets/images/skins/dark/full_on.png"
 								style="position:absolute; visibility:hidden;"/>
-							<img id="full" title="Full Screen" src="{$display_path}ui/images/skins/dark/full.png"/>
+							<img id="full" title="Full Screen" src="{$display_path}kerameikos-assets/images/skins/dark/full.png"/>
 						</div>
-						<canvas id="draw-canvas" style="background-image: url({$display_path}ui/images/skins/backgrounds/dark.jpg)"/>
+						<canvas id="draw-canvas" style="background-image: url({$display_path}kerameikos-assets/images/skins/backgrounds/dark.jpg)"/>
 					</div>
 				</div>
 			</div>
@@ -615,7 +615,7 @@
 					<xsl:if test="doc('input:id-count')//res:binding[@name = 'count']/res:literal &gt; 0">
 						<div>
 							<a href="{$id}.xml" title="DataCite XML Metadata">
-								<img src="{$display_path}ui/images/datacite-medium.png" alt="DataCite Logo: https://datacite.org/"/>
+								<img src="{$display_path}kerameikos-assets/images/datacite-medium.png" alt="DataCite Logo: https://datacite.org/"/>
 							</a>
 							<br/>
 							<a href="{$id}.xml">DataCite XML Metadata</a>

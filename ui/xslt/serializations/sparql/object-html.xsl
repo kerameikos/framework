@@ -43,18 +43,18 @@
 			<head>
 				<title>Kerameikos.org: Object</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
-				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
+				<link rel="icon" type="image/png" href="{$display_path}kerameikos-assets/images/favicon.png"/>
 				<!-- bootstrap -->
 				<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"/>
 				<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
 				<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
-				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
+				<link rel="stylesheet" href="{$display_path}kerameikos-assets/css/style.css"/>
 				<xsl:call-template name="wordpress-css"/>
 
 				<!-- leaflet -->
 				<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css"/>
 				<script src="https://unpkg.com/leaflet@1.0.0/dist/leaflet.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet.ajax.min.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/leaflet.ajax.min.js"/>
 
 				<!-- mirador -->
 				<xsl:if test="descendant::crm:P129i_is_subject_of">
@@ -66,10 +66,10 @@
 					test="
 						//crm:E36_Visual_Item[dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']
 						or //*[rdf:type/@rdf:resource = 'http://www.cidoc-crm.org/cidoc-crm/E36_Visual_Item'][dcterms:conformsTo/@rdf:resource = 'http://iiif.io/api/image']">
-					<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>
+					<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/leaflet-iiif.js"/>
 				</xsl:if>
 
-				<script type="text/javascript" src="{$display_path}ui/javascript/object_functions.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/object_functions.js"/>
 				
 				<!-- include metadata -->
 				

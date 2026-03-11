@@ -13,13 +13,13 @@
 			<head>
 				<title>Kerameikos.org: Datasets</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
-				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
+				<link rel="icon" type="image/png" href="{$display_path}kerameikos-assets/images/favicon.png"/>
 				<!-- bootstrap -->
 				<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/result_functions.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/result_functions.js"/>
 				<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css"/>
 				<script src="https://netdna.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"/>
-				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
+				<link rel="stylesheet" href="{$display_path}kerameikos-assets/css/style.css"/>
 				<xsl:call-template name="wordpress-css"/>
 				<!-- google analytics -->
 				<xsl:if test="string(//config/google_analytics)">
@@ -74,7 +74,7 @@
 							<tr>
 								<td>
 									<a href="http://commons.pelagios.org/">
-										<img src="{$display_path}ui/images/pelagios.png"/>
+										<img src="{$display_path}kerameikos-assets/images/pelagios.png"/>
 									</a>
 								</td>
 								<td>
@@ -90,7 +90,7 @@
 					<div class="col-md-4">
 						<h4>Atom Feed</h4>
 						<a href="feed/" title="Atom Feed">
-							<img src="{$display_path}ui/images/atom-large.png" alt="Atom Logo"/>
+							<img src="{$display_path}kerameikos-assets/images/atom-large.png" alt="Atom Logo"/>
 						</a>
 					</div>
 				</div>

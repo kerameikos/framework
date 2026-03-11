@@ -8,19 +8,19 @@
 			<head>
 				<title>Kerameikos.org</title>
 				<meta name="viewport" content="width=device-width, initial-scale=1"/>
-				<link rel="icon" type="image/png" href="{$display_path}ui/images/favicon.png"/>
+				<link rel="icon" type="image/png" href="{$display_path}kerameikos-assets/images/favicon.png"/>
 				<script type="text/javascript" src="https://code.jquery.com/jquery-latest.min.js"/>
 				<!-- bootstrap -->
 				<link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
 				<script type="text/javascript" src="https://netdna.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"/>
-				<link rel="stylesheet" href="{$display_path}ui/css/style.css"/>
+				<link rel="stylesheet" href="{$display_path}kerameikos-assets/css/style.css"/>
 				<xsl:call-template name="wordpress-css"/>
-				<!--<script type="text/javascript" src="{$display_path}ui/javascript/openseadragon.min.js"/>-->
+				<!--<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/openseadragon.min.js"/>-->
 				<link rel="stylesheet" href="https://unpkg.com/leaflet@1.0.0/dist/leaflet.css"/>
 				<script type="text/javascript" src="https://unpkg.com/leaflet@1.0.0/dist/leaflet.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet.ajax.min.js"/>
-				<script type="text/javascript" src="{$display_path}ui/javascript/leaflet-iiif.js"/>				
-				<script type="text/javascript" src="{$display_path}ui/javascript/image_functions.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/leaflet.ajax.min.js"/>
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/leaflet-iiif.js"/>				
+				<script type="text/javascript" src="{$display_path}kerameikos-assets/javascript/image_functions.js"/>
 			</head>
 			<body>
 				<xsl:call-template name="header"/>
