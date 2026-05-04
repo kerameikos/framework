@@ -239,6 +239,24 @@
 		</xsl:choose>
 		
 	</xsl:function>
+	
+	<xsl:function name="kerameikos:normalizeLanguage">
+		<xsl:param name="lang"/>
+		
+		<xsl:choose>
+			<xsl:when test="$lang = 'de'">German</xsl:when>
+			<xsl:when test="$lang = 'el'">Greek</xsl:when>
+			<xsl:when test="$lang = 'en'">English</xsl:when>
+			<xsl:when test="$lang = 'fr'">French</xsl:when>
+			<xsl:when test="$lang = 'es'">Spanish</xsl:when>
+			<xsl:when test="$lang = 'he'">Hebrew</xsl:when>
+			<xsl:when test="$lang = 'it'">Italian</xsl:when>
+			<xsl:when test="$lang = 'zh'">Chinese</xsl:when>
+			<xsl:otherwise>
+				<xsl:value-of select="$lang"/>
+			</xsl:otherwise>
+		</xsl:choose>
+	</xsl:function>
 
 	<!-- ************** PARSE ACCEPT-LANGUAGE FROM HTTP HEADER ************** -->
 	<xsl:function name="kerameikos:parseAcceptLanguage">

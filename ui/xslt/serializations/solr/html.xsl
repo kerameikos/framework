@@ -96,11 +96,11 @@
 	
 	<xsl:template match="doc">
 		<div class="result-doc">
-			<h4>
+			<h3>
 				<a href="id/{str[@name='id']}" title="{if(string(str[@name='prefLabel'])) then str[@name='prefLabel'] else str[@name='id']}">
 					<xsl:value-of select="if(string(str[@name='prefLabel'])) then str[@name='prefLabel'] else str[@name='id']"/>
 				</a>
-			</h4>
+			</h3>
 			<xsl:if test="string(arr[@name='definition']/str) or not(contains($q, 'type'))">
 				<dl class="dl-horizontal">
 					<xsl:if test="string(arr[@name='definition']/str)">

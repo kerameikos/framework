@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
-	xmlns:dbpedia-owl="http://dbpedia.org/ontology/" xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
-	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:dcterms="http://purl.org/dc/terms/"
-	xmlns:kid="https://kerameikos.org/id/" xmlns:kon="https://kerameikos.org/ontology#" xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
-	xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:org="http://www.w3.org/ns/org#" xmlns:tei="http://www.tei-c.org/ns/1.0"
-	xmlns:kerameikos="https://kerameikos.org/" xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
-	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:prov="http://www.w3.org/ns/prov#" xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+	xmlns:foaf="http://xmlns.com/foaf/0.1/" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+	xmlns:dbpedia-owl="http://dbpedia.org/ontology/"
+	xmlns:skos="http://www.w3.org/2004/02/skos/core#" xmlns:owl="http://www.w3.org/2002/07/owl#"
+	xmlns:crm="http://www.cidoc-crm.org/cidoc-crm/" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+	xmlns:dcterms="http://purl.org/dc/terms/" xmlns:kid="https://kerameikos.org/id/"
+	xmlns:kon="https://kerameikos.org/ontology#"
+	xmlns:geo="http://www.w3.org/2003/01/geo/wgs84_pos#"
+	xmlns:edm="http://www.europeana.eu/schemas/edm/" xmlns:org="http://www.w3.org/ns/org#"
+	xmlns:tei="http://www.tei-c.org/ns/1.0" xmlns:kerameikos="https://kerameikos.org/"
+	xmlns:osgeo="http://data.ordnancesurvey.co.uk/ontology/geometry/"
+	xmlns:res="http://www.w3.org/2005/sparql-results#" xmlns:prov="http://www.w3.org/ns/prov#"
+	xmlns:ontolex="http://www.w3.org/ns/lemon/ontolex#"
 	xmlns:crmgeo="http://www.ics.forth.gr/isl/CRMgeo/" exclude-result-prefixes="#all" version="2.0">
 
 	<!-- human readable templates for ID or other concept scheme RDF serializations. mode="type" is for general output from SPARQL CONSTRUCT or DESCRIBE -->
@@ -22,14 +28,15 @@
 			</xsl:if>
 
 			<xsl:element
-				name="{if (name()='prov:Activity') then 'h4' else if (name() = 'dcterms:ProvenanceStatement') then 'h3' else if (not(parent::rdf:RDF)) then 'h3' else if(position()=1) then 'h2' else 'h3'}">
+				name="{if (name()='prov:Activity') then 'h3' else if (name() = 'dcterms:ProvenanceStatement') then 'h3' else if (not(parent::rdf:RDF)) then 'h3' else if(position()=1) then 'h2' else 'h3'}">
 				<!-- display a label based on the URI if there is an @rdf:about, otherwise formulate a blank node label -->
 
 				<xsl:choose>
 					<xsl:when test="@rdf:about">
 						<xsl:choose>
 							<xsl:when test="contains(@rdf:about, '#')">
-								<xsl:value-of select="concat('#', substring-after(@rdf:about, '#'))"/>
+								<xsl:value-of select="concat('#', substring-after(@rdf:about, '#'))"
+								/>
 							</xsl:when>
 							<xsl:otherwise>
 								<xsl:value-of select="skos:prefLabel[@xml:lang = 'en']"/>
@@ -67,27 +74,35 @@
 
 			<xsl:if test="skos:prefLabel">
 				<div class="section">
-					<h4>Labels</h4>
+					<h3>Labels</h3>
 					<dl class="dl-horizontal">
 						<dt>
-							<a href="{concat($namespaces//namespace[@prefix='skos']/@uri, 'prefLabel')}" title="skos:prefLabel">
-								<xsl:value-of select="kerameikos:normalizeCurie('skos:prefLabel', 'en')"/>
+							<a
+								href="{concat($namespaces//namespace[@prefix='skos']/@uri, 'prefLabel')}"
+								title="skos:prefLabel">
+								<xsl:value-of
+									select="kerameikos:normalizeCurie('skos:prefLabel', 'en')"/>
 							</a>
 						</dt>
 						<dd>
-							<xsl:apply-templates select="skos:prefLabel[lang('en') or lang('fr') or lang('de') or lang('el') or lang('it')]" mode="prefLabel"/>
+							<xsl:apply-templates
+								select="skos:prefLabel[lang('en') or lang('fr') or lang('de') or lang('el') or lang('it')]"
+								mode="prefLabel"/>
 
 							<!-- additional labels -->
-							<xsl:if test="skos:prefLabel[not(lang('en') or lang('fr') or lang('de') or lang('el') or lang('it'))]">
+							<xsl:if
+								test="skos:prefLabel[not(lang('en') or lang('fr') or lang('de') or lang('el') or lang('it'))]">
 								<span style="margin-left:20px">
 									<i>Additional labels</i>
-									<a href="#" class="toggle-button" id="toggle-prefLabels" title="Click to hide or show additional labels">
+									<a href="#" class="toggle-button" id="toggle-prefLabels"
+										title="Click to hide or show additional labels">
 										<span class="glyphicon glyphicon-triangle-right"/>
 									</a>
 								</span>
 							</xsl:if>
 							<div style="display:none" id="prefLabels">
-								<xsl:apply-templates select="skos:prefLabel[not(lang('en') or lang('fr') or lang('de') or lang('el') or lang('it'))]"
+								<xsl:apply-templates
+									select="skos:prefLabel[not(lang('en') or lang('fr') or lang('de') or lang('el') or lang('it'))]"
 									mode="prefLabel">
 									<xsl:sort select="@xml:lang"/>
 								</xsl:apply-templates>
@@ -103,12 +118,17 @@
 
 						<xsl:if test="ontolex:otherForm">
 							<dt>
-								<a href="{concat($namespaces//namespace[@prefix='lexinfo']/@uri, 'plural')}" title="lexinfo:plural">
-									<xsl:value-of select="kerameikos:normalizeCurie('lexinfo:plural', 'en')"/>
+								<a
+									href="{concat($namespaces//namespace[@prefix='lexinfo']/@uri, 'plural')}"
+									title="lexinfo:plural">
+									<xsl:value-of
+										select="kerameikos:normalizeCurie('lexinfo:plural', 'en')"/>
 								</a>
 							</dt>
 							<dd>
-								<xsl:apply-templates select="ontolex:otherForm/ontolex:Form/ontolex:writtenRep" mode="prefLabel">
+								<xsl:apply-templates
+									select="ontolex:otherForm/ontolex:Form/ontolex:writtenRep"
+									mode="prefLabel">
 									<xsl:sort select="@xml:lang"/>
 								</xsl:apply-templates>
 							</dd>
@@ -120,19 +140,39 @@
 
 			<xsl:if test="skos:definition">
 				<div class="section">
-					<h4>Definitions</h4>
+					<h3>Definitions</h3>
 
 					<dl class="dl-horizontal">
-						<xsl:apply-templates select="skos:definition" mode="human-readable"/>
+						<xsl:apply-templates select="skos:definition[@xml:lang = 'en']"
+							mode="human-readable"/>
 
+						<xsl:if test="count(skos:definition) &gt; 1">
+							<br/>
+							<span>
+								<i>Additional definitions</i>
+								<a href="#" class="toggle-button" id="toggle-definitions"
+									title="Click to hide or show additional labels">
+									<span class="glyphicon glyphicon-triangle-right"/>
+								</a>
+							</span>
+						</xsl:if>
 					</dl>
+
+
+					<div style="display:none" id="definitions">
+						<dl class="dl-horizontal">
+							<xsl:apply-templates select="skos:definition[not(lang('en'))]" mode="human-readable">
+								<xsl:sort select="@xml:lang"/>
+							</xsl:apply-templates>
+						</dl>						
+					</div>
 
 				</div>
 			</xsl:if>
 
 			<xsl:if test="crm:P4_has_time-span">
 				<div class="section">
-					<h4>Time Span</h4>
+					<h3>Time Span</h3>
 
 					<dl class="dl-horizontal">
 						<xsl:apply-templates select="crm:P4_has_time-span" mode="human-readable"/>
@@ -144,21 +184,23 @@
 
 			<xsl:if test="org:hasMembership">
 				<div class="section">
-					<h4>Roles</h4>
+					<h3>Roles</h3>
 
 					<xsl:for-each select="org:hasMembership">
 						<xsl:variable name="uri" select="@rdf:resource"/>
-						<xsl:apply-templates select="//org:Membership[@rdf:about = $uri]" mode="human-readable"/>
+						<xsl:apply-templates select="//org:Membership[@rdf:about = $uri]"
+							mode="human-readable"/>
 					</xsl:for-each>
 				</div>
 			</xsl:if>
 
 			<xsl:if test="skos:exactMatch or skos:closeMatch or skos:related or skos:broader">
 				<div class="section">
-					<h4>Relations</h4>
+					<h3>Relations</h3>
 
 					<dl class="dl-horizontal">
-						<xsl:apply-templates select="skos:exactMatch | skos:broader | skos:closeMatch | skos:related | dcterms:isPartOf | dcterms:source"
+						<xsl:apply-templates
+							select="skos:exactMatch | skos:broader | skos:closeMatch | skos:related | dcterms:isPartOf | dcterms:source"
 							mode="human-readable">
 							<xsl:sort select="local-name()"/>
 							<xsl:sort select="@rdf:resource"/>
@@ -177,15 +219,19 @@
 		</dt>
 		<dd>
 			<span property="crm:E52_Time-Span">
-				<xsl:apply-templates select="crm:E52_Time-Span/crm:P82a_begin_of_the_begin" mode="human-readable"/>
+				<xsl:apply-templates select="crm:E52_Time-Span/crm:P82a_begin_of_the_begin"
+					mode="human-readable"/>
 				<xsl:text> - </xsl:text>
-				<xsl:apply-templates select="crm:E52_Time-Span/crm:P82b_end_of_the_end" mode="human-readable"/>
+				<xsl:apply-templates select="crm:E52_Time-Span/crm:P82b_end_of_the_end"
+					mode="human-readable"/>
 			</span>
 		</dd>
 	</xsl:template>
 
 	<!-- date rendering -->
-	<xsl:template match="edm:begin | edm:end | crm:P82a_begin_of_the_begin | crm:P82b_end_of_the_end" mode="human-readable">
+	<xsl:template
+		match="edm:begin | edm:end | crm:P82a_begin_of_the_begin | crm:P82b_end_of_the_end"
+		mode="human-readable">
 		<span property="{name()}" content="{.}" datatype="xsd:gYear">
 			<xsl:value-of select="kerameikos:normalizeYear(.)"/>
 		</span>
@@ -199,9 +245,11 @@
 
 	<xsl:template match="geo:SpatialThing" mode="human-readable">
 		<div class="section">
-			<h4>Geospatial Data</h4>
+			<h3>Geospatial Data</h3>
 			<dl class="dl-horizontal">
-				<xsl:apply-templates select="geo:lat | geo:long | osgeo:asGeoJSON | dcterms:isPartOf | crmgeo:asWKT" mode="human-readable"/>
+				<xsl:apply-templates
+					select="geo:lat | geo:long | osgeo:asGeoJSON | dcterms:isPartOf | crmgeo:asWKT"
+					mode="human-readable"/>
 			</dl>
 		</div>
 	</xsl:template>
@@ -227,12 +275,27 @@
 	</xsl:template>
 
 	<xsl:template match="skos:definition" mode="human-readable">
-		<dt>
-			<xsl:value-of select="@xml:lang"/>
-		</dt>
-		<dd property="{name()}" lang="{@xml:lang}">
-			<xsl:value-of select="."/>
-		</dd>
+		<xsl:choose>
+			<xsl:when test="@xml:lang = 'he'">		
+				<dt class="rtl">
+					<xsl:value-of select="kerameikos:normalizeLanguage(@xml:lang)"/>
+				</dt>
+				<dd property="{name()}" lang="{@xml:lang}" class="rtl">
+					<xsl:value-of select="."/>
+				</dd>
+				
+			</xsl:when>
+			<xsl:otherwise>
+				<dt>
+					<xsl:value-of select="kerameikos:normalizeLanguage(@xml:lang)"/>
+				</dt>
+				<dd property="{name()}" lang="{@xml:lang}">
+					<xsl:value-of select="."/>
+				</dd>
+			</xsl:otherwise>
+		</xsl:choose>
+		
+		
 	</xsl:template>
 
 	<xsl:template match="osgeo:asGeoJSON | crmgeo:asWKT" mode="human-readable">
@@ -248,7 +311,9 @@
 
 	<xsl:template match="edm:begin | edm:end" mode="human-readable"> </xsl:template>
 
-	<xsl:template match="skos:* | dcterms:source | dcterms:isPartOf | org:role | org:organization | geo:lat | geo:long" mode="human-readable">
+	<xsl:template
+		match="skos:* | dcterms:source | dcterms:isPartOf | org:role | org:organization | geo:lat | geo:long"
+		mode="human-readable">
 		<dt>
 			<a href="{concat(namespace-uri(), local-name())}" title="{name()}">
 				<xsl:value-of select="kerameikos:normalizeCurie(name(), 'en')"/>
@@ -291,7 +356,7 @@
 			</xsl:if>
 
 			<xsl:element
-				name="{if (name()='prov:Activity') then 'h4' else if (name() = 'dcterms:ProvenanceStatement') then 'h3' else if (not(parent::rdf:RDF)) then 'h3' else if(position()=1) then 'h2' else 'h3'}">
+				name="{if (name()='prov:Activity') then 'h3' else if (name() = 'dcterms:ProvenanceStatement') then 'h3' else if (not(parent::rdf:RDF)) then 'h3' else if(position()=1) then 'h2' else 'h3'}">
 				<!-- display a label based on the URI if there is an @rdf:about, otherwise formulate a blank node label -->
 				<xsl:choose>
 					<xsl:when test="@rdf:about">
@@ -373,7 +438,8 @@
 	<xsl:template match="*" mode="list-item">
 		<xsl:variable name="name" select="name()"/>
 		<dt>
-			<a href="{concat($namespaces//namespace[@prefix=substring-before($name, ':')]/@uri, substring-after($name, ':'))}">
+			<a
+				href="{concat($namespaces//namespace[@prefix=substring-before($name, ':')]/@uri, substring-after($name, ':'))}">
 				<xsl:value-of select="name()"/>
 			</a>
 		</dt>
@@ -387,7 +453,8 @@
 					<xsl:choose>
 						<xsl:when test="string(.)">
 							<xsl:choose>
-								<xsl:when test="name() = 'osgeo:asGeoJSON' and string-length(.) &gt; 100">
+								<xsl:when
+									test="name() = 'osgeo:asGeoJSON' and string-length(.) &gt; 100">
 									<xsl:call-template name="render_geojson"/>
 								</xsl:when>
 								<xsl:otherwise>
@@ -433,7 +500,7 @@
 					<a href="#" class="toggle-geoJSON">[less]</a>
 				</div>
 			</xsl:otherwise>
-		</xsl:choose>		
+		</xsl:choose>
 	</xsl:template>
 
 	<!-- hide the ontolex:otherFrom from the HTML output: plural displayed after prefLabel -->

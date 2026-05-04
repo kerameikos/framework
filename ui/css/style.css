@@ -11,6 +11,12 @@ html{
     padding-top: 10px;
     padding-bottom: 10px;
 }
+.rtl {
+    direction: rtl;
+}
+h1, h2, h3, h4, h5, h6 {
+    font-weight:bold
+}
 .highlight{
     background-color: #efefef;
     border: 1px solid #E7E7E7;
