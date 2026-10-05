@@ -55,11 +55,11 @@
 					<xsl:choose>
 						<xsl:when test="string($q)">
 							<xsl:value-of select="concat($solr-url, '?q=', encode-for-uri($q), '&amp;sort=', encode-for-uri($sort), '&amp;start=',$start,
-								'&amp;qf=prefLabel%5E10%20text%5E1&amp;rows=100&amp;facet=true&amp;facet.field=type&amp;facet.field=role_facet&amp;facet.sort=index&amp;facet.limit=-1', $other-params)"/>
+								'&amp;qf=label%5E10%20text%5E1&amp;rows=100&amp;facet=true&amp;facet.field=type&amp;facet.field=role_facet&amp;facet.sort=index&amp;facet.limit=-1', $other-params)"/>
 						</xsl:when>
 						<xsl:otherwise>
 							<xsl:value-of select="concat($solr-url, '?q=*:*&amp;sort=', encode-for-uri($sort), '&amp;start=',$start,
-								'&amp;qf=prefLabel%5E10%20text%5E1&amp;rows=100&amp;facet=true&amp;facet.field=type&amp;facet.field=role_facet&amp;facet.sort=index&amp;facet.limit=-1', $other-params)"/>
+								'&amp;qf=label%5E10%20text%5E1&amp;rows=100&amp;facet=true&amp;facet.field=type&amp;facet.field=role_facet&amp;facet.sort=index&amp;facet.limit=-1', $other-params)"/>
 						</xsl:otherwise>
 					</xsl:choose>
 				</xsl:variable>
