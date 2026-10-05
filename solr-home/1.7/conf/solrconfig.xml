@@ -501,6 +501,7 @@
        <str name="df">text</str>
        <str name="wt">xml</str>
        <str name="q.op">AND</str>
+       <str name="qf">prefLabel^10 text^1</str>
      </lst>
 
     </requestHandler>
