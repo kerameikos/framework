@@ -501,6 +501,7 @@
        <str name="df">text</str>
        <str name="wt">xml</str>
        <str name="q.op">AND</str>
+       <str name="defType">edismax</str>
        <str name="qf">label^10 text^1</str>
      </lst>
 
